@@ -23,6 +23,7 @@ class BaseDialog(object):
 		self.panel.SetSizer(self.sizer)
 
 	def Show(self):
+		self.panel.Layout()
 		result=self.wnd.ShowModal()
 		if result!=wx.ID_CANCEL:
 			self.value=self.GetData()
