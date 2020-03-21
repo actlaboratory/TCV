@@ -51,15 +51,15 @@ class Menu(BaseMenu):
 		self.HelpMenu=wx.Menu()
 
 		#メニューの中身
-		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続"))
-		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断"))
-		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了"))
-		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報"))
+		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C)"))
+		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
+		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
+		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V)"))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
-		self.hMenuBar.Append(self.FileMenu,_("ファイル"))
-		self.hMenuBar.Append(self.HelpMenu,_("ヘルプ"))
+		self.hMenuBar.Append(self.FileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.HelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
 class Events(BaseEvents):
