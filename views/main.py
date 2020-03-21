@@ -21,7 +21,7 @@ from simpleDialog import dialog
 from .base import *
 from simpleDialog import *
 
-import views.mkdir
+import views.connect
 
 
 class MainView(BaseView):
@@ -52,7 +52,7 @@ class Menu(BaseMenu):
 
 		#メニューの中身
 		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続"))
-		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("接続"))
+		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了"))
 		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報"))
 
@@ -77,3 +77,7 @@ class Events(BaseEvents):
 			self.Exit()
 		elif selected==menuItemsStore.getRef("versionInfo"):
 			dialog(_("バージョン情報"), _("%(appName)s Version %(versionNumber)s.\nCopyright (C) %(year)s %(developerName)s") %{"appName": constants.APP_NAME, "versionNumber": constants.APP_VERSION, "year":constants.APP_COPYRIGHT_YEAR, "developerName": constants.APP_DEVELOPERS})
+		elif selected==menuItemsStore.getRef("connect"):
+			connectDialog = views.connect.Dialog()
+			connectDialog.Initialize()
+			ret = connectDialog.Show()
