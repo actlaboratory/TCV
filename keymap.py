@@ -197,6 +197,7 @@ class KeymapHandler():
 	"""wxのアクセラレーターテーブルを生成"""
 
 	def __init__(self,dict=None):
+		self.log=logging.getLogger("keymapHandler")
 		self.errors={}
 		self.entries={}
 		self.map={}
