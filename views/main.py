@@ -75,3 +75,5 @@ class Events(BaseEvents):
 
 		if selected==menuItemsStore.getRef("exit"):
 			self.Exit()
+		elif selected==menuItemsStore.getRef("versionInfo"):
+			dialog(_("バージョン情報"), _("%(appName)s Version %(versionNumber)s.\nCopyright (C) %(year)s %(developerName)s") %{"appName": constants.APP_NAME, "versionNumber": constants.APP_VERSION, "year":constants.APP_COPYRIGHT_YEAR, "developerName": constants.APP_DEVELOPERS})
