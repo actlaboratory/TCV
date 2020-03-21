@@ -70,10 +70,5 @@ class Events(BaseEvents):
 		selected=event.GetId()#メニュー識別しの数値が出る
 
 
-		if selected==menuItemsStore.getRef("EXAMPLE"):
-			d=views.mkdir.Dialog()
-			d.Initialize()
-			ret=d.Show()
-			if ret==wx.ID_CANCEL: return
-			dialog(_("入力結果"),str(d.GetValue()))
-			return
+		if selected==menuItemsStore.getRef("exit"):
+			self.Exit()
