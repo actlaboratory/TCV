@@ -1,0 +1,14 @@
+*.pyc
+*.log
+__pycache__
+settings.ini
+keymap.ini
+*.bat
+*log.txt
+build/
+dist/
+*.obj
+*.exp
+*.lib
+*.spec
+AccessToken.txt
