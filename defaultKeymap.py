@@ -5,5 +5,6 @@
 defaultKeymap={}
 
 defaultKeymap["mainView"]={
-	"EXAMPLE": "ctrl+F12/shift+delete/ctrl+c/INSERT/ctrl+BACK",
+	"connect":"ctrl+n",
+	"disconnect":"ctrl+w/ctrl+F4",
 }
