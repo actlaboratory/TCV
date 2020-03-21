@@ -5,10 +5,10 @@
 import wx
 
 #アプリケーション基本情報
-APP_NAME="Test Application"
+APP_NAME="TCV"
 APP_VERSION="0.01"
-APP_COPYRIGHT_YEAR="20XX"
-APP_DEVELOPERS="Ananimous"
+APP_COPYRIGHT_YEAR="2020"
+APP_DEVELOPERS="Kazto Kitabatake"
 
 #各種ファイル名
 SETTING_FILE_NAME="settings.ini"
