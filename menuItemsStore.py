@@ -12,6 +12,7 @@ class _MenuItemsStore(object):
 		self.refs={}
 
 	def _getRef(self,identifier):
+		identifier=identifier.upper()
 		try:
 			ref=self.refs[identifier]
 		except KeyError:#なかったら作る
