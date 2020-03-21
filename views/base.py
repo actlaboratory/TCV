@@ -29,6 +29,7 @@ class BaseView(object):
 		self.creator=views.ViewCreator.ViewCreator(1,self.hPanel,None)
 
 	def Show(self):
+		self.sizer.GetPanel.Layout()
 		self.hFrame.Show()
 		self.app.SetTopWindow(self.hFrame)
 		return True
