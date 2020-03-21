@@ -11,7 +11,7 @@ wxPython ‚ð—p‚¢‚Ä‰¹º“Ç‚Ýã‚°EŽãŽ‹ŽÒŒü‚¯•\Ž¦Ý’è‚É‘Î‰ž‚µ‚½ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ð\’
 .exe‚Å‚Í‚È‚­.py‚©‚çŽÀs‚·‚éê‡Aˆê•”‹@”\‚ð³‚µ‚­ŽÀs‚·‚é‚É‚Í.py‚ð *‰Â•ÏŒÂˆø”‚ðŽó‚¯“ü‚ê‚éŒ`‚Å* python.exe‚ÉŠÖ˜A•t‚¯‚µ‚Ä‚¢‚é•K—v‚ª‚ ‚éB’Êí‚ÌŠÖ˜A•t‚¯‚Å‚Í‚¤‚Ü‚­“®ì‚µ‚È‚¢‚Ì‚Å’ˆÓB
 
 ## ì¬‚µ‚½ƒ\ƒtƒgƒEƒFƒA‚ÌŽÀs
-python falcon.py  
+python TCV.py  
 
 ## exeƒtƒ@ƒCƒ‹‚Éƒrƒ‹ƒh
 python tools\build.py
