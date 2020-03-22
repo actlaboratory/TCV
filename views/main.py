@@ -48,17 +48,23 @@ class Menu(BaseMenu):
 
 		#メニューの大項目を作る
 		self.FileMenu=wx.Menu()
+		self.PlayMenu=wx.Menu()
 		self.HelpMenu=wx.Menu()
 
 		#メニューの中身
 		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C)"))
 		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
+		self.RegisterMenuCommand(self.PlayMenu,"play",_("再生(&P)"))
+		self.RegisterMenuCommand(self.PlayMenu,"stop",_("停止(&S)"))
+		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
+		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
 		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V)"))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
 		self.hMenuBar.Append(self.FileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.PlayMenu,_("再生(&P)"))
 		self.hMenuBar.Append(self.HelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
