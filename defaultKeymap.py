@@ -7,4 +7,8 @@ defaultKeymap={}
 defaultKeymap["mainView"]={
 	"connect":"ctrl+n",
 	"disconnect":"ctrl+w/ctrl+F4",
+	"play": "F1",
+	"stop": "F2",
+	"volumeUp": "F3",
+	"volumeDown": "F4"
 }
