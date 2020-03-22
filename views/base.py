@@ -29,7 +29,7 @@ class BaseView(object):
 		self.creator=views.ViewCreator.ViewCreator(1,self.hPanel,None, wx.VERTICAL)
 
 	def Show(self):
-		self.sizer.GetPanel.Layout()
+		self.creator.GetPanel().Layout()
 		self.hFrame.Show()
 		self.app.SetTopWindow(self.hFrame)
 		return True
