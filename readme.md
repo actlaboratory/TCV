@@ -4,27 +4,39 @@ wxPython ‚ð—p‚¢‚Ä‰¹º“Ç‚Ýã‚°EŽãŽ‹ŽÒŒü‚¯•\Ž¦Ý’è‚É‘Î‰ž‚µ‚½ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ð\’
 
 
 ## ŠÂ‹«\’z
+
 - ƒVƒFƒ‹:ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg‚È‚Ç
+
 - python 3.7 (3.8‚Å‚Í“®ì‚µ‚Ü‚¹‚ñ)
+
 -ƒVƒFƒ‹‚©‚çˆÈ‰º‚ÌƒRƒ}ƒ“ƒh‚ðŽÀs
+
 	python -m pip install -r requirements.txt
+
 .exe‚Å‚Í‚È‚­.py‚©‚çŽÀs‚·‚éê‡Aˆê•”‹@”\‚ð³‚µ‚­ŽÀs‚·‚é‚É‚Í.py‚ð *‰Â•ÏŒÂˆø”‚ðŽó‚¯“ü‚ê‚éŒ`‚Å* python.exe‚ÉŠÖ˜A•t‚¯‚µ‚Ä‚¢‚é•K—v‚ª‚ ‚éB’Êí‚ÌŠÖ˜A•t‚¯‚Å‚Í‚¤‚Ü‚­“®ì‚µ‚È‚¢‚Ì‚Å’ˆÓB
 
 ## ì¬‚µ‚½ƒ\ƒtƒgƒEƒFƒA‚ÌŽÀs
+
 python TCV.py  
 
 ## exeƒtƒ@ƒCƒ‹‚Éƒrƒ‹ƒh
+
 python tools\build.py
 
 ## –|–óŽ«‘ƒtƒ@ƒCƒ‹(po)‚ÌƒAƒbƒvƒf[ƒg
+
 python tools\updateTranslation.py  
+
 - locale ƒtƒHƒ‹ƒ_‚ð’Tõ‚µApoƒtƒ@ƒCƒ‹‚ªŽ©“®”z’u‚³‚ê‚éB
+
 - Œ¾Œê‚ð’Ç‰Á‚µ‚½‚¢ê‡‚ÍAlocale ƒtƒHƒ‹ƒ_‚É‹óƒtƒHƒ‹ƒ_‚ðì‚ê‚Î‚æ‚¢B
+
 - ‘O‰ñ‚Ì–|–ó•¶‚ÍŽc‚Á‚½‚Ü‚Üƒ}[ƒW‚³‚ê‚é‚½‚ßA•¶Žš—ñ‚ª‘‚¦‚½ê‡‚àã‹LƒRƒ}ƒ“ƒh‚ð—˜—p‚·‚ê‚Î‚æ‚¢B
 
 ## –|–ó‚µ‚½‚ç  
+
 python tools\buildTranslation.py
 
 ## ’˜ìŒ 
-- –{ƒLƒbƒg‚Ì’˜ìŒ ‚ÍƒLƒbƒg»ìŽÒ‚É‚ ‚é‚ªA–{ƒLƒbƒg‚ð—˜—p‚µ‚Ä§ì‚³‚ê‚½ƒAƒvƒŠƒP[ƒVƒ‡ƒ“Aƒ‚ƒWƒ…[ƒ‹AŠg’£‚³‚ê‚½ƒLƒbƒg“™‚É‚Â‚¢‚Ä‰½‚ç‚ÌŒ —˜‚àŽå’£‚µ‚È‚¢B
 
+- –{ƒLƒbƒg‚Ì’˜ìŒ ‚ÍƒLƒbƒg»ìŽÒ‚É‚ ‚é‚ªA–{ƒLƒbƒg‚ð—˜—p‚µ‚Ä§ì‚³‚ê‚½ƒAƒvƒŠƒP[ƒVƒ‡ƒ“Aƒ‚ƒWƒ…[ƒ‹AŠg’£‚³‚ê‚½ƒLƒbƒg“™‚É‚Â‚¢‚Ä‰½‚ç‚ÌŒ —˜‚àŽå’£‚µ‚È‚¢B
