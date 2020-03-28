@@ -22,7 +22,7 @@ from .base import *
 from simpleDialog import *
 
 import views.connect
-
+import views.ViewCreator
 
 class MainView(BaseView):
 	def __init__(self):
@@ -41,6 +41,11 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionY")
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
+		commentList = self.creator.ListCtrl(0, 0)
+		selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
+		commentBody = self.creator.inputbox(_("コメント内容"))
+		commentSend = self.creator.button(_("送信"), None)
+		liveInfo = self.creator.ListCtrl(0, 0)
 
 class Menu(BaseMenu):
 	def Apply(self,target):
