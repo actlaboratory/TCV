@@ -41,11 +41,23 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionY")
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
-		commentList = self.creator.ListCtrl(0, 0)
+		commentList = self.creator.ListCtrl(30, 0, style=wx.LC_REPORT)
+		commentList.InsertColumn(0, _("名前"), wx.LIST_FORMAT_CENTRE, 200)
+		commentList.InsertColumn(1, _("コメント"), wx.LIST_FORMAT_CENTRE, 200)
+		commentList.InsertColumn(2, _("ユーザ名"), wx.LIST_FORMAT_CENTRE, 200)
+		commentList.InsertColumn(3, _("日時"), wx.LIST_FORMAT_CENTRE, 200)
+		# ダミーのコメント
+		commentList.InsertItem(0, "")
+		commentList.SetItem(0, 0, "ユーザ１")
+		commentList.SetItem(0, 1, "コメント")
+		commentList.SetItem(0, 2, "dummy_user")
+		commentList.SetItem(0, 3, "0時0分")
 		selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
 		commentBody = self.creator.inputbox(_("コメント内容"))
 		commentSend = self.creator.button(_("送信"), None)
-		liveInfo = self.creator.ListCtrl(0, 0)
+		liveInfo = self.creator.ListCtrl(50, 0)
+		# ダミー
+		liveInfo.InsertItem(0, "ライブ情報")
 
 class Menu(BaseMenu):
 	def Apply(self,target):
