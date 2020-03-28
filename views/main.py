@@ -58,15 +58,20 @@ class Menu(BaseMenu):
 		self.HelpMenu=wx.Menu()
 
 		#メニューの中身
+		#ファイルメニュー
 		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C)"))
 		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
+		#再生メニュー
 		self.RegisterMenuCommand(self.PlayMenu,"play",_("再生(&P)"))
 		self.RegisterMenuCommand(self.PlayMenu,"stop",_("停止(&S)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
+		#設定メニュー
 		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G)"))
 		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R)"))
+		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M)"))
+		#ヘルプメニュー
 		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V)"))
 
 		#メニューバーの生成
