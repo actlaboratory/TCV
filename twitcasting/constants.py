@@ -6,5 +6,5 @@ from accessToken import accessToken
 baseURL = "https://apiv2.twitcasting.tv"
 baseHeaders = {
 	"X-Api-Version": "2.0",
-	"Authorization": "Bearer {" + accessToken + "}"
+	"Authorization": "Bearer " + accessToken
 }
