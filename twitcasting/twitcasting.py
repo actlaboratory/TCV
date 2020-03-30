@@ -2,7 +2,7 @@
 # ツイキャスとの通信モジュール
 
 import requests
-from accessToken import accessToken
+from twitcasting.accessToken import accessToken
 import json
 
 baseURL = "https://apiv2.twitcasting.tv"
