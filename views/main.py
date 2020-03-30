@@ -22,7 +22,7 @@ from .base import *
 from simpleDialog import *
 
 import views.connect
-import views.ViewCreator
+from twitcasting.connection import *
 
 class MainView(BaseView):
 	def __init__(self):
@@ -113,3 +113,8 @@ class Events(BaseEvents):
 			connectDialog = views.connect.Dialog()
 			connectDialog.Initialize()
 			ret = connectDialog.Show()
+			if ret==wx.ID_CANCEL: return
+			connect(str(connectDialog.GetValue()))
+			return
+		elif selected==menuItemsStore.getRef("disconnect"):
+			disconnect()
