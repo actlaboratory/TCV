@@ -21,6 +21,11 @@ def VerifyCredentials():
 	dict = json.loads(req)
 	return dict
 
+def GetMovieInfo(movie_id):
+	req = requests.get(baseURL + "/movies/" + movie_id, headers=baseHeaders).text
+	dict = json.loads(req)
+	return dict
+
 def GetCurrentLive(user_id):
 	req = requests.get(baseURL + "/users/" + user_id + "/current_live", headers=baseHeaders).text
 	dict = json.loads(req)
