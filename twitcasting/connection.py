@@ -12,7 +12,6 @@ def connect(user_id):
 	info = GetUserInfo(user_id)
 	if "error" in info:
 		dialog(_("エラー"), _("ライブへの接続に失敗しました。"))
-		return None
 	elif info["user"]["is_live"] == True:
 		globalVars.app.say(_("接続しました。現在配信中です。"))
 		connected = True
@@ -33,9 +32,13 @@ def getCommentList(movie):
 	src = GetComments(movie)
 	comments = src["comments"]
 	for i in comments:
-		dispname = i["from_user"]["name"]
-		message = i["message"]
-		user = i["from_user"]["screen_id"]
-		commentList.append(dispname + "," + message + "," + user)
+		commentData = {
+			"commentID": i["id"],
+			"dispname": i["from_user"]["name"],
+			"message": i["message"],
+			"user": i["from_user"]["screen_id"]
+		}
+		commentList.append(commentData)
 	dialog("デバッグ用", str(commentList))
 	return commentList
+
