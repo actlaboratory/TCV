@@ -38,8 +38,8 @@ def getCommentList(movieId):
 			"commentID": i["id"],
 			"dispname": i["from_user"]["name"],
 			"message": i["message"],
-			"user": i["from_user"]["screen_id"],
-			"time": i["created"]
+			"time": i["created"],
+			"user": i["from_user"]["screen_id"]
 		}
 		commentList.append(commentData)
 	# テスト用
