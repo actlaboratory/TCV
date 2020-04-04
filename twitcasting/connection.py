@@ -15,23 +15,23 @@ def connect(user_id):
 	elif info["user"]["is_live"] == True:
 		globalVars.app.say(_("接続しました。現在配信中です。"))
 		connected = True
-		movie = GetCurrentLive(user_id)["movie"]["id"]
-		getCommentList(movie)
-		getLiveInfo(movie)
+		movieId = GetCurrentLive(user_id)["movie"]["id"]
+		getCommentList(movieId)
+		getLiveInfo(movieId)
 	elif info["user"]["is_live"] == False:
 		globalVars.app.say(_("接続しました。現在オフラインです。"))
 		connected = True
-		movie = info["user"]["last_movie_id"]
-		getCommentList(movie)
-		getLiveInfo(movie)
+		movieId = info["user"]["last_movie_id"]
+		getCommentList(movieId)
+		getLiveInfo(movieId)
 
 def disconnect():
 	connected = False
 	globalVars.app.say(_("切断しました。"))
 
-def getCommentList(movie):
+def getCommentList(movieId):
 	commentList = []
-	src = GetComments(movie)
+	src = GetComments(movieId)
 	comments = src["comments"]
 	for i in comments:
 		commentData = {
@@ -45,9 +45,8 @@ def getCommentList(movie):
 	dialog("コメント", str(commentList))
 	return commentList
 
-
-def getLiveInfo(movie):
-	src = GetMovieInfo(movie)
+def getLiveInfo(movieId):
+	src = GetMovieInfo(movieId)
 	info = {
 		"movieID": src["movie"]["id"],
 		"title": src["movie"]["title"],
