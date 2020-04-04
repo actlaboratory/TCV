@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ツイキャスとの通信モジュール
+# ツイキャスAPI操作モジュール
 
 import requests
 from twitcasting.accessToken import accessToken
@@ -31,7 +31,7 @@ def GetCurrentLive(user_id):
 	dict = json.loads(req)
 	return dict
 
-def GetComments(movie_id, offset="", limit="", slice_id=""):
+def GetComments(movie_id, offset="0", limit="10", slice_id=""):
 	req = requests.get(baseURL + "/movies/" + movie_id + "/comments?offset=" + offset + "&limit=" + limit + "&slice_id=" + slice_id, headers=baseHeaders).text
 	dict = json.loads(req)
 	return dict

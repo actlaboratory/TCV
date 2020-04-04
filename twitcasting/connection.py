@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ツイキャスライブ接続･切断モジュール
+# ツイキャスライブ接続･切断等モジュール
 
 from twitcasting.twitcasting import *
 import globalVars
@@ -41,8 +41,10 @@ def getCommentList(movie):
 			"user": i["from_user"]["screen_id"]
 		}
 		commentList.append(commentData)
+	# テスト用
 	dialog("コメント", str(commentList))
 	return commentList
+
 
 def getLiveInfo(movie):
 	src = GetMovieInfo(movie)
@@ -55,6 +57,8 @@ def getLiveInfo(movie):
 		"totalViewCount": src["movie"]["total_view_count"],
 		"hlsURL": src["movie"]["hls_url"]
 	}
+	# テスト用
 	dialog("ライブ情報", str(info))
 	return info
+
 
