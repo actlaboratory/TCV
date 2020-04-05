@@ -14,3 +14,4 @@ dist/
 AccessToken.txt
 result.txt
 exec.bat
+/.vs

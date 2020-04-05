@@ -5,6 +5,7 @@ from twitcasting.twitcasting import *
 import globalVars
 from simpleDialog import dialog
 import views.main
+import datetime
 
 connected = False
 
@@ -38,7 +39,7 @@ def getCommentList(movieId):
 			"commentID": i["id"],
 			"dispname": i["from_user"]["name"],
 			"message": i["message"],
-			"time": i["created"],
+			"time": datetime.datetime.fromtimestamp(i["created"]),
 			"user": i["from_user"]["screen_id"]
 		}
 		commentList.append(commentData)
@@ -60,5 +61,4 @@ def getLiveInfo(movieId):
 	# テスト用
 	dialog("ライブ情報", str(info))
 	return info
-
 
