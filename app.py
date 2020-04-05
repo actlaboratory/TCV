@@ -18,6 +18,7 @@ import constants
 import DefaultSettings
 import errorCodes
 from views import main
+import manager
 
 class Main(wx.App):
 	def initialize(self):
@@ -59,6 +60,7 @@ class Main(wx.App):
 		# メインビューを表示
 		self.hMainView=main.MainView()
 		self.hMainView.Show()
+		self.manager = manager.manager(self.hMainView)
 		return True
 
 	def InitLogger(self):
