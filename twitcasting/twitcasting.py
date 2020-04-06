@@ -32,7 +32,7 @@ def GetCurrentLive(user_id):
 	return dict
 
 def GetComments(movie_id, offset=0, limit=10, slice_id=""):
-	req = requests.get(baseURL + "/movies/" + movie_id + "/comments?offset=" + str(offset) + "&limit=" + str(limit) + "&slice_id=" + slice_id, headers=baseHeaders).text
+	req = requests.get(baseURL + "/movies/" + str(movie_id) + "/comments?offset=" + str(offset) + "&limit=" + str(limit) + "&slice_id=" + str(slice_id), headers=baseHeaders).text
 	dict = json.loads(req)
 	return dict["comments"]
 

@@ -19,7 +19,9 @@ class connection:
 		result = GetComments(self.movieId, offset, limit)
 		self.lastCommentId = result[0]["id"]
 		result2 = self.getComment()
-		return result2 + result
+		result3 = result2 + result
+		result3.reverse()
+		return result3
 
 	def getComment(self):
 		ret = []
@@ -28,6 +30,7 @@ class connection:
 			self.lastCommentId = result[0]["id"]
 			ret = result + ret
 			result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+		ret.reverse()
 		return ret
 
 
