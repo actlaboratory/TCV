@@ -49,9 +49,7 @@ class MainView(BaseView):
 		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
 		self.commentBody = self.creator.inputbox(_("コメント内容"))
 		self.commentSend = self.creator.button(_("送信"), None)
-		self.liveInfo = self.creator.ListCtrl(50, 0)
-		# ダミー
-		self.liveInfo.InsertItem(0, "ライブ情報")
+		self.liveInfo = self.creator.ListCtrl(50, 0, style = wx.LC_LIST)
 
 class Menu(BaseMenu):
 	def Apply(self,target):

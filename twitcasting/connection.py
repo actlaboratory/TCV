@@ -33,6 +33,10 @@ class connection:
 		ret.reverse()
 		return ret
 
+	def getLiveInfo(self):
+		result = GetMovieInfo(self.movieId)
+		return result
+
 
 	"""
 	def connect(user_id):
