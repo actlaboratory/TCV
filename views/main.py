@@ -65,7 +65,7 @@ class Menu(BaseMenu):
 
 		#メニューの中身
 		#ファイルメニュー
-		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C)"))
+		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C) ..."))
 		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
 		#再生メニュー
@@ -74,11 +74,11 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
 		#設定メニュー
-		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G)"))
-		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R)"))
-		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M)"))
+		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
+		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
+		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M) ..."))
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V)"))
+		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
