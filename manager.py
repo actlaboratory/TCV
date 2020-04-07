@@ -45,16 +45,17 @@ class manager:
 			_("タイトル：%(title)s") %{"title": info["movie"]["title"]},
 			_("閲覧：現在%(current)d人、合計%(total)d人") %{"current": info["movie"]["current_view_count"], "total": info["movie"]["total_view_count"]},
 			_("カテゴリ：%(category)s") %{"category": info["movie"]["category"]},
-			_("コメント数：%(number)d") %{"number": info["movie"]["comment_count"]}
+			_("コメント数：%(number)d") %{"number": info["movie"]["comment_count"]},
+			info["broadcaster"]["screen_id"]
 		]
 		if info["movie"]["is_live"] == True:
 			result.insert(0, _("現在配信中"))
 		else:
 			result.insert(0, _("オフライン"))
 		if info["movie"]["is_collabo"] == True:
-			result.append(_("コラボ可能"))
+			result.insert(-1, _("コラボ可能"))
 		else:
-			result.append(_("コラボ不可"))
+			result.insert(-1, _("コラボ不可"))
 
 		if mode == 0:
 			for i in range(0, len(result)):
