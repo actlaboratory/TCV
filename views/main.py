@@ -22,7 +22,6 @@ from .base import *
 from simpleDialog import *
 
 import views.connect
-import twitcasting.connection
 
 class MainView(BaseView):
 	def __init__(self):
@@ -41,15 +40,15 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionY")
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
-		self.commentList = self.creator.ListCtrl(30, 0, style = wx.LC_REPORT)
+		self.commentList = self.creator.ListCtrl(30, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
-		self.commentBody = self.creator.inputbox(_("コメント内容"))
-		self.commentSend = self.creator.button(_("送信"), None)
-		self.liveInfo = self.creator.ListCtrl(50, 0, style = wx.LC_LIST)
+		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"))
+		#self.commentSend = self.creator.button(_("送信"), globalVars.app.Manager.postComment())
+		self.liveInfo = self.creator.ListCtrl(50, 0, style = wx.LC_LIST, name = _("ライブ情報"))
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -106,7 +105,7 @@ class Events(BaseEvents):
 			connectDialog.Initialize()
 			ret = connectDialog.Show()
 			if ret==wx.ID_CANCEL: return
-			globalVars.app.manager.connect(str(connectDialog.GetValue()))
+			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
 			return
 		elif selected==menuItemsStore.getRef("disconnect"):
 			twitcasting.connection.disconnect()

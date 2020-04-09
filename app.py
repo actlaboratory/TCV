@@ -40,9 +40,9 @@ class Main(wx.App):
 			self.log.info("use reader 'NVDA'")
 			self.speech=accessible_output2.outputs.nvda.NVDA()
 		#SAPI4はバグってるっぽいので無効にしておく
-		#		elif(reader=="SAPI4"):
-			#			self.log.info("use reader 'SAPI4'")
-			#			self.speech=accessible_output2.outputs.sapi4.Sapi4()
+		#elif(reader=="SAPI4"):
+			#self.log.info("use reader 'SAPI4'")
+			#self.speech=accessible_output2.outputs.sapi4.Sapi4()
 		elif(reader=="SAPI5"):
 			self.log.info("use reader 'SAPI5'")
 			self.speech=accessible_output2.outputs.sapi5.SAPI5()
@@ -60,7 +60,7 @@ class Main(wx.App):
 		# メインビューを表示
 		self.hMainView=main.MainView()
 		self.hMainView.Show()
-		self.manager = manager.manager(self.hMainView)
+		self.Manager = manager.manager(self.hMainView)
 		return True
 
 	def InitLogger(self):

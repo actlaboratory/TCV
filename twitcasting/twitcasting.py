@@ -11,6 +11,7 @@ baseHeaders = {
 	"Authorization": "Bearer " + accessToken
 }
 
+# User
 def GetUserInfo(user_id):
 	req = requests.get(baseURL + "/users/" + user_id, headers=baseHeaders).text
 	dict = json.loads(req)
@@ -21,6 +22,7 @@ def VerifyCredentials():
 	dict = json.loads(req)
 	return dict
 
+# Movie
 def GetMovieInfo(movie_id):
 	req = requests.get(baseURL + "/movies/" + movie_id, headers=baseHeaders).text
 	dict = json.loads(req)
@@ -31,6 +33,7 @@ def GetCurrentLive(user_id):
 	dict = json.loads(req)
 	return dict
 
+# Comments
 def GetComments(movie_id, offset=0, limit=10, slice_id=""):
 	req = requests.get(baseURL + "/movies/" + str(movie_id) + "/comments?offset=" + str(offset) + "&limit=" + str(limit) + "&slice_id=" + str(slice_id), headers=baseHeaders).text
 	dict = json.loads(req)

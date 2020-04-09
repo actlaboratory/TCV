@@ -22,7 +22,7 @@ class manager:
 		self.initialComments = self.connection.getInitialComment(50)
 		self.addComments(self.initialComments)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
-		self.commentTimer.Start(2000)
+		self.commentTimer.Start(5000)
 		self.liveInfo = self.connection.getLiveInfo()
 		self.createLiveInfoList(self.liveInfo, liveInfoFirst)
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
@@ -51,7 +51,7 @@ class manager:
 		if info["movie"]["is_live"] == True:
 			result.insert(0, _("現在配信中"))
 		else:
-			result.insert(0, _("オフライン"))
+			result.insert(0, _("オフライン（最終放送時の情報を表示中）"))
 		if info["movie"]["is_collabo"] == True:
 			result.insert(-1, _("コラボ可能"))
 		else:
@@ -65,6 +65,10 @@ class manager:
 				bool = result[i] == self.MainView.liveInfo.GetItemText(i)
 				if bool == False:
 					self.MainView.liveInfo.SetItemText(i, result[i])
+
+	def postComment(self):
+		commentBody = self.MainView.commentBodyEdit.GetLineText(0)
+		self.connection.postComment(commentBody)
 
 	def timer(self, event):
 		timer = event.GetTimer()
