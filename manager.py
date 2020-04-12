@@ -30,6 +30,7 @@ class manager:
 		self.commentTimer.Start(5000)
 		self.liveInfo = self.connection.getLiveInfo()
 		self.createLiveInfoList(self.liveInfo, first)
+		self.oldViewers = self.liveInfo["movie"]["current_view_count"]
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 		self.liveInfoTimer.Start(10000)
 
@@ -85,4 +86,10 @@ class manager:
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			newInfo = self.connection.getLiveInfo()
+			self.newViewers = newInfo["movie"]["current_view_count"]
+			if self.newViewers < self.oldViewers:
+				globalVars.app.say(_("閲覧者が%(viewers)d人に減りました。") %{"viewers": self.newViewers})
+			elif self.newViewers > self.oldViewers:
+				globalVars.app.say(_("閲覧者が%(viewers)d人に増えました。") %{"viewers": self.newViewers})
+			self.oldViewers = self.newViewers
 			self.createLiveInfoList(newInfo, update)
