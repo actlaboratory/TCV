@@ -4,12 +4,13 @@
 import twitcasting.connection
 import datetime
 import wx
+import globalVars
 
 evtComment = 0
 evtLiveInfo = 1
 
-liveInfoFirst = 0
-liveInfoUpdate = 1
+first = 0
+update = 1
 
 class manager:
 	def __init__(self, MainView):
@@ -20,15 +21,15 @@ class manager:
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
 		self.initialComments = self.connection.getInitialComment(50)
-		self.addComments(self.initialComments)
+		self.addComments(self.initialComments, first)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 		self.commentTimer.Start(5000)
 		self.liveInfo = self.connection.getLiveInfo()
-		self.createLiveInfoList(self.liveInfo, liveInfoFirst)
+		self.createLiveInfoList(self.liveInfo, first)
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 		self.liveInfoTimer.Start(10000)
 
-	def addComments(self, commentList):
+	def addComments(self, commentList, mode):
 		for i in commentList:
 			result = [
 				i["from_user"]["name"],
@@ -39,6 +40,8 @@ class manager:
 			self.MainView.commentList.InsertItem(0	, "")
 			for j in range(0, 4):
 				self.MainView.commentList.SetItem(0, j, result[j])
+				if mode == update:
+					globalVars.app.say(str(result[j]))
 
 	def createLiveInfoList(self, info, mode):
 		result = [
@@ -75,7 +78,7 @@ class manager:
 		id = timer.GetId()
 		if id == evtComment:
 			newComments = self.connection.getComment()
-			self.addComments(newComments)
+			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			newInfo = self.connection.getLiveInfo()
-			self.createLiveInfoList(newInfo, liveInfoUpdate)
+			self.createLiveInfoList(newInfo, update)
