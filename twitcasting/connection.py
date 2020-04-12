@@ -9,6 +9,7 @@ class connection:
 	def __init__(self, userId):
 		self.userId = userId
 		userInfo = GetUserInfo(self.userId)
+		self.isLive = userInfo["user"]["is_live"]
 		self.movieId = userInfo["user"]["last_movie_id"]
 
 	def getInitialComment(self, number):

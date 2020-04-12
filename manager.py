@@ -20,6 +20,10 @@ class manager:
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
+		if self.connection.isLive == True:
+			globalVars.app.say(_("接続。現在配信中。"))
+		else:
+			globalVars.app.say(_("接続。現在オフライン。最終配信時の情報を表示中。"))
 		self.initialComments = self.connection.getInitialComment(50)
 		self.addComments(self.initialComments, first)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
