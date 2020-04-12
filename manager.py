@@ -5,6 +5,7 @@ import twitcasting.connection
 import datetime
 import wx
 import globalVars
+import simpleDialog
 
 evtComment = 0
 evtLiveInfo = 1
@@ -24,13 +25,14 @@ class manager:
 			globalVars.app.say(_("接続。現在配信中。"))
 		else:
 			globalVars.app.say(_("接続。現在オフライン。最終配信時の情報を表示中。"))
-		self.initialComments = self.connection.getInitialComment(50)
-		self.addComments(self.initialComments, first)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 		self.commentTimer.Start(5000)
+		self.initialComments = self.connection.getInitialComment(50)
+		self.addComments(self.initialComments, first)
 		self.liveInfo = self.connection.getLiveInfo()
-		self.createLiveInfoList(self.liveInfo, first)
 		self.oldViewers = self.liveInfo["movie"]["current_view_count"]
+		self.oldIsLive = self.liveInfo["movie"]["is_live"]
+		self.createLiveInfoList(self.liveInfo, first)
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 		self.liveInfoTimer.Start(10000)
 
@@ -82,14 +84,22 @@ class manager:
 		timer = event.GetTimer()
 		id = timer.GetId()
 		if id == evtComment:
+			self.connection.update()
 			newComments = self.connection.getComment()
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
+			self.connection.update()
 			newInfo = self.connection.getLiveInfo()
 			self.newViewers = newInfo["movie"]["current_view_count"]
 			if self.newViewers < self.oldViewers:
-				globalVars.app.say(_("閲覧者が%(viewers)d人に減りました。") %{"viewers": self.newViewers})
+				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
 			elif self.newViewers > self.oldViewers:
-				globalVars.app.say(_("閲覧者が%(viewers)d人に増えました。") %{"viewers": self.newViewers})
+				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
 			self.oldViewers = self.newViewers
+			self.newIsLive = newInfo["movie"]["is_live"]
+			if self.oldIsLive == True and self.newIsLive == False:
+				globalVars.app.say(_("ライブ終了。"))
+			elif self.oldIsLive == False and self.newIsLive == True:
+				globalVars.app.say(_("ライブ開始。"))
+			self.oldIsLive = self.newIsLive
 			self.createLiveInfoList(newInfo, update)
