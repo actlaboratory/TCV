@@ -47,7 +47,7 @@ class MainView(BaseView):
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
 		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"))
-		#self.commentSend = self.creator.button(_("送信"), globalVars.app.Manager.postComment())
+		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
 		self.liveInfo = self.creator.ListCtrl(50, 0, style = wx.LC_LIST, name = _("ライブ情報"))
 
 class Menu(BaseMenu):
@@ -109,3 +109,13 @@ class Events(BaseEvents):
 			return
 		elif selected==menuItemsStore.getRef("disconnect"):
 			twitcasting.connection.disconnect()
+
+	def postComment(self, event):
+		commentBody = self.parent.commentBodyEdit.GetLineText(0)
+		result = globalVars.app.Manager.postComment(commentBody)
+		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"]:
+			dialog(_("エラー"), _("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
+		elif "error" in result:
+			dialog(_("エラー"), _("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
+		else:
+			self.parent.commentBodyEdit.Clear()

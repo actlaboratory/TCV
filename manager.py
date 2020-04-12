@@ -66,9 +66,9 @@ class manager:
 				if bool == False:
 					self.MainView.liveInfo.SetItemText(i, result[i])
 
-	def postComment(self):
-		commentBody = self.MainView.commentBodyEdit.GetLineText(0)
-		self.connection.postComment(commentBody)
+	def postComment(self, commentBody):
+		result = self.connection.postComment(commentBody)
+		return result
 
 	def timer(self, event):
 		timer = event.GetTimer()

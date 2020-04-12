@@ -10,7 +10,6 @@ class connection:
 		self.userId = userId
 		userInfo = GetUserInfo(self.userId)
 		self.movieId = userInfo["user"]["last_movie_id"]
-		self.commentToSns = 0
 
 	def getInitialComment(self, number):
 		offset = max(0, number-50)
@@ -37,6 +36,6 @@ class connection:
 		return result
 
 	def postComment(self, body):
-		result = PostComment(self.movieID, body, self.commentToSns)
+		result = PostComment(self.movieId, body, "none")
 		return result
 
