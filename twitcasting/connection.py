@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ツイキャスライブ接続･切断等モジュール
+# コネクション
 
 from twitcasting.twitcasting import *
 import views.main
@@ -11,6 +11,12 @@ class connection:
 		userInfo = GetUserInfo(self.userId)
 		self.isLive = userInfo["user"]["is_live"]
 		self.movieId = userInfo["user"]["last_movie_id"]
+		self.movieInfo = GetMovieInfo(self.movieId)
+		self.elapsedTime = self.movieInfo["movie"]["duration"]
+		self.totalTime = 1800
+		self.remainingTime = self.totalTime - self.elapsedTime
+		while self.remainingTime < 0:
+			self.remainingTime += 1800
 
 	def getInitialComment(self, number):
 		offset = max(0, number-50)
@@ -40,8 +46,7 @@ class connection:
 			return ret
 
 	def getLiveInfo(self):
-		result = GetMovieInfo(self.movieId)
-		return result
+		self.movieInfo = GetMovieInfo(self.movieId)
 
 	def postComment(self, body):
 		result = PostComment(self.movieId, body, "none")
@@ -61,3 +66,4 @@ class connection:
 				elif isLive == True:
 					self.movieId = currentLive["movie"]["id"]
 					self.isLive = currentLive["movie"]["is_live"]
+					self.movieInfo = GetMovieInfo(self.movieId)
