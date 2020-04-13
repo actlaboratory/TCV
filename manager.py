@@ -14,6 +14,9 @@ evtCountDown = 2
 first = 0
 update = 1
 
+commentTimerInterval = 5000
+liveInfoTimerInterval = 10000
+countDownTimerInterval = 1000
 class manager:
 	def __init__(self, MainView):
 		self.MainView = MainView
@@ -22,22 +25,24 @@ class manager:
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
+		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 		if self.connection.isLive == True:
 			globalVars.app.say(_("接続。現在配信中。"))
-			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
-			self.countDownTimer.Start(1000)
+			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
 		else:
 			globalVars.app.say(_("接続。現在オフライン。最終配信時の情報を表示中。"))
+			self.connection.elapsedTime = 0
+			self.connection.remainingTime = 0
 		self.initialComments = self.connection.getInitialComment(50)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
-		self.commentTimer.Start(5000)
+		self.commentTimer.Start(commentTimerInterval)
 		self.addComments(self.initialComments, first)
 		self.connection.getLiveInfo()
 		self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 		self.oldIsLive = self.connection.isLive
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
-		self.liveInfoTimer.Start(10000)
+		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
 
 	def addComments(self, commentList, mode):
@@ -92,13 +97,14 @@ class manager:
 		return time
 
 	def timer(self, event):
+		if self.connection.isLive == False or "error" in self.connection.movieInfo:
+			self.connection.update()
 		timer = event.GetTimer()
 		id = timer.GetId()
 		if id == evtComment:
 			newComments = self.connection.getComment()
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
-			self.connection.update()
 			self.connection.getLiveInfo()
 			self.newViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			if self.newViewers < self.oldViewers:
@@ -110,9 +116,14 @@ class manager:
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
+				self.connection.elapsedTime = 0
+				self.connection.remainingTime = 0
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
-				self.countDownTimer.Start(1000)
+				self.connection.totalTime = 1800
+				self.connection.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+				self.connection.remainingTime = self.connection.totalTime - self.connection.elapsedTime
+				self.countDownTimer.Start(countDownTimerInterval)
 			self.oldIsLive = self.newIsLive
 			self.createLiveInfoList(update)
 		elif id == evtCountDown:

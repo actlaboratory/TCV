@@ -53,17 +53,10 @@ class connection:
 		return result
 
 	def update(self):
-		if self.isLive == True:
-			pass
-		elif self.isLive == False:
-			currentLive = GetCurrentLive(self.userId)
-			if "error" in currentLive:
-				pass
-			else:
-				isLive = currentLive["movie"]["is_live"]
-				if isLive == False:
-					self.isLive = False
-				elif isLive == True:
-					self.movieId = currentLive["movie"]["id"]
-					self.isLive = currentLive["movie"]["is_live"]
-					self.movieInfo = GetMovieInfo(self.movieId)
+		userInfo = GetUserInfo(self.userId)
+		if userInfo["user"]["is_live"] == True:
+			self.movieInfo = GetCurrentLive(self.userId)
+		elif userInfo["user"]["is_live"] == False:
+			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
+		self.isLive = self.movieInfo["movie"]["is_live"]
+		self.movieId = self.movieInfo["movie"]["id"]
