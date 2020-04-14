@@ -113,9 +113,5 @@ class Events(BaseEvents):
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetLineText(0)
 		result = globalVars.app.Manager.postComment(commentBody)
-		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"]:
-			dialog(_("エラー"), _("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
-		elif "error" in result:
-			dialog(_("エラー"), _("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
-		else:
+		if result == True:
 			self.parent.commentBodyEdit.Clear()

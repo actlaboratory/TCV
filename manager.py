@@ -25,25 +25,28 @@ class manager:
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
-		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
-		if self.connection.isLive == True:
-			globalVars.app.say(_("接続。現在配信中。"))
-			self.countDownTimer.Start(countDownTimerInterval)
-			globalVars.app.say(_("タイマー開始。"))
+		if self.connection.connected == False:
+			simpleDialog.dialog(_("エラー"), _("指定されたユーザが見つかりません。"))
 		else:
-			globalVars.app.say(_("接続。現在オフライン。最終配信時の情報を表示中。"))
-			self.connection.elapsedTime = 0
-			self.connection.remainingTime = 0
-		self.initialComments = self.connection.getInitialComment(50)
-		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
-		self.commentTimer.Start(commentTimerInterval)
-		self.addComments(self.initialComments, first)
-		self.connection.getLiveInfo()
-		self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
-		self.oldIsLive = self.connection.isLive
-		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
-		self.liveInfoTimer.Start(liveInfoTimerInterval)
-		self.createLiveInfoList(first)
+			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
+			if self.connection.isLive == True:
+				globalVars.app.say(_("接続。現在配信中。"))
+				self.countDownTimer.Start(countDownTimerInterval)
+				globalVars.app.say(_("タイマー開始。"))
+			else:
+				globalVars.app.say(_("接続。現在オフライン。最終配信時の情報を表示中。"))
+				self.connection.elapsedTime = 0
+				self.connection.remainingTime = 0
+			self.initialComments = self.connection.getInitialComment(50)
+			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
+			self.commentTimer.Start(commentTimerInterval)
+			self.addComments(self.initialComments, first)
+			self.connection.getLiveInfo()
+			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
+			self.oldIsLive = self.connection.isLive
+			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
+			self.liveInfoTimer.Start(liveInfoTimerInterval)
+			self.createLiveInfoList(first)
 
 	def addComments(self, commentList, mode):
 		for i in commentList:
@@ -90,7 +93,14 @@ class manager:
 
 	def postComment(self, commentBody):
 		result = self.connection.postComment(commentBody)
-		return result
+		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"]:
+			simpleDialog.dialog(_("エラー"), _("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
+			return False
+		elif "error" in result:
+			dialog(_("エラー"), _("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
+			return False
+		else:
+			return True
 
 	def formatTime(self, second):
 		time = datetime.time(hour = int(second / 3600), minute = int(second % 3600 / 60), second = int(second % 3600 % 60))

@@ -9,21 +9,25 @@ class connection:
 	def __init__(self, userId):
 		self.userId = userId
 		userInfo = GetUserInfo(self.userId)
-		self.isLive = userInfo["user"]["is_live"]
-		self.movieId = userInfo["user"]["last_movie_id"]
-		self.movieInfo = GetMovieInfo(self.movieId)
-		self.elapsedTime = self.movieInfo["movie"]["duration"]
-		self.totalTime = 1800
-		self.remainingTime = self.totalTime - self.elapsedTime
-		while self.remainingTime < 0:
-			self.remainingTime += 1800
+		if "error" in userInfo and userInfo["error"]["code"] == 404:
+			self.connected = False
+		else:
+			self.connected = True
+			self.isLive = userInfo["user"]["is_live"]
+			self.movieId = userInfo["user"]["last_movie_id"]
+			self.movieInfo = GetMovieInfo(self.movieId)
+			self.elapsedTime = self.movieInfo["movie"]["duration"]
+			self.totalTime = 1800
+			self.remainingTime = self.totalTime - self.elapsedTime
+			while self.remainingTime < 0:
+				self.remainingTime += 1800
 
 	def getInitialComment(self, number):
 		offset = max(0, number-50)
 		limit = min(50, number)
 		result = GetComments(self.movieId, offset, limit)
 		if len(result) == 0:
-			self.lastCommentId = None
+			self.lastCommentId = ""
 			return []
 		else:
 			self.lastCommentId = result[0]["id"]
