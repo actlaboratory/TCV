@@ -127,6 +127,11 @@ class Events(BaseEvents):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"] + " ")
 			self.parent.commentBodyEdit.SetInsertionPointEnd()
 			self.parent.commentBodyEdit.SetFocus()
+		elif selected==menuItemsStore.getRef("deleteSelectedComment"):
+			dlg=wx.MessageDialog(None,_("選択中のコメントを削除しますか？"),_("確認"),wx.YES_NO|wx.ICON_QUESTION)
+			if dlg.ShowModal()==wx.ID_NO:
+				return
+			globalVars.app.Manager.deleteComment()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetLineText(0)

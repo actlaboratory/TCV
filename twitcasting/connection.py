@@ -36,6 +36,8 @@ class connection:
 			self.lastCommentId = result[0]["id"]
 			result2 = self.getComment()
 			result3 = result2 + result
+			for i in result3:
+				i["movieId"] = self.movieId
 			self.comments = result3 + self.comments
 			result3.reverse()
 			return result3
@@ -50,6 +52,8 @@ class connection:
 				self.lastCommentId = result[0]["id"]
 				ret = result + ret
 				result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+			for i in ret:
+				i["movieId"] = self.movieId
 			self.comments = ret + self.comments
 			ret.reverse()
 			return ret
@@ -62,6 +66,13 @@ class connection:
 	def postComment(self, body):
 		result = PostComment(self.movieId, body, "none")
 		return result
+
+	def deleteComment(self, comment):
+		result = DeleteComment(comment["movieId"], comment["id"])
+		if "error" in result and result["error"]["code"] == 403:
+			return False
+		else:
+			return True
 
 	def update(self):
 		userInfo = GetUserInfo(self.userId)

@@ -105,6 +105,15 @@ class manager:
 		time = datetime.time(hour = int(second / 3600), minute = int(second % 3600 / 60), second = int(second % 3600 % 60))
 		return time
 
+	def deleteComment(self):
+		selected = self.MainView.commentList.GetFocusedItem()
+		result = self.connection.deleteComment(self.connection.comments[selected])
+		if result == False:
+			simpleDialog.dialog(_("エラー"), _("コメントの削除に失敗しました。このコメントを削除する権限がありません。"))
+		else:
+			del self.connection.comments[selected]
+			self.MainView.commentList.DeleteItem(selected)
+
 	def timer(self, event):
 		if self.connection.isLive == False or "error" in self.connection.movieInfo:
 			self.connection.update()
