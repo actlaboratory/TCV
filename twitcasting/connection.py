@@ -16,11 +16,14 @@ class connection:
 			self.isLive = userInfo["user"]["is_live"]
 			self.movieId = userInfo["user"]["last_movie_id"]
 			self.movieInfo = GetMovieInfo(self.movieId)
+			self.category = self.movieInfo["movie"]["category"]
+			self.categoryName = getCategoryName(self.category)
 			self.elapsedTime = self.movieInfo["movie"]["duration"]
 			self.totalTime = 1800
 			self.remainingTime = self.totalTime - self.elapsedTime
 			while self.remainingTime < 0:
 				self.remainingTime += 1800
+		self.comments = []
 
 	def getInitialComment(self, number):
 		offset = max(0, number-50)
@@ -33,6 +36,7 @@ class connection:
 			self.lastCommentId = result[0]["id"]
 			result2 = self.getComment()
 			result3 = result2 + result
+			self.comments = result3 + self.comments
 			result3.reverse()
 			return result3
 
@@ -46,11 +50,14 @@ class connection:
 				self.lastCommentId = result[0]["id"]
 				ret = result + ret
 				result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+			self.comments = ret + self.comments
 			ret.reverse()
 			return ret
 
 	def getLiveInfo(self):
 		self.movieInfo = GetMovieInfo(self.movieId)
+		self.category = self.movieInfo["movie"]["category"]
+		self.categoryName = getCategoryName(self.category)
 
 	def postComment(self, body):
 		result = PostComment(self.movieId, body, "none")
@@ -64,3 +71,12 @@ class connection:
 			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
 		self.isLive = self.movieInfo["movie"]["is_live"]
 		self.movieId = self.movieInfo["movie"]["id"]
+
+def getCategoryName(id):
+	if id == None:
+		return _("カテゴリなし")
+	categories = GetCategories()
+	for category in categories:
+		for subCategory in category["sub_categories"]:
+			if subCategory["id"] == id:
+				return subCategory["name"]

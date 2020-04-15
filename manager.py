@@ -61,7 +61,6 @@ class manager:
 			self.MainView.commentList.SetItem(0, 1, result["message"])
 			self.MainView.commentList.SetItem(0, 2, result["time"])
 			self.MainView.commentList.SetItem(0, 3, result["user"])
-
 			if mode == update:
 				globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
 
@@ -70,7 +69,7 @@ class manager:
 			_("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.connection.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.connection.remainingTime).strftime("%H:%M:%S")},
 			_("タイトル：%(title)s") %{"title": self.connection.movieInfo["movie"]["title"]},
 			_("閲覧：現在%(current)d人、合計%(total)d人") %{"current": self.connection.movieInfo["movie"]["current_view_count"], "total": self.connection.movieInfo["movie"]["total_view_count"]},
-			_("カテゴリ：%(category)s") %{"category": self.connection.movieInfo["movie"]["category"]},
+			_("カテゴリ：%(category)s") %{"category": self.connection.categoryName},
 			_("コメント数：%(number)d") %{"number": self.connection.movieInfo["movie"]["comment_count"]},
 			self.connection.movieInfo["broadcaster"]["screen_id"]
 		]
