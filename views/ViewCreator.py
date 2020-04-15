@@ -93,7 +93,7 @@ class ViewCreator():
 		hButton=wx.Button(self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_SUNKEN)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self.SetFace(hButton,mode=BUTTON_COLOUR)
-		self.sizer.Add(hButton,1,wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,5)
+		self.sizer.Add(hButton,1, wx.ALIGN_BOTTOM | wx.ALL,5)
 		hButton.SetDefault()
 		self.AddSpace(self.space)
 		return hButton
@@ -102,7 +102,7 @@ class ViewCreator():
 		hButton=wx.Button(self.parent, wx.ID_CANCEL,label=text, name=text)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self.SetFace(hButton,mode=BUTTON_COLOUR)
-		self.sizer.Add(hButton,1,wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,5)
+		self.sizer.Add(hButton,1,wx.ALIGN_BOTTOM | wx.ALL,5)
 		self.AddSpace(self.space)
 		return hButton
 
@@ -212,6 +212,7 @@ class ViewCreator():
 	def ListCtrl(self,proportion,sizerFlag,**settings):
 		hListCtrl=wx.ListCtrl(self.parent,wx.ID_ANY,**settings)
 		self.SetFace(hListCtrl)
+		self.SetFace(hListCtrl.GetMainWindow())
 		self.sizer.Add(hListCtrl,proportion,sizerFlag)
 		self.AddSpace(self.space)
 		return hListCtrl
@@ -224,11 +225,11 @@ class ViewCreator():
 		self.sizer.Layout()
 		return htab
 
-	def inputbox(self,text,x=0,defaultValue=""):
+	def inputbox(self,text,x=0,defaultValue="",style=0):
 		hStaticText=wx.StaticText(self.parent,-1,label=text,name=text)
 		self.sizer.Add(hStaticText,0)
 
-		hTextCtrl=wx.TextCtrl(self.parent, -1,size=(x,-1),name=text,value=defaultValue)
+		hTextCtrl=TextCtrl(self.parent, -1,size=(x,-1),name=text,value=defaultValue,style=style)
 		self.SetFace(hTextCtrl)
 		if x==-1:	#幅を拡張
 			self.sizer.Add(hTextCtrl,1)
@@ -303,10 +304,15 @@ def makePanel(parent):
 	return hPanel
 
 
+class TextCtrl(wx.TextCtrl):
+	def AcceptsFocusFromKeyboard(self):
+		return True
+
+
 
 
 """
 	ラジオボタン関連サンプルコード
 	https://www.python-izm.com/gui/wxpython/wxpython_radiobox/
-
 """
+
