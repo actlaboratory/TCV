@@ -22,6 +22,7 @@ from .base import *
 from simpleDialog import *
 
 import views.connect
+import views.viewItem
 
 class MainView(BaseView):
 	def __init__(self):
@@ -57,6 +58,7 @@ class Menu(BaseMenu):
 		#メニューの大項目を作る
 		self.FileMenu=wx.Menu()
 		self.PlayMenu=wx.Menu()
+		self.CommentMenu=wx.Menu()
 		self.SettingsMenu=wx.Menu()
 		self.HelpMenu=wx.Menu()
 
@@ -70,6 +72,10 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.PlayMenu,"stop",_("停止(&S)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
+		#コメントメニュー
+		self.RegisterMenuCommand(self.CommentMenu,"viewItem",_("コメントの詳細を表示(&V) ..."))
+		self.RegisterMenuCommand(self.CommentMenu,"reply",_("投稿者に返信(&R)"))
+		self.RegisterMenuCommand(self.CommentMenu,"delete",_("選択中のコメントを削除(&D)"))
 		#設定メニュー
 		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
 		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
@@ -81,6 +87,7 @@ class Menu(BaseMenu):
 		self.hMenuBar=wx.MenuBar()
 		self.hMenuBar.Append(self.FileMenu,_("ファイル(&F)"))
 		self.hMenuBar.Append(self.PlayMenu,_("再生(&P)"))
+		self.hMenuBar.Append(self.CommentMenu,_("コメント(&C)"))
 		self.hMenuBar.Append(self.SettingsMenu,_("設定(&S)"))
 		self.hMenuBar.Append(self.HelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
@@ -107,8 +114,10 @@ class Events(BaseEvents):
 			if ret==wx.ID_CANCEL: return
 			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
 			return
-		elif selected==menuItemsStore.getRef("disconnect"):
-			twitcasting.connection.disconnect()
+		elif selected==menuItemsStore.getRef("viewItem"):
+			viewItemDialog = views.viewItem.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
+			viewItemDialog.Initialize()
+			ret = viewItemDialog.Show()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetLineText(0)

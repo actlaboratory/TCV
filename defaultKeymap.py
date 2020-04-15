@@ -10,5 +10,8 @@ defaultKeymap["mainView"]={
 	"play": "F1",
 	"stop": "F2",
 	"volumeUp": "F3",
-	"volumeDown": "F4"
+	"volumeDown": "F4",
+	"viewItem": "Alt+RETURN",
+	"reply": "ctrl+r",
+	"delete": "ctrl+d"
 }
