@@ -22,7 +22,6 @@ from .base import *
 from simpleDialog import *
 
 import views.connect
-import twitcasting.connection
 
 class MainView(BaseView):
 	def __init__(self):
@@ -41,13 +40,15 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionY")
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
-		commentList = self.creator.ListCtrl(30, 0)
-		selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
-		commentBody = self.creator.inputbox(_("コメント内容"))
-		commentSend = self.creator.button(_("送信"), None)
-		liveInfo = self.creator.ListCtrl(50, 0)
-		# ダミー
-		liveInfo.InsertItem(0, "ライブ情報")
+		self.commentList = self.creator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
+		self.commentList.InsertColumn(0, _("名前"))
+		self.commentList.InsertColumn(1, _("投稿"))
+		self.commentList.InsertColumn(2, _("時刻"))
+		self.commentList.InsertColumn(3, _("ユーザ名"))
+		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
+		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"))
+		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
+		self.liveInfo = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -61,7 +62,7 @@ class Menu(BaseMenu):
 
 		#メニューの中身
 		#ファイルメニュー
-		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C)"))
+		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C) ..."))
 		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
 		#再生メニュー
@@ -70,11 +71,11 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
 		#設定メニュー
-		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G)"))
-		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R)"))
-		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M)"))
+		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
+		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
+		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M) ..."))
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V)"))
+		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
@@ -104,7 +105,13 @@ class Events(BaseEvents):
 			connectDialog.Initialize()
 			ret = connectDialog.Show()
 			if ret==wx.ID_CANCEL: return
-			twitcasting.connection.connect(str(connectDialog.GetValue()))
+			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
 			return
 		elif selected==menuItemsStore.getRef("disconnect"):
 			twitcasting.connection.disconnect()
+
+	def postComment(self, event):
+		commentBody = self.parent.commentBodyEdit.GetLineText(0)
+		result = globalVars.app.Manager.postComment(commentBody)
+		if result == True:
+			self.parent.commentBodyEdit.Clear()

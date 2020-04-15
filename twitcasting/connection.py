@@ -1,64 +1,82 @@
 # -*- coding: utf-8 -*-
-# ツイキャスライブ接続･切断等モジュール
+# コネクション
 
 from twitcasting.twitcasting import *
-import globalVars
-from simpleDialog import dialog
 import views.main
 import datetime
 
-connected = False
+class connection:
+	def __init__(self, userId):
+		self.userId = userId
+		userInfo = GetUserInfo(self.userId)
+		if "error" in userInfo and userInfo["error"]["code"] == 404:
+			self.connected = False
+		else:
+			self.connected = True
+			self.isLive = userInfo["user"]["is_live"]
+			self.movieId = userInfo["user"]["last_movie_id"]
+			self.movieInfo = GetMovieInfo(self.movieId)
+			self.category = self.movieInfo["movie"]["category"]
+			self.categoryName = getCategoryName(self.category)
+			self.elapsedTime = self.movieInfo["movie"]["duration"]
+			self.totalTime = 1800
+			self.remainingTime = self.totalTime - self.elapsedTime
+			while self.remainingTime < 0:
+				self.remainingTime += 1800
+		self.comments = []
 
-def connect(user_id):
-	info = GetUserInfo(user_id)
-	if "error" in info:
-		dialog(_("エラー"), _("ライブへの接続に失敗しました。"))
-	elif info["user"]["is_live"] == True:
-		globalVars.app.say(_("接続しました。現在配信中です。"))
-		connected = True
-		movieId = GetCurrentLive(user_id)["movie"]["id"]
-		getCommentList(movieId)
-		getLiveInfo(movieId)
-	elif info["user"]["is_live"] == False:
-		globalVars.app.say(_("接続しました。現在オフラインです。"))
-		connected = True
-		movieId = info["user"]["last_movie_id"]
-		getCommentList(movieId)
-		getLiveInfo(movieId)
+	def getInitialComment(self, number):
+		offset = max(0, number-50)
+		limit = min(50, number)
+		result = GetComments(self.movieId, offset, limit)
+		if len(result) == 0:
+			self.lastCommentId = ""
+			return []
+		else:
+			self.lastCommentId = result[0]["id"]
+			result2 = self.getComment()
+			result3 = result2 + result
+			self.comments = result3 + self.comments
+			result3.reverse()
+			return result3
 
-def disconnect():
-	connected = False
-	globalVars.app.say(_("切断しました。"))
+	def getComment(self):
+		ret = []
+		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+		if len(result) == 0:
+			return []
+		else:
+			while result != []:
+				self.lastCommentId = result[0]["id"]
+				ret = result + ret
+				result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+			self.comments = ret + self.comments
+			ret.reverse()
+			return ret
 
-def getCommentList(movieId):
-	commentList = []
-	src = GetComments(movieId)
-	comments = src["comments"]
-	for i in comments:
-		commentData = {
-			"commentID": i["id"],
-			"dispname": i["from_user"]["name"],
-			"message": i["message"],
-			"time": datetime.datetime.fromtimestamp(i["created"]),
-			"user": i["from_user"]["screen_id"]
-		}
-		commentList.append(commentData)
-	# テスト用
-	dialog("コメント", str(commentList))
-	return commentList
+	def getLiveInfo(self):
+		self.movieInfo = GetMovieInfo(self.movieId)
+		self.category = self.movieInfo["movie"]["category"]
+		self.categoryName = getCategoryName(self.category)
 
-def getLiveInfo(movieId):
-	src = GetMovieInfo(movieId)
-	info = {
-		"movieID": src["movie"]["id"],
-		"title": src["movie"]["title"],
-		"category": src["movie"]["category"],
-		"commentCount": src["movie"]["comment_count"],
-		"currentViewCount": src["movie"]["current_view_count"],
-		"totalViewCount": src["movie"]["total_view_count"],
-		"hlsURL": src["movie"]["hls_url"]
-	}
-	# テスト用
-	dialog("ライブ情報", str(info))
-	return info
+	def postComment(self, body):
+		result = PostComment(self.movieId, body, "none")
+		return result
 
+	def update(self):
+		userInfo = GetUserInfo(self.userId)
+		if userInfo["user"]["is_live"] == True:
+			self.movieInfo = GetCurrentLive(self.userId)
+		elif userInfo["user"]["is_live"] == False:
+			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
+		self.isLive = self.movieInfo["movie"]["is_live"]
+		self.movieId = self.movieInfo["movie"]["id"]
+
+def getCategoryName(id):
+	if id == None:
+		return _("カテゴリなし")
+	categories = GetCategories()
+	for category in categories:
+		for subCategory in category["sub_categories"]:
+			if subCategory["id"] == id:
+				return subCategory["name"]
