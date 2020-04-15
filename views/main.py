@@ -22,7 +22,7 @@ from .base import *
 from simpleDialog import *
 
 import views.connect
-import views.viewItem
+import views.viewComment
 
 class MainView(BaseView):
 	def __init__(self):
@@ -73,9 +73,10 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
 		#コメントメニュー
-		self.RegisterMenuCommand(self.CommentMenu,"viewItem",_("コメントの詳細を表示(&V) ..."))
-		self.RegisterMenuCommand(self.CommentMenu,"reply",_("投稿者に返信(&R)"))
-		self.RegisterMenuCommand(self.CommentMenu,"delete",_("選択中のコメントを削除(&D)"))
+		self.RegisterMenuCommand(self.CommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
+		self.RegisterMenuCommand(self.CommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
+		self.RegisterMenuCommand(self.CommentMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
+		self.RegisterMenuCommand(self.CommentMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
 		#設定メニュー
 		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
 		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
@@ -114,10 +115,18 @@ class Events(BaseEvents):
 			if ret==wx.ID_CANCEL: return
 			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
 			return
-		elif selected==menuItemsStore.getRef("viewItem"):
-			viewItemDialog = views.viewItem.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
-			viewItemDialog.Initialize()
-			ret = viewItemDialog.Show()
+		elif selected==menuItemsStore.getRef("viewComment"):
+			viewCommentDialog = views.viewComment.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
+			viewCommentDialog.Initialize()
+			viewCommentDialog.Show()
+		elif selected==menuItemsStore.getRef("replyToSelectedComment"):
+			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["from_user"]["screen_id"] + " ")
+			self.parent.commentBodyEdit.SetInsertionPointEnd()
+			self.parent.commentBodyEdit.SetFocus()
+		elif selected==menuItemsStore.getRef("replyToBroadcaster"):
+			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"] + " ")
+			self.parent.commentBodyEdit.SetInsertionPointEnd()
+			self.parent.commentBodyEdit.SetFocus()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetLineText(0)

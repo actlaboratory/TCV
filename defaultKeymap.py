@@ -11,7 +11,8 @@ defaultKeymap["mainView"]={
 	"stop": "F2",
 	"volumeUp": "F3",
 	"volumeDown": "F4",
-	"viewItem": "Alt+RETURN",
-	"reply": "ctrl+r",
-	"delete": "ctrl+d"
+	"viewComment": "Alt+RETURN",
+	"replyToSelectedComment": "ctrl+r",
+	"deleteSelectedComment": "ctrl+d",
+	"replyToBroadcaster": "ctrl+shift+r"
 }

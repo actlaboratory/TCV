@@ -18,7 +18,7 @@ class Dialog(BaseDialog):
 		}
 
 	def Initialize(self):
-		self.identifier="viewItemDialog"#このビューを表す文字列
+		self.identifier="viewCommentDialog"#このビューを表す文字列
 		self.log=getLogger(self.identifier)
 		self.log.debug("created")
 		super().Initialize(self.app.hMainView.hFrame,_("コメントの詳細"))
