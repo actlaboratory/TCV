@@ -69,6 +69,7 @@ class manager:
 		result = [
 			_("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.connection.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.connection.remainingTime).strftime("%H:%M:%S")},
 			_("タイトル：%(title)s") %{"title": self.connection.movieInfo["movie"]["title"]},
+			_("テロップ：%(subtitle)s") %{"subtitle": self.connection.movieInfo["movie"]["subtitle"]},
 			_("閲覧：現在%(current)d人、合計%(total)d人") %{"current": self.connection.movieInfo["movie"]["current_view_count"], "total": self.connection.movieInfo["movie"]["total_view_count"]},
 			_("カテゴリ：%(category)s") %{"category": self.connection.categoryName},
 			_("コメント数：%(number)d") %{"number": self.connection.movieInfo["movie"]["comment_count"]},
