@@ -45,7 +45,7 @@ class connection:
 	def getComment(self):
 		ret = []
 		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
-		if len(result) == 0:
+		if len(result) == 0 or "error" in result:
 			return []
 		else:
 			while result != []:
@@ -59,7 +59,7 @@ class connection:
 			return ret
 
 	def getLiveInfo(self):
-		self.movieInfo = GetMovieInfo(self.movieId)
+		self.update()
 		self.category = self.movieInfo["movie"]["category"]
 		self.categoryName = getCategoryName(self.category)
 

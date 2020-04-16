@@ -44,6 +44,7 @@ class manager:
 			self.connection.getLiveInfo()
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			self.oldIsLive = self.connection.isLive
+			self.oldMovieId = self.connection.movieId
 			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 			self.liveInfoTimer.Start(liveInfoTimerInterval)
 			self.createLiveInfoList(first)
@@ -115,15 +116,19 @@ class manager:
 			self.MainView.commentList.DeleteItem(selected)
 
 	def timer(self, event):
-		if self.connection.isLive == False or "error" in self.connection.movieInfo:
-			self.connection.update()
 		timer = event.GetTimer()
 		id = timer.GetId()
 		if id == evtComment:
 			newComments = self.connection.getComment()
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
-			self.connection.getLiveInfo()
+			self.connection.update()
+			self.newMovieId = self.connection.movieId
+			if self.newMovieId != self.oldMovieId:
+				globalVars.app.say(_("タイマーリセット。"))
+				self.connection.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+				self.connection.remainingTime = self.connection.totalTime - self.connection.elapsedTime
+			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			if self.newViewers < self.oldViewers:
 				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
