@@ -47,7 +47,7 @@ class MainView(BaseView):
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
-		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"))
+		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
 		self.liveInfo = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
 
@@ -134,7 +134,7 @@ class Events(BaseEvents):
 			globalVars.app.Manager.deleteComment()
 
 	def postComment(self, event):
-		commentBody = self.parent.commentBodyEdit.GetLineText(0)
+		commentBody = self.parent.commentBodyEdit.GetValue()
 		result = globalVars.app.Manager.postComment(commentBody)
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
