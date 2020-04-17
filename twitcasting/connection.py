@@ -2,6 +2,7 @@
 # コネクション
 
 from twitcasting.twitcasting import *
+from twitcasting.getItem import getItem
 import views.main
 import datetime
 
@@ -23,7 +24,8 @@ class connection:
 			self.remainingTime = self.totalTime - self.elapsedTime
 			while self.remainingTime < 0:
 				self.remainingTime += 1800
-		self.comments = []
+			self.getItem()
+			self.comments = []
 
 	def getInitialComment(self, number):
 		offset = max(0, number-50)
@@ -62,6 +64,7 @@ class connection:
 		self.update()
 		self.category = self.movieInfo["movie"]["category"]
 		self.categoryName = getCategoryName(self.category)
+		self.getItem()
 
 	def postComment(self, body):
 		result = PostComment(self.movieId, body, "none")
@@ -82,6 +85,9 @@ class connection:
 			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
 		self.isLive = self.movieInfo["movie"]["is_live"]
 		self.movieId = self.movieInfo["movie"]["id"]
+
+	def getItem(self):
+		self.item = getItem(self.movieInfo["broadcaster"]["screen_id"])
 
 def getCategoryName(id):
 	if id == None:

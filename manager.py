@@ -42,12 +42,14 @@ class manager:
 			self.commentTimer.Start(commentTimerInterval)
 			self.addComments(self.initialComments, first)
 			self.connection.getLiveInfo()
+			self.connection.getItem()
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
 			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 			self.liveInfoTimer.Start(liveInfoTimerInterval)
 			self.createLiveInfoList(first)
+			self.createItemList(first)
 
 	def addComments(self, commentList, mode):
 		for i in commentList:
@@ -83,14 +85,27 @@ class manager:
 			result.insert(-1, _("コラボ可能"))
 		else:
 			result.insert(-1, _("コラボ不可"))
-		if mode == 0:
+		if mode == first:
 			for i in range(0, len(result)):
 				self.MainView.liveInfo.InsertItem(i, result[i])
-		elif mode == 1:
+		elif mode == update:
 			for i in range(0, len(result)):
 				bool = result[i] == self.MainView.liveInfo.GetItemText(i)
 				if bool == False:
 					self.MainView.liveInfo.SetItemText(i, result[i])
+
+	def createItemList(self, mode):
+		result = []
+		for name, count in self.connection.item.items():
+			result.append(name + ":" + count)
+		if mode == first:
+			for i in range(0, len(result)):
+				self.MainView.itemList.InsertItem(i, result[i])
+		elif mode == update:
+			for i in range(0, len(result)):
+				bool = result[i] == self.MainView.itemList.GetItemText(i)
+				if bool == False:
+					self.MainView.itemList.SetItemText(i, result[i])
 
 	def postComment(self, commentBody):
 		result = self.connection.postComment(commentBody)
@@ -150,6 +165,7 @@ class manager:
 				self.countDownTimer.Start(countDownTimerInterval)
 			self.oldIsLive = self.newIsLive
 			self.createLiveInfoList(update)
+			self.createItemList(update)
 		elif id == evtCountDown:
 			self.connection.elapsedTime += 1
 			self.connection.remainingTime -= 1

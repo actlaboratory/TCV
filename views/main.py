@@ -50,6 +50,7 @@ class MainView(BaseView):
 		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
 		self.liveInfo = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
+		self.itemList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
 
 class Menu(BaseMenu):
 	def Apply(self,target):
