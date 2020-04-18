@@ -28,21 +28,24 @@ class manager:
 		if self.connection.connected == False:
 			simpleDialog.dialog(_("エラー"), _("指定されたユーザが見つかりません。"))
 		else:
+			globalVars.app.say(userId)
 			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 			if self.connection.isLive == True:
 				globalVars.app.say(_("接続。現在配信中。"))
 				self.countDownTimer.Start(countDownTimerInterval)
 				globalVars.app.say(_("タイマー開始。"))
 			else:
-				globalVars.app.say(_("接続。現在オフライン。最終配信時の情報を表示中。"))
+				globalVars.app.say(_("接続。現在オフライン。"))
 				self.connection.elapsedTime = 0
 				self.connection.remainingTime = 0
 			self.initialComments = self.connection.getInitialComment(50)
 			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 			self.commentTimer.Start(commentTimerInterval)
 			self.addComments(self.initialComments, first)
-			self.connection.getLiveInfo()
-			self.connection.getItem()
+			self.connection.update()
+			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
+				return
+			self.oldCoins = self.connection.coins
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
@@ -139,6 +142,10 @@ class manager:
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			self.connection.update()
+			self.newCoins = self.connection.coins
+			if self.newCoins != self.newCoins and self.newCoins % 5 == 0 and self.newCoins != 0:
+				globalVars.app.say(_("コイン%(coins)s枚。") %{"coins": str(self.connection.coins)})
+			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				globalVars.app.say(_("タイマーリセット。"))

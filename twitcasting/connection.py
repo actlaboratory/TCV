@@ -14,20 +14,28 @@ class connection:
 			self.connected = False
 		else:
 			self.connected = True
-			self.isLive = userInfo["user"]["is_live"]
-			self.movieId = userInfo["user"]["last_movie_id"]
-			self.movieInfo = GetMovieInfo(self.movieId)
-			self.category = self.movieInfo["movie"]["category"]
-			self.categoryName = getCategoryName(self.category)
-			self.elapsedTime = self.movieInfo["movie"]["duration"]
-			self.totalTime = 1800
-			self.remainingTime = self.totalTime - self.elapsedTime
-			while self.remainingTime < 0:
-				self.remainingTime += 1800
-			self.getItem()
-			self.comments = []
+			self.update()
+			if "error" in self.movieInfo and self.movieInfo["error"]["code"] == 404:
+				return
+			else:
+				self.category = self.movieInfo["movie"]["category"]
+				self.categoryName = getCategoryName(self.category)
+				if "コンティニューコイン" in self.item:
+					self.coins = int(self.item["コンティニューコイン"])
+				else:
+					self.coins = 0
+				self.elapsedTime = self.movieInfo["movie"]["duration"]
+				self.totalTime = int(self.coins / 5) * 1800 + 1800
+				self.remainingTime = self.totalTime - self.elapsedTime
+				if self.elapsedTime + self.remainingTime > 14400:
+					self.remainingTime = 14400 - self.elapsedTime
+				while self.remainingTime < 0:
+					self.remainingTime += 1800
+				self.comments = []
 
 	def getInitialComment(self, number):
+		if self.movieId == "":
+			return []
 		offset = max(0, number-50)
 		limit = min(50, number)
 		result = GetComments(self.movieId, offset, limit)
@@ -45,6 +53,8 @@ class connection:
 			return result3
 
 	def getComment(self):
+		if self.movieId == "":
+			return []
 		ret = []
 		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
 		if len(result) == 0 or "error" in result:
@@ -60,12 +70,6 @@ class connection:
 			ret.reverse()
 			return ret
 
-	def getLiveInfo(self):
-		self.update()
-		self.category = self.movieInfo["movie"]["category"]
-		self.categoryName = getCategoryName(self.category)
-		self.getItem()
-
 	def postComment(self, body):
 		result = PostComment(self.movieId, body, "none")
 		return result
@@ -80,14 +84,23 @@ class connection:
 	def update(self):
 		userInfo = GetUserInfo(self.userId)
 		if userInfo["user"]["is_live"] == True:
+			self.isLive = True
 			self.movieInfo = GetCurrentLive(self.userId)
 		elif userInfo["user"]["is_live"] == False:
+			self.isLive = False
 			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
-		self.isLive = self.movieInfo["movie"]["is_live"]
+			if "error" in self.movieInfo and self.movieInfo["error"]["code"] == 404:
+				self.movieId = ""
+				return
 		self.movieId = self.movieInfo["movie"]["id"]
-
-	def getItem(self):
+		self.category = self.movieInfo["movie"]["category"]
+		self.categoryName = getCategoryName(self.category)
 		self.item = getItem(self.movieInfo["broadcaster"]["screen_id"])
+		if "コンティニューコイン" in self.item:
+			self.coins = int(self.item["コンティニューコイン"])
+		else:
+			self.coins = 0
+
 
 def getCategoryName(id):
 	if id == None:
