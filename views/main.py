@@ -24,6 +24,7 @@ from simpleDialog import *
 import views.connect
 import views.viewComment
 import views.viewBroadcaster
+import webbrowser
 
 class MainView(BaseView):
 	def __init__(self):
@@ -143,6 +144,8 @@ class Events(BaseEvents):
 			viewBroadcasterDialog = views.viewBroadcaster.Dialog(globalVars.app.Manager.connection.movieInfo["broadcaster"])
 			viewBroadcasterDialog.Initialize()
 			viewBroadcasterDialog.Show()
+		elif selected==menuItemsStore.getRef("openLive"):
+			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()
