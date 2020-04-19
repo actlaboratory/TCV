@@ -23,6 +23,7 @@ from simpleDialog import *
 
 import views.connect
 import views.viewComment
+import views.viewBroadcaster
 
 class MainView(BaseView):
 	def __init__(self):
@@ -60,6 +61,7 @@ class Menu(BaseMenu):
 		self.FileMenu=wx.Menu()
 		self.PlayMenu=wx.Menu()
 		self.CommentMenu=wx.Menu()
+		self.LiveMenu=wx.Menu()
 		self.SettingsMenu=wx.Menu()
 		self.HelpMenu=wx.Menu()
 
@@ -78,6 +80,9 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.CommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
 		self.RegisterMenuCommand(self.CommentMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
 		self.RegisterMenuCommand(self.CommentMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
+		#ライブメニュー
+		self.RegisterMenuCommand(self.LiveMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
+		self.RegisterMenuCommand(self.LiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
 		#設定メニュー
 		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
 		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
@@ -90,6 +95,7 @@ class Menu(BaseMenu):
 		self.hMenuBar.Append(self.FileMenu,_("ファイル(&F)"))
 		self.hMenuBar.Append(self.PlayMenu,_("再生(&P)"))
 		self.hMenuBar.Append(self.CommentMenu,_("コメント(&C)"))
+		self.hMenuBar.Append(self.LiveMenu,_("ライブ(&L)"))
 		self.hMenuBar.Append(self.SettingsMenu,_("設定(&S)"))
 		self.hMenuBar.Append(self.HelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
@@ -133,6 +139,10 @@ class Events(BaseEvents):
 			if dlg.ShowModal()==wx.ID_NO:
 				return
 			globalVars.app.Manager.deleteComment()
+		elif selected==menuItemsStore.getRef("viewBroadcaster"):
+			viewBroadcasterDialog = views.viewBroadcaster.Dialog(globalVars.app.Manager.connection.movieInfo["broadcaster"])
+			viewBroadcasterDialog.Initialize()
+			viewBroadcasterDialog.Show()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

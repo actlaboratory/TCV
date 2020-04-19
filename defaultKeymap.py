@@ -14,5 +14,6 @@ defaultKeymap["mainView"]={
 	"viewComment": "Alt+RETURN",
 	"replyToSelectedComment": "ctrl+r",
 	"deleteSelectedComment": "ctrl+d/DELETE",
-	"replyToBroadcaster": "ctrl+shift+r"
+	"replyToBroadcaster": "ctrl+shift+r",
+	"viewBroadcaster": "ctrl+b"
 }

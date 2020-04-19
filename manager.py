@@ -83,7 +83,7 @@ class manager:
 		if self.connection.movieInfo["movie"]["is_live"] == True:
 			result.insert(0, _("現在配信中"))
 		else:
-			result.insert(0, _("オフライン（最終放送時の情報を表示中）"))
+			result.insert(0, _("オフライン"))
 		if self.connection.movieInfo["movie"]["is_collabo"] == True:
 			result.insert(-1, _("コラボ可能"))
 		else:
@@ -143,7 +143,9 @@ class manager:
 		elif id == evtLiveInfo:
 			self.connection.update()
 			self.newCoins = self.connection.coins
-			if self.newCoins != self.newCoins and self.newCoins % 5 == 0 and self.newCoins != 0:
+			if self.newCoins != self.oldCoins:
+				if self.newCoins < self.oldCoins:
+					globalVars.app.say(_("コイン消費"))
 				globalVars.app.say(_("コイン%(coins)s枚。") %{"coins": str(self.connection.coins)})
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
@@ -176,19 +178,18 @@ class manager:
 		elif id == evtCountDown:
 			self.connection.elapsedTime += 1
 			self.connection.remainingTime -= 1
-			if self.connection.remainingTime == 900:
+			if self.connection.remainingTime % 1800 == 900:
 				globalVars.app.say(_("残り１５分。"))
-			if self.connection.remainingTime == 300:
+			if self.connection.remainingTime % 1800 == 300:
 				globalVars.app.say(_("残り５分。"))
-			if self.connection.remainingTime == 180:
+			if self.connection.remainingTime % 1800 == 180:
 				globalVars.app.say(_("残り３分。"))
-			if self.connection.remainingTime == 60:
+			if self.connection.remainingTime % 1800 == 60:
 				globalVars.app.say(_("残り１分"))
-			if self.connection.remainingTime == 30:
+			if self.connection.remainingTime % 1800 == 30:
 				globalVars.app.say(_("残り３０秒。"))
-			if self.connection.remainingTime == 10:
+			if self.connection.remainingTime % 1800 == 10:
 				globalVars.app.say(_("残り１０秒。"))
-			if self.connection.remainingTime == 0:
+			if self.connection.remainingTime % 1800 == 0:
 				globalVars.app.say(_("３０分経過。"))
-				self.connection.remainingTime += 1800
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.connection.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.connection.remainingTime).strftime("%H:%M:%S")})
