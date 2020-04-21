@@ -24,13 +24,6 @@ class connection:
 					self.coins = int(self.item["コンティニューコイン"])
 				else:
 					self.coins = 0
-				self.elapsedTime = self.movieInfo["movie"]["duration"]
-				self.totalTime = int(self.coins / 5) * 1800 + 1800
-				self.remainingTime = self.totalTime - self.elapsedTime
-				if self.elapsedTime + self.remainingTime > 14400:
-					self.remainingTime = 14400 - self.elapsedTime
-				while self.remainingTime < 0:
-					self.remainingTime += 1800
 				self.comments = []
 
 	def getInitialComment(self, number):

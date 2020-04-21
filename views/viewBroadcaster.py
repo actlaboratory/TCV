@@ -13,6 +13,7 @@ class Dialog(BaseDialog):
 		self.broadcaster = {
 			_("名前"): broadcaster["name"],
 			_("ユーザ名"): broadcaster["screen_id"],
+			_("レベル"): str(broadcaster["level"]),
 			_("自己紹介"): broadcaster["profile"]
 		}
 

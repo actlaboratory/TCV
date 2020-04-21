@@ -14,6 +14,7 @@ class Dialog(BaseDialog):
 			_("コメント本文"): comment["message"],
 			_("名前"): comment["from_user"]["name"],
 			_("ユーザ名"): comment["from_user"]["screen_id"],
+			_("レベル"): str(comment["from_user"]["level"]),
 			_("自己紹介"): comment["from_user"]["profile"]
 		}
 

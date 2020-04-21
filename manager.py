@@ -32,12 +32,13 @@ class manager:
 			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 			if self.connection.isLive == True:
 				globalVars.app.say(_("接続。現在配信中。"))
+				self.resetTimer()
 				self.countDownTimer.Start(countDownTimerInterval)
 				globalVars.app.say(_("タイマー開始。"))
 			else:
 				globalVars.app.say(_("接続。現在オフライン。"))
-				self.connection.elapsedTime = 0
-				self.connection.remainingTime = 0
+				self.elapsedTime = 0
+				self.remainingTime = 0
 			self.initialComments = self.connection.getInitialComment(50)
 			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 			self.commentTimer.Start(commentTimerInterval)
@@ -67,12 +68,12 @@ class manager:
 			self.MainView.commentList.SetItem(0, 1, result["message"])
 			self.MainView.commentList.SetItem(0, 2, result["time"])
 			self.MainView.commentList.SetItem(0, 3, result["user"])
-			if mode == update:
-				globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
+			#if mode == update:
+				#globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
 
 	def createLiveInfoList(self, mode):
 		result = [
-			_("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.connection.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.connection.remainingTime).strftime("%H:%M:%S")},
+			_("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")},
 			_("タイトル：%(title)s") %{"title": self.connection.movieInfo["movie"]["title"]},
 			_("テロップ：%(subtitle)s") %{"subtitle": self.connection.movieInfo["movie"]["subtitle"]},
 			_("閲覧：現在%(current)d人、合計%(total)d人") %{"current": self.connection.movieInfo["movie"]["current_view_count"], "total": self.connection.movieInfo["movie"]["total_view_count"]},
@@ -109,6 +110,7 @@ class manager:
 				bool = result[i] == self.MainView.itemList.GetItemText(i)
 				if bool == False:
 					self.MainView.itemList.SetItemText(i, result[i])
+					globalVars.app.say(str(result[i]))
 
 	def postComment(self, commentBody):
 		result = self.connection.postComment(commentBody)
@@ -134,6 +136,12 @@ class manager:
 			del self.connection.comments[selected]
 			self.MainView.commentList.DeleteItem(selected)
 
+	def resetTimer(self):
+		self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+		self.remainingTime = 1800 - self.elapsedTime % 1800 + int(self.connection.coins / 5) * 1800
+		if self.elapsedTime + self.remainingTime > 14400:
+			self.remainingTime = 14400 - self.elapsedTime
+
 	def timer(self, event):
 		timer = event.GetTimer()
 		id = timer.GetId()
@@ -146,13 +154,12 @@ class manager:
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
-				globalVars.app.say(_("コイン%(coins)s枚。") %{"coins": str(self.connection.coins)})
+				self.resetTimer()
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				globalVars.app.say(_("タイマーリセット。"))
-				self.connection.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-				self.connection.remainingTime = self.connection.totalTime - self.connection.elapsedTime
+				self.resetTimer()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			if self.newViewers < self.oldViewers:
@@ -164,32 +171,30 @@ class manager:
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
-				self.connection.elapsedTime = 0
-				self.connection.remainingTime = 0
+				self.elapsedTime = 0
+				self.remainingTime = 0
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
-				self.connection.totalTime = 1800
-				self.connection.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-				self.connection.remainingTime = self.connection.totalTime - self.connection.elapsedTime
+				self.resetTimer()
 				self.countDownTimer.Start(countDownTimerInterval)
 			self.oldIsLive = self.newIsLive
 			self.createLiveInfoList(update)
 			self.createItemList(update)
 		elif id == evtCountDown:
-			self.connection.elapsedTime += 1
-			self.connection.remainingTime -= 1
-			if self.connection.remainingTime % 1800 == 900:
+			self.elapsedTime += 1
+			self.remainingTime -= 1
+			if self.remainingTime % 1800 == 900:
 				globalVars.app.say(_("残り１５分。"))
-			if self.connection.remainingTime % 1800 == 300:
+			if self.remainingTime % 1800 == 300:
 				globalVars.app.say(_("残り５分。"))
-			if self.connection.remainingTime % 1800 == 180:
+			if self.remainingTime % 1800 == 180:
 				globalVars.app.say(_("残り３分。"))
-			if self.connection.remainingTime % 1800 == 60:
+			if self.remainingTime % 1800 == 60:
 				globalVars.app.say(_("残り１分"))
-			if self.connection.remainingTime % 1800 == 30:
+			if self.remainingTime % 1800 == 30:
 				globalVars.app.say(_("残り３０秒。"))
-			if self.connection.remainingTime % 1800 == 10:
+			if self.remainingTime % 1800 == 10:
 				globalVars.app.say(_("残り１０秒。"))
-			if self.connection.remainingTime % 1800 == 0:
+			if self.remainingTime % 1800 == 0:
 				globalVars.app.say(_("３０分経過。"))
-			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.connection.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.connection.remainingTime).strftime("%H:%M:%S")})
+			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
