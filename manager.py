@@ -110,7 +110,6 @@ class manager:
 				bool = result[i] == self.MainView.itemList.GetItemText(i)
 				if bool == False:
 					self.MainView.itemList.SetItemText(i, result[i])
-					globalVars.app.say(str(result[i]))
 
 	def postComment(self, commentBody):
 		result = self.connection.postComment(commentBody)
@@ -154,6 +153,7 @@ class manager:
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
+				globalVars.app.say(str(self.newCoins))
 				self.resetTimer()
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
