@@ -68,8 +68,8 @@ class manager:
 			self.MainView.commentList.SetItem(0, 1, result["message"])
 			self.MainView.commentList.SetItem(0, 2, result["time"])
 			self.MainView.commentList.SetItem(0, 3, result["user"])
-			#if mode == update:
-				#globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
+			if mode == update:
+				globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
 
 	def createLiveInfoList(self, mode):
 		result = [
