@@ -157,6 +157,19 @@ class manager:
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			self.connection.update()
+			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
+				return
+			self.newIsLive = self.connection.movieInfo["movie"]["is_live"]
+			if self.oldIsLive == True and self.newIsLive == False:
+				globalVars.app.say(_("ライブ終了。"))
+				self.countDownTimer.Stop()
+				self.elapsedTime = 0
+				self.remainingTime = 0
+			elif self.oldIsLive == False and self.newIsLive == True:
+				globalVars.app.say(_("ライブ開始。"))
+				self.resetTimer()
+				self.countDownTimer.Start(countDownTimerInterval)
+			self.oldIsLive = self.newIsLive
 			self.newSubtitle = self.connection.movieInfo["movie"]["subtitle"]
 			if self.newSubtitle != self.oldSubtitle:
 				globalVars.app.say(_("テロップ変更。"))
@@ -180,17 +193,6 @@ class manager:
 			elif self.newViewers > self.oldViewers:
 				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
 			self.oldViewers = self.newViewers
-			self.newIsLive = self.connection.movieInfo["movie"]["is_live"]
-			if self.oldIsLive == True and self.newIsLive == False:
-				globalVars.app.say(_("ライブ終了。"))
-				self.countDownTimer.Stop()
-				self.elapsedTime = 0
-				self.remainingTime = 0
-			elif self.oldIsLive == False and self.newIsLive == True:
-				globalVars.app.say(_("ライブ開始。"))
-				self.resetTimer()
-				self.countDownTimer.Start(countDownTimerInterval)
-			self.oldIsLive = self.newIsLive
 			self.createLiveInfoList(update)
 			self.createItemList(update)
 		elif id == evtCountDown:
