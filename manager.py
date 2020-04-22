@@ -107,8 +107,7 @@ class manager:
 				self.MainView.itemList.InsertItem(i, result[i])
 		elif mode == update:
 			if len(result) < self.MainView.itemList.GetItemCount():
-				for i in range(len(result) + 1, self.MainView.itemList.GetItemCount()):
-					self.MainView.itemList.DeleteItem(i)
+				self.MainView.itemList.DeleteAllItems()
 			for i in range(0, len(result)):
 				bool = result[i] == self.MainView.itemList.GetItemText(i)
 				if bool == False:
