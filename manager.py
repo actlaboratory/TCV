@@ -50,6 +50,7 @@ class manager:
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
+			self.oldSubtitle = self.connection.movieInfo["movie"]["subtitle"]
 			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 			self.liveInfoTimer.Start(liveInfoTimerInterval)
 			self.createLiveInfoList(first)
@@ -155,6 +156,11 @@ class manager:
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			self.connection.update()
+			self.newSubtitle = self.connection.movieInfo["movie"]["subtitle"]
+			if self.newSubtitle != self.oldSubtitle:
+				globalVars.app.say(_("テロップ変更。"))
+				globalVars.app.say(self.newSubtitle)
+			self.oldSubtitle = self.newSubtitle
 			self.newCoins = self.connection.coins
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
