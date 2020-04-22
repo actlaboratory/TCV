@@ -33,6 +33,7 @@ class manager:
 			if self.connection.isLive == True:
 				globalVars.app.say(_("接続。現在配信中。"))
 				self.resetTimer()
+				globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 				self.countDownTimer.Start(countDownTimerInterval)
 				globalVars.app.say(_("タイマー開始。"))
 			else:
@@ -44,16 +45,16 @@ class manager:
 			self.commentTimer.Start(commentTimerInterval)
 			self.addComments(self.initialComments, first)
 			self.connection.update()
+			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
+			self.liveInfoTimer.Start(liveInfoTimerInterval)
 			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
 				return
+			self.createLiveInfoList(first)
 			self.oldCoins = self.connection.coins
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
 			self.oldSubtitle = self.connection.movieInfo["movie"]["subtitle"]
-			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
-			self.liveInfoTimer.Start(liveInfoTimerInterval)
-			self.createLiveInfoList(first)
 			self.createItemList(first)
 
 	def addComments(self, commentList, mode):
