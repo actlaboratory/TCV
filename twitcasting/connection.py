@@ -89,10 +89,11 @@ class connection:
 		self.category = self.movieInfo["movie"]["category"]
 		self.categoryName = getCategoryName(self.category)
 		self.item = getItem(self.movieInfo["broadcaster"]["screen_id"])
-		if "コンティニューコイン" in self.item:
-			self.coins = int(self.item["コンティニューコイン"])
-		else:
-			self.coins = 0
+		for i in self.item:
+			if i["name"] == "コンティニューコイン":
+				self.coins = i["count"]
+			else:
+				self.coins = 0
 
 
 def getCategoryName(id):

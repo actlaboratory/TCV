@@ -102,8 +102,8 @@ class manager:
 
 	def createItemList(self, mode):
 		result = []
-		for name, count in self.connection.item.items():
-			result.append(name + ":" + count)
+		for i in self.connection.item:
+			result.append(i["name"] + ":" + i["count"])
 		if mode == first:
 			for i in range(0, len(result)):
 				self.MainView.itemList.InsertItem(i, result[i])
@@ -165,10 +165,12 @@ class manager:
 				self.countDownTimer.Stop()
 				self.elapsedTime = 0
 				self.remainingTime = 0
+				self.commentTimer.Stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
 				self.resetTimer()
 				self.countDownTimer.Start(countDownTimerInterval)
+				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
 			self.newSubtitle = self.connection.movieInfo["movie"]["subtitle"]
 			if self.newSubtitle != self.oldSubtitle:
@@ -179,7 +181,7 @@ class manager:
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
-				globalVars.app.say(str(self.newCoins))
+				globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
 				self.resetTimer()
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
