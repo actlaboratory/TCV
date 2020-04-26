@@ -18,7 +18,7 @@ def getItem(screenId):
 		itemName.append(i.get("title"))
 	tmp = soup.find_all("span", class_ = "tw-item-count-badge")
 	for i in tmp:
-		itemCount.append(i.text)
+		itemCount.append(int(i.text))
 	tmp = soup.find_all("a")
 	for i in tmp:
 		href = i.get("href")
@@ -28,4 +28,13 @@ def getItem(screenId):
 			itemId.append(href[start: end])
 	for name, count, id in zip(itemName, itemCount, itemId):
 		result.append({"name": name, "count": count, "id": id})
+	return result
+
+def getItemPostedUser(screenId, itemId):
+	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=ja").text
+	soup = BeautifulSoup(req, "lxml")
+	tmp = soup.find_all("span", class_ = "tw-user-name-screen-name")
+	result = []
+	for i in tmp:
+		result.append(i.text[1:])
 	return result

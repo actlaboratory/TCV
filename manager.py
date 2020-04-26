@@ -17,6 +17,7 @@ update = 1
 commentTimerInterval = 5000
 liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
+
 class manager:
 	def __init__(self, MainView):
 		self.MainView = MainView
@@ -55,6 +56,7 @@ class manager:
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
 			self.oldSubtitle = self.connection.movieInfo["movie"]["subtitle"]
+			self.oldItem = self.connection.item
 			self.createItemList(first)
 
 	def addComments(self, commentList, mode):
@@ -103,7 +105,7 @@ class manager:
 	def createItemList(self, mode):
 		result = []
 		for i in self.connection.item:
-			result.append(i["name"] + ":" + i["count"])
+			result.append(i["name"] + ":" + str(i["count"]))
 		if mode == first:
 			for i in range(0, len(result)):
 				self.MainView.itemList.InsertItem(i, result[i])
@@ -196,6 +198,21 @@ class manager:
 				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
 			self.oldViewers = self.newViewers
 			self.createLiveInfoList(update)
+			self.newItem = self.connection.item
+			receivedItem = []
+			for new in self.newItem:
+				if new not in self.oldItem:
+					receivedItem.append({"id": new["id"], "name": new["name"]})
+				for old in self.oldItem:
+					if new["name"] == old["name"] and new["count"] > old["count"]:
+						receivedItem.append({"id": new["id"], "name": new["name"]})
+			for i in receivedItem:
+				id = i["id"]
+				name = i["name"]
+				users = self.connection.getItemPostedUser(id)
+				for j in users:
+					globalVars.app.say(_("%s, アイテム:%s") %(j, name))
+			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
 			self.elapsedTime += 1
