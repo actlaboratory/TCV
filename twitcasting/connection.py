@@ -3,6 +3,7 @@
 
 from twitcasting.twitcasting import *
 from twitcasting.getItem import *
+from twitcasting.getTypingUser import *
 import views.main
 import datetime
 
@@ -74,9 +75,13 @@ class connection:
 		else:
 			return True
 
-	def getItemPostedUser(self, itemId):
+	def getItemPostedUser(self, itemId, count):
 		users = getItemPostedUser(self.userId, itemId)
-		return users
+		return users[0:count]
+
+	def getTypingUser(self):
+		result = getTypingUser(self.userId, self.userId)
+		return result
 
 	def update(self):
 		userInfo = GetUserInfo(self.userId)

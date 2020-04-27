@@ -10,6 +10,7 @@ import simpleDialog
 evtComment = 0
 evtLiveInfo = 1
 evtCountDown = 2
+evtTyping = 3
 
 first = 0
 update = 1
@@ -17,6 +18,7 @@ update = 1
 commentTimerInterval = 5000
 liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
+typingTimerInterval = 5000
 
 class manager:
 	def __init__(self, MainView):
@@ -58,6 +60,8 @@ class manager:
 			self.oldSubtitle = self.connection.movieInfo["movie"]["subtitle"]
 			self.oldItem = self.connection.item
 			self.createItemList(first)
+			self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
+			self.typingTimer.Start(typingTimerInterval)
 
 	def addComments(self, commentList, mode):
 		for i in commentList:
@@ -93,6 +97,8 @@ class manager:
 			result.insert(-1, _("コラボ可能"))
 		else:
 			result.insert(-1, _("コラボ不可"))
+		for i in range(0, len(result)):
+			result[i] = result[i].replace("None", _("なし"))
 		if mode == first:
 			for i in range(0, len(result)):
 				self.MainView.liveInfo.InsertItem(i, result[i])
@@ -176,8 +182,11 @@ class manager:
 			self.oldIsLive = self.newIsLive
 			self.newSubtitle = self.connection.movieInfo["movie"]["subtitle"]
 			if self.newSubtitle != self.oldSubtitle:
-				globalVars.app.say(_("テロップ変更。"))
-				globalVars.app.say(self.newSubtitle)
+				if self.newSubtitle == None:
+					globalVars.app.say(_("テロップ削除"))
+				else:
+					globalVars.app.say(_("テロップ変更。"))
+					globalVars.app.say(self.newSubtitle)
 			self.oldSubtitle = self.newSubtitle
 			self.newCoins = self.connection.coins
 			if self.newCoins != self.oldCoins:
@@ -202,14 +211,14 @@ class manager:
 			receivedItem = []
 			for new in self.newItem:
 				if new not in self.oldItem:
-					receivedItem.append({"id": new["id"], "name": new["name"]})
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
 				for old in self.oldItem:
 					if new["name"] == old["name"] and new["count"] > old["count"]:
-						receivedItem.append({"id": new["id"], "name": new["name"]})
+						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
 			for i in receivedItem:
 				id = i["id"]
 				name = i["name"]
-				users = self.connection.getItemPostedUser(id)
+				users = self.connection.getItemPostedUser(id, i["count"])
 				for j in users:
 					globalVars.app.say(_("%s, アイテム:%s") %(j, name))
 			self.oldItem = self.newItem
@@ -232,3 +241,5 @@ class manager:
 			if self.remainingTime % 1800 == 0:
 				globalVars.app.say(_("３０分経過。"))
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+		elif id == evtTyping:
+			globalVars.app.say(_("%sさんが入力中") %(self.connection.getTypingUser()))
