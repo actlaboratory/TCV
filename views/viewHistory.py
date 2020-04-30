@@ -12,7 +12,7 @@ class Dialog(BaseDialog):
 		self.identifier="viewHistory"#このビューを表す文字列
 		self.log=getLogger(self.identifier)
 		self.log.debug("created")
-		super().Initialize(self.app.hMainView.hFrame,_("接続"))
+		super().Initialize(self.app.hMainView.hFrame,_("履歴"))
 		self.InstallControls()
 		return True
 
@@ -20,6 +20,7 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(0,self.panel,self.sizer,wx.VERTICAL,20)
 		self.historyList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("接続履歴"))
+		self.historyList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		for i in globalVars.app.Manager.history:
 			self.historyList.Append([i])
 
@@ -29,3 +30,6 @@ class Dialog(BaseDialog):
 
 	def GetData(self):
 		return self.historyList.GetFocusedItem()
+
+	def closeDialog(self, event):
+		self.wnd.EndModal(wx.ID_OK)

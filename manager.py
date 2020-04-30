@@ -40,10 +40,11 @@ class manager:
 			simpleDialog.dialog(_("エラー"), _("指定されたユーザが見つかりません。"))
 		else:
 			globalVars.app.say(userId)
-			self.history.insert(0, userId)
-			for i in range(1, len(self.history) - 1):
-				if self.history[0] == self.history[i]:
-					del self.history[i]
+			if userId not in self.history:
+				self.history.insert(0, userId)
+			elif userId in self.history:
+				del self.history[self.history.index(userId)]
+				self.history.insert(0, userId)
 			historyData.write_text("\n".join(self.history))
 			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 			if self.connection.isLive == True:
