@@ -6,6 +6,7 @@ defaultKeymap={}
 
 defaultKeymap["mainView"]={
 	"connect":"ctrl+n",
+	"viewHistory": "ctrl+h",
 	"disconnect":"ctrl+w/ctrl+F4",
 	"play": "F1",
 	"stop": "F2",

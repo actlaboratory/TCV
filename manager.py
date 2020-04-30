@@ -6,6 +6,7 @@ import datetime
 import wx
 import globalVars
 import simpleDialog
+import pathlib
 
 evtComment = 0
 evtLiveInfo = 1
@@ -20,11 +21,18 @@ liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 
+historyData = pathlib.Path("history.dat")
+
 class manager:
 	def __init__(self, MainView):
 		self.MainView = MainView
 		self.evtHandler = wx.EvtHandler()
 		self.evtHandler.Bind(wx.EVT_TIMER, self.timer)
+		if historyData.exists() == False:
+			historyData.touch()
+		self.history = historyData.read_text().split("\n")
+		if len(self.history) == 1 and self.history[0] == "":
+			del self.history[0]
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -32,6 +40,11 @@ class manager:
 			simpleDialog.dialog(_("エラー"), _("指定されたユーザが見つかりません。"))
 		else:
 			globalVars.app.say(userId)
+			self.history.insert(0, userId)
+			for i in range(1, len(self.history)):
+				if self.history[0] == self.history[i]:
+					del self.history[i]
+			historyData.write_text("\n".join(self.history))
 			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 			if self.connection.isLive == True:
 				globalVars.app.say(_("接続。現在配信中。"))
@@ -242,4 +255,6 @@ class manager:
 				globalVars.app.say(_("３０分経過。"))
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 		elif id == evtTyping:
-			globalVars.app.say(_("%sさんが入力中") %(self.connection.getTypingUser()))
+			typingUser = self.connection.getTypingUser()
+			if typingUser != "":
+				globalVars.app.say(_("%sさんが入力中") %(typingUser))

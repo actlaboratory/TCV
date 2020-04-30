@@ -24,6 +24,8 @@ from simpleDialog import *
 import views.connect
 import views.viewComment
 import views.viewBroadcaster
+import views.viewHistory
+import views.accountManager
 import webbrowser
 
 class MainView(BaseView):
@@ -69,6 +71,7 @@ class Menu(BaseMenu):
 		#メニューの中身
 		#ファイルメニュー
 		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C) ..."))
+		self.RegisterMenuCommand(self.FileMenu,"viewHistory",_("最近接続したライブに接続(&H) ..."))
 		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
 		#再生メニュー
@@ -87,7 +90,7 @@ class Menu(BaseMenu):
 		#設定メニュー
 		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
 		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
-		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M) ..."))
+		self.RegisterMenuCommand(self.SettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 
@@ -123,6 +126,16 @@ class Events(BaseEvents):
 			if ret==wx.ID_CANCEL: return
 			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
 			return
+		elif selected==menuItemsStore.getRef("viewHistory"):
+			if len(globalVars.app.Manager.history) == 0:
+				dialog(_("エラー"), _("接続履歴がありません。"))
+				return
+			viewHistoryDialog = views.viewHistory.Dialog()
+			viewHistoryDialog.Initialize()
+			ret = viewHistoryDialog.Show()
+			if ret==wx.ID_CANCEL: return
+			globalVars.app.Manager.connect(globalVars.app.Manager.history[viewHistoryDialog.GetValue()])
+			return
 		elif selected==menuItemsStore.getRef("viewComment"):
 			viewCommentDialog = views.viewComment.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
 			viewCommentDialog.Initialize()
@@ -146,6 +159,10 @@ class Events(BaseEvents):
 			viewBroadcasterDialog.Show()
 		elif selected==menuItemsStore.getRef("openLive"):
 			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
+		elif selected==menuItemsStore.getRef("accountManager"):
+			accountManager = views.accountManager.Dialog([])
+			accountManager.Initialize()
+			accountManager.Show()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()
