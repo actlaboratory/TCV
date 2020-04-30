@@ -41,7 +41,7 @@ class manager:
 		else:
 			globalVars.app.say(userId)
 			self.history.insert(0, userId)
-			for i in range(1, len(self.history)):
+			for i in range(1, len(self.history) - 1):
 				if self.history[0] == self.history[i]:
 					del self.history[i]
 			historyData.write_text("\n".join(self.history))
