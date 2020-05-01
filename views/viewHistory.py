@@ -27,9 +27,14 @@ class Dialog(BaseDialog):
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
+		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory)
 
 	def GetData(self):
 		return self.historyList.GetFocusedItem()
 
 	def closeDialog(self, event):
 		self.wnd.EndModal(wx.ID_OK)
+
+	def clearHistory(self, event):
+		globalVars.app.Manager.clearHistory()
+		self.historyList.ClearAll()

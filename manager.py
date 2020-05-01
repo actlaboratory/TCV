@@ -171,6 +171,11 @@ class manager:
 		if self.elapsedTime + self.remainingTime > 14400:
 			self.remainingTime = 14400 - self.elapsedTime
 
+	def clearHistory(self):
+		self.history = []
+		historyData.write_text("\n".join(self.history))
+
+
 	def timer(self, event):
 		timer = event.GetTimer()
 		id = timer.GetId()
