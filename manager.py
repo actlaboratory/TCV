@@ -22,6 +22,7 @@ countDownTimerInterval = 1000
 typingTimerInterval = 5000
 
 historyData = pathlib.Path("history.dat")
+favoritesData = pathlib.Path("favorites.dat")
 
 class manager:
 	def __init__(self, MainView):
@@ -33,6 +34,11 @@ class manager:
 		self.history = historyData.read_text().split("\n")
 		if len(self.history) == 1 and self.history[0] == "":
 			del self.history[0]
+		if favoritesData.exists() == False:
+			favoritesData.touch()
+		self.favorites = favoritesData.read_text().split("\n")
+		if len(self.favorites) == 1 and self.favorites[0] == "":
+			del self.favorites[0]
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -143,7 +149,7 @@ class manager:
 
 	def postComment(self, commentBody):
 		result = self.connection.postComment(commentBody)
-		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"]:
+		if "error" in result and "comment" in result["error"]["details"] and result["error"]["details"]["comment"] == "length":
 			simpleDialog.dialog(_("エラー"), _("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
 			return False
 		elif "error" in result:
@@ -175,6 +181,12 @@ class manager:
 		self.history = []
 		historyData.write_text("\n".join(self.history))
 
+	def addFavorites(self):
+		if self.connection.userId in self.favorites:
+			simpleDialog.dialog(_("エラー"), _("すでに登録されています。"))
+			return
+		self.favorites.insert(0, self.connection.userId)
+		favoritesData.write_text("\n".join(self.favorites))
 
 	def timer(self, event):
 		timer = event.GetTimer()
