@@ -170,14 +170,14 @@ class Events(BaseEvents):
 			self.parent.commentBodyEdit.SetFocus()
 		#コメントの削除
 		elif selected==menuItemsStore.getRef("deleteSelectedComment"):
-			dlg=wx.MessageDialog(None,_("選択中のコメントを削除しますか？"),_("確認"),wx.YES_NO|wx.ICON_QUESTION)
-			if dlg.ShowModal()==wx.ID_NO:
+			dlg=simpleDialog.yesNoDialog(_("確認"),_("選択中のコメントを削除しますか？"))
+			if dlg==wx.ID_NO:
 				return
 			globalVars.app.Manager.deleteComment()
 		#お気に入りに追加
 		elif selected==menuItemsStore.getRef("addFavorites"):
-			dlg=wx.MessageDialog(None,_("%sのライブをお気に入りに追加しますか？") %(globalVars.app.Manager.connection.userId),_("確認"),wx.YES_NO|wx.ICON_QUESTION)
-			if dlg.ShowModal()==wx.ID_NO:
+			dlg=simpleDialog.yesNoDialog(_("確認"),_("%sのライブをお気に入りに追加しますか？") %(globalVars.app.Manager.connection.userId))
+			if dlg==wx.ID_NO:
 				return
 			globalVars.app.Manager.addFavorites()
 		#配信者の情報
