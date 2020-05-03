@@ -189,6 +189,7 @@ class manager:
 			simpleDialog.errorDialog(_("すでに登録されています。"))
 			return
 		self.favorites.insert(0, self.connection.userId)
+		self.favorites.sort()
 		favoritesData.write_text("\n".join(self.favorites))
 
 	def timer(self, event):
