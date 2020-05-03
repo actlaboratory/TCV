@@ -6,6 +6,7 @@ import globalVars
 import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
+import simpleDialog
 
 class Dialog(BaseDialog):
 	def Initialize(self):
@@ -36,5 +37,8 @@ class Dialog(BaseDialog):
 		self.wnd.EndModal(wx.ID_OK)
 
 	def clearHistory(self, event):
+		dlg = simpleDialog.yesNoDialog(_("確認"), _("接続履歴を全て消去します。よろしいですか？"))
+		if dlg == wx.ID_NO:
+			return
 		globalVars.app.Manager.clearHistory()
 		self.historyList.ClearAll()
