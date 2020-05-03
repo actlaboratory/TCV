@@ -12,7 +12,7 @@ from logging import getLogger
 from .baseDialog import *
 import globalVars
 import views.ViewCreator
-from simpleDialog import dialog
+import simpleDialog
 
 class Dialog(BaseDialog):
 
@@ -99,7 +99,7 @@ class Dialog(BaseDialog):
 		index=self.hListCtrl.GetFocusedItem()
 		ext=self.hListCtrl.GetItemText(index,0)
 		if "<default" in ext:
-			dialog(_("エラー"),_("デフォルト設定は削除できません。"))
+			simpleDialog.errorDialog(_("デフォルト設定は削除できません。"))
 			return
 		del(self.config[ext])
 		self.hListCtrl.DeleteItem(index)
@@ -155,9 +155,9 @@ class SettingDialog(BaseDialog):
 		if self.extensionEdit.GetLineText(0)=="" or self.pathEdit.GetLineText(0)=="":
 			return
 		if not re.match("^[a-zA-Z0-9\\-$~]+$",self.extensionEdit.GetLineText(0)):
-			dialog(_("エラー"),_("入力された拡張子に利用できない文字が含まれています。パスを確認してください。"))
+			simpleDialog.errorDialog(_("入力された拡張子に利用できない文字が含まれています。パスを確認してください。"))
 			return
 		if not os.path.isfile(self.pathEdit.GetLineText(0)):
-			dialog(_("エラー"),_("入力された実行ファイルが存在しません。パスを確認してください。"))
+			simpleDialog.errorDialog(_("入力された実行ファイルが存在しません。パスを確認してください。"))
 			return
 		event.Skip()

@@ -134,7 +134,7 @@ class Events(BaseEvents):
 		#履歴
 		elif selected==menuItemsStore.getRef("viewHistory"):
 			if len(globalVars.app.Manager.history) == 0:
-				simpleDialog.dialog(_("エラー"), _("接続履歴がありません。"))
+				simpleDialog.errorDialog(_("接続履歴がありません。"))
 				return
 			viewHistoryDialog = views.viewHistory.Dialog()
 			viewHistoryDialog.Initialize()
@@ -145,7 +145,7 @@ class Events(BaseEvents):
 		#お気に入り
 		elif selected==menuItemsStore.getRef("viewFavorites"):
 			if len(globalVars.app.Manager.favorites) == 0:
-				simpleDialog.dialog(_("エラー"), _("お気に入りライブが登録されていません。"))
+				simpleDialog.errorDialog(_("お気に入りライブが登録されていません。"))
 				return
 			viewFavoritesDialog = views.viewFavorites.Dialog()
 			viewFavoritesDialog.Initialize()
