@@ -4,3 +4,4 @@ winpaths
 pyinstaller
 requests
 beautifulsoup4
+lxml
