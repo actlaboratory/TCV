@@ -6,6 +6,7 @@ import globalVars
 import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
+import simpleDialog
 
 class Dialog(BaseDialog):
 	def Initialize(self):
@@ -23,6 +24,7 @@ class Dialog(BaseDialog):
 		self.favoritesList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		for i in globalVars.app.Manager.favorites:
 			self.favoritesList.Append([i])
+		self.deleteButton = self.creator.button(_("削除"), self.delete)
 
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
@@ -33,3 +35,10 @@ class Dialog(BaseDialog):
 
 	def closeDialog(self, event):
 		self.wnd.EndModal(wx.ID_OK)
+
+	def delete(self, event):
+		dlg = simpleDialog.yesNoDialog(_("確認"), _("%sのライブをお気に入りから削除してもよろしいですか？") %(globalVars.app.Manager.favorites[self.favoritesList.GetFocusedItem()]))
+		if dlg == wx.ID_NO:
+			return
+		globalVars.app.Manager.deleteFavorites(self.favoritesList.GetFocusedItem())
+		self.favoritesList.DeleteItem(self.favoritesList.GetFocusedItem())

@@ -192,6 +192,11 @@ class manager:
 		self.favorites.sort()
 		favoritesData.write_text("\n".join(self.favorites))
 
+	def deleteFavorites(self, index):
+		del self.favorites[index]
+		self.favorites.sort()
+		favoritesData.write_text("\n".join(self.favorites))
+
 	def timer(self, event):
 		timer = event.GetTimer()
 		id = timer.GetId()
