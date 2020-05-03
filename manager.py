@@ -181,7 +181,7 @@ class manager:
 			self.remainingTime = 14400 - self.elapsedTime
 
 	def clearHistory(self):
-		self.history = []
+		self.history.clear()
 		historyData.write_text("\n".join(self.history))
 
 	def addFavorites(self):
@@ -195,6 +195,10 @@ class manager:
 	def deleteFavorites(self, index):
 		del self.favorites[index]
 		self.favorites.sort()
+		favoritesData.write_text("\n".join(self.favorites))
+
+	def clearFavorites(self):
+		self.favorites.clear()
 		favoritesData.write_text("\n".join(self.favorites))
 
 	def timer(self, event):

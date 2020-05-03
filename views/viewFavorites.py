@@ -25,6 +25,7 @@ class Dialog(BaseDialog):
 		for i in globalVars.app.Manager.favorites:
 			self.favoritesList.Append([i])
 		self.deleteButton = self.creator.button(_("削除"), self.delete)
+		self.clearButton = self.creator.button(_("全て削除"), self.clear)
 
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
@@ -42,3 +43,10 @@ class Dialog(BaseDialog):
 			return
 		globalVars.app.Manager.deleteFavorites(self.favoritesList.GetFocusedItem())
 		self.favoritesList.DeleteItem(self.favoritesList.GetFocusedItem())
+
+	def clear(self, event):
+		dlg = simpleDialog.yesNoDialog(_("確認"), _("お気に入りの内容を全て消去します。よろしいですか？"))
+		if dlg == wx.ID_NO:
+			return
+		globalVars.app.Manager.clearFavorites()
+		self.favoritesList.ClearAll()
