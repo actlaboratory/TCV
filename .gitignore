@@ -15,3 +15,6 @@ AccessToken.txt
 result.txt
 exec.bat
 /.vs
+/twitcasting/memo.txt
+/history.dat
+/favorites.dat

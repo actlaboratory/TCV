@@ -2,7 +2,8 @@
 # コネクション
 
 from twitcasting.twitcasting import *
-from twitcasting.getItem import getItem
+from twitcasting.getItem import *
+from twitcasting.getTypingUser import *
 import views.main
 import datetime
 
@@ -20,10 +21,10 @@ class connection:
 			else:
 				self.category = self.movieInfo["movie"]["category"]
 				self.categoryName = getCategoryName(self.category)
-				if "コンティニューコイン" in self.item:
-					self.coins = int(self.item["コンティニューコイン"])
-				else:
-					self.coins = 0
+				self.coins = 0
+				for i in self.item:
+					if i["name"] == "コンティニューコイン":
+						self.coins = i["count"]
 				self.comments = []
 
 	def getInitialComment(self, number):
@@ -74,6 +75,14 @@ class connection:
 		else:
 			return True
 
+	def getItemPostedUser(self, itemId, count):
+		users = getItemPostedUser(self.userId, itemId)
+		return users[0:count]
+
+	def getTypingUser(self):
+		result = getTypingUser(self.userId, self.userId)
+		return result
+
 	def update(self):
 		userInfo = GetUserInfo(self.userId)
 		if userInfo["user"]["is_live"] == True:
@@ -89,10 +98,10 @@ class connection:
 		self.category = self.movieInfo["movie"]["category"]
 		self.categoryName = getCategoryName(self.category)
 		self.item = getItem(self.movieInfo["broadcaster"]["screen_id"])
-		if "コンティニューコイン" in self.item:
-			self.coins = int(self.item["コンティニューコイン"])
-		else:
-			self.coins = 0
+		self.coins = 0
+		for i in self.item:
+			if i["name"] == "コンティニューコイン":
+				self.coins = i["count"]
 
 
 def getCategoryName(id):

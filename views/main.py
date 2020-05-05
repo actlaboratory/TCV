@@ -17,13 +17,15 @@ import globalVars
 import menuItemsStore
 
 from logging import getLogger
-from simpleDialog import dialog
+import simpleDialog
 from .base import *
-from simpleDialog import *
 
 import views.connect
 import views.viewComment
 import views.viewBroadcaster
+import views.viewHistory
+import views.viewFavorites
+import views.accountManager
 import webbrowser
 
 class MainView(BaseView):
@@ -69,6 +71,8 @@ class Menu(BaseMenu):
 		#メニューの中身
 		#ファイルメニュー
 		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C) ..."))
+		self.RegisterMenuCommand(self.FileMenu,"viewHistory",_("最近接続したライブに接続(&H) ..."))
+		self.RegisterMenuCommand(self.FileMenu,"viewFavorites",_("お気に入りライブに接続(&F) ..."))
 		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
 		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
 		#再生メニュー
@@ -84,10 +88,11 @@ class Menu(BaseMenu):
 		#ライブメニュー
 		self.RegisterMenuCommand(self.LiveMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
 		self.RegisterMenuCommand(self.LiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
+		self.RegisterMenuCommand(self.LiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
 		#設定メニュー
 		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
 		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
-		self.RegisterMenuCommand(self.SettingsMenu,"manageAccounts",_("アカウントの管理(&M) ..."))
+		self.RegisterMenuCommand(self.SettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 
@@ -112,10 +117,13 @@ class Events(BaseEvents):
 		selected=event.GetId()#メニュー識別しの数値が出る
 
 
+		#終了
 		if selected==menuItemsStore.getRef("exit"):
 			self.Exit()
+		#バージョン情報
 		elif selected==menuItemsStore.getRef("versionInfo"):
-			dialog(_("バージョン情報"), _("%(appName)s Version %(versionNumber)s.\nCopyright (C) %(year)s %(developerName)s") %{"appName": constants.APP_NAME, "versionNumber": constants.APP_VERSION, "year":constants.APP_COPYRIGHT_YEAR, "developerName": constants.APP_DEVELOPERS})
+			simpleDialog.dialog(_("バージョン情報"), _("%(appName)s Version %(versionNumber)s.\nCopyright (C) %(year)s %(developerName)s") %{"appName": constants.APP_NAME, "versionNumber": constants.APP_VERSION, "year":constants.APP_COPYRIGHT_YEAR, "developerName": constants.APP_DEVELOPERS})
+		#接続
 		elif selected==menuItemsStore.getRef("connect"):
 			connectDialog = views.connect.Dialog()
 			connectDialog.Initialize()
@@ -123,29 +131,68 @@ class Events(BaseEvents):
 			if ret==wx.ID_CANCEL: return
 			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
 			return
+		#履歴
+		elif selected==menuItemsStore.getRef("viewHistory"):
+			if len(globalVars.app.Manager.history) == 0:
+				simpleDialog.errorDialog(_("接続履歴がありません。"))
+				return
+			viewHistoryDialog = views.viewHistory.Dialog()
+			viewHistoryDialog.Initialize()
+			ret = viewHistoryDialog.Show()
+			if ret==wx.ID_CANCEL: return
+			globalVars.app.Manager.connect(globalVars.app.Manager.history[viewHistoryDialog.GetValue()])
+			return
+		#お気に入り
+		elif selected==menuItemsStore.getRef("viewFavorites"):
+			if len(globalVars.app.Manager.favorites) == 0:
+				simpleDialog.errorDialog(_("お気に入りライブが登録されていません。"))
+				return
+			viewFavoritesDialog = views.viewFavorites.Dialog()
+			viewFavoritesDialog.Initialize()
+			ret = viewFavoritesDialog.Show()
+			if ret==wx.ID_CANCEL: return
+			globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
+			return
+		#コメントの詳細を表示
 		elif selected==menuItemsStore.getRef("viewComment"):
 			viewCommentDialog = views.viewComment.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
 			viewCommentDialog.Initialize()
 			viewCommentDialog.Show()
+		#選択中のコメントに返信
 		elif selected==menuItemsStore.getRef("replyToSelectedComment"):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["from_user"]["screen_id"] + " ")
 			self.parent.commentBodyEdit.SetInsertionPointEnd()
 			self.parent.commentBodyEdit.SetFocus()
+		#配信者に返信
 		elif selected==menuItemsStore.getRef("replyToBroadcaster"):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"] + " ")
 			self.parent.commentBodyEdit.SetInsertionPointEnd()
 			self.parent.commentBodyEdit.SetFocus()
+		#コメントの削除
 		elif selected==menuItemsStore.getRef("deleteSelectedComment"):
-			dlg=wx.MessageDialog(None,_("選択中のコメントを削除しますか？"),_("確認"),wx.YES_NO|wx.ICON_QUESTION)
-			if dlg.ShowModal()==wx.ID_NO:
+			dlg=simpleDialog.yesNoDialog(_("確認"),_("選択中のコメントを削除しますか？"))
+			if dlg==wx.ID_NO:
 				return
 			globalVars.app.Manager.deleteComment()
+		#お気に入りに追加
+		elif selected==menuItemsStore.getRef("addFavorites"):
+			dlg=simpleDialog.yesNoDialog(_("確認"),_("%sのライブをお気に入りに追加しますか？") %(globalVars.app.Manager.connection.userId))
+			if dlg==wx.ID_NO:
+				return
+			globalVars.app.Manager.addFavorites()
+		#配信者の情報
 		elif selected==menuItemsStore.getRef("viewBroadcaster"):
 			viewBroadcasterDialog = views.viewBroadcaster.Dialog(globalVars.app.Manager.connection.movieInfo["broadcaster"])
 			viewBroadcasterDialog.Initialize()
 			viewBroadcasterDialog.Show()
+		#ブラウザで開く
 		elif selected==menuItemsStore.getRef("openLive"):
 			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
+		#アカウントマネージャ
+		elif selected==menuItemsStore.getRef("accountManager"):
+			accountManager = views.accountManager.Dialog([])
+			accountManager.Initialize()
+			accountManager.Show()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

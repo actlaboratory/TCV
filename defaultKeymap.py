@@ -6,6 +6,8 @@ defaultKeymap={}
 
 defaultKeymap["mainView"]={
 	"connect":"ctrl+n",
+	"viewHistory": "ctrl+h",
+	"viewFavorites": "ctrl+i",
 	"disconnect":"ctrl+w/ctrl+F4",
 	"play": "F1",
 	"stop": "F2",
@@ -13,7 +15,8 @@ defaultKeymap["mainView"]={
 	"volumeDown": "F4",
 	"viewComment": "Alt+RETURN",
 	"replyToSelectedComment": "ctrl+r",
-	"deleteSelectedComment": "ctrl+d/DELETE",
+	"deleteSelectedComment": "DELETE",
 	"replyToBroadcaster": "ctrl+shift+r",
-	"viewBroadcaster": "ctrl+b"
+	"viewBroadcaster": "ctrl+b",
+	"addFavorites": "ctrl+d"
 }

@@ -6,10 +6,12 @@ import datetime
 import wx
 import globalVars
 import simpleDialog
+import pathlib
 
 evtComment = 0
 evtLiveInfo = 1
 evtCountDown = 2
+evtTyping = 3
 
 first = 0
 update = 1
@@ -17,22 +19,44 @@ update = 1
 commentTimerInterval = 5000
 liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
+typingTimerInterval = 5000
+
+historyData = pathlib.Path("history.dat")
+favoritesData = pathlib.Path("favorites.dat")
+
 class manager:
 	def __init__(self, MainView):
 		self.MainView = MainView
 		self.evtHandler = wx.EvtHandler()
 		self.evtHandler.Bind(wx.EVT_TIMER, self.timer)
+		if historyData.exists() == False:
+			historyData.touch()
+		self.history = historyData.read_text().split("\n")
+		if len(self.history) == 1 and self.history[0] == "":
+			del self.history[0]
+		if favoritesData.exists() == False:
+			favoritesData.touch()
+		self.favorites = favoritesData.read_text().split("\n")
+		if len(self.favorites) == 1 and self.favorites[0] == "":
+			del self.favorites[0]
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
 		if self.connection.connected == False:
-			simpleDialog.dialog(_("エラー"), _("指定されたユーザが見つかりません。"))
+			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
 		else:
 			globalVars.app.say(userId)
+			if userId not in self.history:
+				self.history.insert(0, userId)
+			elif userId in self.history:
+				del self.history[self.history.index(userId)]
+				self.history.insert(0, userId)
+			historyData.write_text("\n".join(self.history))
 			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 			if self.connection.isLive == True:
 				globalVars.app.say(_("接続。現在配信中。"))
 				self.resetTimer()
+				globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 				self.countDownTimer.Start(countDownTimerInterval)
 				globalVars.app.say(_("タイマー開始。"))
 			else:
@@ -44,16 +68,20 @@ class manager:
 			self.commentTimer.Start(commentTimerInterval)
 			self.addComments(self.initialComments, first)
 			self.connection.update()
+			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
+			self.liveInfoTimer.Start(liveInfoTimerInterval)
 			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
 				return
+			self.createLiveInfoList(first)
 			self.oldCoins = self.connection.coins
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
-			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
-			self.liveInfoTimer.Start(liveInfoTimerInterval)
-			self.createLiveInfoList(first)
+			self.oldSubtitle = self.connection.movieInfo["movie"]["subtitle"]
+			self.oldItem = self.connection.item
 			self.createItemList(first)
+			self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
+			self.typingTimer.Start(typingTimerInterval)
 
 	def addComments(self, commentList, mode):
 		for i in commentList:
@@ -68,8 +96,8 @@ class manager:
 			self.MainView.commentList.SetItem(0, 1, result["message"])
 			self.MainView.commentList.SetItem(0, 2, result["time"])
 			self.MainView.commentList.SetItem(0, 3, result["user"])
-			#if mode == update:
-				#globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
+			if mode == update:
+				globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
 
 	def createLiveInfoList(self, mode):
 		result = [
@@ -89,6 +117,8 @@ class manager:
 			result.insert(-1, _("コラボ可能"))
 		else:
 			result.insert(-1, _("コラボ不可"))
+		for i in range(0, len(result)):
+			result[i] = result[i].replace("None", _("なし"))
 		if mode == first:
 			for i in range(0, len(result)):
 				self.MainView.liveInfo.InsertItem(i, result[i])
@@ -100,25 +130,33 @@ class manager:
 
 	def createItemList(self, mode):
 		result = []
-		for name, count in self.connection.item.items():
-			result.append(name + ":" + count)
+		for i in self.connection.item:
+			result.append(i["name"] + ":" + str(i["count"]))
 		if mode == first:
 			for i in range(0, len(result)):
 				self.MainView.itemList.InsertItem(i, result[i])
 		elif mode == update:
+			if len(result) < self.MainView.itemList.GetItemCount():
+				self.MainView.itemList.DeleteAllItems()
 			for i in range(0, len(result)):
 				bool = result[i] == self.MainView.itemList.GetItemText(i)
 				if bool == False:
-					self.MainView.itemList.SetItemText(i, result[i])
-					globalVars.app.say(str(result[i]))
+					try:
+						self.MainView.itemList.SetItemText(i, result[i])
+					except:
+						self.MainView.itemList.InsertItem(i, result[i])
+
 
 	def postComment(self, commentBody):
 		result = self.connection.postComment(commentBody)
-		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"]:
-			simpleDialog.dialog(_("エラー"), _("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
+		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
+			if len(commentBody) == 0:
+				simpleDialog.errorDialog(_("コメントが入力されていません。"))
+			else:
+				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
 			return False
 		elif "error" in result:
-			dialog(_("エラー"), _("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
+			simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
 			return False
 		else:
 			return True
@@ -131,7 +169,7 @@ class manager:
 		selected = self.MainView.commentList.GetFocusedItem()
 		result = self.connection.deleteComment(self.connection.comments[selected])
 		if result == False:
-			simpleDialog.dialog(_("エラー"), _("コメントの削除に失敗しました。このコメントを削除する権限がありません。"))
+			simpleDialog.errorDialog(_("コメントの削除に失敗しました。このコメントを削除する権限がありません。"))
 		else:
 			del self.connection.comments[selected]
 			self.MainView.commentList.DeleteItem(selected)
@@ -142,6 +180,27 @@ class manager:
 		if self.elapsedTime + self.remainingTime > 14400:
 			self.remainingTime = 14400 - self.elapsedTime
 
+	def clearHistory(self):
+		self.history.clear()
+		historyData.write_text("\n".join(self.history))
+
+	def addFavorites(self):
+		if self.connection.userId in self.favorites:
+			simpleDialog.errorDialog(_("すでに登録されています。"))
+			return
+		self.favorites.insert(0, self.connection.userId)
+		self.favorites.sort()
+		favoritesData.write_text("\n".join(self.favorites))
+
+	def deleteFavorites(self, index):
+		del self.favorites[index]
+		self.favorites.sort()
+		favoritesData.write_text("\n".join(self.favorites))
+
+	def clearFavorites(self):
+		self.favorites.clear()
+		favoritesData.write_text("\n".join(self.favorites))
+
 	def timer(self, event):
 		timer = event.GetTimer()
 		id = timer.GetId()
@@ -150,10 +209,34 @@ class manager:
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			self.connection.update()
+			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
+				return
+			self.newIsLive = self.connection.movieInfo["movie"]["is_live"]
+			if self.oldIsLive == True and self.newIsLive == False:
+				globalVars.app.say(_("ライブ終了。"))
+				self.countDownTimer.Stop()
+				self.elapsedTime = 0
+				self.remainingTime = 0
+				self.commentTimer.Stop()
+			elif self.oldIsLive == False and self.newIsLive == True:
+				globalVars.app.say(_("ライブ開始。"))
+				self.resetTimer()
+				self.countDownTimer.Start(countDownTimerInterval)
+				self.commentTimer.Start(commentTimerInterval)
+			self.oldIsLive = self.newIsLive
+			self.newSubtitle = self.connection.movieInfo["movie"]["subtitle"]
+			if self.newSubtitle != self.oldSubtitle:
+				if self.newSubtitle == None:
+					globalVars.app.say(_("テロップ削除"))
+				else:
+					globalVars.app.say(_("テロップ変更。"))
+					globalVars.app.say(self.newSubtitle)
+			self.oldSubtitle = self.newSubtitle
 			self.newCoins = self.connection.coins
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
+				globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
 				self.resetTimer()
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
@@ -167,18 +250,22 @@ class manager:
 			elif self.newViewers > self.oldViewers:
 				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
 			self.oldViewers = self.newViewers
-			self.newIsLive = self.connection.movieInfo["movie"]["is_live"]
-			if self.oldIsLive == True and self.newIsLive == False:
-				globalVars.app.say(_("ライブ終了。"))
-				self.countDownTimer.Stop()
-				self.elapsedTime = 0
-				self.remainingTime = 0
-			elif self.oldIsLive == False and self.newIsLive == True:
-				globalVars.app.say(_("ライブ開始。"))
-				self.resetTimer()
-				self.countDownTimer.Start(countDownTimerInterval)
-			self.oldIsLive = self.newIsLive
 			self.createLiveInfoList(update)
+			self.newItem = self.connection.item
+			receivedItem = []
+			for new in self.newItem:
+				if new not in self.oldItem:
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+				for old in self.oldItem:
+					if new["name"] == old["name"] and new["count"] > old["count"]:
+						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
+			for i in receivedItem:
+				id = i["id"]
+				name = i["name"]
+				users = self.connection.getItemPostedUser(id, i["count"])
+				for j in users:
+					globalVars.app.say(_("%s, アイテム:%s") %(j, name))
+			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
 			self.elapsedTime += 1
@@ -198,3 +285,7 @@ class manager:
 			if self.remainingTime % 1800 == 0:
 				globalVars.app.say(_("３０分経過。"))
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+		elif id == evtTyping:
+			typingUser = self.connection.getTypingUser()
+			if typingUser != "":
+				globalVars.app.say(_("%sさんが入力中") %(typingUser))
