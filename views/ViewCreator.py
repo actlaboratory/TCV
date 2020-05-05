@@ -108,7 +108,7 @@ class ViewCreator():
 
 	def combobox(self,text,selection,event,state=-1):
 		hStaticText=wx.StaticText(self.parent,-1,label=text,name=text)
-		self.sizer.Add(hStaticText,0,wx.ALIGN_CENTER_VERTICAL)
+		self.sizer.Add(hStaticText,0)
 
 		v=""
 		if state>=0:
