@@ -5,3 +5,4 @@ pyinstaller
 requests
 beautifulsoup4
 lxml
+pyperclip
