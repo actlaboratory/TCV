@@ -27,7 +27,7 @@ class Dialog(BaseDialog):
 		self.deleteButton = self.creator.button(_("削除"), self.delete)
 		self.clearButton = self.creator.button(_("全て削除"), self.clear)
 
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 

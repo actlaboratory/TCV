@@ -25,7 +25,7 @@ class Dialog(BaseDialog):
 		for i in globalVars.app.Manager.history:
 			self.historyList.Append([i])
 
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory)
