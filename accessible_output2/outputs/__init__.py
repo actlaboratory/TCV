@@ -11,6 +11,7 @@ if platform.system() == 'Windows':
 	from . import pc_talker
 	#import sapi4
 	from . import clipboard
+	from . import nospeech
 
 if platform.system() == 'Darwin':
 	from . import nsSpeechSynth
