@@ -148,16 +148,20 @@ class manager:
 
 
 	def postComment(self, commentBody):
+		if len(commentBody) == 0:
+			simpleDialog.errorDialog(_("コメントが入力されていません。"))
+			return False
+		elif len(commentBody) > 140:
+			simpleDialog.errorDialog(_("１４０字を超えるコメントは投稿できません。現在%s文字のコメントが入力されています。") %(str(len(commentBody))))
+			return False
 		result = self.connection.postComment(commentBody)
-		if "error" in result and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
-			if len(commentBody) == 0:
-				simpleDialog.errorDialog(_("コメントが入力されていません。"))
-			else:
+		if "error" in result:
+			if "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
 				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
-			return False
-		elif "error" in result:
-			simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
-			return False
+				return False
+			else:
+				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
+				return False
 		else:
 			return True
 
