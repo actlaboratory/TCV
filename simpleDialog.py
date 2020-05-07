@@ -22,7 +22,7 @@ def errorDialog(message):
 	return
 
 def debugDialog(message):
-	dialog = wx.MessageDialog(None,message,_("デバッグ用"),wx.OK)
+	dialog = wx.MessageDialog(None,str(message),_("デバッグ用"),wx.OK)
 	dialog.ShowModal()
 	dialog.Destroy()
 	return
