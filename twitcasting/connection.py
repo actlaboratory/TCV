@@ -10,22 +10,8 @@ import datetime
 class connection:
 	def __init__(self, userId):
 		self.userId = userId
-		userInfo = GetUserInfo(self.userId)
-		if "error" in userInfo and userInfo["error"]["code"] == 404:
-			self.connected = False
-		else:
-			self.connected = True
-			self.update()
-			if "error" in self.movieInfo and self.movieInfo["error"]["code"] == 404:
-				return
-			else:
-				self.category = self.movieInfo["movie"]["category"]
-				self.categoryName = getCategoryName(self.category)
-				self.coins = 0
-				for i in self.item:
-					if i["name"] == "コンティニューコイン":
-						self.coins = i["count"]
-				self.comments = []
+		self.update()
+		self.comments = []
 
 	def getInitialComment(self, number):
 		if self.movieId == "":
@@ -85,6 +71,10 @@ class connection:
 
 	def update(self):
 		userInfo = GetUserInfo(self.userId)
+		if "error" in userInfo and userInfo["error"]["code"] == 404:
+			self.connected = False
+		else:
+			self.connected = True
 		if userInfo["user"]["is_live"] == True:
 			self.isLive = True
 			self.movieInfo = GetCurrentLive(self.userId)
@@ -92,7 +82,6 @@ class connection:
 			self.isLive = False
 			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
 			if "error" in self.movieInfo and self.movieInfo["error"]["code"] == 404:
-				self.movieId = ""
 				return
 		self.movieId = self.movieInfo["movie"]["id"]
 		self.category = self.movieInfo["movie"]["category"]

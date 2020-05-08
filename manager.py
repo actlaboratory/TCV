@@ -67,11 +67,8 @@ class manager:
 			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 			self.commentTimer.Start(commentTimerInterval)
 			self.addComments(self.initialComments, first)
-			self.connection.update()
 			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 			self.liveInfoTimer.Start(liveInfoTimerInterval)
-			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
-				return
 			self.createLiveInfoList(first)
 			self.oldCoins = self.connection.coins
 			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
