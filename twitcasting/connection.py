@@ -14,7 +14,7 @@ class connection:
 		self.comments = []
 
 	def getInitialComment(self, number):
-		if self.movieId == "":
+		if self.hasMovieId == False:
 			return []
 		offset = max(0, number-50)
 		limit = min(50, number)
@@ -33,7 +33,7 @@ class connection:
 			return result3
 
 	def getComment(self):
-		if self.movieId == "":
+		if self.hasMovieId == False:
 			return []
 		ret = []
 		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
@@ -73,20 +73,33 @@ class connection:
 		userInfo = GetUserInfo(self.userId)
 		if "error" in userInfo and userInfo["error"]["code"] == 404:
 			self.connected = False
+			return
 		else:
 			self.connected = True
+		self.movieId = userInfo["user"]["last_movie_id"]
+		if self.movieId == None:
+			self.hasMovieId = False
+		else:
+			self.hasMovieId = True
 		if userInfo["user"]["is_live"] == True:
 			self.isLive = True
-			self.movieInfo = GetCurrentLive(self.userId)
 		elif userInfo["user"]["is_live"] == False:
 			self.isLive = False
-			self.movieInfo = GetMovieInfo(userInfo["user"]["last_movie_id"])
+		if self.hasMovieId == True:
+			self.movieInfo = GetMovieInfo(self.movieId)
 			if "error" in self.movieInfo and self.movieInfo["error"]["code"] == 404:
-				return
-		self.movieId = self.movieInfo["movie"]["id"]
-		self.category = self.movieInfo["movie"]["category"]
-		self.categoryName = getCategoryName(self.category)
-		self.item = getItem(self.movieInfo["broadcaster"]["screen_id"])
+				self.hasMovieId = False
+			if self.hasMovieId == True:
+				self.category = self.movieInfo["movie"]["category"]
+				self.categoryName = getCategoryName(self.category)
+				self.viewers = self.movieInfo["movie"]["current_view_count"]
+				self.subtitle = self.movieInfo["movie"]["subtitle"]
+		if self.hasMovieId == False:
+			self.category = None
+			self.categoryName = getCategoryName(self.category)
+			self.viewers = 0
+			self.subtitle = None
+		self.item = getItem(self.userId)
 		self.coins = 0
 		for i in self.item:
 			if i["name"] == "コンティニューコイン":

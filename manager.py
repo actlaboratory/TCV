@@ -71,10 +71,10 @@ class manager:
 			self.liveInfoTimer.Start(liveInfoTimerInterval)
 			self.createLiveInfoList(first)
 			self.oldCoins = self.connection.coins
-			self.oldViewers = self.connection.movieInfo["movie"]["current_view_count"]
+			self.oldViewers = self.connection.viewers
 			self.oldIsLive = self.connection.isLive
 			self.oldMovieId = self.connection.movieId
-			self.oldSubtitle = self.connection.movieInfo["movie"]["subtitle"]
+			self.oldSubtitle = self.connection.subtitle
 			self.oldItem = self.connection.item
 			self.createItemList(first)
 			self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
@@ -97,6 +97,8 @@ class manager:
 				globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
 
 	def createLiveInfoList(self, mode):
+		if self.connection.hasMovieId == False:
+			return
 		result = [
 			_("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")},
 			_("タイトル：%(title)s") %{"title": self.connection.movieInfo["movie"]["title"]},
@@ -210,9 +212,7 @@ class manager:
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			self.connection.update()
-			if "error" in self.connection.movieInfo and self.connection.movieInfo["error"]["code"] == 404:
-				return
-			self.newIsLive = self.connection.movieInfo["movie"]["is_live"]
+			self.newIsLive = self.connection.isLive
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
@@ -225,7 +225,7 @@ class manager:
 				self.countDownTimer.Start(countDownTimerInterval)
 				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
-			self.newSubtitle = self.connection.movieInfo["movie"]["subtitle"]
+			self.newSubtitle = self.connection.subtitle
 			if self.newSubtitle != self.oldSubtitle:
 				if self.newSubtitle == None:
 					globalVars.app.say(_("テロップ削除"))
@@ -245,7 +245,7 @@ class manager:
 				globalVars.app.say(_("タイマーリセット。"))
 				self.resetTimer()
 			self.oldMovieId = self.newMovieId
-			self.newViewers = self.connection.movieInfo["movie"]["current_view_count"]
+			self.newViewers = self.connection.viewers
 			if self.newViewers < self.oldViewers:
 				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
 			elif self.newViewers > self.oldViewers:
