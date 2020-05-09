@@ -176,6 +176,9 @@ class Events(BaseEvents):
 			globalVars.app.Manager.deleteComment()
 		#お気に入りに追加
 		elif selected==menuItemsStore.getRef("addFavorites"):
+			if globalVars.app.Manager.connection.userId in globalVars.app.Manager.favorites:
+				simpleDialog.errorDialog(_("すでに登録されています。"))
+				return
 			dlg=simpleDialog.yesNoDialog(_("確認"),_("%sのライブをお気に入りに追加しますか？") %(globalVars.app.Manager.connection.userId))
 			if dlg==wx.ID_NO:
 				return

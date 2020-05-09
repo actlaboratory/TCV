@@ -188,9 +188,6 @@ class manager:
 		historyData.write_text("\n".join(self.history))
 
 	def addFavorites(self):
-		if self.connection.userId in self.favorites:
-			simpleDialog.errorDialog(_("すでに登録されています。"))
-			return
 		self.favorites.insert(0, self.connection.userId)
 		self.favorites.sort()
 		favoritesData.write_text("\n".join(self.favorites))
