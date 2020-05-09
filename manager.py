@@ -188,7 +188,7 @@ class manager:
 		historyData.write_text("\n".join(self.history))
 
 	def addFavorites(self):
-		self.favorites.insert(0, self.connection.userId)
+		self.favorites.insert(0, self.connection.userId.lower())
 		self.favorites.sort()
 		favoritesData.write_text("\n".join(self.favorites))
 
