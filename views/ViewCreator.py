@@ -102,7 +102,8 @@ class ViewCreator():
 		hButton=wx.Button(self.parent, wx.ID_CANCEL,label=text, name=text)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self.SetFace(hButton,mode=BUTTON_COLOUR)
-		self.sizer.Add(hButton,1,wx.ALIGN_BOTTOM | wx.ALL,5)
+
+		self.sizer.Add(hButton,1, wx.ALL,5)
 		self.AddSpace(self.space)
 		return hButton
 
