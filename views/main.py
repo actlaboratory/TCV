@@ -47,6 +47,7 @@ class MainView(BaseView):
 		)
 		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
 		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
+		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
 		self.commentList = self.creator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
 		self.commentList.InsertColumn(0, _("名前"))
@@ -56,6 +57,7 @@ class MainView(BaseView):
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
 		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
 		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
+		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
 		self.liveInfo = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
 		self.itemList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
@@ -200,6 +202,9 @@ class Events(BaseEvents):
 			accountManager = views.accountManager.Dialog([])
 			accountManager.Initialize()
 			accountManager.Show()
+		#コメント送信（ホットキー）
+		elif selected==menuItemsStore.getRef("postComment"):
+			self.postComment(None)
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

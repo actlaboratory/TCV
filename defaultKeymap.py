@@ -24,3 +24,6 @@ defaultKeymap["commentList"]={
 	"deleteSelectedComment": "DELETE",
 }
 
+defaultKeymap["commentBody"]={
+	"postComment": "ctrl+RETURN"
+}
