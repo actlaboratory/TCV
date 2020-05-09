@@ -10,6 +10,7 @@ import wx
 import re
 import ctypes
 import pywintypes
+import keymap
 
 import constants
 import errorCodes
@@ -44,12 +45,15 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionX"),
 			self.app.config.getint(self.identifier,"positionY")
 		)
+		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
+		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
 		self.commentList = self.creator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
+		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
 		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
 		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)

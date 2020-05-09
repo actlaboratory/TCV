@@ -13,10 +13,14 @@ defaultKeymap["mainView"]={
 	"stop": "F2",
 	"volumeUp": "F3",
 	"volumeDown": "F4",
-	"viewComment": "Alt+RETURN",
-	"replyToSelectedComment": "ctrl+r",
-	"deleteSelectedComment": "DELETE",
 	"replyToBroadcaster": "ctrl+shift+r",
 	"viewBroadcaster": "ctrl+b",
 	"addFavorites": "ctrl+d"
 }
+
+defaultKeymap["commentList"]={
+	"viewComment": "Alt+RETURN",
+	"replyToSelectedComment": "ctrl+r",
+	"deleteSelectedComment": "DELETE",
+}
+
