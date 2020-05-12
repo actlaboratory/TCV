@@ -79,7 +79,15 @@ class BaseMenu(object):
 			dialog(_("エラー"),tmp)
 		self.acceleratorTable=self.keymap.GetTable(self.keymap_identifier)
 
-	def RegisterMenuCommand(self,menu_handle,ref_id,title):
+	def RegisterMenuCommand(self,menu_handle,ref_id,title=""):
+		"""メニューに項目を追加"""
+		if type(ref_id)==dict:
+			for k,v in ref_id.items():
+				self._RegisterMenuCommand(menu_handle,k,v)
+		else:
+			return self._RegisterMenuCommand(menu_handle,ref_id,title)
+
+	def _RegisterMenuCommand(self,menu_handle,ref_id,title):
 		"""メニューアイテム生成補助関数"""
 		shortcut=self.keymap.GetKeyString(self.keymap_identifier,ref_id)
 		s=title if shortcut is None else "%s\t%s" % (title,shortcut)
