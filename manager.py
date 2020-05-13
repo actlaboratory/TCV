@@ -131,20 +131,11 @@ class manager:
 		result = []
 		for i in self.connection.item:
 			result.append(i["name"] + ":" + str(i["count"]))
-		if mode == first:
-			for i in range(0, len(result)):
-				self.MainView.itemList.InsertItem(i, result[i])
-		elif mode == update:
-			if len(result) < self.MainView.itemList.GetItemCount():
-				self.MainView.itemList.DeleteAllItems()
-			for i in range(0, len(result)):
-				bool = result[i] == self.MainView.itemList.GetItemText(i)
-				if bool == False:
-					try:
-						self.MainView.itemList.SetItemText(i, result[i])
-					except:
-						self.MainView.itemList.InsertItem(i, result[i])
-
+		result.sort()
+		if mode == update:
+			self.MainView.itemList.ClearAll()
+		for i in range(0, len(result)):
+			self.MainView.itemList.InsertItem(i, result[i])
 
 	def postComment(self, commentBody):
 		if len(commentBody) == 0:
@@ -264,7 +255,7 @@ class manager:
 				users = self.connection.getItemPostedUser(id, count)
 				sameUser = False
 				for k in range(1, len(users) - 1):
-					if users[0] == users[i]:
+					if users[0] == users[k]:
 						sameUser = True
 				if sameUser == True:
 					globalVars.app.say(_("%sさんから%sをもらいました。") %(user[0], name))
