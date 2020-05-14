@@ -243,7 +243,7 @@ class manager:
 			self.newItem = self.connection.item
 			receivedItem = []
 			for new in self.newItem:
-				#if new not in self.oldItem:
+				#if new["name"] not in self.oldItem:
 					#receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
 				for old in self.oldItem:
 					if new["name"] == old["name"] and new["count"] > old["count"]:
@@ -258,7 +258,7 @@ class manager:
 					if users[0] == users[k]:
 						sameUser = True
 				if sameUser == True:
-					globalVars.app.say(_("%sさんから%sをもらいました。") %(user[0], name))
+					globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
 				else:
 					globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
 			self.oldItem = self.newItem
