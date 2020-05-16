@@ -24,4 +24,15 @@ class DefaultSettings:
 			"sizeY": "600",
 		}
 
+		config["autoReadingOptions"]={
+			"output": "AUTO",
+			"announceReceivedComments": 1,
+			"receivedCommentsAnnouncement": "$dispname,$message,$time,$user",
+			"announceViewers": True,
+			"viewersIncreasedAnnouncement": "閲覧者が$viewers人に増えました。",
+			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
+			"announceTypingUser": False,
+			"announceReceivedItems": True
+		}
+
 		return config

@@ -94,7 +94,14 @@ class manager:
 			self.MainView.commentList.SetItem(0, 2, result["time"])
 			self.MainView.commentList.SetItem(0, 3, result["user"])
 			if mode == update:
-				globalVars.app.say("%(dispname)s, %(message)s, %(time)s, %(user)s" %{"dispname": result["dispname"], "message": result["message"], "time": result["time"], "user": result["user"]})
+				commentReadMode = globalVars.app.config.getint("autoReadingOptions", "announceReceivedComments", 1)
+				if commentReadMode == 1:
+					announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
+					announceText = announceText.replace("$dispname", result["dispname"])
+					announceText = announceText.replace("$message", result["message"])
+					announceText = announceText.replace("$time", result["time"])
+					announceText = announceText.replace("$user", result["user"])
+					globalVars.app.say(announceText)
 
 	def createLiveInfoList(self, mode):
 		if self.connection.hasMovieId == False:
@@ -173,6 +180,7 @@ class manager:
 		self.remainingTime = 1800 - self.elapsedTime % 1800 + int(self.connection.coins / 5) * 1800
 		if self.elapsedTime + self.remainingTime > 14400:
 			self.remainingTime = 14400 - self.elapsedTime
+		globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 
 	def clearHistory(self):
 		self.history.clear()
@@ -234,10 +242,16 @@ class manager:
 				self.resetTimer()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
-			if self.newViewers < self.oldViewers:
-				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
-			elif self.newViewers > self.oldViewers:
-				globalVars.app.say(_("閲覧%(viewers)d人。") %{"viewers": self.newViewers})
+			announceViewers = globalVars.app.config.getboolean("autoReadingOptions", "announceViewers", True)
+			if announceViewers == True:
+				if self.newViewers < self.oldViewers:
+					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
+					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+					globalVars.app.say(viewersInfo)
+				elif self.newViewers > self.oldViewers:
+					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
+					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+					globalVars.app.say(viewersInfo)
 			self.oldViewers = self.newViewers
 			self.createLiveInfoList(update)
 			self.newItem = self.connection.item
@@ -257,10 +271,12 @@ class manager:
 				for k in range(1, len(users) - 1):
 					if users[0] == users[k]:
 						sameUser = True
-				if sameUser == True:
-					globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
-				else:
-					globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+				announceReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "announceReceivedItems", True)
+				if announceReceivedItems == True:
+					if sameUser == True:
+						globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+					else:
+						globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
@@ -283,5 +299,7 @@ class manager:
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
-			if typingUser != "":
-				globalVars.app.say(_("%sさんが入力中") %(typingUser))
+			announceTypingUser = globalVars.app.config.getboolean("autoReadingOptions", "announceTypingUser", False)
+			if announceTypingUser == True:
+				if typingUser != "":
+					globalVars.app.say(_("%sさんが入力中") %(typingUser))

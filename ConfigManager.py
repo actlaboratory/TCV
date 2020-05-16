@@ -54,6 +54,25 @@ class ConfigManager(configparser.ConfigParser):
 			self.__getitem__(section).__setitem__(key,str(default))
 			return int(default)
 
+	def getboolean(self,section,key,default=True):
+		if type(default)!=bool:
+			raise ValueError("default value must be boolean")
+		try:
+			return super().getboolean(section,key)
+		except ValueError:
+			self.log.debug("value is not boolean.  return default "+str(default)+" at section "+section+", key "+key)
+			self[section][key]=str(default)
+			return int(default)
+		except configparser.NoOptionError as e:
+			self.log.debug("add new boolval "+str(default)+" at section "+section+", key "+key)
+			self[section][key]=default
+			return default
+		except configparser.NoSectionError as e:
+			self.log.debug("add new section and boolval "+str(default)+" at section "+section+", key "+key)
+			self.add_section(section)
+			self.__getitem__(section).__setitem__(key,default)
+			return default
+
 	def add_section(self,name):
 		if not self.has_section(name):
 			return super().add_section(name)

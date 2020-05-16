@@ -32,7 +32,7 @@ class Main(wx.App):
 		self.InitTranslation()
 
 		# 音声読み上げの準備
-		reader=self.config["speech"]["reader"]
+		reader=self.config["autoReadingOptions"]["output"]
 		if(reader=="PCTK"):
 			self.log.info("use reader 'PCTalker'")
 			self.speech=accessible_output2.outputs.pc_talker.PCTalker()
