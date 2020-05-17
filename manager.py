@@ -61,7 +61,8 @@ class manager:
 			else:
 				globalVars.app.say(_("接続。現在オフライン。"))
 				self.resetTimer()
-			self.initialComments = self.connection.getInitialComment(50)
+			initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
+			self.initialComments = self.connection.getInitialComment(initialCommentCount)
 			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 			self.commentTimer.Start(commentTimerInterval)
 			self.addComments(self.initialComments, first)
