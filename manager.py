@@ -56,13 +56,11 @@ class manager:
 			if self.connection.isLive == True:
 				globalVars.app.say(_("接続。現在配信中。"))
 				self.resetTimer()
-				globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 				self.countDownTimer.Start(countDownTimerInterval)
 				globalVars.app.say(_("タイマー開始。"))
 			else:
 				globalVars.app.say(_("接続。現在オフライン。"))
-				self.elapsedTime = 0
-				self.remainingTime = 0
+				self.resetTimer()
 			self.initialComments = self.connection.getInitialComment(50)
 			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 			self.commentTimer.Start(commentTimerInterval)
@@ -176,11 +174,16 @@ class manager:
 			self.MainView.commentList.DeleteItem(selected)
 
 	def resetTimer(self):
-		self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-		self.remainingTime = 1800 - self.elapsedTime % 1800 + int(self.connection.coins / 5) * 1800
-		if self.elapsedTime + self.remainingTime > 14400:
-			self.remainingTime = 14400 - self.elapsedTime
-		globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+		globalVars.app.say(_("タイマーリセット。"))
+		if self.connection.isLive == True:
+			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+			self.remainingTime = 1800 - self.elapsedTime % 1800 + int(self.connection.coins / 5) * 1800
+			if self.elapsedTime + self.remainingTime > 14400:
+				self.remainingTime = 14400 - self.elapsedTime
+			globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+		elif self.connection.isLive == False:
+			self.elapsedTime = 0
+			self.remainingTime = 0
 
 	def clearHistory(self):
 		self.history.clear()
@@ -212,12 +215,10 @@ class manager:
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
-				self.elapsedTime = 0
-				self.remainingTime = 0
+				self.resetTimer()
 				self.commentTimer.Stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
-				self.resetTimer()
 				self.countDownTimer.Start(countDownTimerInterval)
 				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
@@ -238,7 +239,8 @@ class manager:
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
-				globalVars.app.say(_("タイマーリセット。"))
+				if self.connection.isLive == True:
+					globalVars.app.say(_("次のライブが開始されました。"))
 				self.resetTimer()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
