@@ -51,7 +51,14 @@ class connection:
 			return ret
 
 	def postComment(self, body):
-		result = PostComment(self.movieId, body, "none")
+		commentToSns = globalVars.app.config.getint("general", "commentToSns", 0)
+		if commentToSns == 0:
+			sns = "none"
+		elif commentToSns == 1:
+			sns = "reply"
+		elif commentToSns == 2:
+			sns = "normal"
+		result = PostComment(self.movieId, body, sns)
 		return result
 
 	def deleteComment(self, comment):

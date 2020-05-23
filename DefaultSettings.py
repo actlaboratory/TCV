@@ -11,7 +11,8 @@ class DefaultSettings:
 			"language": "ja-JP",
 			"fileVersion": "100",
 			"locale": "ja-JP",
-			"initialCommentCount": 50
+			"initialCommentCount": 50,
+			"commentToSns": 0
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
