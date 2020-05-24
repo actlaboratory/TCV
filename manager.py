@@ -248,11 +248,11 @@ class manager:
 			announceViewers = globalVars.app.config.getboolean("autoReadingOptions", "announceViewers", True)
 			if announceViewers == True:
 				if self.newViewers < self.oldViewers:
-					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
+					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
 					globalVars.app.say(viewersInfo)
 				elif self.newViewers > self.oldViewers:
-					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
+					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
 					globalVars.app.say(viewersInfo)
 			self.oldViewers = self.newViewers
