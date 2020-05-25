@@ -135,7 +135,14 @@ class Events(BaseEvents):
 			connectDialog.Initialize()
 			ret = connectDialog.Show()
 			if ret==wx.ID_CANCEL: return
-			globalVars.app.Manager.connect(str(connectDialog.GetValue()))
+			user = str(connectDialog.GetValue())
+			if "https://twitcasting.tv/" in user:
+				user = user[23:]
+			elif "http://twitcasting.tv/" in user:
+				user = user[22:]
+			if "/" in user:
+				user = user[0:user.find("/")]
+			globalVars.app.Manager.connect(user)
 			return
 		#履歴
 		elif selected==menuItemsStore.getRef("viewHistory"):
