@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# ƒAƒNƒZƒXƒg[ƒNƒ“æ“¾ƒ‚ƒWƒ…[ƒ‹ib’è”Åj
-# Œ»İ‚ÍAccessToken.txt‚©‚ç‚Ì“Ç‚İ‚İ‚Ì‚İ‘Î‰
+# ã‚¢ã‚¯ã‚»ã‚¹ãƒˆãƒ¼ã‚¯ãƒ³å–å¾—ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ï¼ˆæš«å®šç‰ˆï¼‰
+# ç¾åœ¨ã¯AccessToken.txtã‹ã‚‰ã®èª­ã¿è¾¼ã¿ã®ã¿å¯¾å¿œ
 
 file = open("twitcasting\\AccessToken.txt", "r")
 accessToken = file.readlines()[0]
