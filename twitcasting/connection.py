@@ -6,6 +6,7 @@ from twitcasting.getItem import *
 from twitcasting.getTypingUser import *
 import views.main
 import datetime
+import globalVars
 
 class connection:
 	def __init__(self, userId):
