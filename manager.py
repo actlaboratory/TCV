@@ -7,6 +7,8 @@ import wx
 import globalVars
 import simpleDialog
 import pathlib
+from twitcasting.accessToken import accessToken
+import twitcasting.twitcasting
 
 evtComment = 0
 evtLiveInfo = 1
@@ -39,6 +41,8 @@ class manager:
 		self.favorites = favoritesData.read_text().split("\n")
 		if len(self.favorites) == 1 and self.favorites[0] == "":
 			del self.favorites[0]
+		self.myAccount = []
+		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -94,7 +98,11 @@ class manager:
 			self.MainView.commentList.SetItem(0, 3, result["user"])
 			if mode == update:
 				commentReadMode = globalVars.app.config.getint("autoReadingOptions", "announceReceivedComments", 1)
-				if commentReadMode == 1:
+				if commentReadMode == 2:
+					for j in self.myAccount:
+						if i["from_user"]["id"] == j["id"]:
+							return
+				if commentReadMode != 0:
 					announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
 					announceText = announceText.replace("$dispname", result["dispname"])
 					announceText = announceText.replace("$message", result["message"])
