@@ -23,12 +23,12 @@ for l in langs:
 	print(l)
 
 files=glob.glob("*.py")
+files.extend(glob.glob("*/*.py", recursive=True))
 print("Detected files:")
-for f in files:
-	print(f)
+print("Detected files: %d" % len(files))
 
 print("Updating the base dictionary(pot)")
-subprocess.call(("tools\\xgettext.exe -p locale --from-code utf-8 --package-name=application %s" % (" ".join(files))).split())
+subprocess.call(("tools\\xgettext.exe -p locale --from-code utf-8 --package-name=SOC %s" % (" ".join(files))).split())
 for l in langs:
 	if os.path.exists("locale/%s/LC_MESSAGES/messages.po" % (l)):
 		print("Merging %s" % l)
