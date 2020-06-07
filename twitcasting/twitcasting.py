@@ -3,7 +3,6 @@
 
 import requests
 from twitcasting.accessToken import accessToken
-import json
 
 baseURL = "https://apiv2.twitcasting.tv"
 baseHeaders = {
@@ -13,47 +12,47 @@ baseHeaders = {
 
 # User
 def GetUserInfo(user_id):
-	req = requests.get(baseURL + "/users/" + user_id, headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.get(baseURL + "/users/" + user_id, headers=baseHeaders)
+	dict = result.json()
 	return dict
 
 def VerifyCredentials():
-	req = requests.get(baseURL + "/verify_credentials", headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.get(baseURL + "/verify_credentials", headers=baseHeaders)
+	dict = result.json()
 	return dict
 
 # Movie
 def GetMovieInfo(movie_id):
-	req = requests.get(baseURL + "/movies/" + movie_id, headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.get(baseURL + "/movies/" + movie_id, headers=baseHeaders)
+	dict = result.json()
 	return dict
 
 def GetCurrentLive(user_id):
-	req = requests.get(baseURL + "/users/" + user_id + "/current_live", headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.get(baseURL + "/users/" + user_id + "/current_live", headers=baseHeaders)
+	dict = result.json()
 	return dict
 
 # Comments
 def GetComments(movie_id, offset=0, limit=10, slice_id=""):
-	req = requests.get(baseURL + "/movies/" + str(movie_id) + "/comments?offset=" + str(offset) + "&limit=" + str(limit) + "&slice_id=" + str(slice_id), headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.get(baseURL + "/movies/" + str(movie_id) + "/comments?offset=" + str(offset) + "&limit=" + str(limit) + "&slice_id=" + str(slice_id), headers=baseHeaders)
+	dict = result.json()
 	if "error" in dict:
 		return dict
 	else:
 		return dict["comments"]
 
 def PostComment(movie_id, comment, sns="none"):
-	req = requests.post(baseURL + "/movies/" + movie_id + "/comments", json = {"comment": comment, "sns": sns}, headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.post(baseURL + "/movies/" + movie_id + "/comments", json = {"comment": comment, "sns": sns}, headers=baseHeaders)
+	dict = result.json()
 	return dict
 
 def DeleteComment(movie_id, comment_id):
-	req = requests.delete(baseURL + "/movies/" + movie_id + "/comments/" + comment_id, headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.delete(baseURL + "/movies/" + movie_id + "/comments/" + comment_id, headers=baseHeaders)
+	dict = result.json()
 	return dict
 
 # Category
 def GetCategories(lang = "ja"):
-	req = requests.get(baseURL + "/categories?lang=" + lang, headers=baseHeaders).text
-	dict = json.loads(req)
+	result = requests.get(baseURL + "/categories?lang=" + lang, headers=baseHeaders)
+	dict = result.json()
 	return dict["categories"]
