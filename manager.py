@@ -51,10 +51,10 @@ class manager:
 		else:
 			globalVars.app.say(userId)
 			if userId not in self.history:
-				self.history.insert(0, userId)
+				self.history.insert(0, userId.lower())
 			elif userId in self.history:
 				del self.history[self.history.index(userId)]
-				self.history.insert(0, userId)
+				self.history.insert(0, userId.lower())
 			historyData.write_text("\n".join(self.history))
 			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 			if self.connection.isLive == True:
