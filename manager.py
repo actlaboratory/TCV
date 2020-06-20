@@ -44,6 +44,7 @@ class manager:
 			del self.favorites[0]
 		self.myAccount = []
 		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
+		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -92,6 +93,9 @@ class manager:
 				"time": datetime.datetime.fromtimestamp(i["created"]).strftime("%H:%M:%S"),
 				"user": i["from_user"]["screen_id"]
 			}
+			for j in self.nameReplaceList:
+				if j[0] == result["user"]:
+					result["dispname"] = j[1]
 			for j in globalVars.app.config.items("commentReplaceBasic"):
 				result["message"] = result["message"].replace(j[0], j[1])
 			for j in globalVars.app.config.items("commentReplaceReg"):

@@ -25,7 +25,6 @@ class DefaultSettings:
 			"sizeX": "800",
 			"sizeY": "600",
 		}
-
 		config["autoReadingOptions"]={
 			"output": "AUTO",
 			"announceReceivedComments": 1,
@@ -36,10 +35,11 @@ class DefaultSettings:
 			"announceTypingUser": False,
 			"announceReceivedItems": True
 		}
-
 		config["commentReplaceBasic"]={
 		}
-
 		config["commentReplaceReg"] = {
 		}
+		config["nameReplace"] = {
+		}
+
 		return config
