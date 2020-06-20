@@ -91,6 +91,8 @@ class manager:
 				"time": datetime.datetime.fromtimestamp(i["created"]).strftime("%H:%M:%S"),
 				"user": i["from_user"]["screen_id"]
 			}
+			for j in globalVars.app.config.items("commentReplaceBasic"):
+				result["message"] = result["message"].replace(j[0], j[1])
 			self.MainView.commentList.InsertItem(0	, "")
 			self.MainView.commentList.SetItem(0, 0, result["dispname"])
 			self.MainView.commentList.SetItem(0, 1, result["message"])

@@ -37,4 +37,7 @@ class DefaultSettings:
 			"announceReceivedItems": True
 		}
 
+		config["commentReplaceBasic"]={
+		}
+
 		return config
