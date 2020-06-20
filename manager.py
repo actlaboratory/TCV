@@ -100,6 +100,17 @@ class manager:
 				result["message"] = result["message"].replace(j[0], j[1])
 			for j in globalVars.app.config.items("commentReplaceReg"):
 				result["message"] = re.sub(j[0], j[1], result["message"])
+			urls = re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", result["message"])
+			domains = re.finditer("(https?://[^/]+/)", result["message"])
+			for url in urls:
+				for domain in domains:
+					if len(globalVars.app.config["commentReplaceSpecial"]["url"]) != 0:
+						result["message"] = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], result["message"])
+					if globalVars.app.config.getboolean("commentReplaceSpecial", "deleteProtcolName", False) == True:
+						result["message"] = result["message"].replace("http://", "")
+						result["message"] = result["message"].replace("https://", "")
+					if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
+						result["message"] = result["message"].replace(url.group(), domain.group())
 			self.MainView.commentList.InsertItem(0	, "")
 			self.MainView.commentList.SetItem(0, 0, result["dispname"])
 			self.MainView.commentList.SetItem(0, 1, result["message"])

@@ -39,6 +39,11 @@ class DefaultSettings:
 		}
 		config["commentReplaceReg"] = {
 		}
+		config["commentReplaceSpecial"] = {
+			"deleteProtcolName": False,
+			"onlyDomain": False,
+			"url": ""
+		}
 		config["nameReplace"] = {
 		}
 
