@@ -9,6 +9,7 @@ import simpleDialog
 import pathlib
 from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
+import re
 
 evtComment = 0
 evtLiveInfo = 1
@@ -93,6 +94,8 @@ class manager:
 			}
 			for j in globalVars.app.config.items("commentReplaceBasic"):
 				result["message"] = result["message"].replace(j[0], j[1])
+			for j in globalVars.app.config.items("commentReplaceReg"):
+				result["message"] = re.sub(j[0], j[1], result["message"])
 			self.MainView.commentList.InsertItem(0	, "")
 			self.MainView.commentList.SetItem(0, 0, result["dispname"])
 			self.MainView.commentList.SetItem(0, 1, result["message"])

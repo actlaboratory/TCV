@@ -40,4 +40,6 @@ class DefaultSettings:
 		config["commentReplaceBasic"]={
 		}
 
+		config["commentReplaceReg"] = {
+		}
 		return config
