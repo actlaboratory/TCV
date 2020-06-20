@@ -162,11 +162,11 @@ class manager:
 			return False
 		result = self.connection.postComment(commentBody)
 		if "error" in result:
-			if "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
+			if result["error"]["code"] == 1001 and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
 				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
 				return False
 			else:
-				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result["error"])})
+				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result)})
 				return False
 		else:
 			return True
