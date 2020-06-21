@@ -50,40 +50,40 @@ class manager:
 		self.connection = twitcasting.connection.connection(userId)
 		if self.connection.connected == False:
 			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
+			return
+		globalVars.app.say(userId)
+		if userId not in self.history:
+			self.history.insert(0, userId.lower())
+		elif userId in self.history:
+			del self.history[self.history.index(userId)]
+			self.history.insert(0, userId.lower())
+		historyData.write_text("\n".join(self.history))
+		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
+		if self.connection.isLive == True:
+			globalVars.app.say(_("接続。現在配信中。"))
+			self.resetTimer()
+			self.countDownTimer.Start(countDownTimerInterval)
+			globalVars.app.say(_("タイマー開始。"))
 		else:
-			globalVars.app.say(userId)
-			if userId not in self.history:
-				self.history.insert(0, userId.lower())
-			elif userId in self.history:
-				del self.history[self.history.index(userId)]
-				self.history.insert(0, userId.lower())
-			historyData.write_text("\n".join(self.history))
-			self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
-			if self.connection.isLive == True:
-				globalVars.app.say(_("接続。現在配信中。"))
-				self.resetTimer()
-				self.countDownTimer.Start(countDownTimerInterval)
-				globalVars.app.say(_("タイマー開始。"))
-			else:
-				globalVars.app.say(_("接続。現在オフライン。"))
-				self.resetTimer()
-			initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
-			self.initialComments = self.connection.getInitialComment(initialCommentCount)
-			self.commentTimer = wx.Timer(self.evtHandler, evtComment)
-			self.commentTimer.Start(commentTimerInterval)
-			self.addComments(self.initialComments, first)
-			self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
-			self.liveInfoTimer.Start(liveInfoTimerInterval)
-			self.createLiveInfoList(first)
-			self.oldCoins = self.connection.coins
-			self.oldViewers = self.connection.viewers
-			self.oldIsLive = self.connection.isLive
-			self.oldMovieId = self.connection.movieId
-			self.oldSubtitle = self.connection.subtitle
-			self.oldItem = self.connection.item
-			self.createItemList(first)
-			self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
-			self.typingTimer.Start(typingTimerInterval)
+			globalVars.app.say(_("接続。現在オフライン。"))
+			self.resetTimer()
+		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
+		self.initialComments = self.connection.getInitialComment(initialCommentCount)
+		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
+		self.commentTimer.Start(commentTimerInterval)
+		self.addComments(self.initialComments, first)
+		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
+		self.liveInfoTimer.Start(liveInfoTimerInterval)
+		self.createLiveInfoList(first)
+		self.oldCoins = self.connection.coins
+		self.oldViewers = self.connection.viewers
+		self.oldIsLive = self.connection.isLive
+		self.oldMovieId = self.connection.movieId
+		self.oldSubtitle = self.connection.subtitle
+		self.oldItem = self.connection.item
+		self.createItemList(first)
+		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
+		self.typingTimer.Start(typingTimerInterval)
 
 	def addComments(self, commentList, mode):
 		for i in commentList:
