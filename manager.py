@@ -45,6 +45,7 @@ class manager:
 		self.myAccount = []
 		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
+		self.timers = []
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -59,6 +60,7 @@ class manager:
 			self.history.insert(0, userId.lower())
 		historyData.write_text("\n".join(self.history))
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
+		self.timers.append(self.countDownTimer)
 		if self.connection.isLive == True:
 			globalVars.app.say(_("接続。現在配信中。"))
 			self.resetTimer()
@@ -70,9 +72,11 @@ class manager:
 		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
 		self.initialComments = self.connection.getInitialComment(initialCommentCount)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
+		self.timers.append(self.commentTimer)
 		self.commentTimer.Start(commentTimerInterval)
 		self.addComments(self.initialComments, first)
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
+		self.timers.append(self.liveInfoTimer)
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
 		self.oldCoins = self.connection.coins
@@ -83,6 +87,7 @@ class manager:
 		self.oldItem = self.connection.item
 		self.createItemList(first)
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
+		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
 
 	def addComments(self, commentList, mode):

@@ -24,6 +24,7 @@ class BaseView(object):
 		self.hFrame=wx.Frame(None,-1,ttl, size=(x,y),pos=(px,py))
 		self.hFrame.Bind(wx.EVT_MOVE_END,self.events.WindowMove)
 		self.hFrame.Bind(wx.EVT_SIZE,self.events.WindowResize)
+		self.hFrame.Bind(wx.EVT_CLOSE,self.events.Exit)
 
 		self.hPanel=views.ViewCreator.makePanel(self.hFrame)
 		self.creator=views.ViewCreator.ViewCreator(1,self.hPanel,None, wx.VERTICAL)

@@ -218,3 +218,9 @@ class Events(BaseEvents):
 		result = globalVars.app.Manager.postComment(commentBody)
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
+
+	def Exit(self, event = None):
+		for i in globalVars.app.Manager.timers:
+			if i.IsRunning() == True:
+				i.Stop()
+		super().Exit()
