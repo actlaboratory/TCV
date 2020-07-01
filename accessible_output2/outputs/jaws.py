@@ -20,7 +20,7 @@ class Jaws (Output):
 	def braille(self, text, **options):
 		# HACK: replace " with ', Jaws doesn't seem to understand escaping them with \
 		text = text.replace('"', "'")
-		self.object.RunFunction("BrailleString(\"%s\")" % text)
+		self.object.RunFunction("BrailleMessage(\"%s\")" % text)
 
 	def speak(self, text, interrupt=False):
 		self.object.SayString('      %s' % text, interrupt)
