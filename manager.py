@@ -91,41 +91,41 @@ class manager:
 		self.typingTimer.Start(typingTimerInterval)
 
 	def addComments(self, commentList, mode):
-		for i in commentList:
-			result = {
-				"dispname": i["from_user"]["name"],
-				"message": i["message"],
-				"time": datetime.datetime.fromtimestamp(i["created"]).strftime("%H:%M:%S"),
-				"user": i["from_user"]["screen_id"]
+		for commentObject in commentList:
+			commentData = {
+				"dispname": commentObject["from_user"]["name"],
+				"message": commentObject["message"],
+				"time": datetime.datetime.fromtimestamp(commentObject["created"]).strftime("%H:%M:%S"),
+				"user": commentObject["from_user"]["screen_id"]
 			}
-			for j in self.nameReplaceList:
-				if j[0] == result["user"]:
-					result["dispname"] = j[1]
-			for j in globalVars.app.config.items("commentReplaceBasic"):
-				result["message"] = result["message"].replace(j[0], j[1])
-			for j in globalVars.app.config.items("commentReplaceReg"):
-				result["message"] = re.sub(j[0], j[1], result["message"])
-			urls = re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", result["message"])
-			domains = re.finditer("(https?://[^/]+/)", result["message"])
+			for i in self.nameReplaceList:
+				if i[0] == commentData["user"]:
+					commentData["dispname"] = i[1]
+			for i in globalVars.app.config.items("commentReplaceBasic"):
+				commentData["message"] = commentData["message"].replace(i[0], i[1])
+			for i in globalVars.app.config.items("commentReplaceReg"):
+				commentData["message"] = re.sub(i[0], i[1], commentData["message"])
+			urls = re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", commentData["message"])
+			domains = re.finditer("(https?://[^/]+/)", commentData["message"])
 			for url in urls:
 				for domain in domains:
 					if len(globalVars.app.config["commentReplaceSpecial"]["url"]) != 0:
-						result["message"] = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], result["message"])
+						commentData["message"] = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], commentData["message"])
 					if globalVars.app.config.getboolean("commentReplaceSpecial", "deleteProtcolName", False) == True:
-						result["message"] = result["message"].replace("http://", "")
-						result["message"] = result["message"].replace("https://", "")
+						commentData["message"] = commentData["message"].replace("http://", "")
+						commentData["message"] = commentData["message"].replace("https://", "")
 					if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
-						result["message"] = result["message"].replace(url.group(), domain.group())
+						commentData["message"] = commentData["message"].replace(url.group(), domain.group())
 			self.MainView.commentList.InsertItem(0	, "")
-			self.MainView.commentList.SetItem(0, 0, result["dispname"])
-			self.MainView.commentList.SetItem(0, 1, result["message"])
-			self.MainView.commentList.SetItem(0, 2, result["time"])
-			self.MainView.commentList.SetItem(0, 3, result["user"])
+			self.MainView.commentList.SetItem(0, 0, commentData["dispname"])
+			self.MainView.commentList.SetItem(0, 1, commentData["message"])
+			self.MainView.commentList.SetItem(0, 2, commentData["time"])
+			self.MainView.commentList.SetItem(0, 3, commentData["user"])
 			if mode == update:
 				commentReadMode = globalVars.app.config.getint("autoReadingOptions", "announceReceivedComments", 1)
 				if commentReadMode == 2:
-					for j in self.myAccount:
-						if i["from_user"]["id"] == j["id"]:
+					for i in self.myAccount:
+						if commentObject["from_user"]["id"] == i["id"]:
 							return
 				if commentReadMode == 0:
 					return
@@ -134,18 +134,21 @@ class manager:
 				else:
 					readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
 				if readMentions == 2:
-					for j in self.myAccount:
-						if "@%s " %(j["screen_id"]) in result["message"]:
+					for i in self.myAccount:
+						if "@%s " %(i["screen_id"]) in commentData["message"]:
 							return
 				elif readMentions == 0:
-					if "@" in i["message"]:
+					if "@" in commentObject["message"]:
 						return
-				announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
-				announceText = announceText.replace("$dispname", result["dispname"])
-				announceText = announceText.replace("$message", result["message"])
-				announceText = announceText.replace("$time", result["time"])
-				announceText = announceText.replace("$user", result["user"])
-				globalVars.app.say(announceText)
+				self.readComment(commentData)
+
+	def readComment(self, commentData):
+		announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
+		announceText = announceText.replace("$dispname", commentData["dispname"])
+		announceText = announceText.replace("$message", commentData["message"])
+		announceText = announceText.replace("$time", commentData["time"])
+		announceText = announceText.replace("$user", commentData["user"])
+		globalVars.app.say(announceText)
 
 	def createLiveInfoList(self, mode):
 		if self.connection.hasMovieId == False:
