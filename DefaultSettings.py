@@ -18,9 +18,6 @@ class DefaultSettings:
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
 			"colorMode":"normal"
 		}
-		config["speech"]={
-			"reader" : "AUTO"
-		}
 		config["mainView"]={
 			"sizeX": "800",
 			"sizeY": "600",
@@ -33,7 +30,9 @@ class DefaultSettings:
 			"viewersIncreasedAnnouncement": "閲覧者が$viewers人に増えました。",
 			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
 			"announceTypingUser": False,
-			"announceReceivedItems": True
+			"announceReceivedItems": True,
+			"readMentions_myLive": 1,
+			"readMentions_otherLive": 1
 		}
 		config["commentReplaceBasic"]={
 		}

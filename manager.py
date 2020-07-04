@@ -127,13 +127,25 @@ class manager:
 					for j in self.myAccount:
 						if i["from_user"]["id"] == j["id"]:
 							return
-				if commentReadMode != 0:
-					announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
-					announceText = announceText.replace("$dispname", result["dispname"])
-					announceText = announceText.replace("$message", result["message"])
-					announceText = announceText.replace("$time", result["time"])
-					announceText = announceText.replace("$user", result["user"])
-					globalVars.app.say(announceText)
+				if commentReadMode == 0:
+					return
+				if self.connection.userId in self.myAccount:
+					readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
+				else:
+					readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
+				if readMentions == 2:
+					for j in self.myAccount:
+						if "@%s " %(j["screen_id"]) in result["message"]:
+							return
+				elif readMentions == 0:
+					if "@" in i["message"]:
+						return
+				announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
+				announceText = announceText.replace("$dispname", result["dispname"])
+				announceText = announceText.replace("$message", result["message"])
+				announceText = announceText.replace("$time", result["time"])
+				announceText = announceText.replace("$user", result["user"])
+				globalVars.app.say(announceText)
 
 	def createLiveInfoList(self, mode):
 		if self.connection.hasMovieId == False:
