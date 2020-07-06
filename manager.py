@@ -134,9 +134,12 @@ class manager:
 				else:
 					readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
 				if readMentions == 2:
+					mentionMe = False
 					for i in self.myAccount:
 						if "@%s " %(i["screen_id"]) in commentData["message"]:
-							return
+							mentionMe = True
+					if mentionMe == False:
+						return
 				elif readMentions == 0:
 					if "@" in commentObject["message"]:
 						return
