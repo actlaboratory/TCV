@@ -95,6 +95,8 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
+		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True:
+			self.play()
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
