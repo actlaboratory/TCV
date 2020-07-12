@@ -48,6 +48,7 @@ class manager:
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
 		self.player = None
+		self.playing = False
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -366,8 +367,12 @@ class manager:
 	def play(self):
 		if self.player == None:
 			self.player = player.Player()
-		self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
+		if self.playing == False:
+			self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
+			self.playing = True
 
 	def stop(self):
-		self.player.channelFree()
+		if self.playing == True:
+			self.player.channelFree()
+			self.playing = False
 
