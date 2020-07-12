@@ -212,6 +212,9 @@ class Events(BaseEvents):
 		#コメント送信（ホットキー）
 		elif selected==menuItemsStore.getRef("postComment"):
 			self.postComment(None)
+		#再生
+		elif selected==menuItemsStore.getRef("play"):
+			globalVars.app.Manager.play()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

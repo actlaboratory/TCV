@@ -10,6 +10,7 @@ import pathlib
 from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
 import re
+import player
 
 evtComment = 0
 evtLiveInfo = 1
@@ -46,6 +47,7 @@ class manager:
 		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
+		self.player = None
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -360,3 +362,8 @@ class manager:
 			if announceTypingUser == True:
 				if typingUser != "":
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
+
+	def play(self):
+		if self.player == None:
+			self.player = player.Player()
+		self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
