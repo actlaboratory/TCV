@@ -49,6 +49,7 @@ class manager:
 		self.timers = []
 		self.player = None
 		self.playing = False
+		self.played = False
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -95,9 +96,8 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
-		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True:
+		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
-
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
 			commentData = {
@@ -277,8 +277,13 @@ class manager:
 				self.countDownTimer.Stop()
 				self.resetTimer()
 				self.commentTimer.Stop()
+				if self.playing == True:
+					self.played = True
+					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
+				if self.played == True:
+					self.play()
 				self.countDownTimer.Start(countDownTimerInterval)
 				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
@@ -370,6 +375,9 @@ class manager:
 		if self.player == None:
 			self.player = player.Player()
 			self.player.changeVolume(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
+		if self.connection.movieInfo["movie"]["hls_url"] == None:
+			simpleDialog.errorDialog(_("現在配信中でないなどの理由により、再生できません。"))
+			return
 		if self.playing == False:
 			self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
 			self.playing = True
