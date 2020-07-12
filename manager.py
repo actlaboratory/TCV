@@ -367,6 +367,7 @@ class manager:
 	def play(self):
 		if self.player == None:
 			self.player = player.Player()
+			self.player.changeVolume(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
 		if self.playing == False:
 			self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
 			self.playing = True

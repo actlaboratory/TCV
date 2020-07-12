@@ -46,5 +46,7 @@ class DefaultSettings:
 		}
 		config["nameReplace"] = {
 		}
-
+		config["soundPlaySetting"]={
+			"defaultVolume": 100
+		}
 		return config
