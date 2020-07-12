@@ -218,6 +218,12 @@ class Events(BaseEvents):
 		#停止
 		elif selected==menuItemsStore.getRef("stop"):
 			globalVars.app.Manager.stop()
+		#音量を上げる
+		elif selected==menuItemsStore.getRef("volumeUp"):
+			globalVars.app.Manager.volumeUp()
+		#音量を下げる
+		elif selected==menuItemsStore.getRef("volumeDown"):
+			globalVars.app.Manager.volumeDown()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

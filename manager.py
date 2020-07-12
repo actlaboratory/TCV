@@ -376,3 +376,8 @@ class manager:
 			self.player.channelFree()
 			self.playing = False
 
+	def volumeUp(self):
+		self.player.changeVolume(self.player.getVolume() + 10)
+
+	def volumeDown(self):
+		self.player.changeVolume(self.player.getVolume() - 10)

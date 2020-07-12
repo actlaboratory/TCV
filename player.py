@@ -200,7 +200,7 @@ class Player():
 
 	# 音量変更（整数%）
 	def changeVolume(self, num):
-		if num < 0 or num > 200:
+		if num < 0:
 			return
 		num = num/100
 		self.handleVolume = num
