@@ -68,8 +68,8 @@ class manager:
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
 		else:
-			globalVars.app.say(_("接続。現在オフライン。"))
 			self.resetTimer()
+			globalVars.app.say(_("接続。現在オフライン。"))
 		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
 		self.initialComments = self.connection.getInitialComment(initialCommentCount)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
@@ -240,6 +240,7 @@ class manager:
 			totalTime = self.elapsedTime + 1800 - int(self.elapsedTime % 1800) + (int(self.connection.coins / 5) * 1800)
 			if totalTime > 14400:
 				totalTime = 14400
+		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
 		if timerType == 2:
 			if self.remainingTime != 180 and int(self.remainingTime % 1800) == 180:
@@ -312,13 +313,11 @@ class manager:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
 				globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
-				self.resetTimer()
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
-				self.resetTimer()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			announceViewers = globalVars.app.config.getboolean("autoReadingOptions", "announceViewers", True)
@@ -359,7 +358,6 @@ class manager:
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
-			self.elapsedTime = self.elapsedTime + 1
 			self.resetTimer()
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 		elif id == evtTyping:
