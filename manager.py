@@ -58,6 +58,9 @@ class manager:
 		elif userId in self.history:
 			del self.history[self.history.index(userId)]
 			self.history.insert(0, userId.lower())
+		historyMax = globalVars.app.config.getint("general", "historyMax", 10)
+		if len(self.history) > historyMax:
+			del self.history[historyMax:]
 		historyData.write_text("\n".join(self.history))
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 		self.timers.append(self.countDownTimer)
