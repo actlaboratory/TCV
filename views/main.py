@@ -215,6 +215,9 @@ class Events(BaseEvents):
 		#再生
 		elif selected==menuItemsStore.getRef("play"):
 			globalVars.app.Manager.play()
+		#停止
+		elif selected==menuItemsStore.getRef("stop"):
+			globalVars.app.Manager.stop()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

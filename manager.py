@@ -367,3 +367,7 @@ class manager:
 		if self.player == None:
 			self.player = player.Player()
 		self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
+
+	def stop(self):
+		self.player.channelFree()
+
