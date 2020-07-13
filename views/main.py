@@ -86,6 +86,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.PlayMenu,"stop",_("停止(&S)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
+		self.RegisterMenuCommand(self.PlayMenu,"resetVolume",_("音量を１００％に設定(&R)"))
 		#コメントメニュー
 		self.RegisterMenuCommand(self.CommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
 		self.RegisterMenuCommand(self.CommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
@@ -224,6 +225,8 @@ class Events(BaseEvents):
 		#音量を下げる
 		elif selected==menuItemsStore.getRef("volumeDown"):
 			globalVars.app.Manager.volumeDown()
+		elif selected==menuItemsStore.getRef("resetVolume"):
+			globalVars.app.Manager.resetVolume()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

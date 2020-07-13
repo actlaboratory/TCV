@@ -393,3 +393,6 @@ class manager:
 
 	def volumeDown(self):
 		self.player.changeVolume(self.player.getVolume() - 10)
+
+	def resetVolume(self):
+		self.player.changeVolume(100)
