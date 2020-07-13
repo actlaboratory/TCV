@@ -50,6 +50,7 @@ class manager:
 		self.player = None
 		self.playing = False
 		self.played = False
+		self.MainView.menu.enable("stop", False)
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -382,11 +383,15 @@ class manager:
 		if self.playing == False:
 			self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
 			self.playing = True
+			self.MainView.menu.enable("play", False)
+			self.MainView.menu.enable("stop", True)
 
 	def stop(self):
 		if self.playing == True:
 			self.player.channelFree()
 			self.playing = False
+			self.MainView.menu.enable("stop", False)
+			self.MainView.menu.enable("play", True)
 
 	def volumeUp(self):
 		self.player.changeVolume(self.player.getVolume() + 10)
