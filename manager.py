@@ -98,6 +98,7 @@ class manager:
 		self.typingTimer.Start(typingTimerInterval)
 		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
+
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
 			commentData = {
