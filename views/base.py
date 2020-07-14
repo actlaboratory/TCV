@@ -94,6 +94,8 @@ class BaseMenu(object):
 		s=title if shortcut is None else "%s\t%s" % (title,shortcut)
 		menu_handle.Append(menuItemsStore.getRef(ref_id),s)
 
+	def enable(self, identifier, enable):
+		self.hMenuBar.Enable(menuItemsStore.getRef(identifier), enable)
 
 class BaseEvents(object):
 	"""イベント処理のデフォルトの動作をいくつか定義してあります。"""

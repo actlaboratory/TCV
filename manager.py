@@ -10,6 +10,7 @@ import pathlib
 from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
 import re
+import player
 
 evtComment = 0
 evtLiveInfo = 1
@@ -46,6 +47,10 @@ class manager:
 		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
+		self.player = None
+		self.playing = False
+		self.played = False
+		self.MainView.menu.enable("stop", False)
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -58,6 +63,9 @@ class manager:
 		elif userId in self.history:
 			del self.history[self.history.index(userId)]
 			self.history.insert(0, userId.lower())
+		historyMax = globalVars.app.config.getint("general", "historyMax", 10)
+		if len(self.history) > historyMax:
+			del self.history[historyMax:]
 		historyData.write_text("\n".join(self.history))
 		self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
@@ -90,6 +98,8 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
+		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
+			self.play()
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
@@ -295,8 +305,13 @@ class manager:
 				self.countDownTimer.Stop()
 				self.resetTimer()
 				self.commentTimer.Stop()
+				if self.playing == True:
+					self.played = True
+					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
+				if self.played == True:
+					self.play()
 				self.countDownTimer.Start(countDownTimerInterval)
 				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
@@ -345,16 +360,23 @@ class manager:
 				name = i["name"]
 				count = i["count"]
 				users = self.connection.getItemPostedUser(id, count)
+				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
+				if readItemPostedUser == 2:
+					for j in range(0, 1):
+						users[j] = twitcasting.twitcasting.GetUserInfo(users[j])["user"]["name"]
 				sameUser = False
 				for k in range(1, len(users) - 1):
 					if users[0] == users[k]:
 						sameUser = True
 				announceReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "announceReceivedItems", True)
 				if announceReceivedItems == True:
-					if sameUser == True:
-						globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+					if readItemPostedUser == 0:
+						globalVars.app.say(_("%sをもらいました。") %name)
 					else:
-						globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+						if sameUser == True:
+							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+						else:
+							globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
@@ -366,3 +388,32 @@ class manager:
 			if announceTypingUser == True:
 				if typingUser != "":
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
+
+	def play(self):
+		if self.player == None:
+			self.player = player.Player()
+			self.player.changeVolume(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
+		if self.connection.movieInfo["movie"]["hls_url"] == None:
+			simpleDialog.errorDialog(_("現在配信中でないなどの理由により、再生できません。"))
+			return
+		if self.playing == False:
+			self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
+			self.playing = True
+			self.MainView.menu.enable("play", False)
+			self.MainView.menu.enable("stop", True)
+
+	def stop(self):
+		if self.playing == True:
+			self.player.channelFree()
+			self.playing = False
+			self.MainView.menu.enable("stop", False)
+			self.MainView.menu.enable("play", True)
+
+	def volumeUp(self):
+		self.player.changeVolume(self.player.getVolume() + 10)
+
+	def volumeDown(self):
+		self.player.changeVolume(self.player.getVolume() - 10)
+
+	def resetVolume(self):
+		self.player.changeVolume(100)

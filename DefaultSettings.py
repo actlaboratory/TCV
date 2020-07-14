@@ -13,7 +13,8 @@ class DefaultSettings:
 			"locale": "ja-JP",
 			"initialCommentCount": 50,
 			"commentToSns": 0,
-			"timerType": 0
+			"timerType": 0,
+			"historyMax": 10
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
@@ -32,6 +33,7 @@ class DefaultSettings:
 			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
 			"announceTypingUser": False,
 			"announceReceivedItems": True,
+			"readItemPostedUser": 0,
 			"readMentions_myLive": 1,
 			"readMentions_otherLive": 1
 		}
@@ -46,5 +48,8 @@ class DefaultSettings:
 		}
 		config["nameReplace"] = {
 		}
-
+		config["soundPlaySetting"]={
+			"autoPlay": False,
+			"defaultVolume": 100
+		}
 		return config

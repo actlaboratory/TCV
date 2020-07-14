@@ -29,7 +29,7 @@ def main():
 def exchandler(type, exc, tb):
 	winsound.Beep(1000, 1000)
 	msg=traceback.format_exception(type, exc, tb)
-	simpleDialog.errorDialog(str(msg[-1]))
+	globalVars.app.say(str(msg[-1]))
 	f=open("errorLog.txt", "a")
 	f.writelines(msg)
 	f.close()
