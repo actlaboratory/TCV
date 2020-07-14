@@ -338,7 +338,7 @@ class manager:
 				users = self.connection.getItemPostedUser(id, count)
 				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
 				if readItemPostedUser == 2:
-					for j in range(0, len(users)):
+					for j in range(0, 1):
 						users[j] = twitcasting.twitcasting.GetUserInfo(users[j])["user"]["name"]
 				sameUser = False
 				for k in range(1, len(users) - 1):
