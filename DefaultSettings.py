@@ -32,6 +32,7 @@ class DefaultSettings:
 			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
 			"announceTypingUser": False,
 			"announceReceivedItems": True,
+			"readItemPostedUser": 0,
 			"readMentions_myLive": 1,
 			"readMentions_otherLive": 1
 		}

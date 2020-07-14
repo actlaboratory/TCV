@@ -336,16 +336,23 @@ class manager:
 				name = i["name"]
 				count = i["count"]
 				users = self.connection.getItemPostedUser(id, count)
+				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
+				if readItemPostedUser == 2:
+					for j in range(0, len(users)):
+						users[j] = twitcasting.twitcasting.GetUserInfo(users[j])["user"]["name"]
 				sameUser = False
 				for k in range(1, len(users) - 1):
 					if users[0] == users[k]:
 						sameUser = True
 				announceReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "announceReceivedItems", True)
 				if announceReceivedItems == True:
-					if sameUser == True:
-						globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+					if readItemPostedUser == 0:
+						globalVars.app.say(_("%sをもらいました。") %name)
 					else:
-						globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+						if sameUser == True:
+							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+						else:
+							globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
