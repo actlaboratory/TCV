@@ -244,12 +244,13 @@ class manager:
 			self.elapsedTime = 0
 			self.remainingTime = 0
 			return
+		tmp = 1800 - (self.elapsedTime % 1800)
 		if timerType == 0:
-			totalTime = 1800
+			totalTime = self.elapsedTime + tmp
 		else:
-			totalTime = self.elapsedTime + 1800 - int(self.elapsedTime % 1800) + (int(self.connection.coins / 5) * 1800)
-			if totalTime > 14400:
-				totalTime = 14400
+			totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+		if totalTime > 14400:
+			totalTime = 14400
 		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
 		if timerType == 2:
@@ -261,7 +262,7 @@ class manager:
 			if self.remainingTime % 1800 == i:
 				self.sayRemainingTime()
 		if self.remainingTime % 1800 == 0:
-			globalVars.app.say(_("%s分が経過しました。") %(str(self.elapsedTime / 60)))
+			globalVars.app.say(_("30分が経過しました。"))
 
 	def clearHistory(self):
 		self.history.clear()
