@@ -11,6 +11,7 @@ from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
 import re
 import player
+import constants
 
 evtComment = 0
 evtLiveInfo = 1
@@ -99,6 +100,7 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
+		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
 
