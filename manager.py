@@ -75,6 +75,7 @@ class manager:
 			self.resetTimer()
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
+			globalVars.app.say(_("残り時間：%s") %self.formatTime(self.remainingTime).strftime("%H:%M:%S"))
 		else:
 			self.resetTimer()
 			globalVars.app.say(_("接続。現在オフライン。"))
