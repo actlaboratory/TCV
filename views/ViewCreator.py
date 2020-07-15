@@ -212,6 +212,7 @@ class ViewCreator():
 
 	def ListCtrl(self,proportion,sizerFlag,**settings):
 		hListCtrl=wx.ListCtrl(self.parent,wx.ID_ANY,**settings)
+		hListCtrl.SetLabelText(settings["name"])
 		self.SetFace(hListCtrl)
 		self.SetFace(hListCtrl.GetMainWindow())
 		self.sizer.Add(hListCtrl,proportion,sizerFlag)
