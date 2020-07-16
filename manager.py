@@ -139,28 +139,26 @@ class manager:
 			if mode == update:
 				if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["commentReceivedSound"])
-				commentReadMode = globalVars.app.config.getint("autoReadingOptions", "announceReceivedComments", 1)
-				if commentReadMode == 2:
-					for i in self.myAccount:
-						if commentObject["from_user"]["id"] == i["id"]:
+				if globalVars.app.config.getboolean("autoReadingOptions", "readReceivedComments", True) == True:
+					if globalVars.app.config.getboolean("autoReadingOptions", "readMyComment", True) == False:
+						for i in self.myAccount:
+							if commentObject["from_user"]["id"] == i["id"]:
+								return
+					if self.connection.userId in self.myAccount:
+						readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
+					else:
+						readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
+					if readMentions == 2:
+						mentionMe = False
+						for i in self.myAccount:
+							if "@%s " %(i["screen_id"]) in commentData["message"]:
+								mentionMe = True
+						if mentionMe == False and "@" in commentObject["message"]:
 							return
-				if commentReadMode == 0:
-					return
-				if self.connection.userId in self.myAccount:
-					readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
-				else:
-					readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
-				if readMentions == 2:
-					mentionMe = False
-					for i in self.myAccount:
-						if "@%s " %(i["screen_id"]) in commentData["message"]:
-							mentionMe = True
-					if mentionMe == False and "@" in commentObject["message"]:
-						return
-				elif readMentions == 0:
-					if "@" in commentObject["message"]:
-						return
-				self.readComment(commentData)
+					elif readMentions == 0:
+						if "@" in commentObject["message"]:
+							return
+					self.readComment(commentData)
 
 	def readComment(self, commentData):
 		announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]

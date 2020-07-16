@@ -25,16 +25,17 @@ class DefaultSettings:
 		}
 		config["autoReadingOptions"]={
 			"output": "AUTO",
-			"announceReceivedComments": 1,
+			"readReceivedComments": True,
 			"receivedCommentsAnnouncement": "$dispname,$message,$time,$user",
+			"readMyComment": True,
+			"readMentions_myLive": 1,
+			"readMentions_otherLive": 1,
 			"announceViewers": True,
 			"viewersIncreasedAnnouncement": "閲覧者が$viewers人に増えました。",
 			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
 			"announceTypingUser": False,
 			"announceReceivedItems": True,
-			"readItemPostedUser": 0,
-			"readMentions_myLive": 1,
-			"readMentions_otherLive": 1
+			"readItemPostedUser": 0
 		}
 		config["commentReplaceBasic"]={
 		}
