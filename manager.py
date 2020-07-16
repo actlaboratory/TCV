@@ -139,8 +139,6 @@ class manager:
 			self.MainView.commentList.SetItem(0, 2, commentData["time"])
 			self.MainView.commentList.SetItem(0, 3, commentData["user"])
 			if mode == update:
-				if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True:
-					self.playFx(globalVars.app.config["fx"]["commentReceivedSound"])
 				if globalVars.app.config.getboolean("autoReadingOptions", "readReceivedComments", True) == True:
 					if globalVars.app.config.getboolean("autoReadingOptions", "readMyComment", True) == False:
 						for i in self.myAccount:
@@ -161,6 +159,8 @@ class manager:
 						if "@" in commentObject["message"]:
 							return
 					self.readComment(commentData)
+		if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True and mode == update:
+			self.playFx(globalVars.app.config["fx"]["commentReceivedSound"])
 
 	def readComment(self, commentData):
 		announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
