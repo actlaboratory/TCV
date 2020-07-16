@@ -30,11 +30,11 @@ class DefaultSettings:
 			"readMyComment": True,
 			"readMentions_myLive": 1,
 			"readMentions_otherLive": 1,
-			"announceViewers": True,
+			"readViewers": True,
 			"viewersIncreasedAnnouncement": "閲覧者が$viewers人に増えました。",
 			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
-			"announceTypingUser": False,
-			"announceReceivedItems": True,
+			"readTypingUser": False,
+			"readReceivedItems": True,
 			"readItemPostedUser": 0
 		}
 		config["commentReplaceBasic"]={

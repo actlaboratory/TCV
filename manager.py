@@ -318,8 +318,8 @@ class manager:
 				self.resetTimer()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
-			announceViewers = globalVars.app.config.getboolean("autoReadingOptions", "announceViewers", True)
-			if announceViewers == True:
+			readViewers = globalVars.app.config.getboolean("autoReadingOptions", "readViewers", True)
+			if readViewers == True:
 				if self.newViewers < self.oldViewers:
 					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
@@ -353,8 +353,8 @@ class manager:
 				for k in range(1, len(users) - 1):
 					if users[0] == users[k]:
 						sameUser = True
-				announceReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "announceReceivedItems", True)
-				if announceReceivedItems == True:
+				readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
+				if readReceivedItems == True:
 					if readItemPostedUser == 0:
 						globalVars.app.say(_("%sをもらいました。") %name)
 					else:
@@ -387,7 +387,7 @@ class manager:
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
 			if typingUser != "":
-				if globalVars.app.config.getboolean("autoReadingOptions", "announceTypingUser", False) == True:
+				if globalVars.app.config.getboolean("autoReadingOptions", "readTypingUser", False) == True:
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
