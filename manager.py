@@ -48,10 +48,13 @@ class manager:
 		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
-		self.player = None
+		self.livePlayer = None
+		self.fxPlayer = None
 		self.playing = False
 		self.played = False
 		self.MainView.menu.enable("stop", False)
+		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
+			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
 	def connect(self, userId):
 		self.connection = twitcasting.connection.connection(userId)
@@ -134,6 +137,8 @@ class manager:
 			self.MainView.commentList.SetItem(0, 2, commentData["time"])
 			self.MainView.commentList.SetItem(0, 3, commentData["user"])
 			if mode == update:
+				if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["commentReceivedSound"])
 				commentReadMode = globalVars.app.config.getint("autoReadingOptions", "announceReceivedComments", 1)
 				if commentReadMode == 2:
 					for i in self.myAccount:
@@ -150,7 +155,7 @@ class manager:
 					for i in self.myAccount:
 						if "@%s " %(i["screen_id"]) in commentData["message"]:
 							mentionMe = True
-					if mentionMe == False:
+					if mentionMe == False and "@" in commentObject["message"]:
 						return
 				elif readMentions == 0:
 					if "@" in commentObject["message"]:
@@ -222,6 +227,8 @@ class manager:
 				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result)})
 				return False
 		else:
+			if globalVars.app.config.getboolean("fx", "playCommentPostedSound", True) == True:
+				self.playFx(globalVars.app.config["fx"]["commentPostedSound"])
 			return True
 
 	def formatTime(self, second):
@@ -323,6 +330,8 @@ class manager:
 					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
 					globalVars.app.say(viewersInfo)
+			if globalVars.app.config.getboolean("fx", "playViewersChangedSound", True) == True and self.newViewers != self.oldViewers:
+				self.playFx(globalVars.app.config["fx"]["viewersChangedSound"])
 			self.oldViewers = self.newViewers
 			self.createLiveInfoList(update)
 			self.newItem = self.connection.item
@@ -355,6 +364,8 @@ class manager:
 							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
 						else:
 							globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+				if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
@@ -377,36 +388,42 @@ class manager:
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
-			announceTypingUser = globalVars.app.config.getboolean("autoReadingOptions", "announceTypingUser", False)
-			if announceTypingUser == True:
-				if typingUser != "":
+			if typingUser != "":
+				if globalVars.app.config.getboolean("autoReadingOptions", "announceTypingUser", False) == True:
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
+				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["typingSound"])
 
 	def play(self):
-		if self.player == None:
-			self.player = player.Player()
-			self.player.changeVolume(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
+		if self.livePlayer == None:
+			self.livePlayer = player.Player()
+			self.livePlayer.changeVolume(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
 		if self.connection.movieInfo["movie"]["hls_url"] == None:
 			simpleDialog.errorDialog(_("現在配信中でないなどの理由により、再生できません。"))
 			return
 		if self.playing == False:
-			self.player.inputFile(self.connection.movieInfo["movie"]["hls_url"])
+			self.livePlayer.inputFile(self.connection.movieInfo["movie"]["hls_url"])
 			self.playing = True
 			self.MainView.menu.enable("play", False)
 			self.MainView.menu.enable("stop", True)
 
 	def stop(self):
 		if self.playing == True:
-			self.player.channelFree()
+			self.livePlayer.channelFree()
 			self.playing = False
 			self.MainView.menu.enable("stop", False)
 			self.MainView.menu.enable("play", True)
 
 	def volumeUp(self):
-		self.player.changeVolume(self.player.getVolume() + 10)
+		self.livePlayer.changeVolume(self.livePlayer.getVolume() + 10)
 
 	def volumeDown(self):
-		self.player.changeVolume(self.player.getVolume() - 10)
+		self.livePlayer.changeVolume(self.livePlayer.getVolume() - 10)
 
 	def resetVolume(self):
-		self.player.changeVolume(100)
+		self.livePlayer.changeVolume(100)
+
+	def playFx(self, filePath):
+		if self.fxPlayer == None:
+			self.fxPlayer = player.Player()
+		self.fxPlayer.inputFile(filePath)

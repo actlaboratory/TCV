@@ -47,8 +47,22 @@ class DefaultSettings:
 		}
 		config["nameReplace"] = {
 		}
-		config["soundPlaySetting"]={
+		config["livePlay"]={
 			"autoPlay": False,
 			"defaultVolume": 100
+		}
+		config["fx"] = {
+			"playCommentReceivedSound": True,
+			"commentReceivedSound": "fx\\receive.wav",
+			"playViewersChangedSound": True,
+			"viewersChangedSound": "fx\\info.wav",
+			"playItemReceivedSound": True,
+			"itemReceivedSound": "fx\\item.wav",
+			"playCommentPostedSound": True,
+			"commentPostedSound": "fx\\comsend.wav",
+			"playTypingSound": True,
+			"typingSound": "fx\\typing.wav",
+			"playStartupSound": False,
+			"startupSound": "fx\\info.wav"
 		}
 		return config
