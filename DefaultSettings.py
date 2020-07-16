@@ -13,6 +13,7 @@ class DefaultSettings:
 			"locale": "ja-JP",
 			"initialCommentCount": 50,
 			"commentToSns": 0,
+			"timerType": 0,
 			"historyMax": 10
 		}
 		config["view"]={

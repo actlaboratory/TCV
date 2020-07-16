@@ -1,4 +1,4 @@
-#	 -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # manager
 
 import twitcasting.connection
@@ -71,6 +71,7 @@ class manager:
 		if len(self.history) > historyMax:
 			del self.history[historyMax:]
 		historyData.write_text("\n".join(self.history))
+		self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 		self.timers.append(self.countDownTimer)
 		if self.connection.isLive == True:
@@ -78,9 +79,10 @@ class manager:
 			self.resetTimer()
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
+			globalVars.app.say(_("残り時間：%s") %self.formatTime(self.remainingTime).strftime("%H:%M:%S"))
 		else:
-			globalVars.app.say(_("接続。現在オフライン。"))
 			self.resetTimer()
+			globalVars.app.say(_("接続。現在オフライン。"))
 		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
 		self.initialComments = self.connection.getInitialComment(initialCommentCount)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
@@ -242,17 +244,33 @@ class manager:
 			del self.connection.comments[selected]
 			self.MainView.commentList.DeleteItem(selected)
 
-	def resetTimer(self):
-		globalVars.app.say(_("タイマーリセット。"))
-		if self.connection.isLive == True:
-			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-			self.remainingTime = 1800 - self.elapsedTime % 1800 + int(self.connection.coins / 5) * 1800
-			if self.elapsedTime + self.remainingTime > 14400:
-				self.remainingTime = 14400 - self.elapsedTime
-			globalVars.app.say(_("残り時間：%(remainingTime)s。") %{"remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
-		elif self.connection.isLive == False:
+	def resetTimer(self, speech = False):
+		if speech == True:
+			globalVars.app.say(_("タイマーリセット。"))
+		timerType = globalVars.app.config.getint("general", "timerType", 0)
+		if self.connection.isLive == False:
 			self.elapsedTime = 0
 			self.remainingTime = 0
+			return
+		tmp = 1800 - (self.elapsedTime % 1800)
+		if timerType == 0:
+			totalTime = self.elapsedTime + tmp
+		else:
+			totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+		if totalTime > 14400:
+			totalTime = 14400
+		self.elapsedTime = self.elapsedTime + 1
+		self.remainingTime = totalTime - self.elapsedTime
+		if timerType == 2:
+			if self.remainingTime != 180 and int(self.remainingTime % 1800) == 180:
+				self.sayRemainingTime()
+				return
+		announceTime = [900, 600, 300, 180, 60, 30, 10]
+		for i in announceTime:
+			if self.remainingTime % 1800 == i:
+				self.sayRemainingTime()
+		if self.remainingTime % 1800 == 0:
+			globalVars.app.say(_("30分が経過しました。"))
 
 	def clearHistory(self):
 		self.history.clear()
@@ -271,6 +289,16 @@ class manager:
 	def clearFavorites(self):
 		self.favorites.clear()
 		favoritesData.write_text("\n".join(self.favorites))
+
+	def sayRemainingTime(self):
+		remainingTime = self.formatTime(self.remainingTime)
+		if remainingTime.minute == 0:
+			string = _("残り%s秒です。") %(str(remainingTime.second))
+		elif remainingTime.second == 0:
+			string = _("残り%s分です。") %(str(remainingTime.minute))
+		else:
+			string = _("残り%s分%s秒です。") %(str(remainingTime.minute), str(remainingTime.second))
+		globalVars.app.say(string)
 
 	def timer(self, event):
 		timer = event.GetTimer()
@@ -309,13 +337,11 @@ class manager:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
 				globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
-				self.resetTimer()
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
-				self.resetTimer()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			readViewers = globalVars.app.config.getboolean("autoReadingOptions", "readViewers", True)
@@ -367,22 +393,7 @@ class manager:
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
-			self.elapsedTime += 1
-			self.remainingTime -= 1
-			if self.remainingTime % 1800 == 900:
-				globalVars.app.say(_("残り１５分。"))
-			if self.remainingTime % 1800 == 300:
-				globalVars.app.say(_("残り５分。"))
-			if self.remainingTime % 1800 == 180:
-				globalVars.app.say(_("残り３分。"))
-			if self.remainingTime % 1800 == 60:
-				globalVars.app.say(_("残り１分"))
-			if self.remainingTime % 1800 == 30:
-				globalVars.app.say(_("残り３０秒。"))
-			if self.remainingTime % 1800 == 10:
-				globalVars.app.say(_("残り１０秒。"))
-			if self.remainingTime % 1800 == 0:
-				globalVars.app.say(_("３０分経過。"))
+			self.resetTimer()
 			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
