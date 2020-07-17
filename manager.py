@@ -375,9 +375,6 @@ class manager:
 				count = i["count"]
 				users = self.connection.getItemPostedUser(id, count)
 				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
-				if readItemPostedUser == 2:
-					for j in range(0, 1):
-						users[j] = twitcasting.twitcasting.GetUserInfo(users[j])["user"]["name"]
 				sameUser = False
 				for k in range(1, len(users) - 1):
 					if users[0] == users[k]:
@@ -387,6 +384,7 @@ class manager:
 					if readItemPostedUser == 0:
 						globalVars.app.say(_("%sをもらいました。") %name)
 					else:
+						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
 						if sameUser == True:
 							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
 						else:
