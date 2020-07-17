@@ -389,8 +389,8 @@ class manager:
 							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
 						else:
 							globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
-				if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True:
-					self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
+			if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
+				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
 			self.createItemList(update)
 		elif id == evtCountDown:
