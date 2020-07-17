@@ -159,7 +159,7 @@ class manager:
 						if "@" in commentObject["message"]:
 							return
 					self.readComment(commentData)
-		if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True and mode == update:
+		if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True and mode == update and len(commentList) != 0:
 			self.playFx(globalVars.app.config["fx"]["commentReceivedSound"])
 
 	def readComment(self, commentData):
@@ -342,6 +342,9 @@ class manager:
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
+					if self.playing == True:
+						self.stop()
+						self.play()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			readViewers = globalVars.app.config.getboolean("autoReadingOptions", "readViewers", True)
