@@ -262,9 +262,9 @@ class manager:
 		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
 		if timerType == 2:
-			if self.remainingTime != 180 and int(self.remainingTime % 1800) == 180:
+			if self.remainingTime > 1800 and int(self.remainingTime % 1800) == 180:
 				self.sayRemainingTime()
-				return
+			return
 		announceTime = [900, 600, 300, 180, 60, 30, 10]
 		for i in announceTime:
 			if self.remainingTime % 1800 == i:
@@ -291,7 +291,7 @@ class manager:
 		favoritesData.write_text("\n".join(self.favorites))
 
 	def sayRemainingTime(self):
-		remainingTime = self.formatTime(self.remainingTime)
+		remainingTime = self.formatTime(self.remainingTime % 1800)
 		if remainingTime.minute == 0:
 			string = _("残り%s秒です。") %(str(remainingTime.second))
 		elif remainingTime.second == 0:

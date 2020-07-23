@@ -102,6 +102,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
+		self.RegisterMenuCommand(self.hHelpMenu,"viewErrorLog",_("エラーログを開く（開発用）"))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
@@ -225,8 +226,13 @@ class Events(BaseEvents):
 		#音量を下げる
 		elif selected==menuItemsStore.getRef("volumeDown"):
 			globalVars.app.Manager.volumeDown()
+		#音量のリセット
 		elif selected==menuItemsStore.getRef("resetVolume"):
 			globalVars.app.Manager.resetVolume()
+		#エラーログを開く
+		elif selected==menuItemsStore.getRef("viewErrorLog"):
+			import subprocess
+			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()

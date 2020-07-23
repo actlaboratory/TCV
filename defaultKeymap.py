@@ -15,7 +15,8 @@ defaultKeymap["mainView"]={
 	"volumeDown": "F4",
 	"replyToBroadcaster": "ctrl+shift+r",
 	"viewBroadcaster": "ctrl+b",
-	"addFavorites": "ctrl+d"
+	"addFavorites": "ctrl+d",
+	"viewErrorLog": "ctrl+shift+f1"
 }
 
 defaultKeymap["commentList"]={
