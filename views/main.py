@@ -67,49 +67,50 @@ class Menu(BaseMenu):
 		"""指定されたウィンドウに、メニューを適用する。"""
 
 		#メニューの大項目を作る
-		self.FileMenu=wx.Menu()
-		self.PlayMenu=wx.Menu()
-		self.CommentMenu=wx.Menu()
-		self.LiveMenu=wx.Menu()
-		self.SettingsMenu=wx.Menu()
-		self.HelpMenu=wx.Menu()
+		self.hFileMenu=wx.Menu()
+		self.hPlayMenu=wx.Menu()
+		self.hCommentMenu=wx.Menu()
+		self.hLiveMenu=wx.Menu()
+		self.hSettingsMenu=wx.Menu()
+		self.hHelpMenu=wx.Menu()
 
 		#メニューの中身
 		#ファイルメニュー
-		self.RegisterMenuCommand(self.FileMenu,"connect",_("接続(&C) ..."))
-		self.RegisterMenuCommand(self.FileMenu,"viewHistory",_("最近接続したライブに接続(&H) ..."))
-		self.RegisterMenuCommand(self.FileMenu,"viewFavorites",_("お気に入りライブに接続(&F) ..."))
-		self.RegisterMenuCommand(self.FileMenu,"disconnect",_("切断(&D)"))
-		self.RegisterMenuCommand(self.FileMenu,"exit",_("終了(&Q)"))
+		self.RegisterMenuCommand(self.hFileMenu,"connect",_("接続(&C) ..."))
+		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("最近接続したライブに接続(&H) ..."))
+		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入りライブに接続(&F) ..."))
+		self.RegisterMenuCommand(self.hFileMenu,"disconnect",_("切断(&D)"))
+		self.RegisterMenuCommand(self.hFileMenu,"exit",_("終了(&Q)"))
 		#再生メニュー
-		self.RegisterMenuCommand(self.PlayMenu,"play",_("再生(&P)"))
-		self.RegisterMenuCommand(self.PlayMenu,"stop",_("停止(&S)"))
-		self.RegisterMenuCommand(self.PlayMenu,"volumeUp",_("音量を上げる(&U)"))
-		self.RegisterMenuCommand(self.PlayMenu,"volumeDown",_("音量を下げる(&D)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"play",_("再生(&P)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"stop",_("停止(&S)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"volumeUp",_("音量を上げる(&U)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"volumeDown",_("音量を下げる(&D)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"resetVolume",_("音量を１００％に設定(&R)"))
 		#コメントメニュー
-		self.RegisterMenuCommand(self.CommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
-		self.RegisterMenuCommand(self.CommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
-		self.RegisterMenuCommand(self.CommentMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
-		self.RegisterMenuCommand(self.CommentMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
+		self.RegisterMenuCommand(self.hCommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
+		self.RegisterMenuCommand(self.hCommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
+		self.RegisterMenuCommand(self.hCommentMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
+		self.RegisterMenuCommand(self.hCommentMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
 		#ライブメニュー
-		self.RegisterMenuCommand(self.LiveMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
-		self.RegisterMenuCommand(self.LiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
-		self.RegisterMenuCommand(self.LiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
+		self.RegisterMenuCommand(self.hLiveMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
+		self.RegisterMenuCommand(self.hLiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
+		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
 		#設定メニュー
-		self.RegisterMenuCommand(self.SettingsMenu,"basicSettings",_("基本設定(&G) ..."))
-		self.RegisterMenuCommand(self.SettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
-		self.RegisterMenuCommand(self.SettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"basicSettings",_("基本設定(&G) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.HelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
+		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
-		self.hMenuBar.Append(self.FileMenu,_("ファイル(&F)"))
-		self.hMenuBar.Append(self.PlayMenu,_("再生(&P)"))
-		self.hMenuBar.Append(self.CommentMenu,_("コメント(&C)"))
-		self.hMenuBar.Append(self.LiveMenu,_("ライブ(&L)"))
-		self.hMenuBar.Append(self.SettingsMenu,_("設定(&S)"))
-		self.hMenuBar.Append(self.HelpMenu,_("ヘルプ(&H)"))
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.hPlayMenu,_("再生(&P)"))
+		self.hMenuBar.Append(self.hCommentMenu,_("コメント(&C)"))
+		self.hMenuBar.Append(self.hLiveMenu,_("ライブ(&L)"))
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定(&S)"))
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
 class Events(BaseEvents):
@@ -212,9 +213,29 @@ class Events(BaseEvents):
 		#コメント送信（ホットキー）
 		elif selected==menuItemsStore.getRef("postComment"):
 			self.postComment(None)
+		#再生
+		elif selected==menuItemsStore.getRef("play"):
+			globalVars.app.Manager.play()
+		#停止
+		elif selected==menuItemsStore.getRef("stop"):
+			globalVars.app.Manager.stop()
+		#音量を上げる
+		elif selected==menuItemsStore.getRef("volumeUp"):
+			globalVars.app.Manager.volumeUp()
+		#音量を下げる
+		elif selected==menuItemsStore.getRef("volumeDown"):
+			globalVars.app.Manager.volumeDown()
+		elif selected==menuItemsStore.getRef("resetVolume"):
+			globalVars.app.Manager.resetVolume()
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()
 		result = globalVars.app.Manager.postComment(commentBody)
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
+
+	def Exit(self, event = None):
+		for i in globalVars.app.Manager.timers:
+			if i.IsRunning() == True:
+				i.Stop()
+		super().Exit()

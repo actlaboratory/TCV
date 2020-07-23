@@ -12,14 +12,13 @@ class DefaultSettings:
 			"fileVersion": "100",
 			"locale": "ja-JP",
 			"initialCommentCount": 50,
-			"commentToSns": 0
+			"commentToSns": 0,
+			"timerType": 0,
+			"historyMax": 10
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
 			"colorMode":"normal"
-		}
-		config["speech"]={
-			"reader" : "AUTO"
 		}
 		config["mainView"]={
 			"sizeX": "800",
@@ -27,13 +26,17 @@ class DefaultSettings:
 		}
 		config["autoReadingOptions"]={
 			"output": "AUTO",
-			"announceReceivedComments": 1,
+			"readReceivedComments": True,
 			"receivedCommentsAnnouncement": "$dispname,$message,$time,$user",
-			"announceViewers": True,
+			"readMyComment": True,
+			"readMentions_myLive": 1,
+			"readMentions_otherLive": 1,
+			"readViewers": True,
 			"viewersIncreasedAnnouncement": "閲覧者が$viewers人に増えました。",
 			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
-			"announceTypingUser": False,
-			"announceReceivedItems": True
+			"readTypingUser": False,
+			"readReceivedItems": True,
+			"readItemPostedUser": 0
 		}
 		config["commentReplaceBasic"]={
 		}
@@ -46,5 +49,22 @@ class DefaultSettings:
 		}
 		config["nameReplace"] = {
 		}
-
+		config["livePlay"]={
+			"autoPlay": False,
+			"defaultVolume": 100
+		}
+		config["fx"] = {
+			"playCommentReceivedSound": True,
+			"commentReceivedSound": "fx\\receive.wav",
+			"playViewersChangedSound": True,
+			"viewersChangedSound": "fx\\info.wav",
+			"playItemReceivedSound": True,
+			"itemReceivedSound": "fx\\item.wav",
+			"playCommentPostedSound": True,
+			"commentPostedSound": "fx\\comsend.wav",
+			"playTypingSound": True,
+			"typingSound": "fx\\typing.wav",
+			"playStartupSound": False,
+			"startupSound": "fx\\info.wav"
+		}
 		return config
