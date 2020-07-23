@@ -65,6 +65,8 @@ class Main(wx.App):
 
 		# メインビューを表示
 		self.hMainView=main.MainView()
+		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
+			self.hMainView.hFrame.Maximize()
 		self.hMainView.Show()
 		self.Manager = manager.manager(self.hMainView)
 		return True
