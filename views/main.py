@@ -76,6 +76,7 @@ class Menu(BaseMenu):
 		self.hLiveMenu=wx.Menu()
 		self.hSettingsMenu=wx.Menu()
 		self.hHelpMenu=wx.Menu()
+		self.hCommentListContextMenu=wx.Menu()
 
 		#メニューの中身
 		#ファイルメニュー
@@ -106,6 +107,9 @@ class Menu(BaseMenu):
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 		self.RegisterMenuCommand(self.hHelpMenu,"viewErrorLog",_("エラーログを開く（開発用）"))
+		#コメントリストのコンテキストメニュー
+		self.RegisterMenuCommand(self.hCommentListContextMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
+
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
@@ -236,6 +240,10 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("viewErrorLog"):
 			import subprocess
 			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
+		#コメントリストのコンテキストメニューを開く
+		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
+			self.parent.hFrame.PopupMenu(self.parent.menu.hCommentListContextMenu)
+
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()
