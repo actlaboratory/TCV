@@ -122,7 +122,7 @@ class manager:
 				commentData["message"] = commentData["message"].replace(i[0], i[1])
 			for i in globalVars.app.config.items("commentReplaceReg"):
 				commentData["message"] = re.sub(i[0], i[1], commentData["message"])
-			urls = re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", commentData["message"])
+			urls = list(commentObject["urls"])
 			domains = re.finditer("(https?://[^/]+/)", commentData["message"])
 			for url in urls:
 				for domain in domains:

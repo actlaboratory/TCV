@@ -28,6 +28,7 @@ import views.viewHistory
 import views.viewFavorites
 import views.accountManager
 import webbrowser
+import constants
 
 class MainView(BaseView):
 	def __init__(self):
@@ -107,9 +108,6 @@ class Menu(BaseMenu):
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
 		self.RegisterMenuCommand(self.hHelpMenu,"viewErrorLog",_("エラーログを開く（開発用）"))
-		#コメントリストのコンテキストメニュー
-		self.RegisterMenuCommand(self.hCommentListContextMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
-
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
@@ -242,7 +240,16 @@ class Events(BaseEvents):
 			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
-			self.parent.hFrame.PopupMenu(self.parent.menu.hCommentListContextMenu)
+			contextMenu = wx.Menu()
+			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
+			urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
+			for i, j in zip(urls, range(len(urls))):
+				contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
+			self.parent.hFrame.PopupMenu(contextMenu)
+		#URLを開く
+		elif selected >= constants.MENU_URL_FIRST:
+			obj = event.GetEventObject()
+			webbrowser.open(obj.GetLabel(selected))
 
 
 	def postComment(self, event):
