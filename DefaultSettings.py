@@ -24,8 +24,14 @@ class DefaultSettings:
 			"sizeX": "800",
 			"sizeY": "600",
 		}
-		config["autoReadingOptions"]={
+		config["voice"] = {
 			"output": "AUTO",
+			"sapi5Voice": 0,
+			"sapi5Rate": 50,
+			"sapi5Pitch": 50,
+			"sapi5Volume": -1
+		}
+		config["autoReadingOptions"]={
 			"readReceivedComments": True,
 			"receivedCommentsAnnouncement": "$dispname,$message,$time,$user",
 			"readMyComment": True,

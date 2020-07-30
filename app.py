@@ -32,7 +32,7 @@ class Main(wx.App):
 		self.InitTranslation()
 
 		# 音声読み上げの準備
-		reader=self.config["autoReadingOptions"]["output"]
+		reader=self.config["voice"]["output"]
 		if(reader=="PCTK"):
 			self.log.info("use reader 'PCTalker'")
 			self.speech=accessible_output2.outputs.pc_talker.PCTalker()
@@ -46,6 +46,24 @@ class Main(wx.App):
 		elif(reader=="SAPI5"):
 			self.log.info("use reader 'SAPI5'")
 			self.speech=accessible_output2.outputs.sapi5.SAPI5()
+			voice = self.config.getint("voice", "sapi5Voice", 0)
+			rate = self.config.getint("voice", "sapi5Rate", 50)
+			if rate == 50:
+				rate = self.speech.get_rate()
+			pitch = self.config.getint("voice", "sapi5pitch", 50)
+			if pitch == 50:
+				pitch = self.speech.get_pitch()
+			volume = self.config.getint("voice", "sapi5Volume", -1)
+			if volume == -1:
+				volume = self.speech.get_volume()
+			try:
+				self.speech.set_voice(self.speech.list_voices()[voice])
+			except:
+				self.speech.set_voice(self.speech.list_voices()[0])
+			self.speech.set_rate(rate)
+			self.speech.set_pitch(pitch)
+			self.speech.set_volume(volume)
+			self.say("TCVを起動します。音声は%s、速度は%d、高さは%d、音量は%dです。" %(self.speech.get_voice(), self.speech.get_rate(), self.speech.get_pitch(), self.speech.get_volume()))
 		elif(reader=="AUTO"):
 			self.log.info("use reader 'AUTO'")
 			self.speech=accessible_output2.outputs.auto.Auto()
