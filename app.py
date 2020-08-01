@@ -63,7 +63,6 @@ class Main(wx.App):
 			self.speech.set_rate(rate)
 			self.speech.set_pitch(pitch)
 			self.speech.set_volume(volume)
-			self.say("TCVを起動します。音声は%s、速度は%d、高さは%d、音量は%dです。" %(self.speech.get_voice(), self.speech.get_rate(), self.speech.get_pitch(), self.speech.get_volume()))
 		elif(reader=="AUTO"):
 			self.log.info("use reader 'AUTO'")
 			self.speech=accessible_output2.outputs.auto.Auto()
