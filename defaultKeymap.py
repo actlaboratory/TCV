@@ -29,3 +29,7 @@ defaultKeymap["commentList"]={
 defaultKeymap["commentBody"]={
 	"postComment": "ctrl+RETURN"
 }
+
+defaultKeymap["userInfo"]: {
+	"openUserInfoContextMenu": "RBUTTON/APPLICATIONS/SHIFT+F10"
+}

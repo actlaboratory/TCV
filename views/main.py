@@ -53,6 +53,7 @@ class MainView(BaseView):
 	def createMainView(self, viewCreator, keymap):
 		self.commentListAcceleratorTable=keymap.GetTable("commentList")
 		self.commentBodyAcceleratorTable=keymap.GetTable("commentBody")
+		self.userInfoAcceleratorTable=keymap.GetTable("userInfo")
 		self.commentList = viewCreator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
@@ -64,6 +65,7 @@ class MainView(BaseView):
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentSend = viewCreator.button(_("送信"), self.events.postComment)
 		self.liveInfo = viewCreator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
+		self.liveInfo.SetAcceleratorTable(self.userInfoListAcceleratorTable)
 		self.itemList = viewCreator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
 
 class Menu(BaseMenu):
