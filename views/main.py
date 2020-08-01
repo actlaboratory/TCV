@@ -244,6 +244,8 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
 			contextMenu = wx.Menu()
 			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
+			self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
+			self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
 			urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
 			for i, j in zip(urls, range(len(urls))):
 				contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
