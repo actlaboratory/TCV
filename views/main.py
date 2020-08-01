@@ -65,7 +65,7 @@ class MainView(BaseView):
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentSend = viewCreator.button(_("送信"), self.events.postComment)
 		self.liveInfo = viewCreator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
-		self.liveInfo.SetAcceleratorTable(self.userInfoListAcceleratorTable)
+		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
 		self.itemList = viewCreator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
 
 class Menu(BaseMenu):
@@ -252,6 +252,16 @@ class Events(BaseEvents):
 		elif selected >= constants.MENU_URL_FIRST:
 			obj = event.GetEventObject()
 			webbrowser.open(obj.GetLabel(selected))
+		#ユーザー情報のコンテキストメニューを開く
+		elif selected==menuItemsStore.getRef("openUserInfoContextMenu"):
+			focusedItem = self.parent.liveInfo.GetFocusedItem()
+			if focusedItem != self.parent.liveInfo.GetItemCount() - 1:
+				return
+			contextMenu = wx.Menu()
+			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
+			self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
+			self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
+			self.parent.hFrame.PopupMenu(contextMenu)
 
 
 	def postComment(self, event):
