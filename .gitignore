@@ -19,3 +19,4 @@ exec.bat
 /history.dat
 /favorites.dat
 /twitcasting/client.txt
+.vscode/launch.json
