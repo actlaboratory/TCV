@@ -264,11 +264,15 @@ class manager:
 		if timerType == 2:
 			if self.remainingTime > 1800 and int(self.remainingTime % 1800) == 180:
 				self.sayRemainingTime()
+				if self.remainingTime >= 1800:
+					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
 			return
 		announceTime = [900, 600, 300, 180, 60, 30, 10]
 		for i in announceTime:
 			if self.remainingTime % 1800 == i:
 				self.sayRemainingTime()
+				if self.remainingTime >= 1800 and timerType != 0:
+					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
 		if self.remainingTime % 1800 == 0:
 			globalVars.app.say(_("30分が経過しました。"))
 
@@ -336,7 +340,8 @@ class manager:
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
-				globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
+				if self.newCoins % 5 == 0:
+					globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
