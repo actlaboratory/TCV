@@ -86,6 +86,8 @@ class Main(wx.App):
 			self.hMainView.hFrame.Maximize()
 		self.hMainView.Show()
 		self.Manager = manager.manager(self.hMainView)
+		if len(sys.argv) == 2:
+			self.Manager.connect(sys.argv[1])
 		return True
 
 	def InitLogger(self):
