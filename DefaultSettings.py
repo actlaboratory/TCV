@@ -14,7 +14,8 @@ class DefaultSettings:
 			"initialCommentCount": 50,
 			"commentToSns": 0,
 			"timerType": 0,
-			"historyMax": 10
+			"historyMax": 10,
+			"defaultConnectAccount": ""
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
