@@ -94,6 +94,7 @@ class manager:
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
 		self.oldCoins = self.connection.coins
+		self.oldCategory = self.connection.categoryName
 		self.oldViewers = self.connection.viewers
 		self.oldIsLive = self.connection.isLive
 		self.oldMovieId = self.connection.movieId
@@ -336,6 +337,10 @@ class manager:
 					globalVars.app.say(_("テロップ変更。"))
 					globalVars.app.say(self.newSubtitle)
 			self.oldSubtitle = self.newSubtitle
+			self.newCategory = self.connection.categoryName
+			if self.newCategory != self.oldCategory:
+				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
+			self.oldCategory = self.newCategory
 			self.newCoins = self.connection.coins
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
