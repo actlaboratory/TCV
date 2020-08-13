@@ -46,27 +46,26 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionX"),
 			self.app.config.getint(self.identifier,"positionY")
 		)
-		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
-		self.createMainView(self.creator, self.keymap)
 
-	def createMainView(self, viewCreator, keymap):
-		self.commentListAcceleratorTable=keymap.GetTable("commentList")
-		self.commentBodyAcceleratorTable=keymap.GetTable("commentBody")
-		self.userInfoAcceleratorTable=keymap.GetTable("userInfo")
-		self.commentList = viewCreator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
+	def createMainView(self):
+		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
+		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
+		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
+		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
+		self.commentList = self.creator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
-		self.selectAccount = viewCreator.combobox(_("コメント投稿アカウント"), [], None)
-		self.commentBodyEdit, self.commentBodyStatic = viewCreator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
+		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
+		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
-		self.commentSend = viewCreator.button(_("送信"), self.events.postComment)
-		self.liveInfo = viewCreator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
+		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
+		self.liveInfo = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
-		self.itemList = viewCreator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
+		self.itemList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -153,6 +152,9 @@ class Events(BaseEvents):
 				user = user[0:user.find("/")]
 			globalVars.app.Manager.connect(user)
 			return
+		#切断
+		elif selected==menuItemsStore.getRef("disconnect"):
+			globalVars.app.Manager.disconnect()
 		#履歴
 		elif selected==menuItemsStore.getRef("viewHistory"):
 			if len(globalVars.app.Manager.history) == 0:

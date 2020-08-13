@@ -61,6 +61,11 @@ class manager:
 		if self.connection.connected == False:
 			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
 			return
+		self.MainView.createMainView()
+		self.MainView.menu.enable("connect", False)
+		self.MainView.menu.enable("viewHistory", False)
+		self.MainView.menu.enable("viewFavorites", False)
+		self.MainView.menu.enable("disconnect", True)
 		globalVars.app.say(userId)
 		if userId not in self.history:
 			self.history.insert(0, userId.lower())
@@ -107,6 +112,16 @@ class manager:
 		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
+
+	def disconnect(self):
+		self.stop()
+		for i in self.timers:
+			i.Stop()
+		self.MainView.Clear()
+		self.MainView.menu.enable("connect", True)
+		self.MainView.menu.enable("viewHistory", True)
+		self.MainView.menu.enable("viewFavorites", True)
+		self.MainView.menu.enable("disconnect", False)
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
