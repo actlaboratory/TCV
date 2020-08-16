@@ -75,16 +75,19 @@ class BaseView(object):
 class BaseMenu(object):
 	def __init__(self,identifier):
 		"""acceleratorTable登録準備"""
-		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
+		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap,keymap.KeyFilter().SetDefault(False,True))
 		self.keymap_identifier=identifier
 		self.keymap.addFile(constants.KEYMAP_FILE_NAME)
 		errors=self.keymap.GetError(identifier)
 		if errors:
-			tmp=_(constants.KEYMAP_FILE_NAME+"で設定されたショートカットキーが正しくありません。キーが重複しているか、存在しないキー名を指定しています。以下のキーの設定内容をご確認ください。\n\n")
+			tmp=_(constants.KEYMAP_FILE_NAME+"で設定されたショートカットキーが正しくありません。キーの重複、存在しないキー名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容をご確認ください。\n\n")
 			for v in errors:
 				tmp+=v+"\n"
 			dialog(_("エラー"),tmp)
 		self.acceleratorTable=self.keymap.GetTable(self.keymap_identifier)
+
+		#これ以降はユーザ設定の追加なのでフィルタを変更
+		self.keymap.filter=keymap.KeyFilter().SetDefault(False,False)
 
 	def RegisterMenuCommand(self,menu_handle,ref_id,title=""):
 		"""メニューに項目を追加"""
