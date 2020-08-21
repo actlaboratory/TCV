@@ -47,6 +47,13 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionY")
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
+		self.createStartScreen()
+
+	def createStartScreen(self):
+		status = "現在、ライブに接続されていません。\nライブに接続するにはctrl+Nを押します。\n接続履歴から選択して接続するにはCtrl+Hを押します。\nお気に入りライブを表示するにはctrl+Iを押します。\n"
+		self.statusEdit, self.statusStatic = self.creator.inputbox(_("状況"), 400, status, wx.TE_READONLY | wx.TE_DONTWRAP | wx.TE_MULTILINE)
+		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
+		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
 
 	def createMainView(self):
 		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)

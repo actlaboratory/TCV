@@ -61,6 +61,7 @@ class manager:
 		if self.connection.connected == False:
 			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
 			return
+		self.MainView.Clear()
 		self.MainView.createMainView()
 		self.MainView.menu.enable("connect", False)
 		self.MainView.menu.enable("viewHistory", False)
@@ -118,6 +119,7 @@ class manager:
 		for i in self.timers:
 			i.Stop()
 		self.MainView.Clear()
+		self.MainView.createStartScreen()
 		self.MainView.menu.enable("connect", True)
 		self.MainView.menu.enable("viewHistory", True)
 		self.MainView.menu.enable("viewFavorites", True)
