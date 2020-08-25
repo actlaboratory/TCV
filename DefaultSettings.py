@@ -25,8 +25,8 @@ class DefaultSettings:
 			"sizeX": "800",
 			"sizeY": "600",
 		}
-		config["voice"] = {
-			"output": "AUTO",
+		config["speech"] = {
+			"reader": "AUTO",
 			"sapi5Voice": 0,
 			"sapi5Rate": 50,
 			"sapi5Pitch": 50,
@@ -75,3 +75,9 @@ class DefaultSettings:
 			"startupSound": "fx\\info.wav"
 		}
 		return config
+
+initialValues={}
+"""
+	この辞書には、ユーザによるキーの削除が許されるが、初回起動時に組み込んでおきたい設定のデフォルト値を設定する。
+	ここでの設定はユーザの環境に設定ファイルがなかった場合のみ適用され、初期値として保存される。
+"""

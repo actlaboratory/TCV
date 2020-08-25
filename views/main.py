@@ -118,7 +118,6 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hHelpMenu,"viewErrorLog",_("エラーログを開く（開発用）"))
 
 		#メニューバーの生成
-		self.hMenuBar=wx.MenuBar()
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
 		self.hMenuBar.Append(self.hPlayMenu,_("再生(&P)"))
 		self.hMenuBar.Append(self.hCommentMenu,_("コメント(&C)"))

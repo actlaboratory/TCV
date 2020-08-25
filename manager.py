@@ -52,7 +52,7 @@ class manager:
 		self.fxPlayer = None
 		self.playing = False
 		self.played = False
-		self.MainView.menu.enable("stop", False)
+		self.MainView.menu.EnableMenu("stop", False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
@@ -63,10 +63,10 @@ class manager:
 			return
 		self.MainView.Clear()
 		self.MainView.createMainView()
-		self.MainView.menu.enable("connect", False)
-		self.MainView.menu.enable("viewHistory", False)
-		self.MainView.menu.enable("viewFavorites", False)
-		self.MainView.menu.enable("disconnect", True)
+		self.MainView.menu.EnableMenu("connect", False)
+		self.MainView.menu.EnableMenu("viewHistory", False)
+		self.MainView.menu.EnableMenu("viewFavorites", False)
+		self.MainView.menu.EnableMenu("disconnect", True)
 		globalVars.app.say(userId)
 		if userId not in self.history:
 			self.history.insert(0, userId.lower())
@@ -120,10 +120,10 @@ class manager:
 			i.Stop()
 		self.MainView.Clear()
 		self.MainView.createStartScreen()
-		self.MainView.menu.enable("connect", True)
-		self.MainView.menu.enable("viewHistory", True)
-		self.MainView.menu.enable("viewFavorites", True)
-		self.MainView.menu.enable("disconnect", False)
+		self.MainView.menu.EnableMenu("connect", True)
+		self.MainView.menu.EnableMenu("viewHistory", True)
+		self.MainView.menu.EnableMenu("viewFavorites", True)
+		self.MainView.menu.EnableMenu("disconnect", False)
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
@@ -441,15 +441,15 @@ class manager:
 		if self.playing == False:
 			self.livePlayer.inputFile(self.connection.movieInfo["movie"]["hls_url"])
 			self.playing = True
-			self.MainView.menu.enable("play", False)
-			self.MainView.menu.enable("stop", True)
+			self.MainView.menu.EnableMenu("play", False)
+			self.MainView.menu.EnableMenu("stop", True)
 
 	def stop(self):
 		if self.playing == True:
 			self.livePlayer.channelFree()
 			self.playing = False
-			self.MainView.menu.enable("stop", False)
-			self.MainView.menu.enable("play", True)
+			self.MainView.menu.EnableMenu("stop", False)
+			self.MainView.menu.EnableMenu("play", True)
 
 	def volumeUp(self):
 		self.livePlayer.changeVolume(self.livePlayer.getVolume() + 10)

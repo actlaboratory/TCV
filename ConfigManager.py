@@ -7,11 +7,11 @@ import configparser
 import logging
 from logging import getLogger
 
+
+
 class ConfigManager(configparser.ConfigParser):
-
-
 	def __init__(self):
-		super().__init__()
+		super().__init__(interpolation=None)
 		self.identifier="ConfigManager"
 		self.log=getLogger(self.identifier)
 		self.log.debug("Create config instance")
@@ -21,7 +21,7 @@ class ConfigManager(configparser.ConfigParser):
 		if os.path.exists(fileName):
 			self.log.info("read configFile:"+fileName)
 			try:
-				return super().read(fileName)
+				return super().read(fileName, encoding='UTF-8')
 			except configparser.ParsingError:
 				self.log.warning("configFile parse failed.")
 				return []
@@ -31,7 +31,7 @@ class ConfigManager(configparser.ConfigParser):
 
 	def write(self):
 		self.log.info("write configFile:"+self.fileName)
-		with open(self.fileName,"w") as f: return super().write(f)
+		with open(self.fileName,"w", encoding='UTF-8') as f: return super().write(f)
 
 	def __getitem__(self,key):
 		try:
@@ -40,19 +40,6 @@ class ConfigManager(configparser.ConfigParser):
 			self.log.debug("created new section:"+key)
 			self.add_section(key)
 			return self.__getitem__(key)
-
-	def getint(self,section,key,default=0):
-		try:
-			return super().getint(section,key)
-		except configparser.NoOptionError as e:
-			self.log.debug("add new intval "+str(default)+" at section "+section+", key "+key)
-			self[section][key]=str(default)
-			return int(default)
-		except configparser.NoSectionError as e:
-			self.log.debug("add new section and intval "+str(default)+" at section "+section+", key "+key)
-			self.add_section(section)
-			self.__getitem__(section).__setitem__(key,str(default))
-			return int(default)
 
 	def getboolean(self,section,key,default=True):
 		if type(default)!=bool:
@@ -73,6 +60,48 @@ class ConfigManager(configparser.ConfigParser):
 			self.__getitem__(section).__setitem__(key,default)
 			return default
 
+	def getint(self,section,key,default=0,min=None,max=None):
+		if type(default)!=int:
+			raise ValueError("default value must be int")
+		if (min!=None and type(min)!=int) or (max!=None and type(max)!=int):
+			raise ValueError("min/max value must be int")
+		try:
+			ret = super().getint(section,key)
+			if (min!=None and ret<min) or (max!=None and ret>max):
+				self.log.debug("intvalue "+str(ret)+" out of range.  at section "+section+", key "+key)
+				self[section][key]=str(default)
+				return int(default)
+			return ret
+		except (configparser.NoOptionError,ValueError) as e:
+			self.log.debug("add new intval "+str(default)+" at section "+section+", key "+key)
+			self[section][key]=str(default)
+			return int(default)
+		except configparser.NoSectionError as e:
+			self.log.debug("add new section and intval "+str(default)+" at section "+section+", key "+key)
+			self.add_section(section)
+			self.__getitem__(section).__setitem__(key,str(default))
+			return int(default)
+
+	def getstring(self,section,key,default="",selection=None,*, raw=False, vars=None,fallback=None):
+		if selection!=None and type(selection) not in (set,tuple,list):
+			raise TypeError("selection must be set or tuple")
+		ret=self.__getitem__(section)[key]
+		if ret=="":
+			if default=="":
+				self[section][key]=""
+				return ""
+			else:
+				self.log.debug("add default value.  at section "+section+", key "+key)
+				self[section][key]=default
+				ret=default
+				if selection==None:return ret
+
+		if selection!=None and ret not in selection:
+			self.log.debug("value "+ret+" not in selection.  at section "+section+", key "+key)
+			self[section][key]=default
+			ret=default
+		return ret
+
 	def add_section(self,name):
 		if not self.has_section(name):
 			return super().add_section(name)
@@ -90,3 +119,4 @@ class ConfigSection(configparser.SectionProxy):
 
 	def __setitem__(self,key,value):
 		return super().__setitem__(key,str(value))
+
