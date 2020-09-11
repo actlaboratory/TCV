@@ -16,6 +16,7 @@ defaultKeymap["mainView"]={
 	"replyToBroadcaster": "ctrl+shift+r",
 	"viewBroadcaster": "ctrl+b",
 	"addFavorites": "ctrl+d",
+	"silence": "ESCAPE",
 	"viewErrorLog": "ctrl+shift+f1"
 }
 

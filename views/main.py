@@ -244,6 +244,12 @@ class Events(BaseEvents):
 		#音量のリセット
 		elif selected==menuItemsStore.getRef("resetVolume"):
 			globalVars.app.Manager.resetVolume()
+		#音声停止
+		elif selected==menuItemsStore.getRef("silence"):
+			try:
+				globalVars.app.speech.silence()
+			except AttributeError:
+				pass
 		#エラーログを開く
 		elif selected==menuItemsStore.getRef("viewErrorLog"):
 			import subprocess
