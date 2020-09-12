@@ -13,6 +13,7 @@ import re
 import constants
 import soundPlayer.player
 from soundPlayer.constants import *
+import soundPlayer.fxPlayer
 
 evtComment = 0
 evtLiveInfo = 1
@@ -442,26 +443,29 @@ class manager:
 		if self.livePlayer == None:
 			self.livePlayer = soundPlayer.player.player()
 			self.livePlayer.setAmp(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
-		if self.livePlayer.getStatus() == PLAYER_STATUS_STOPPED:
+		if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING:
 			if self.connection.movieInfo["movie"]["hls_url"] == None:
-				simpleDialog.errorDialog(_("現在配信中でないなどの理由により、再生できません。"))
+				simpleDialog.errorDialog(_("再生URLを取得できません。"))
 				return
-			self.livePlayer.setSource(self.connection.movieInfo["movie"]["hls_url"])
+			setSource = self.livePlayer.setSource(self.connection.movieInfo["movie"]["hls_url"])
+			if setSource == False:
+				simpleDialog.errorDialog(_("再生に失敗しました。"))
+				return
 			self.livePlayer.play()
-			self.MainView.menu.EnableMenu("play", False)
-			self.MainView.menu.EnableMenu("stop", True)
-			self.MainView.menu.EnableMenu("volumeUp", True)
-			self.MainView.menu.EnableMenu("volumeDown", true)
-			self.MainView.menu.EnableMenu("resetVolume", True)
+		self.MainView.menu.EnableMenu("play", False)
+		self.MainView.menu.EnableMenu("stop", True)
+		self.MainView.menu.EnableMenu("volumeUp", True)
+		self.MainView.menu.EnableMenu("volumeDown", True)
+		self.MainView.menu.EnableMenu("resetVolume", True)
 
 	def stop(self):
-		if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
 			self.livePlayer.stop()
-			self.MainView.menu.EnableMenu("stop", False)
-			self.MainView.menu.EnableMenu("play", True)
-			self.MainView.menu.EnableMenu("volumeUp", False)
-			self.MainView.menu.EnableMenu("volumeDown", False)
-			self.MainView.menu.EnableMenu("resetVolume", False)
+		self.MainView.menu.EnableMenu("stop", False)
+		self.MainView.menu.EnableMenu("play", True)
+		self.MainView.menu.EnableMenu("volumeUp", False)
+		self.MainView.menu.EnableMenu("volumeDown", False)
+		self.MainView.menu.EnableMenu("resetVolume", False)
 
 	def volumeUp(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
@@ -473,4 +477,4 @@ class manager:
 		self.livePlayer.setAmp(100)
 
 	def playFx(self, filePath):
-		return
+		soundPlayer.fxPlayer.playFx(filePath)
