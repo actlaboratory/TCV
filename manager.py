@@ -117,16 +117,19 @@ class manager:
 		self.typingTimer.Start(typingTimerInterval)
 		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		self.MainView.menu.EnableMenu("play", True)
-		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
+		if globalVars.app.config.getboolean("livePlay", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
 
 	def disconnect(self):
-		self.stop()
+		if self.livePlayer != None:
+			self.stop()
 		self.MainView.menu.EnableMenu("play", False)
 		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
 		self.MainView.Clear()
+		self.MainView.hFrame.SetTitle(constants.APP_NAME)
+
 		self.MainView.createStartScreen()
 		self.MainView.menu.EnableMenu("connect", True)
 		self.MainView.menu.EnableMenu("viewHistory", True)
@@ -442,7 +445,8 @@ class manager:
 	def play(self):
 		if self.livePlayer == None:
 			self.livePlayer = soundPlayer.player.player()
-			self.livePlayer.setAmp(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
+			self.livePlayer.setAmp(globalVars.app.config.getint("livePlay", "defaultVolume", 100))
+			self.livePlayer.setHlsTimeout(globalVars.app.config.getint("livePlay", "audioDelay", 7))
 		if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING:
 			if self.connection.movieInfo["movie"]["hls_url"] == None:
 				simpleDialog.errorDialog(_("再生URLを取得できません。"))
