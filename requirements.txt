@@ -6,3 +6,4 @@ requests
 beautifulsoup4
 lxml
 pyperclip
+https://github.com/actlaboratory/soundPlayer/archive/0.0.5.zip

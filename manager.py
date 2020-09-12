@@ -10,8 +10,9 @@ import pathlib
 from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
 import re
-import player
 import constants
+import soundPlayer.player
+from soundPlayer.constants import *
 
 evtComment = 0
 evtLiveInfo = 1
@@ -50,9 +51,12 @@ class manager:
 		self.timers = []
 		self.livePlayer = None
 		self.fxPlayer = None
-		self.playing = False
 		self.played = False
+		self.MainView.menu.EnableMenu("play", False)
 		self.MainView.menu.EnableMenu("stop", False)
+		self.MainView.menu.EnableMenu("volumeUp", False)
+		self.MainView.menu.EnableMenu("volumeDown", False)
+		self.MainView.menu.EnableMenu("resetVolume", False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
@@ -111,11 +115,14 @@ class manager:
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
 		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
+		self.MainView.menu.EnableMenu("play", True)
 		if globalVars.app.config.getboolean("soundPlaySetting", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
 
 	def disconnect(self):
 		self.stop()
+		self.MainView.menu.EnableMenu("play", False)
+		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
 		self.MainView.Clear()
@@ -336,7 +343,7 @@ class manager:
 				self.countDownTimer.Stop()
 				self.resetTimer()
 				self.commentTimer.Stop()
-				if self.playing == True:
+				if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 					self.played = True
 					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
@@ -369,7 +376,7 @@ class manager:
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
-					if self.playing == True:
+					if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 						self.stop()
 						self.play()
 			self.oldMovieId = self.newMovieId
@@ -433,34 +440,37 @@ class manager:
 
 	def play(self):
 		if self.livePlayer == None:
-			self.livePlayer = player.Player()
-			self.livePlayer.changeVolume(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
-		if self.connection.movieInfo["movie"]["hls_url"] == None:
-			simpleDialog.errorDialog(_("現在配信中でないなどの理由により、再生できません。"))
-			return
-		if self.playing == False:
-			self.livePlayer.inputFile(self.connection.movieInfo["movie"]["hls_url"])
-			self.playing = True
+			self.livePlayer = soundPlayer.player.player()
+			self.livePlayer.setAmp(globalVars.app.config.getint("soundPlaySetting", "defaultVolume", 100))
+		if self.livePlayer.getStatus() == PLAYER_STATUS_STOPPED:
+			if self.connection.movieInfo["movie"]["hls_url"] == None:
+				simpleDialog.errorDialog(_("現在配信中でないなどの理由により、再生できません。"))
+				return
+			self.livePlayer.setSource(self.connection.movieInfo["movie"]["hls_url"])
+			self.livePlayer.play()
 			self.MainView.menu.EnableMenu("play", False)
 			self.MainView.menu.EnableMenu("stop", True)
+			self.MainView.menu.EnableMenu("volumeUp", True)
+			self.MainView.menu.EnableMenu("volumeDown", true)
+			self.MainView.menu.EnableMenu("resetVolume", True)
 
 	def stop(self):
-		if self.playing == True:
-			self.livePlayer.channelFree()
-			self.playing = False
+		if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+			self.livePlayer.stop()
 			self.MainView.menu.EnableMenu("stop", False)
 			self.MainView.menu.EnableMenu("play", True)
+			self.MainView.menu.EnableMenu("volumeUp", False)
+			self.MainView.menu.EnableMenu("volumeDown", False)
+			self.MainView.menu.EnableMenu("resetVolume", False)
 
 	def volumeUp(self):
-		self.livePlayer.changeVolume(self.livePlayer.getVolume() + 10)
+		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
 
 	def volumeDown(self):
-		self.livePlayer.changeVolume(self.livePlayer.getVolume() - 10)
+		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) - 10)
 
 	def resetVolume(self):
-		self.livePlayer.changeVolume(100)
+		self.livePlayer.setAmp(100)
 
 	def playFx(self, filePath):
-		if self.fxPlayer == None:
-			self.fxPlayer = player.Player()
-		self.fxPlayer.inputFile(filePath)
+		return
