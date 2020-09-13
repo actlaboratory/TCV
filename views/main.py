@@ -27,6 +27,7 @@ import views.viewBroadcaster
 import views.viewHistory
 import views.viewFavorites
 import views.accountManager
+import views.changeDevice
 import webbrowser
 import constants
 
@@ -100,6 +101,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hPlayMenu,"volumeUp",_("音量を上げる(&U)"))
 		self.RegisterMenuCommand(self.hPlayMenu,"volumeDown",_("音量を下げる(&D)"))
 		self.RegisterMenuCommand(self.hPlayMenu,"resetVolume",_("音量を１００％に設定(&R)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"changeDevice",_("再生デバイスを変更(&C)"))
 		#コメントメニュー
 		self.RegisterMenuCommand(self.hCommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
 		self.RegisterMenuCommand(self.hCommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
@@ -244,6 +246,14 @@ class Events(BaseEvents):
 		#音量のリセット
 		elif selected==menuItemsStore.getRef("resetVolume"):
 			globalVars.app.Manager.resetVolume()
+		#再生デバイス変更
+		elif selected==menuItemsStore.getRef("changeDevice"):
+			changeDeviceDialog = views.changeDevice.Dialog()
+			changeDeviceDialog.Initialize()
+			ret = changeDeviceDialog.Show()
+			if ret==wx.ID_CANCEL: return
+			globalVars.app.Manager.changeDevice(changeDeviceDialog.GetData())
+			return
 		#音声停止
 		elif selected==menuItemsStore.getRef("silence"):
 			try:

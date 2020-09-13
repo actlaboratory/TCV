@@ -447,6 +447,7 @@ class manager:
 			self.livePlayer = soundPlayer.player.player()
 			self.livePlayer.setAmp(globalVars.app.config.getint("livePlay", "defaultVolume", 100))
 			self.livePlayer.setHlsTimeout(globalVars.app.config.getint("livePlay", "audioDelay", 7))
+			self.changeDevice(globalVars.app.config["livePlay"]["device"])
 		if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING:
 			if self.connection.movieInfo["movie"]["hls_url"] == None:
 				simpleDialog.errorDialog(_("再生URLを取得できません。"))
@@ -479,6 +480,19 @@ class manager:
 
 	def resetVolume(self):
 		self.livePlayer.setAmp(100)
+
+	def changeDevice(self, deviceName = ""):
+		if deviceName == "":
+			result = self.livePlayer.setDevice(PLAYER_DEFAULT_SPEAKER)
+		else:
+			result = self.livePlayer.setDeviceByName(deviceName)
+		if result == True:
+			if deviceName == "":
+				globalVars.app.config["livePlay"]["device"] = ""
+			else:
+				globalVars.app.config["livePlay"]["device"] = deviceName
+		else:
+			self.changeDevice()
 
 	def playFx(self, filePath):
 		soundPlayer.fxPlayer.playFx(filePath)

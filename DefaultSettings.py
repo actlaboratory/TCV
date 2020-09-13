@@ -55,7 +55,8 @@ class DefaultSettings:
 		config["livePlay"]={
 			"autoPlay": False,
 			"defaultVolume": 100,
-			"audioDelay": 7
+			"audioDelay": 7,
+			"device": "",
 		}
 		config["fx"] = {
 			"playCommentReceivedSound": True,

@@ -13,6 +13,7 @@ defaultKeymap["mainView"]={
 	"stop": "F2",
 	"volumeUp": "F3",
 	"volumeDown": "F4",
+	"changeDevice": "f5",
 	"replyToBroadcaster": "ctrl+shift+r",
 	"viewBroadcaster": "ctrl+b",
 	"addFavorites": "ctrl+d",
