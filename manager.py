@@ -502,4 +502,4 @@ class manager:
 			device = globalVars.app.config["livePlay"]["device"]
 		else:
 			device = PLAYER_DEFAULT_SPEAKER
-		soundPlayer.fxPlayer.playFx(filePath, device)
+		soundPlayer.fxPlayer.playFx(filePath, device, globalVars.app.config.getint("fx", "fxVolume", 100, 0, 100))
