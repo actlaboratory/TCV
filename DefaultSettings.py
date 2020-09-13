@@ -70,7 +70,8 @@ class DefaultSettings:
 			"playTypingSound": True,
 			"typingSound": "fx\\typing.wav",
 			"playStartupSound": False,
-			"startupSound": "fx\\info.wav"
+			"startupSound": "fx\\info.wav",
+			"syncAudioDevice": False
 		}
 		return config
 

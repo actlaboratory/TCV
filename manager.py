@@ -495,4 +495,8 @@ class manager:
 			self.changeDevice()
 
 	def playFx(self, filePath):
-		soundPlayer.fxPlayer.playFx(filePath)
+		if globalVars.app.config.getboolean("fx", "syncAudioDevice", False) == True and globalVars.app.config["livePlay"]["device"] != "":
+			device = globalVars.app.config["livePlay"]["device"]
+		else:
+			device = PLAYER_DEFAULT_SPEAKER
+		soundPlayer.fxPlayer.playFx(filePath, device)
