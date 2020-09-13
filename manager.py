@@ -58,6 +58,7 @@ class manager:
 		self.MainView.menu.EnableMenu("volumeUp", False)
 		self.MainView.menu.EnableMenu("volumeDown", False)
 		self.MainView.menu.EnableMenu("resetVolume", False)
+		self.MainView.menu.EnableMenu("changeDevice", False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
@@ -124,6 +125,7 @@ class manager:
 		if self.livePlayer != None:
 			self.stop()
 		self.MainView.menu.EnableMenu("play", False)
+		self.MainView.menu.EnableMenu("changeDevice", False)
 		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
@@ -462,6 +464,7 @@ class manager:
 		self.MainView.menu.EnableMenu("volumeUp", True)
 		self.MainView.menu.EnableMenu("volumeDown", True)
 		self.MainView.menu.EnableMenu("resetVolume", True)
+		self.MainView.menu.EnableMenu("changeDevice", True)
 
 	def stop(self):
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
