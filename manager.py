@@ -7,7 +7,6 @@ import wx
 import globalVars
 import simpleDialog
 import pathlib
-from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
 import re
 import constants
@@ -47,7 +46,7 @@ class manager:
 		if len(self.favorites) == 1 and self.favorites[0] == "":
 			del self.favorites[0]
 		self.myAccount = []
-		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
+		# self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
 		self.livePlayer = None

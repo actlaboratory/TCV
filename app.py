@@ -5,6 +5,7 @@ import AppBase
 from views import main
 import sys
 import manager
+import twitcasting.accountManager
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -17,6 +18,7 @@ class Main(AppBase.MainBase):
 			self.hMainView.hFrame.Maximize()
 		self.hMainView.Show()
 		self.Manager = manager.manager(self.hMainView)
+		self.accountManager = twitcasting.accountManager.AccountManager()
 		if len(sys.argv) == 2:
 			self.Manager.connect(sys.argv[1])
 		return True
