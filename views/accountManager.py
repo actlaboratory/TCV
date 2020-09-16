@@ -11,6 +11,7 @@ from .baseDialog import *
 import globalVars
 import views.ViewCreator
 import simpleDialog
+import datetime
 
 class Dialog(BaseDialog):
 
@@ -33,14 +34,13 @@ class Dialog(BaseDialog):
 		#情報の表示
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
 		self.hListCtrl=self.creator.ListCtrl(0,wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(600,300),style=wx.LC_REPORT,name=_("アカウント"))
-
 		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
 		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
 		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(1,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
+		self.hListCtrl.InsertColumn(3,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
 
-		for i in self.config:
-			self.hListCtrl.Append([i["userId"], i["name"], i["limit"], i["default"]])
+		for i in globalVars.app.accountManager.tokens:
+			self.hListCtrl.Append([i["user"]["screen_id"], i["user"]["name"], _("%i日") %datetime.timedelta(seconds = i["expires_in"]).days])
 
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
@@ -58,7 +58,6 @@ class Dialog(BaseDialog):
 		self.bClose=self.creator.cancelbutton(_("閉じる"),None)
 
 	def ItemSelected(self,event):
-		self.editButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
 
 	def GetValue(self):

@@ -6,6 +6,7 @@ import pickle
 import webbrowser
 import time
 import pathlib
+import requests
 
 file = "accounts.dat"
 
@@ -20,7 +21,8 @@ class AccountManager:
 			self.loadFromFile()
 		except:
 			pass
-		print(self.tokens)
+		for i in range(0, len(self.tokens)):
+			self.verifyCredentials(i)
 
 	def loadFromFile(self):
 		with open(file, "rb") as f:
@@ -38,3 +40,12 @@ class AccountManager:
 				self.tokens.append(self.manager.getToken())
 				break
 		self.saveAsFile()
+
+	def verifyCredentials(self, idx):
+		token = self.tokens[idx]["access_token"]
+		result = requests.get("https://apiv2.twitcasting.tv/verify_credentials", headers = {
+			"X-Api-Version": "2.0",
+			"Authorization": "Bearer " + token
+		}).json()
+		self.tokens[idx]["user"] = result["user"]
+
