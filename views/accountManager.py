@@ -57,14 +57,20 @@ class Dialog(BaseDialog):
 		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
 		self.hListCtrl.InsertColumn(3,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
 		for i in globalVars.app.accountManager.tokens:
+			if i["default"] == True:
+				state = _("通信用アカウントとして設定済み")
+			else:
+				state = ""
 			self.hListCtrl.Append([
 				i["user"]["screen_id"],
 				i["user"]["name"],
-				datetime.datetime.fromtimestamp(i["expires_at"]).strftime("%Y/%m/%d")
+				datetime.datetime.fromtimestamp(i["expires_at"]).strftime("%Y/%m/%d"),
+				state
 			])
 
 	def ItemSelected(self,event):
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
+		self.setDefaultButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
 
 	def GetValue(self):
 		return self.config
@@ -74,8 +80,10 @@ class Dialog(BaseDialog):
 		globalVars.app.accountManager.add()
 		self.refreshList()
 
-	def setDefault(self):
-		pass
+	def setDefault(self, event):
+		idx = self.hListCtrl.GetFocusedItem()
+		globalVars.app.accountManager.setDefaultAccount(idx)
+		self.refreshList()
 
 	def delete(self,event):
 		pass

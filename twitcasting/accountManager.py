@@ -41,6 +41,7 @@ class AccountManager:
 				self.tokens.append(manager.getToken())
 				break
 		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
+		self.tokens[-1]["default"] = False
 		self.verifyCredentials(-1)
 		self.saveAsFile()
 
@@ -52,3 +53,9 @@ class AccountManager:
 		}).json()
 		self.tokens[idx]["user"] = result["user"]
 
+	def setDefaultAccount(self, idx):
+		for i in range(0, len(self.tokens)):
+			if i == idx:
+				self.tokens[i]["default"] = True
+			else:
+				self.tokens[i]["default"] = False
