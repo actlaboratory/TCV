@@ -7,12 +7,12 @@ import webbrowser
 import time
 import pathlib
 import requests
+import datetime
 
 file = "accounts.dat"
 
 class AccountManager:
 	def __init__(self):
-		self.manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
 		self.tokens = []
 		f = pathlib.Path(file)
 		if f.exists() == False:
@@ -33,12 +33,15 @@ class AccountManager:
 			pickle.dump(self.tokens, f)
 
 	def add(self):
-		webbrowser.open(self.manager.getUrl(), new=1, autoraise=True)
-		while(True):
+		manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
+		webbrowser.open(manager.getUrl())
+		while True:
 			time.sleep(0.01)
-			if self.manager.getToken():
-				self.tokens.append(self.manager.getToken())
+			if manager.getToken():
+				self.tokens.append(manager.getToken())
 				break
+		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
+		self.verifyCredentials(-1)
 		self.saveAsFile()
 
 	def verifyCredentials(self, idx):
