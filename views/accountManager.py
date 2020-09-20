@@ -48,10 +48,11 @@ class Dialog(BaseDialog):
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bClose=self.creator.cancelbutton(_("閉じる"),None)
+		self.bClose=self.creator.cancelbutton(_("閉じる"),self.close)
 
 	def refreshList(self):
-		self.hListCtrl.ClearAll()
+		cursor = self.hListCtrl.GetFocusedItem()
+		self.hListCtrl.DeleteAllItems()
 		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
 		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
 		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
@@ -67,6 +68,11 @@ class Dialog(BaseDialog):
 				datetime.datetime.fromtimestamp(i["expires_at"]).strftime("%Y/%m/%d"),
 				state
 			])
+		if cursor >= 0:
+			try:
+				self.hListCtrl.GetItem(cursor).SetFocus()
+			except:
+				pass
 
 	def ItemSelected(self,event):
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
@@ -87,3 +93,14 @@ class Dialog(BaseDialog):
 
 	def delete(self,event):
 		pass
+
+	def close(self, event):
+		result = globalVars.app.accountManager.hasDefaultAccount()
+		if result == False:
+			simpleDialog.errorDialog(_("通信用アカウントが設定されていません。"))
+			return
+		else:
+			self.wnd.Destroy()
+
+	def OnClose(self, event):
+		self.close(None)

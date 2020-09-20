@@ -59,3 +59,11 @@ class AccountManager:
 				self.tokens[i]["default"] = True
 			else:
 				self.tokens[i]["default"] = False
+		self.saveAsFile()
+
+	def hasDefaultAccount(self):
+		for i in self.tokens:
+			if i["default"] == True:
+				return True
+		return False
+
