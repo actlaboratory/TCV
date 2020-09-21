@@ -52,7 +52,7 @@ class MainView(BaseView):
 
 	def createStartScreen(self):
 		status = "現在、ライブに接続されていません。\nライブに接続するにはctrl+Nを押します。\n接続履歴から選択して接続するにはCtrl+Hを押します。\nお気に入りライブを表示するにはctrl+Iを押します。\n"
-		self.statusEdit, self.statusStatic = self.creator.inputbox(_("状況"), 400, status, wx.TE_READONLY | wx.TE_DONTWRAP | wx.TE_MULTILINE)
+		self.statusEdit, self.statusStatic = self.creator.inputbox(_("状況"), None, status, wx.TE_READONLY | wx.TE_DONTWRAP | wx.TE_MULTILINE, 400)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
 		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
 
@@ -61,19 +61,19 @@ class MainView(BaseView):
 		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
 		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
-		self.commentList = self.creator.ListCtrl(0, 0, style = wx.LC_REPORT, name = _("コメント一覧"))
+		self.commentList, self.commentListStatic = self.creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT)
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
-		self.selectAccount = self.creator.combobox(_("コメント投稿アカウント"), [], None)
-		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), 0, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
+		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [])
+		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
-		self.liveInfo = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("ライブ情報"))
+		self.liveInfo, self.liveInfoStatic = self.creator.listCtrl(_("ライブ情報"), None, wx.LC_LIST)
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
-		self.itemList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("アイテム"))
+		self.itemList, self.itemListStatic = self.creator.listCtrl(_("アイテム"), None, wx.LC_LIST)
 
 class Menu(BaseMenu):
 	def Apply(self,target):

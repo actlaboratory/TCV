@@ -20,7 +20,7 @@ class Dialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(0,self.panel,self.sizer,wx.VERTICAL,20)
-		self.deviceList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("再生デバイス"))
+		self.deviceList, self.static = self.creator.listCtrl(_("再生デバイス"), None, wx.LC_LIST)
 		self.deviceList.ClearAll()
 		self.deviceList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		self.deviceList.InsertItem(0, _("規定のデバイス"))

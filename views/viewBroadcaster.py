@@ -30,7 +30,7 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(0,self.panel,self.sizer,wx.VERTICAL,20)
 		for key, value in self.broadcaster.items():
-			self.creator.inputbox(key, 500, value, wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP)
+			self.creator.inputbox(key, None, value, wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP, 500)
 		self.closeButton=self.creator.cancelbutton(_("閉じる(&C)"), None)
 
 	def GetData(self):
