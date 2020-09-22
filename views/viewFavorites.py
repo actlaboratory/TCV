@@ -20,7 +20,7 @@ class Dialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(0,self.panel,self.sizer,wx.VERTICAL,20)
-		self.favoritesList = self.creator.ListCtrl(0, 0, style = wx.LC_LIST, name = _("お気に入り"))
+		self.favoritesList, self.favoritesStatic = self.creator.listCtrl(_("お気に入り"), None, wx.LC_LIST)
 		self.favoritesList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		for i in globalVars.app.Manager.favorites:
 			self.favoritesList.Append([i])
