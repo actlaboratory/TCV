@@ -5,25 +5,31 @@
 
 import _winxptheme
 import wx
+
 import constants
-import keymap
 import defaultKeymap
+import globalVars
+import keymap
 import menuItemsStore
 import views.ViewCreator
-from simpleDialog import dialog
 
-import globalVars
+from logging import getLogger
+from simpleDialog import dialog
 
 
 class BaseView(object):
 	"""ビューの基本クラス。"""
-	def __init__(self):
+	def __init__(self,identifier):
+		self.identifier=identifier
+		self.log=getLogger("%s.%s" % (constants.LOG_PREFIX,self.identifier))
 		self.shortcutEnable=True
-		self.viewMode=globalVars.app.config.getstring("view","colorMode","white",("normal","dark"))
+		self.viewMode=globalVars.app.config.getstring("view","colorMode","white",("white","dark"))
+		self.app=globalVars.app
+
 
 	def Initialize(self, ttl, x, y,px,py,style=wx.DEFAULT_FRAME_STYLE):
 		"""タイトルとウィンドウサイズとポジションを指定して、ウィンドウを初期化する。"""
-		self.hFrame=wx.Frame(None,-1,ttl, size=(x,y),pos=(px,py),name=ttl,style=style)
+		self.hFrame=wx.Frame(None,wx.ID_ANY,ttl, size=(x,y),pos=(px,py),name=ttl,style=style)
 		_winxptheme.SetWindowTheme(self.hFrame.GetHandle(),"","")
 		self.hFrame.Bind(wx.EVT_MOVE_END,self.events.WindowMove)
 		self.hFrame.Bind(wx.EVT_SIZE,self.events.WindowResize)
@@ -32,7 +38,7 @@ class BaseView(object):
 
 	def MakePanel(self):
 		self.hPanel=views.ViewCreator.makePanel(self.hFrame)
-		self.creator=views.ViewCreator.ViewCreator(1,self.hPanel,None, wx.VERTICAL)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,None, wx.VERTICAL)
 
 	def Clear(self):
 		self.hFrame.DestroyChildren()

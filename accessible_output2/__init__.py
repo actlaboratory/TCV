@@ -1,14 +1,24 @@
+#2020.09.22 Python3.8対応、platform_util除去対応実施 (yamahubuki)
+
+
 from __future__ import absolute_import
 import ctypes
 import os
 import sys
 import types
 
+
 def load_library(libname, cdll=False):
-	if is_frozen():
-		libfile = os.path.join(embedded_data_path(), 'accessible_output2', 'lib', libname)
+	if hasattr(sys,"frozen"):
+		if sys.version_info.major>=3 and sys.version_info.minor>=8:
+			os.add_dll_directory(os.path.join(os.path.abspath(os.path.dirname(sys.executable)), 'accessible_output2', 'lib'))
+		libfile = os.path.join(os.path.abspath(os.path.dirname(sys.executable)), 'accessible_output2', 'lib', libname)
 	else:
-		libfile = os.path.join(module_path(), 'lib', libname)
+		import inspect
+		module_path=os.path.abspath(os.path.dirname(inspect.getmodule(inspect.stack()[0][0]).__file__))
+		if sys.version_info.major>=3 and sys.version_info.minor>=8:
+			os.add_dll_directory(os.path.join(module_path, 'lib'))
+		libfile = os.path.join(module_path, 'lib', libname)
 	if cdll:
 		return ctypes.cdll[libfile]
 	else:
@@ -31,36 +41,3 @@ def find_datafiles():
 	results = glob(path)
 	dest_dir = os.path.join('accessible_output2', 'lib')
 	return [(dest_dir, results)]
-
-def is_frozen():
-	"""Return a bool indicating if application is compressed"""
-	import imp
-	return hasattr(sys, 'frozen') or imp.is_frozen("__main__")
-
-#------------------------------------------------------
-#
-#platform_utilsからのぬきだし
-#
-#------------------------------------------------------
-import inspect
-
-def embedded_data_path():
-	"""Returns the full executable path/name if frozen, or the full path/name of the main module if not."""
-	if is_frozen():
-		executable =  sys.executable
-	else:
-		try:
-			import __main__
-			executable =  os.path.abspath(__main__.__file__)
-		except AttributeError:
-			executable = sys.argv[0]
-
-	path = os.path.abspath(os.path.dirname(executable))
-	return path
-
-def module_path(level=2):
-	return os.path.abspath(os.path.dirname(get_module(level)))
-
-def get_module(level=2):
-	"""Hacky method for deriving the caller of this function's module."""
-	return inspect.getmodule(inspect.stack()[level][0]).__file__

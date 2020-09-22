@@ -9,9 +9,10 @@ from views.baseDialog import *
 import simpleDialog
 
 class Dialog(BaseDialog):
+	def __init__(self):
+		super().__init("viewHistory")
+
 	def Initialize(self):
-		self.identifier="viewHistory"#このビューを表す文字列
-		self.log=getLogger(self.identifier)
 		self.log.debug("created")
 		super().Initialize(self.app.hMainView.hFrame,_("履歴"))
 		self.InstallControls()
@@ -19,13 +20,13 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(0,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		self.historyList, self.historyStatic = self.creator.listCtrl(_("接続履歴"), None, wx.LC_LIST)
 		self.historyList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		for i in globalVars.app.Manager.history:
 			self.historyList.Append([i])
 
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory)

@@ -1,11 +1,12 @@
 ﻿# -*- coding: utf-8 -*-
-#wx view.fontManager
+#Falcon wx view.fontManager
 #Copyright (C) 2019 yamahubuki <itiro.ishino@gmail.com>
+#Note: All comments except these top lines will be written in Japanese. 
 
 import logging
 import wx
-from logging import getLogger
-from .base import *
+from logging import getLogger, FileHandler, Formatter
+#from .base import *
 import constants
 import DefaultSettings
 import globalVars
@@ -14,19 +15,22 @@ from simpleDialog import *
 
 class FontManager():
 	def __init__(self):
-		self.identifier="wxFontManager"
-		self.log=getLogger("falcon.%s" % self.identifier)
+		self.identifier="FontManager"
+		self.log=getLogger("%s.%s" % (constants.APP_NAME,self.identifier))
 		self.log.debug("created")
 		self.app=globalVars.app
 
 		# 設定ファイルの情報を基にfontを生成
 		self.font=wx.Font();
-		if not self.font.SetNativeFontInfoUserDesc(self.app.config.get("view","font")):
-			dialog(_("エラー"),_("設定されているフォント情報が不正です。デフォルトのフォントを適用します。"))
-			self.log.warning("fontString error. SetNativeFontInfoUserDesc("+self.app.config.get("view","font")+") returned false.")
-			self.font.SetNativeFontInfoUserDesc(DefaultSettings.get("view","font"))
-			self.app.config.set("view","font",DefaultSettings.get("view","font"))
-			with open(constants.SETTING_FILE_NAME, "w") as f: self.config.write(f)
+		if self.app:
+			if not self.font.SetNativeFontInfoUserDesc(self.app.config.get("view","font")):
+				dialog(_("エラー"),_("設定されているフォント情報が不正です。デフォルトのフォントを適用します。"))
+				self.log.warning("fontString error. SetNativeFontInfoUserDesc("+self.app.config.get("view","font")+") returned false.")
+				self.font.SetNativeFontInfoUserDesc(DefaultSettings.get("view","font"))
+				self.app.config.set("view","font",DefaultSettings.get("view","font"))
+				with open(constants.SETTING_FILE_NAME, "w") as f: self.config.write(f)
+		else:
+			self.font.SetNativeFontInfoUserDesc("bold 'ＭＳ ゴシック' 22")
 
 	# フォント設定ダイアログを表示
 	# 引数に親ウィンドウを指定

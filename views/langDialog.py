@@ -10,10 +10,16 @@ import constants
 
 class langDialog(BaseDialog):
 	def __init__(self):
-		super().__init__()
+		#まだglobalVars.appが未精製の状態での軌道の可能性があるのであえて呼ばない
+		#super().__init__()
+		self.lang_code = list(constants.SUPPORTING_LANGUAGE.keys())
+		self.lang_name = list(constants.SUPPORTING_LANGUAGE.values())
+		self.identifier="languageSelectDialog"
+		self.log=getLogger("%s.%s" % (constants.LOG_PREFIX,self.identifier))
+		self.value=None
+		self.viewMode="white"
+
 	def Initialize(self):
-		self.identifier="language selecter"#このビューを表す文字列
-		self.log=getLogger("Soc%s" % (self.identifier))
 		self.log.debug("created")
 		super().Initialize(None,"language settings",0)
 		self.InstallControls()
@@ -23,7 +29,7 @@ class langDialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		#翻訳
-		self.langSelect = self.creator.combobox("select language", constants.DISPLAY_LANGUAGE, None, state=0)
+		self.langSelect,static = self.creator.combobox("select language", self.lang_name, None, state=0)
 		self.ok = self.creator.okbutton("OK", None)
 
 	def Destroy(self, events = None):
@@ -32,5 +38,5 @@ class langDialog(BaseDialog):
 
 	def GetData(self):
 		select = self.langSelect.GetSelection()
-		return constants.SUPPORTING_LANGUAGE[select]
+		return self.lang_code[select]
 

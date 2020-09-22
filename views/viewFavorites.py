@@ -9,9 +9,10 @@ from views.baseDialog import *
 import simpleDialog
 
 class Dialog(BaseDialog):
+	def __init__(self):
+		super().__init("viewFavorites")
+
 	def Initialize(self):
-		self.identifier="viewFavorites"#このビューを表す文字列
-		self.log=getLogger(self.identifier)
 		self.log.debug("created")
 		super().Initialize(self.app.hMainView.hFrame,_("お気に入り"))
 		self.InstallControls()
@@ -19,7 +20,7 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(0,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		self.favoritesList, self.favoritesStatic = self.creator.listCtrl(_("お気に入り"), None, wx.LC_LIST)
 		self.favoritesList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		for i in globalVars.app.Manager.favorites:
@@ -27,7 +28,7 @@ class Dialog(BaseDialog):
 		self.deleteButton = self.creator.button(_("削除"), self.delete)
 		self.clearButton = self.creator.button(_("全て削除"), self.clear)
 
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
