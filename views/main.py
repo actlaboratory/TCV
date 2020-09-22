@@ -33,11 +33,7 @@ import constants
 
 class MainView(BaseView):
 	def __init__(self):
-		super().__init__()
-		self.identifier="mainView"#このビューを表す文字列
-		self.log=getLogger(self.identifier)
-		self.log.debug("created")
-		self.app=globalVars.app
+		super().__init__("mainView")
 		self.events=Events(self,self.identifier)
 		title=constants.APP_NAME
 		super().Initialize(

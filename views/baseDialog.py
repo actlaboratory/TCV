@@ -3,16 +3,22 @@
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 
 import wx
+import _winxptheme
+
 import constants
 import globalVars
-import _winxptheme
+
+from logging import getLogger
+
 
 class BaseDialog(object):
 	"""モーダルダイアログの基本クラス。"""
-	def __init__(self):
+	def __init__(self,identifier):
+		self.identifier=identifier
+		self.log=getLogger("%s.%s" % (constants.LOG_PREFIX,self.identifier))
 		self.app=globalVars.app
 		self.value=None
-		self.viewMode=globalVars.app.config.getstring("view","colorMode","white",("normal","dark"))
+		self.viewMode=globalVars.app.config.getstring("view","colorMode","white",("white","dark"))
 
 	def Initialize(self, parent,ttl,style=wx.DEFAULT_DIALOG_STYLE | wx.BORDER_DEFAULT):
 		"""タイトルを指定して、ウィンドウを初期化し、親の中央に配置するように設定。"""
@@ -30,13 +36,14 @@ class BaseDialog(object):
 		self.panel.Layout()
 		self.sizer.Fit(self.wnd)
 		self.wnd.Centre()
-		if modal == True:
+		if modal:
 			result=self.wnd.ShowModal()
 			if result!=wx.ID_CANCEL:
 				self.value=self.GetData()
 			self.Destroy()
 		else:
 			result=self.wnd.Show()
+		self.log.debug("show(modal=%s) result=%s" % (str(modal),str(result)))
 		return result
 
 	def Destroy(self):
@@ -44,6 +51,7 @@ class BaseDialog(object):
 		self.wnd.Destroy()
 
 	def GetValue(self):
+		self.log.debug("Value:%s" % str(self.value))
 		return self.value
 
 	def GetData(self):

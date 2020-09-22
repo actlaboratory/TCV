@@ -83,8 +83,8 @@ class ConfigManager(configparser.ConfigParser):
 			return int(default)
 
 	def getstring(self,section,key,default="",selection=None,*, raw=False, vars=None,fallback=None):
-		if selection!=None and type(selection) not in (set,tuple,list):
-			raise TypeError("selection must be set or tuple")
+		if selection!=None and not hasattr(selection, "__iter__"):
+			raise TypeError("selection must be iterable. %s were given." % type(selection))
 		ret=self.__getitem__(section)[key]
 		if ret=="":
 			if default=="":
