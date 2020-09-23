@@ -98,13 +98,13 @@ class Dialog(BaseDialog):
 	def delete(self,event):
 		pass
 
-	def close(self, event):
+	def close(self, event = None):
 		result = globalVars.app.accountManager.hasDefaultAccount()
-		if result == False:
+		if result == False and self.hListCtrl.GetItemCount() > 0:
 			simpleDialog.errorDialog(_("通信用アカウントが設定されていません。"))
 			return
 		else:
 			self.wnd.Destroy()
 
 	def OnClose(self, event):
-		self.close(None)
+		self.close()
