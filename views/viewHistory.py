@@ -10,7 +10,7 @@ import simpleDialog
 
 class Dialog(BaseDialog):
 	def __init__(self):
-		super().__init("viewHistory")
+		super().__init__("viewHistory")
 
 	def Initialize(self):
 		self.log.debug("created")

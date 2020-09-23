@@ -58,7 +58,6 @@ class manager:
 		self.MainView.menu.EnableMenu("volumeUp", False)
 		self.MainView.menu.EnableMenu("volumeDown", False)
 		self.MainView.menu.EnableMenu("resetVolume", False)
-		self.MainView.menu.EnableMenu("changeDevice", False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
@@ -125,7 +124,6 @@ class manager:
 		if self.livePlayer != None:
 			self.stop()
 		self.MainView.menu.EnableMenu("play", False)
-		self.MainView.menu.EnableMenu("changeDevice", False)
 		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
@@ -485,10 +483,13 @@ class manager:
 		self.livePlayer.setAmp(100)
 
 	def changeDevice(self, deviceName = ""):
-		if deviceName == "":
-			result = self.livePlayer.setDevice(PLAYER_DEFAULT_SPEAKER)
-		else:
-			result = self.livePlayer.setDeviceByName(deviceName)
+		try:
+			if deviceName == "":
+				result = self.livePlayer.setDevice(PLAYER_DEFAULT_SPEAKER)
+			else:
+				result = self.livePlayer.setDeviceByName(deviceName)
+		except AttributeError:
+			result = True
 		if result == True:
 			if deviceName == "":
 				globalVars.app.config["livePlay"]["device"] = ""
