@@ -96,7 +96,11 @@ class Dialog(BaseDialog):
 		self.refreshList()
 
 	def delete(self,event):
-		pass
+		idx = self.hListCtrl.GetFocusedItem()
+		self.hListCtrl.DeleteItem(idx)
+		globalVars.app.accountManager.deleteAccount(idx)
+		self.setDefaultButton.Enable(False)
+		self.deleteButton.Enable(False)
 
 	def close(self, event = None):
 		result = globalVars.app.accountManager.hasDefaultAccount()
@@ -108,3 +112,4 @@ class Dialog(BaseDialog):
 
 	def OnClose(self, event):
 		self.close()
+

@@ -67,3 +67,6 @@ class AccountManager:
 				return True
 		return False
 
+	def deleteAccount(self, idx):
+		del self.tokens[idx]
+		self.saveAsFile()
