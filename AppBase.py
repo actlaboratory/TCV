@@ -13,7 +13,7 @@ from logging import getLogger, FileHandler, Formatter
 
 import constants
 import DefaultSettings
-from views import langDialog
+import views.langDialog
 
 class MaiｎBase(wx.App):
 	def __init__(self):
@@ -73,13 +73,14 @@ class MaiｎBase(wx.App):
 
 	def InitLogger(self):
 		"""ログ機能を初期化して準備する。"""
-		self.hLogHandler=FileHandler(constants.APP_NAME+".log", mode="w", encoding="UTF-8")
+		self.hLogHandler=FileHandler(constants.LOG_FILE_NAME, mode="w", encoding="UTF-8")
 		self.hLogHandler.setLevel(logging.DEBUG)
 		self.hLogFormatter=Formatter("%(name)s - %(levelname)s - %(message)s (%(asctime)s)")
 		self.hLogHandler.setFormatter(self.hLogFormatter)
-		self.log=getLogger("ApplicationMain")
-		self.log.setLevel(logging.DEBUG)
-		self.log.addHandler(self.hLogHandler)
+		logger=getLogger(constants.LOG_PREFIX)
+		logger.setLevel(logging.DEBUG)
+		logger.addHandler(self.hLogHandler)
+		self.log=getLogger(constants.LOG_PREFIX+".Main")
 		r="executable" if self.frozen else "interpreter"
 		self.log.info("Starting"+constants.APP_NAME+" as %s!" % r)
 
@@ -93,13 +94,13 @@ class MaiｎBase(wx.App):
 
 	def InitTranslation(self):
 		"""翻訳を初期化する。"""
-		lang=self.config.getstring("general","language","",)
+		lang=self.config.getstring("general","language","",constants.SUPPORTING_LANGUAGE.keys())
 		if lang == "":
 			if locale.getdefaultlocale()[0] in constants.SUPPORTING_LANGUAGE:
 				self.config["general"]["language"] = locale.getdefaultlocale()[0]
 			else:
 				# 言語選択を表示
-				langSelect = langDialog.langDialog()
+				langSelect = views.langDialog.langDialog()
 				langSelect.Initialize()
 				langSelect.Show()
 				self.config["general"]["language"] = langSelect.GetValue()
@@ -111,9 +112,9 @@ class MaiｎBase(wx.App):
 		"""コンパイル済みのexeで実行されている場合はTrue、インタプリタで実行されている場合はFalseを帰す。"""
 		return self.frozen
 
-	def say(self,s):
+	def say(self,s,interrupt=False):
 		"""スクリーンリーダーでしゃべらせる。"""
-		self.speech.speak(s)
+		self.speech.speak(s, interrupt=interrupt)
 		self.speech.braille(s)
 
 	def SetTimeZone(self):
