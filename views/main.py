@@ -64,6 +64,9 @@ class MainView(BaseView):
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
 		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [])
+		for i in globalVars.app.accountManager.tokens:
+			self.selectAccount.Append("%s(%s)" %(i["user"]["screen_id"], i["user"]["name"]))
+		self.selectAccount.SetSelection(0)
 		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
@@ -288,7 +291,7 @@ class Events(BaseEvents):
 
 	def postComment(self, event):
 		commentBody = self.parent.commentBodyEdit.GetValue()
-		result = globalVars.app.Manager.postComment(commentBody)
+		result = globalVars.app.Manager.postComment(commentBody, self.parent.selectAccount.GetSelection())
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
 

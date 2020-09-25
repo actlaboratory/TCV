@@ -1,7 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#Falcon register originalAssociation view
-#Copyright (C) 2020 yamahubuki <itiro.ishino@gmail.com>
-#Note: All comments except these top lines will be written in Japanese. 
+#アカウントマネージャ
 
 import wx
 import os
@@ -13,10 +11,11 @@ from .baseDialog import *
 import globalVars
 import views.ViewCreator
 import simpleDialog
+import datetime
 
 class Dialog(BaseDialog):
 
-	def __init__(self,config):
+	def __init__(self, config):
 		super().__init__("accountManagerDialog")
 		self.config=config
 
@@ -33,15 +32,9 @@ class Dialog(BaseDialog):
 		#情報の表示
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl(_("アカウント"),None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
-		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
-		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(1,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
-
-		for i in self.config:
-			self.hListCtrl.Append([i["userId"], i["name"], i["limit"], i["default"]])
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
+		self.refreshList()
 
 		#処理ボタン
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
@@ -53,102 +46,64 @@ class Dialog(BaseDialog):
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bClose=self.creator.cancelbutton(_("閉じる"),None)
+		self.bClose=self.creator.cancelbutton(_("閉じる"),self.close)
+
+	def refreshList(self):
+		cursor = self.hListCtrl.GetFocusedItem()
+		self.hListCtrl.DeleteAllItems()
+		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
+		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
+		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
+		self.hListCtrl.InsertColumn(3,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
+		for i in globalVars.app.accountManager.tokens:
+			if i["default"] == True:
+				state = _("通信用アカウントとして設定済み")
+			else:
+				state = ""
+			self.hListCtrl.Append([
+				i["user"]["screen_id"],
+				i["user"]["name"],
+				datetime.datetime.fromtimestamp(i["expires_at"]).strftime("%Y/%m/%d"),
+				state
+			])
+		if cursor >= 0:
+			try:
+				self.hListCtrl.GetItem(cursor).SetFocus()
+			except:
+				pass
 
 	def ItemSelected(self,event):
-		self.editButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
-
-	def Destroy(self):
-		self.log.debug("destroy")
-		self.wnd.Destroy()
+		self.setDefaultButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
 
 	def GetValue(self):
 		return self.config
 
 
 	def add(self,event):
-		d=SettingDialog(self.wnd,"","")
-		d.Initialize()
-		d.Show()
-		ext,path=d.GetValue()
-		if ext in self.config:	
-			dlg=wx.MessageDialog(self.wnd,_("この拡張子は既に登録されています。登録を上書きしますか？"),_("上書き確認"),wx.YES_NO|wx.ICON_QUESTION)
-			if dlg.ShowModal()==wx.ID_NO:
-				return
-			index=self.hListCtrl.FindItem(-1,ext)
-			self.hListCtrl.SetItem(index,1,os.path.basename(os.path.dirname(path))+"\\"+os.path.basename(path))
-		else:
-			self.hListCtrl.Append((ext,os.path.basename(os.path.dirname(path))+"\\"+os.path.basename(path)))
-		self.config[ext]=path
-		d.Destroy()
+		globalVars.app.accountManager.add()
+		self.refreshList()
 
-	def setDefault(self):
-		pass
+	def setDefault(self, event):
+		idx = self.hListCtrl.GetFocusedItem()
+		globalVars.app.accountManager.setDefaultAccount(idx)
+		self.refreshList()
 
 	def delete(self,event):
-		index=self.hListCtrl.GetFocusedItem()
-		ext=self.hListCtrl.GetItemText(index,0)
-		if "<default" in ext:
-			simpleDialog.errorDialog(_("デフォルト設定は削除できません。"))
+		idx = self.hListCtrl.GetFocusedItem()
+		self.hListCtrl.DeleteItem(idx)
+		globalVars.app.accountManager.deleteAccount(idx)
+		self.setDefaultButton.Enable(False)
+		self.deleteButton.Enable(False)
+
+	def close(self, event = None):
+		result = globalVars.app.accountManager.hasDefaultAccount()
+		if result == False and self.hListCtrl.GetItemCount() > 0:
+			simpleDialog.errorDialog(_("通信用アカウントが設定されていません。"))
 			return
-		del(self.config[ext])
-		self.hListCtrl.DeleteItem(index)
-
-class SettingDialog(BaseDialog):
-	"""Dialogの上に作られ、各拡張子と実行ファイルの関連付けを入力するダイアログ"""
-
-	def __init__(self,parent,extention,path):
-		self.parent=parent
-		self.extention=extention
-		self.path=path
-
-	def Initialize(self):
-		super().Initialize(self.parent,_("登録内容の入力"),style=wx.WS_EX_VALIDATE_RECURSIVELY )
-		self.InstallControls()
-		return True
-
-	def InstallControls(self):
-		"""いろんなwidgetを設置する。"""
-
-		#情報の表示
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		if self.extention=="":
-			self.extensionEdit,dummy=self.creator.inputbox("拡張子",300,self.extention)
 		else:
-			self.extensionEdit,dummy=self.creator.inputbox("拡張子",300,self.extention,style=wx.TE_READONLY)
-		self.pathEdit,dummy=self.creator.inputbox("実行ファイル名",475,self.path)
-		self.refBtn=self.creator.button("参照",self.getRef,wx.ALIGN_RIGHT)
+			self.wnd.Destroy()
 
-		#ボタンエリア
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bOk=self.creator.okbutton(_("ＯＫ"),self.OKButtonEvent)
-		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
+	def OnClose(self, event):
+		self.close()
 
-	def Show(self):
-		result=self.ShowModal()
-		return result
-
-	def Destroy(self):
-		self.wnd.Destroy()
-
-	def GetValue(self):
-		return (self.extensionEdit.GetLineText(0).lower(),os.path.abspath(self.pathEdit.GetLineText(0)))
-
-	def getRef(self,event):
-		pathext=os.getenv("pathext").replace(";",";*")
-		d=wx.FileDialog(self.wnd,"実行ファイルの選択",wildcard="実行ファイル("+pathext+")",style=wx.FD_FILE_MUST_EXIST | wx.FD_SHOW_HIDDEN)
-		if d.ShowModal()==wx.ID_CANCEL:
-			return
-		self.pathEdit.SetValue(d.GetPath())
-
-	def OKButtonEvent(self,event):
-		if self.extensionEdit.GetLineText(0)=="" or self.pathEdit.GetLineText(0)=="":
-			return
-		if not re.match("^[a-zA-Z0-9\\-$~]+$",self.extensionEdit.GetLineText(0)):
-			simpleDialog.errorDialog(_("入力された拡張子に利用できない文字が含まれています。パスを確認してください。"))
-			return
-		if not os.path.isfile(self.pathEdit.GetLineText(0)):
-			simpleDialog.errorDialog(_("入力された実行ファイルが存在しません。パスを確認してください。"))
-			return
-		event.Skip()

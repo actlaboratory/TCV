@@ -7,7 +7,6 @@ import wx
 import globalVars
 import simpleDialog
 import pathlib
-from twitcasting.accessToken import accessToken
 import twitcasting.twitcasting
 import re
 import constants
@@ -28,8 +27,8 @@ liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 
-historyData = pathlib.Path(constants.HISTORY_FILE)
-favoritesData = pathlib.Path(constants.FAVORITES_FILE)
+historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
+favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
 
 class manager:
 	def __init__(self, MainView):
@@ -47,7 +46,8 @@ class manager:
 		if len(self.favorites) == 1 and self.favorites[0] == "":
 			del self.favorites[0]
 		self.myAccount = []
-		self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
+		for i in globalVars.app.accountManager.tokens:
+			self.myAccount.append(i["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
 		self.livePlayer = None
@@ -72,6 +72,7 @@ class manager:
 		self.MainView.menu.EnableMenu("viewHistory", False)
 		self.MainView.menu.EnableMenu("viewFavorites", False)
 		self.MainView.menu.EnableMenu("disconnect", True)
+		self.MainView.menu.EnableMenu("accountManager", False)
 		globalVars.app.say(userId)
 		if userId not in self.history:
 			self.history.insert(0, userId.lower())
@@ -240,14 +241,14 @@ class manager:
 		for i in range(0, len(result)):
 			self.MainView.itemList.InsertItem(i, result[i])
 
-	def postComment(self, commentBody):
+	def postComment(self, commentBody, idx):
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
 			return False
 		elif len(commentBody) > 140:
 			simpleDialog.errorDialog(_("１４０字を超えるコメントは投稿できません。現在%s文字のコメントが入力されています。") %(str(len(commentBody))))
 			return False
-		result = self.connection.postComment(commentBody)
+		result = self.connection.postComment(commentBody, idx)
 		if "error" in result:
 			if result["error"]["code"] == 1001 and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
 				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
