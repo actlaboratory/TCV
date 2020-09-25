@@ -27,8 +27,8 @@ liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 
-historyData = pathlib.Path("history.dat")
-favoritesData = pathlib.Path("favorites.dat")
+historyData = pathlib.Path(constants.HISTORY_FILE)
+favoritesData = pathlib.Path(constants.FAVORITES_FILE)
 
 class manager:
 	def __init__(self, MainView):
