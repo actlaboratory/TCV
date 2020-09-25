@@ -18,9 +18,9 @@ SETTING_FILE_NAME="settings.ini"
 KEYMAP_FILE_NAME="keymap.ini"
 LOG_PREFIX="app"
 LOG_FILE_NAME="application.log"
-HISTORY_FILE="history.dat"
-FAVORITES_FILE="favorites.dat"
-TOKEN_FILE="accounts.dat"
+HISTORY_FILE_NAME="history.dat"
+FAVORITES_FILE_NAME="favorites.dat"
+TOKEN_FILE_NAME="accounts.dat"
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5

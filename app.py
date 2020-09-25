@@ -19,8 +19,8 @@ class Main(AppBase.MainBase):
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
 		self.hMainView.Show()
-		self.Manager = manager.manager(self.hMainView)
 		self.accountManager = twitcasting.accountManager.AccountManager()
+		self.Manager = manager.manager(self.hMainView)
 		if len(self.accountManager.tokens) == 0:
 			simpleDialog.dialog("", _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			return True

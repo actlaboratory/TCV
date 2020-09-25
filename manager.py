@@ -27,8 +27,8 @@ liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 
-historyData = pathlib.Path(constants.HISTORY_FILE)
-favoritesData = pathlib.Path(constants.FAVORITES_FILE)
+historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
+favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
 
 class manager:
 	def __init__(self, MainView):
@@ -46,7 +46,8 @@ class manager:
 		if len(self.favorites) == 1 and self.favorites[0] == "":
 			del self.favorites[0]
 		self.myAccount = []
-		# self.myAccount.append(twitcasting.twitcasting.VerifyCredentials()["user"])
+		for i in globalVars.app.accountManager.tokens:
+			self.myAccount.append(i["user"])
 		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
 		self.livePlayer = None
@@ -71,6 +72,7 @@ class manager:
 		self.MainView.menu.EnableMenu("viewHistory", False)
 		self.MainView.menu.EnableMenu("viewFavorites", False)
 		self.MainView.menu.EnableMenu("disconnect", True)
+		self.MainView.menu.EnableMenu("accountManager", False)
 		globalVars.app.say(userId)
 		if userId not in self.history:
 			self.history.insert(0, userId.lower())
