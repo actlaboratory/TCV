@@ -239,14 +239,14 @@ class manager:
 		for i in range(0, len(result)):
 			self.MainView.itemList.InsertItem(i, result[i])
 
-	def postComment(self, commentBody):
+	def postComment(self, commentBody, idx):
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
 			return False
 		elif len(commentBody) > 140:
 			simpleDialog.errorDialog(_("１４０字を超えるコメントは投稿できません。現在%s文字のコメントが入力されています。") %(str(len(commentBody))))
 			return False
-		result = self.connection.postComment(commentBody)
+		result = self.connection.postComment(commentBody, idx)
 		if "error" in result:
 			if result["error"]["code"] == 1001 and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
 				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))

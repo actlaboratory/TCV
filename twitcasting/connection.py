@@ -53,7 +53,7 @@ class connection:
 			ret.reverse()
 			return ret
 
-	def postComment(self, body):
+	def postComment(self, body, idx):
 		commentToSns = globalVars.app.config.getint("general", "commentToSns", 0)
 		if commentToSns == 0:
 			sns = "none"
@@ -61,7 +61,7 @@ class connection:
 			sns = "reply"
 		elif commentToSns == 2:
 			sns = "normal"
-		result = PostComment(self.movieId, body, sns)
+		result = PostComment(self.movieId, body, sns, globalVars.app.accountManager.getToken(idx))
 		return result
 
 	def deleteComment(self, comment):

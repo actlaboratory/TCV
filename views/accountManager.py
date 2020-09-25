@@ -15,7 +15,7 @@ import datetime
 
 class Dialog(BaseDialog):
 
-	def __init__(self,config):
+	def __init__(self, config):
 		super().__init__("accountManagerDialog")
 		self.config=config
 
@@ -32,15 +32,9 @@ class Dialog(BaseDialog):
 		#情報の表示
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl(_("アカウント"),None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
-		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
-		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(1,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
-
-		for i in self.config:
-			self.hListCtrl.Append([i["userId"], i["name"], i["limit"], i["default"]])
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
+		self.refreshList()
 
 		#処理ボタン
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)

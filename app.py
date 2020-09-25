@@ -6,6 +6,8 @@ from views import main
 import sys
 import manager
 import twitcasting.accountManager
+import simpleDialog
+import datetime
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -19,6 +21,13 @@ class Main(AppBase.MainBase):
 		self.hMainView.Show()
 		self.Manager = manager.manager(self.hMainView)
 		self.accountManager = twitcasting.accountManager.AccountManager()
+		if len(self.accountManager.tokens) == 0:
+			simpleDialog.dialog("", _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			return True
+		for i in self.accountManager.tokens:
+			if datetime.datetime.now().timestamp() > i["expires_at"]:
+				simpleDialog.dialog("", _("期限が切れたトークンが見つかりました。ツールメニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
+				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 		if len(sys.argv) == 2:
 			self.Manager.connect(sys.argv[1])
 		return True

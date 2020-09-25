@@ -8,13 +8,13 @@ import time
 import pathlib
 import requests
 import datetime
-
-file = "accounts.dat"
+import constants
+import simpleDialog
 
 class AccountManager:
 	def __init__(self):
 		self.tokens = []
-		f = pathlib.Path(file)
+		f = pathlib.Path(constants.TOKEN_FILE_NAME)
 		if f.exists() == False:
 			f.touch()
 		try:
@@ -22,14 +22,17 @@ class AccountManager:
 		except:
 			pass
 		for i in range(0, len(self.tokens)):
-			self.verifyCredentials(i)
+			try:
+				self.verifyCredentials(i)
+			except:
+				pass
 
 	def loadFromFile(self):
-		with open(file, "rb") as f:
+		with open(constants.TOKEN_FILE_NAME, "rb") as f:
 			self.tokens = pickle.load(f)
 
 	def saveAsFile(self):
-		with open(file, "wb") as f:
+		with open(constants.TOKEN_FILE_NAME, "wb") as f:
 			pickle.dump(self.tokens, f)
 
 	def add(self):
@@ -70,3 +73,12 @@ class AccountManager:
 	def deleteAccount(self, idx):
 		del self.tokens[idx]
 		self.saveAsFile()
+
+	def getDefaultToken(self):
+		for i in self.tokens:
+			if i["default"] == True:
+				return i["access_token"]
+
+	def getToken(self, idx):
+		return self.tokens[idx]["access_token"]
+
