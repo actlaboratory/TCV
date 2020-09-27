@@ -10,6 +10,7 @@ import requests
 import datetime
 import constants
 import simpleDialog
+import wx
 
 class AccountManager:
 	def __init__(self):
@@ -40,6 +41,7 @@ class AccountManager:
 		webbrowser.open(manager.getUrl())
 		while True:
 			time.sleep(0.01)
+			wx.YieldIfNeeded()
 			if manager.getToken():
 				self.tokens.append(manager.getToken())
 				break
