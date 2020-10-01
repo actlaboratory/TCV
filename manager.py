@@ -53,6 +53,7 @@ class manager:
 		self.livePlayer = None
 		self.fxPlayer = None
 		self.played = False
+		self.MainView.menu.EnableMenu("disconnect", False)
 		self.MainView.menu.EnableMenu("play", False)
 		self.MainView.menu.EnableMenu("stop", False)
 		self.MainView.menu.EnableMenu("volumeUp", False)
@@ -62,6 +63,9 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
 	def connect(self, userId):
+		if globalVars.app.accountManager.hasDefaultAccount() == False:
+			simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			return
 		self.connection = twitcasting.connection.connection(userId)
 		if self.connection.connected == False:
 			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
