@@ -151,10 +151,8 @@ class Events(BaseEvents):
 			ret = connectDialog.Show()
 			if ret==wx.ID_CANCEL: return
 			user = str(connectDialog.GetValue())
-			if "https://twitcasting.tv/" in user:
-				user = user[23:]
-			elif "http://twitcasting.tv/" in user:
-				user = user[22:]
+			user = user.replace("http://twitcasting.tv/", "")
+			user = user.replace("https://twitcasting.tv/", "")
 			if "/" in user:
 				user = user[0:user.find("/")]
 			globalVars.app.Manager.connect(user)
