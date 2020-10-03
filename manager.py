@@ -503,7 +503,7 @@ class manager:
 		else:
 			self.changeDevice()
 
-	def playFx(self, filePath):
+	def playFx(self, filePath = ""):
 		if globalVars.app.config.getboolean("fx", "syncAudioDevice", False) == True and globalVars.app.config["livePlay"]["device"] != "":
 			device = globalVars.app.config["livePlay"]["device"]
 		else:
