@@ -86,7 +86,10 @@ class manager:
 			self.resetTimer()
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
-			globalVars.app.say(_("残り時間：%s") %self.formatTime(self.remainingTime).strftime("%H:%M:%S"))
+			try:
+				globalVars.app.say(_("残り時間：%s") %self.formatTime(self.remainingTime).strftime("%H:%M:%S"))
+			except:
+				globalVars.app.say(_("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		else:
 			self.resetTimer()
 			globalVars.app.say(_("接続。現在オフライン。"))
@@ -193,7 +196,6 @@ class manager:
 		if self.connection.hasMovieId == False:
 			return
 		result = [
-			_("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")},
 			_("タイトル：%(title)s") %{"title": self.connection.movieInfo["movie"]["title"]},
 			_("テロップ：%(subtitle)s") %{"subtitle": self.connection.movieInfo["movie"]["subtitle"]},
 			_("閲覧：現在%(current)d人、合計%(total)d人") %{"current": self.connection.movieInfo["movie"]["current_view_count"], "total": self.connection.movieInfo["movie"]["total_view_count"]},
@@ -205,6 +207,10 @@ class manager:
 			result.insert(0, _("現在配信中"))
 		else:
 			result.insert(0, _("オフライン"))
+		try:
+			result.insert(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+		except:
+			result.insert(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		if self.connection.movieInfo["movie"]["is_collabo"] == True:
 			result.insert(-1, _("コラボ可能"))
 		else:
@@ -337,7 +343,7 @@ class manager:
 				self.countDownTimer.Stop()
 				self.resetTimer()
 				self.commentTimer.Stop()
-				if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 					self.played = True
 					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
@@ -423,7 +429,10 @@ class manager:
 			self.createItemList(update)
 		elif id == evtCountDown:
 			self.resetTimer()
-			self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+			try:
+				self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+			except:
+				self.MainView.liveInfo.SetItemText(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
 			if typingUser != "":
