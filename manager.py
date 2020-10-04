@@ -53,12 +53,7 @@ class manager:
 		self.livePlayer = None
 		self.fxPlayer = None
 		self.played = False
-		self.MainView.menu.EnableMenu("disconnect", False)
-		self.MainView.menu.EnableMenu("play", False)
-		self.MainView.menu.EnableMenu("stop", False)
-		self.MainView.menu.EnableMenu("volumeUp", False)
-		self.MainView.menu.EnableMenu("volumeDown", False)
-		self.MainView.menu.EnableMenu("resetVolume", False)
+		self.changeMenuState(False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 
@@ -72,11 +67,7 @@ class manager:
 			return
 		self.MainView.Clear()
 		self.MainView.createMainView()
-		self.MainView.menu.EnableMenu("connect", False)
-		self.MainView.menu.EnableMenu("viewHistory", False)
-		self.MainView.menu.EnableMenu("viewFavorites", False)
-		self.MainView.menu.EnableMenu("disconnect", True)
-		self.MainView.menu.EnableMenu("accountManager", False)
+		self.changeMenuState(True)
 		globalVars.app.say(userId)
 		if userId not in self.history:
 			self.history.insert(0, userId.lower())
@@ -121,25 +112,19 @@ class manager:
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
 		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
-		self.MainView.menu.EnableMenu("play", True)
 		if globalVars.app.config.getboolean("livePlay", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
 
 	def disconnect(self):
 		if self.livePlayer != None:
 			self.stop()
-		self.MainView.menu.EnableMenu("play", False)
 		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
 		self.MainView.Clear()
 		self.MainView.hFrame.SetTitle(constants.APP_NAME)
-
 		self.MainView.createStartScreen()
-		self.MainView.menu.EnableMenu("connect", True)
-		self.MainView.menu.EnableMenu("viewHistory", True)
-		self.MainView.menu.EnableMenu("viewFavorites", True)
-		self.MainView.menu.EnableMenu("disconnect", False)
+		self.changeMenuState(False)
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
@@ -467,7 +452,6 @@ class manager:
 		self.MainView.menu.EnableMenu("volumeUp", True)
 		self.MainView.menu.EnableMenu("volumeDown", True)
 		self.MainView.menu.EnableMenu("resetVolume", True)
-		self.MainView.menu.EnableMenu("changeDevice", True)
 
 	def stop(self):
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
@@ -509,3 +493,43 @@ class manager:
 		else:
 			device = PLAYER_DEFAULT_SPEAKER
 		soundPlayer.fxPlayer.playFx(filePath, device, globalVars.app.config.getint("fx", "fxVolume", 100, 0, 100))
+
+	def changeMenuState(self, connectionState):
+		if connectionState == False:
+			menuItems = {
+				"connect": True,
+				"viewHistory": True,
+				"viewFavorites": True,
+				"disconnect": False,
+				"play": False,
+				"stop": False,
+				"volumeUp": False,
+				"volumeDown": False,
+				"resetVolume": False,
+				"viewComment": False,
+				"replyToSelectedComment": False,
+				"deleteSelectedComment": False,
+				"replyToBroadcaster": False,
+				"viewBroadcaster": False,
+				"openLive": False,
+				"addFavorites": False,
+				"accountManager": True,
+			}
+		elif connectionState == True:
+			menuItems = {
+				"connect": False,
+				"viewHistory": False,
+				"viewFavorites": False,
+				"disconnect": True,
+				"play": True,
+				"viewComment": True,
+				"replyToSelectedComment": True,
+				"deleteSelectedComment": True,
+				"replyToBroadcaster": True,
+				"viewBroadcaster": True,
+				"openLive": True,
+				"addFavorites": True,
+				"accountManager": False,
+			}
+		for key, value in menuItems.items():
+			self.MainView.menu.EnableMenu(key, value)
