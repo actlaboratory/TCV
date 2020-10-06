@@ -456,6 +456,7 @@ class manager:
 				simpleDialog.errorDialog(_("再生に失敗しました。"))
 				return
 			self.livePlayer.play()
+			globalVars.app.say(_("再生"))
 		self.MainView.menu.EnableMenu("play", False)
 		self.MainView.menu.EnableMenu("stop", True)
 		self.MainView.menu.EnableMenu("volumeUp", True)
@@ -465,6 +466,7 @@ class manager:
 	def stop(self):
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
 			self.livePlayer.stop()
+			globalVars.app.say(_("停止"))
 		self.MainView.menu.EnableMenu("stop", False)
 		self.MainView.menu.EnableMenu("play", True)
 		self.MainView.menu.EnableMenu("volumeUp", False)
@@ -473,9 +475,11 @@ class manager:
 
 	def volumeUp(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
+		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL))
 
 	def volumeDown(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) - 10)
+		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL))
 
 	def resetVolume(self):
 		self.livePlayer.setAmp(100)
