@@ -11,6 +11,8 @@ import datetime
 import constants
 import simpleDialog
 import wx
+import base64
+import copy
 
 class AccountManager:
 	def __init__(self):
@@ -30,11 +32,18 @@ class AccountManager:
 
 	def loadFromFile(self):
 		with open(constants.TOKEN_FILE_NAME, "rb") as f:
-			self.tokens = pickle.load(f)
+			tmplst = pickle.load(f)
+		self.tokens = []
+		for i in tmplst:
+			i["access_token"] = base64.b64decode(i["access_token"].encode()).decode()
+			self.tokens.append(i)
 
 	def saveAsFile(self):
+		tmplst = copy.deepcopy(self.tokens)
+		for i in tmplst:
+			i["access_token"] = base64.b64encode(i["access_token"].encode()).decode()
 		with open(constants.TOKEN_FILE_NAME, "wb") as f:
-			pickle.dump(self.tokens, f)
+			pickle.dump(tmplst, f)
 
 	def add(self):
 		manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
