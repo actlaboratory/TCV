@@ -57,22 +57,29 @@ class MainView(BaseView):
 		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
 		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
-		self.commentList, self.commentListStatic = self.creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT)
+
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=1)
+		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT,proportion=1, sizerFlag=wx.EXPAND)
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
-		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [])
+
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.EXPAND | wx.LEFT | wx.RIGHT)
+		self.selectAccount, self.selectAccountstatic = creator.combobox(_("コメント投稿アカウント"), [], proportion=1, textLayout=None)
 		for i in globalVars.app.accountManager.tokens:
 			self.selectAccount.Append("%s(%s)" %(i["user"]["screen_id"], i["user"]["name"]))
 		self.selectAccount.SetSelection(0)
-		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
+		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP, proportion=4, textLayout=None)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
-		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
-		self.liveInfo, self.liveInfoStatic = self.creator.listCtrl(_("ライブ情報"), None, wx.LC_LIST)
+		self.commentSend = creator.button(_("送信"), self.events.postComment)
+
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.EXPAND | wx.ALL)
+		self.liveInfo, self.liveInfoStatic = creator.listCtrl(_("ライブ情報"), None, wx.LC_LIST, proportion=1, sizerFlag=wx.EXPAND | wx.RIGHT, textLayout=wx.VERTICAL, margin=20)
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
-		self.itemList, self.itemListStatic = self.creator.listCtrl(_("アイテム"), None, wx.LC_LIST)
+		self.itemList, self.itemListStatic = creator.listCtrl(_("アイテム"), None, wx.LC_LIST, proportion=1, sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+		self.hPanel.Layout()
 
 class Menu(BaseMenu):
 	def Apply(self,target):
