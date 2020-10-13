@@ -39,6 +39,7 @@ class BaseView(object):
 	def MakePanel(self):
 		self.hPanel=views.ViewCreator.makePanel(self.hFrame)
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,None, wx.VERTICAL)
+		self.hFrame.Layout()
 
 	def Clear(self):
 		self.hFrame.DestroyChildren()
