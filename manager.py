@@ -219,12 +219,12 @@ class manager:
 			result[i] = result[i].replace("None", _("なし"))
 		if mode == first:
 			for i in range(0, len(result)):
-				self.MainView.liveInfo.InsertItem(i, result[i])
+				self.MainView.liveInfo.Insert(result[i], i)
 		elif mode == update:
 			for i in range(0, len(result)):
-				bool = result[i] == self.MainView.liveInfo.GetItemText(i)
+				bool = result[i] == self.MainView.liveInfo.GetString(i)
 				if bool == False:
-					self.MainView.liveInfo.SetItemText(i, result[i])
+					self.MainView.liveInfo.SetString(i, result[i])
 
 	def createItemList(self, mode):
 		result = []
@@ -232,9 +232,9 @@ class manager:
 			result.append(i["name"] + ":" + str(i["count"]))
 		result.sort()
 		if mode == update:
-			self.MainView.itemList.ClearAll()
+			self.MainView.itemList.Clear()
 		for i in range(0, len(result)):
-			self.MainView.itemList.InsertItem(i, result[i])
+			self.MainView.itemList.Insert(result[i], i)
 
 	def postComment(self, commentBody, idx):
 		if len(commentBody) == 0:
@@ -376,7 +376,7 @@ class manager:
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
-					if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+					if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 						self.stop()
 						self.play()
 			self.oldMovieId = self.newMovieId
@@ -430,9 +430,9 @@ class manager:
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
-				self.MainView.liveInfo.SetItemText(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+				self.MainView.liveInfo.SetString(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
 			except:
-				self.MainView.liveInfo.SetItemText(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
+				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
 			if typingUser != "":

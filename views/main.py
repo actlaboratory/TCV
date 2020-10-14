@@ -70,9 +70,9 @@ class MainView(BaseView):
 		self.commentBodyEdit, self.commentBodyStatic = self.creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentSend = self.creator.button(_("送信"), self.events.postComment)
-		self.liveInfo, self.liveInfoStatic = self.creator.listCtrl(_("ライブ情報"), None, wx.LC_LIST)
+		self.liveInfo, self.liveInfoStatic = self.creator.listbox(_("ライブ情報"))
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
-		self.itemList, self.itemListStatic = self.creator.listCtrl(_("アイテム"), None, wx.LC_LIST)
+		self.itemList, self.itemListStatic = self.creator.listbox(_("アイテム"))
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -277,8 +277,8 @@ class Events(BaseEvents):
 			webbrowser.open(obj.GetLabel(selected))
 		#ユーザー情報のコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openUserInfoContextMenu"):
-			focusedItem = self.parent.liveInfo.GetFocusedItem()
-			if focusedItem != self.parent.liveInfo.GetItemCount() - 1:
+			focusedItem = self.parent.liveInfo.GetSelection()
+			if focusedItem != self.parent.liveInfo.GetCount() - 1:
 				return
 			contextMenu = wx.Menu()
 			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
