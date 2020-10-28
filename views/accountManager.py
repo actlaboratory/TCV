@@ -81,6 +81,9 @@ class Dialog(BaseDialog):
 
 
 	def add(self,event):
+		q = simpleDialog.yesNoDialog(_("アカウントの追加"), _("ブラウザを開いてアカウントの認証作業を行います。よろしいですか？"))
+		if q == wx.ID_NO:
+			return
 		globalVars.app.accountManager.add()
 		self.refreshList()
 
