@@ -28,6 +28,7 @@ import views.viewHistory
 import views.viewFavorites
 import views.accountManager
 import views.changeDevice
+import views.settings
 import webbrowser
 import constants
 
@@ -118,8 +119,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
 		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
 		#設定メニュー
-		self.RegisterMenuCommand(self.hSettingsMenu,"basicSettings",_("基本設定(&G) ..."))
-		self.RegisterMenuCommand(self.hSettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定(&S) ..."))
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
@@ -227,6 +227,11 @@ class Events(BaseEvents):
 		#ブラウザで開く
 		elif selected==menuItemsStore.getRef("openLive"):
 			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
+		#設定
+		elif selected==menuItemsStore.getRef("settings"):
+			settings = views.settings.settingsDialog()
+			settings.Initialize()
+			settings.Show()
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
 			accountManager = views.accountManager.Dialog([])
