@@ -96,16 +96,22 @@ class settingsDialog(BaseDialog):
 		self.syncaudiodevice = creator.checkbox(_("効果音の出力先をライブ音声の出力先と同期(&D)"))
 		self.playcommentreceivedsound = creator.checkbox(_("コメント受信時にサウンドを再生(&C)"))
 		self.commentreceivedsound, static = creator.inputbox(_("コメント受信時のサウンド(&C)"))
+		self.commentreceivedsoundBrowse = creator.button(_("参照"), self.browse)
 		self.playviewerschangedsound = creator.checkbox(_("閲覧者数が変化したらサウンドを再生(&V)"))
 		self.viewerschangedsound, static = creator.inputbox(_("閲覧者数が変化した際のサウンド(&V)"))
+		self.viewerschangedsoundBrowse = creator.button(_("参照"), self.browse)
 		self.playitemreceivedsound = creator.checkbox(_("アイテム受信時にサウンドを再生(&I)"))
 		self.itemreceivedsound, static = creator.inputbox(_("アイテム受信時のサウンド(&I)"))
+		self.itemreceivedsoundBrowse = creator.button(_("参照"), self.browse)
 		self.playcommentpostedsound = creator.checkbox(_("コメント投稿時にサウンドを再生(&S)"))
 		self.commentpostedsound, static = creator.inputbox(_("コメント投稿時のサウンド(&S)"))
+		self.commentpostedsoundBrowse = creator.button(_("参照"), self.browse)
 		self.playtypingsound = creator.checkbox(_("コメント入力中のユーザーがいたらサウンドを再生(&T)"))
 		self.typingsound, static = creator.inputbox(_("コメント入力中のユーザがいた際のサウンド(&T)"))
+		self.typingsoundBrowse = creator.button(_("参照"), self.browse)
 		self.playstartupsound = creator.checkbox(_("TCVの起動時にサウンドを再生(&S)"))
 		self.startupsound, static = creator.inputbox(_("TCV起動時のサウンド(&S)"))
+		self.startupsoundBrowse = creator.button(_("参照"), self.browse)
 
 		# buttons
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,style=wx.ALIGN_RIGHT)
@@ -158,6 +164,26 @@ class settingsDialog(BaseDialog):
 
 	def save(self):
 		pass
+
+	def browse(self, event):
+		obj = event.GetEventObject()
+		if obj == self.commentreceivedsoundBrowse:
+			target = self.commentreceivedsound
+		elif obj == self.viewerschangedsoundBrowse:
+			target = self.viewerschangedsound
+		elif obj == self.itemreceivedsoundBrowse:
+			target = self.itemreceivedsound
+		elif obj == self.commentpostedsoundBrowse:
+			target = self.commentpostedsound
+		elif obj == self.typingsoundBrowse:
+			target = self.typingsound
+		elif obj == self.startupsoundBrowse:
+			target = self.startupsound
+		dialog = wx.FileDialog(self.wnd, _("効果音ファイルを選択"), wildcard="WAVE files (*.wav)|*.wav", style=wx.FD_OPEN)
+		result = dialog.ShowModal()
+		if result == wx.ID_CANCEL:
+			return
+		target.SetValue(dialog.GetPath())
 
 	def ok(self, event):
 		result = self.save()
