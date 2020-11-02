@@ -26,24 +26,24 @@ class settingsDialog(BaseDialog):
 			"dark": _("反転表示")
 		}
 		self.commenttosnsSelection = {
-			0: _("投稿しない"),
-			1: _("配信者へ返信する形式で投稿"),
-			2: _("通常の投稿")
+			"0": _("投稿しない"),
+			"1": _("配信者へ返信する形式で投稿"),
+			"2": _("通常の投稿")
 		}
 		self.timertypeSelection = {
-			0: _("コインの枚数を加味せず30分を計測"),
-			1: _("コインの枚数を加味して最大まで延長したと仮定した残り時間を計測し各枠ごとの残り時間を詳細に通知する"),
-			2: _("コインの枚数を加味して最大まで延長したと仮定した残り時間を計測し延長が予定される枠の残り時間は３分前のみを通知する")
+			"0": _("コインの枚数を加味せず30分を計測"),
+			"1": _("コインの枚数を加味して最大まで延長したと仮定した残り時間を計測し各枠ごとの残り時間を詳細に通知する"),
+			"2": _("コインの枚数を加味して最大まで延長したと仮定した残り時間を計測し延長が予定される枠の残り時間は３分前のみを通知する")
 		}
 		self.readmentionsSelection = {
-			0: _("読み上げない"),
-			1: _("全て読み上げる"),
-			2: _("自分宛の返信のみ読み上げる")
+			"0": _("読み上げない"),
+			"1": _("全て読み上げる"),
+			"2": _("自分宛の返信のみ読み上げる")
 		}
 		self.readitemposteduserSelection = {
-			0: _("読み上げない"),
-			1: _("ユーザ名を読み上げる"),
-			2: _("表示名を読み上げる")
+			"0": _("読み上げない"),
+			"1": _("ユーザ名を読み上げる"),
+			"2": _("表示名を読み上げる")
 		}
 
 	def Initialize(self):
@@ -113,7 +113,48 @@ class settingsDialog(BaseDialog):
 		self.cancelBtn = creator.cancelbutton(_("キャンセル"), self.cancel)
 
 	def load(self):
-		pass
+		# general
+		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
+		self.initialcommentcount.SetValue(globalVars.app.config["general"]["initialcommentcount"])
+		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
+		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
+		self.historymax.SetValue(globalVars.app.config["general"]["historymax"])
+		self.defaultconnectaccount.SetValue(globalVars.app.config["general"]["defaultconnectaccount"])
+
+		# read
+		self.reader.SetValue(self.readerSelection[globalVars.app.config["speech"]["reader"]])
+		self.readreceivedcomments.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readreceivedcomments"))
+		self.receivedcommentsannouncement.SetValue(globalVars.app.config["autoReadingOptions"]["receivedcommentsannouncement"])
+		self.readmycomment.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readmycomment"))
+		self.readmentions_mylive.SetValue(self.readmentionsSelection[globalVars.app.config["autoReadingOptions"]["readmentions_mylive"]])
+		self.readmentions_otherlive.SetValue(self.readmentionsSelection[globalVars.app.config["autoReadingOptions"]["readmentions_otherlive"]])
+		self.readviewers.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readviewers"))
+		self.viewersincreasedannouncement.SetValue(globalVars.app.config["autoReadingOptions"]["viewersincreasedannouncement"])
+		self.viewersdecreasedannouncement.SetValue(globalVars.app.config["autoReadingOptions"]["viewersdecreasedannouncement"])
+		self.readtypinguser.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readtypinguser"))
+		self.readreceiveditems.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readreceiveditems"))
+		self.readitemposteduser.SetValue(self.readitemposteduserSelection[globalVars.app.config["autoReadingOptions"]["readitemposteduser"]])
+
+		# live play
+		self.autoplay.SetValue(globalVars.app.config.getboolean("livePlay", "autoplay"))
+		self.defaultvolume.SetValue(globalVars.app.config.getint("livePlay", "defaultvolume"))
+		self.audiodelay.SetValue(globalVars.app.config["livePlay"]["audiodelay"])
+
+		# fx
+		self.fxvolume.SetValue(globalVars.app.config.getint("fx", "fxvolume"))
+		self.syncaudiodevice.SetValue(globalVars.app.config.getboolean("fx", "syncaudiodevice"))
+		self.playcommentreceivedsound.SetValue(globalVars.app.config.getboolean("fx", "playcommentreceivedsound"))
+		self.commentreceivedsound.SetValue(globalVars.app.config["fx"]["commentreceivedsound"])
+		self.playviewerschangedsound.SetValue(globalVars.app.config.getboolean("fx", "playviewerschangedsound"))
+		self.viewerschangedsound.SetValue(globalVars.app.config["fx"]["viewerschangedsound"])
+		self.playitemreceivedsound.SetValue(globalVars.app.config.getboolean("fx", "playitemreceivedsound"))
+		self.itemreceivedsound.SetValue(globalVars.app.config["fx"]["itemreceivedsound"])
+		self.playcommentpostedsound.SetValue(globalVars.app.config.getboolean("fx", "playcommentpostedsound"))
+		self.commentpostedsound.SetValue(globalVars.app.config["fx"]["commentpostedsound"])
+		self.playtypingsound.SetValue(globalVars.app.config.getboolean("fx", "playtypingsound"))
+		self.typingsound.SetValue(globalVars.app.config["fx"]["typingsound"])
+		self.playstartupsound.SetValue(globalVars.app.config.getboolean("fx", "playstartupsound"))
+		self.startupsound.SetValue(globalVars.app.config["fx"]["startupsound"])
 
 	def save(self):
 		pass
