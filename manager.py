@@ -163,6 +163,9 @@ class manager:
 			self.MainView.commentList.SetItem(0, 1, commentData["message"])
 			self.MainView.commentList.SetItem(0, 2, commentData["time"])
 			self.MainView.commentList.SetItem(0, 3, commentData["user"])
+			itemLimit = 100000
+			if self.MainView.commentList.GetItemCount() > itemLimit:
+				self.MainView.commentList.DeleteItem(itemLimit)
 			if mode == update:
 				if globalVars.app.config.getboolean("autoReadingOptions", "readReceivedComments", True) == True:
 					if globalVars.app.config.getboolean("autoReadingOptions", "readMyComment", True) == False:
