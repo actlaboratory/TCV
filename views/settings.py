@@ -48,9 +48,9 @@ class settingsDialog(BaseDialog):
 
 	def Initialize(self):
 		self.log.debug("created")
-		super().Initialize(self.app.hMainView.hFrame,_("設定画面"))
+		super().Initialize(self.app.hMainView.hFrame,_("設定"))
 		self.InstallControls()
-		# self.loadSettings()
+		self.load()
 		# self.switch()
 		return True
 
@@ -110,73 +110,24 @@ class settingsDialog(BaseDialog):
 
 		# buttons
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,style=wx.ALIGN_RIGHT)
-		self.okbtn = creator.okbutton(_("OK"), self.onOkBtn)
-		self.cancelBtn = creator.cancelbutton(_("キャンセル"), self.onCancelBtn)
+		self.okbtn = creator.okbutton("OK", self.ok)
+		self.cancelBtn = creator.cancelbutton(_("キャンセル"), self.cancel)
 
-	def onOkBtn(self, event):
-		reader = list(self.readerSelection.keys())[self.reader.GetSelection()]
-		colormode = list(self.colorSelection.keys())[self.color.GetSelection()]
-		update = self.autoUpdate.GetValue()
-		try:
-			timeout = int(self.timeout.GetValue())
-		except ValueError:
-			simpleDialog.errorDialog(_("タイムアウト秒数の設定値が不正です。"))
-		tmpdir = self.tmpEdit.GetValue()
-		saveSourceDir = self.saveSelect[0].GetValue()
-		savedir = self.saveDir.GetValue()
-		globalVars.app.config["speech"]["reader"] = reader
-		globalVars.app.config["view"]["colormode"] = colormode
-		globalVars.app.config["general"]["update"] = update
-		globalVars.app.config["general"]["timeout"] = timeout
-		globalVars.app.config["ocr"]["tmpdir"] = tmpdir
-		globalVars.app.config["ocr"]["savesourcedir"] = saveSourceDir
-		globalVars.app.config["ocr"]["savedir"] = savedir
-		simpleDialog.dialog(_("設定を保存しました。一部の設定は再起動後から有効になります。"))
+	def load(self):
+		pass
+
+	def save(self):
+		pass
+
+	def ok(self, event):
+		result = self.save()
+		if result == False:
+			return
+		simpleDialog.dialog(_("設定完了"), _("設定を保存しました。一部の設定は再起動後から有効になります。"))
 		self.Destroy()
 
-	def onCancelBtn(self, event):
-		print("cancel")
+	def cancel(self, event):
 		self.Destroy()
-
-	def switch(self, event = None):
-		if self.saveSelect[0].GetValue():
-			self.saveDir.Disable()
-			self.changeBtn.Disable()
-		else:
-			self.saveDir.Enable()
-			self.changeBtn.Enable()
-
-	def browse(self, event):
-		dialog = wx.DirDialog(None, _("保存先を選択"))
-		if dialog.ShowModal() == wx.ID_OK:
-			dir = dialog.GetPath()
-			self.saveDir.SetValue(dir)
-		return
-
-	def loadSettings(self):
-		reader = globalVars.app.config["speech"]["reader"]
-		selectionStr = self.readerSelection[reader]
-		self.reader.SetStringSelection(selectionStr)
-		color = globalVars.app.config.getstring("view", "colormode")
-		selectionStr = self.colorSelection[color]
-		self.color.SetStringSelection(selectionStr)
-		update = globalVars.app.config.getboolean("general", "update")
-		if update:
-			self.autoUpdate.SetValue(True)
-		else:
-			self.autoUpdate.SetValue(False)
-		timeout = globalVars.app.config.getint("general", "timeout", 3)
-		self.timeout.SetValue(str(timeout))
-		tmpdir = globalVars.app.tmpdir
-		self.tmpEdit.SetValue(tmpdir)
-		savesourcedir = globalVars.app.config.getboolean("ocr", "saveSourceDir")
-		if savesourcedir:
-			self.saveSelect[0].SetValue(True)
-		else:
-			self.saveSelect[1].SetValue(False)
-		savedir = globalVars.app.config.getstring("ocr", "savedir", "")
-		self.saveDir.SetValue(savedir)
-		return
 
 	def Destroy(self, events = None):
 		self.log.debug("destroy")
