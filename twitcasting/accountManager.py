@@ -81,6 +81,9 @@ class AccountManager:
 				return True
 		return False
 
+	def isDefault(self, idx):
+		return self.tokens[idx]["default"]
+
 	def deleteAccount(self, idx):
 		del self.tokens[idx]
 		self.saveAsFile()

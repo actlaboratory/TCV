@@ -74,7 +74,7 @@ class Dialog(BaseDialog):
 
 	def ItemSelected(self,event):
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
-		self.setDefaultButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
+		self.setDefaultButton.Enable(self.hListCtrl.GetFocusedItem()>=0 and globalVars.app.accountManager.isDefault(self.hListCtrl.GetFocusedItem()) == False)
 
 	def GetValue(self):
 		return self.config
@@ -91,6 +91,7 @@ class Dialog(BaseDialog):
 		idx = self.hListCtrl.GetFocusedItem()
 		globalVars.app.accountManager.setDefaultAccount(idx)
 		self.refreshList()
+		self.hListCtrl.SetFocus()
 
 	def delete(self,event):
 		idx = self.hListCtrl.GetFocusedItem()
