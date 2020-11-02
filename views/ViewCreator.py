@@ -317,7 +317,7 @@ class ViewCreator():
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
 		self._setFace(hListCtrl)
 		self._setFace(hListCtrl.GetMainWindow())
-		_winxptheme.SetWindowTheme(win32api.SendMessage(hListCtrl.GetHandle(),0x101F,0,0),"","")#ヘッダーのウィンドウテーマを引っぺがす
+		#_winxptheme.SetWindowTheme(win32api.SendMessage(hListCtrl.GetHandle(),0x101F,0,0),"","")#ヘッダーのウィンドウテーマを引っぺがす
 		Add(sizer,hListCtrl,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hListCtrl,hStaticText
