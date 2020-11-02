@@ -166,8 +166,9 @@ class manager:
 						for i in self.myAccount:
 							if commentObject["from_user"]["id"] == i["id"]:
 								return
-					if self.connection.userId in self.myAccount:
-						readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
+					for i in self.myAccount:
+						if commentObject["from_user"]["id"] == i["id"]:
+							readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
 					else:
 						readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
 					if readMentions == 2:
