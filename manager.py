@@ -75,10 +75,13 @@ class manager:
 			del self.history[self.history.index(userId)]
 			self.history.insert(0, userId.lower())
 		historyMax = globalVars.app.config.getint("general", "historyMax", 10)
-		if len(self.history) > historyMax:
+		if historyMax >= 0 and len(self.history) > historyMax:
 			del self.history[historyMax:]
 		historyData.write_text("\n".join(self.history))
-		self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+		try:
+			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+		except:
+			self.elapsedTime = 0
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 		self.timers.append(self.countDownTimer)
 		if self.connection.isLive == True:
