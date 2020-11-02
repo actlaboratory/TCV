@@ -55,7 +55,7 @@ class DefaultSettings:
 		config["livePlay"]={
 			"autoPlay": False,
 			"defaultVolume": 100,
-			"audioDelay": 7,
+			"audioDelay": 10,
 			"device": "",
 		}
 		config["fx"] = {
