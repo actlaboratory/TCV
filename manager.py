@@ -18,6 +18,7 @@ evtComment = 0
 evtLiveInfo = 1
 evtCountDown = 2
 evtTyping = 3
+evtPlaystatus = 4
 
 first = 0
 update = 1
@@ -26,6 +27,7 @@ commentTimerInterval = 5000
 liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
+playstatusTimerInterval = 500
 
 historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
 favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
@@ -56,6 +58,8 @@ class manager:
 		self.changeMenuState(False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
+		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
+		self.timers.append(self.playStatusTimer)
 
 	def connect(self, userId):
 		if globalVars.app.accountManager.hasDefaultAccount() == False:
@@ -447,6 +451,9 @@ class manager:
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
+		elif id == evtPlaystatus:
+			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING:
+				self.stop()
 
 	def play(self):
 		if self.livePlayer == None:
@@ -469,8 +476,11 @@ class manager:
 		self.MainView.menu.EnableMenu("volumeUp", True)
 		self.MainView.menu.EnableMenu("volumeDown", True)
 		self.MainView.menu.EnableMenu("resetVolume", True)
+		self.playStatusTimer.Start(playstatusTimerInterval)
 
 	def stop(self):
+		if self.playStatusTimer.IsRunning() == True:
+			self.playStatusTimer.Stop()
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
 			self.livePlayer.stop()
 			globalVars.app.say(_("停止"))
