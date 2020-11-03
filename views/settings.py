@@ -163,7 +163,48 @@ class settingsDialog(BaseDialog):
 		self.startupsound.SetValue(globalVars.app.config["fx"]["startupsound"])
 
 	def save(self):
-		pass
+		# general
+		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
+		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
+		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
+		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
+		globalVars.app.config["general"]["historymax"] = self.historymax.GetValue()
+		globalVars.app.config["general"]["defaultconnectaccount"] = self.defaultconnectaccount.GetValue()
+
+		# read
+		globalVars.app.config["speech"]["reader"] = list(self.readerSelection.keys())[self.reader.GetSelection()]
+		globalVars.app.config["autoReadingOptions"]["readreceivedcomments"] = self.readreceivedcomments.GetValue()
+		globalVars.app.config["autoReadingOptions"]["receivedcommentsannouncement"] = self.receivedcommentsannouncement.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readmycomment"] = self.readmycomment.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readmentions_mylive"] = list(self.readmentionsSelection.keys())[self.readmentions_mylive.GetSelection()]
+		globalVars.app.config["autoReadingOptions"]["readmentions_otherlive"] = list(self.readmentionsSelection.keys())[self.readmentions_otherlive.GetSelection()]
+		globalVars.app.config["autoReadingOptions"]["readviewers"] = self.readviewers.GetValue()
+		globalVars.app.config["autoReadingOptions"]["viewersincreasedannouncement"] = self.viewersincreasedannouncement.GetValue()
+		globalVars.app.config["autoReadingOptions"]["viewersdecreasedannouncement"] = self.viewersdecreasedannouncement.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readtypinguser"] = self.readtypinguser.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readreceiveditems"] = self.readreceiveditems.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readitemposteduser"] = list(self.readitemposteduserSelection.keys())[self.readitemposteduser.GetSelection()]
+
+		# live play
+		globalVars.app.config["livePlay"]["autoplay"] = self.autoplay.GetValue()
+		globalVars.app.config["livePlay"]["defaultvolume"] = self.defaultvolume.GetValue()
+		globalVars.app.config["livePlay"]["audiodelay"] = self.audiodelay.GetValue()
+
+		# fx
+		globalVars.app.config["fx"]["fxvolume"] = self.fxvolume.GetValue()
+		globalVars.app.config["fx"]["syncaudiodevice"] = self.syncaudiodevice.GetValue()
+		globalVars.app.config["fx"]["playcommentreceivedsound"] = self.playcommentreceivedsound.GetValue()
+		globalVars.app.config["fx"]["commentreceivedsound"] = self.commentreceivedsound.GetValue()
+		globalVars.app.config["fx"]["playviewerschangedsound"] = self.playviewerschangedsound.GetValue()
+		globalVars.app.config["fx"]["viewerschangedsound"] = self.viewerschangedsound.GetValue()
+		globalVars.app.config["fx"]["playitemreceivedsound"] = self.playitemreceivedsound.GetValue()
+		globalVars.app.config["fx"]["itemreceivedsound"] = self.itemreceivedsound.GetValue()
+		globalVars.app.config["fx"]["playcommentpostedsound"] = self.playcommentpostedsound.GetValue()
+		globalVars.app.config["fx"]["commentpostedsound"] = self.commentpostedsound.GetValue()
+		globalVars.app.config["fx"]["playtypingsound"] = self.playtypingsound.GetValue()
+		globalVars.app.config["fx"]["typingsound"] = self.typingsound.GetValue()
+		globalVars.app.config["fx"]["playstartupsound"] = self.playstartupsound.GetValue()
+		globalVars.app.config["fx"]["startupsound"] = self.startupsound.GetValue()
 
 	def browse(self, event):
 		obj = event.GetEventObject()
