@@ -39,7 +39,7 @@ class connection:
 			return []
 		ret = []
 		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
-		if len(result) == 0 or "error" in result:
+		if len(result) == 0 or "error" in result or type(result) != list:
 			return []
 		else:
 			while result != []:
