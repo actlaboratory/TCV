@@ -81,6 +81,7 @@ class MainView(BaseView):
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
 		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
 		self.hPanel.Layout()
+		self.commentList.SetFocus()
 
 class Menu(BaseMenu):
 	def Apply(self,target):

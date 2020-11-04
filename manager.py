@@ -18,6 +18,7 @@ evtComment = 0
 evtLiveInfo = 1
 evtCountDown = 2
 evtTyping = 3
+evtPlaystatus = 4
 
 first = 0
 update = 1
@@ -26,6 +27,7 @@ commentTimerInterval = 5000
 liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
+playstatusTimerInterval = 500
 
 historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
 favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
@@ -56,6 +58,8 @@ class manager:
 		self.changeMenuState(False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
+		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
+		self.timers.append(self.playStatusTimer)
 
 	def connect(self, userId):
 		if globalVars.app.accountManager.hasDefaultAccount() == False:
@@ -75,10 +79,13 @@ class manager:
 			del self.history[self.history.index(userId)]
 			self.history.insert(0, userId.lower())
 		historyMax = globalVars.app.config.getint("general", "historyMax", 10)
-		if len(self.history) > historyMax:
+		if historyMax >= 0 and len(self.history) > historyMax:
 			del self.history[historyMax:]
 		historyData.write_text("\n".join(self.history))
-		self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+		try:
+			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+		except:
+			self.elapsedTime = 0
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 		self.timers.append(self.countDownTimer)
 		if self.connection.isLive == True:
@@ -160,14 +167,18 @@ class manager:
 			self.MainView.commentList.SetItem(0, 1, commentData["message"])
 			self.MainView.commentList.SetItem(0, 2, commentData["time"])
 			self.MainView.commentList.SetItem(0, 3, commentData["user"])
+			itemLimit = 100000
+			if self.MainView.commentList.GetItemCount() > itemLimit:
+				self.MainView.commentList.DeleteItem(itemLimit)
 			if mode == update:
 				if globalVars.app.config.getboolean("autoReadingOptions", "readReceivedComments", True) == True:
 					if globalVars.app.config.getboolean("autoReadingOptions", "readMyComment", True) == False:
 						for i in self.myAccount:
 							if commentObject["from_user"]["id"] == i["id"]:
 								return
-					if self.connection.userId in self.myAccount:
-						readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
+					for i in self.myAccount:
+						if commentObject["from_user"]["id"] == i["id"]:
+							readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_myLive", 1)
 					else:
 						readMentions = globalVars.app.config.getint("autoReadingOptions", "readMentions_otherLive", 1)
 					if readMentions == 2:
@@ -440,6 +451,9 @@ class manager:
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
+		elif id == evtPlaystatus:
+			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING:
+				self.stop()
 
 	def play(self):
 		if self.livePlayer == None:
@@ -462,8 +476,11 @@ class manager:
 		self.MainView.menu.EnableMenu("volumeUp", True)
 		self.MainView.menu.EnableMenu("volumeDown", True)
 		self.MainView.menu.EnableMenu("resetVolume", True)
+		self.playStatusTimer.Start(playstatusTimerInterval)
 
 	def stop(self):
+		if self.playStatusTimer.IsRunning() == True:
+			self.playStatusTimer.Stop()
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
 			self.livePlayer.stop()
 			globalVars.app.say(_("停止"))
