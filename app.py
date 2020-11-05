@@ -36,6 +36,8 @@ class Main(AppBase.MainBase):
 		#設定の保存やリソースの開放など、終了前に行いたい処理があれば記述できる
 		#ビューへのアクセスや終了の抑制はできないので注意。
 
+		if self.Manager.livePlayer != None:
+			self.Manager.livePlayer.exit()
 
 		#戻り値は無視される
 		return 0
