@@ -387,6 +387,7 @@ class manager:
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
+					self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 					if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 						self.stop()
 						self.play()
