@@ -51,6 +51,7 @@ class MainView(BaseView):
 		self.connectButton = self.creator.button(_("接続(Ctrl+N)"), self.events.connect)
 		self.viewHistoryButton = self.creator.button(_("接続履歴を開く(ctrl+H)"), self.events.viewHistory)
 		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く(Ctrl+I)"), self.events.viewFavorites)
+		self.settingsButton = self.creator.button(_("設定"), self.events.settings)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
 		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
@@ -206,9 +207,7 @@ class Events(BaseEvents):
 			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
 		#設定
 		elif selected==menuItemsStore.getRef("settings"):
-			settings = views.settings.settingsDialog()
-			settings.Initialize()
-			settings.Show()
+			self.settings()
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
 			self.accountManager()
@@ -325,3 +324,8 @@ class Events(BaseEvents):
 		accountManager = views.accountManager.Dialog([])
 		accountManager.Initialize()
 		accountManager.Show()
+
+	def settings(self, event=None):
+		settings = views.settings.settingsDialog()
+		settings.Initialize()
+		settings.Show()
