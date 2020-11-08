@@ -28,6 +28,7 @@ import views.viewHistory
 import views.viewFavorites
 import views.accountManager
 import views.changeDevice
+import views.settings
 import webbrowser
 import constants
 
@@ -50,6 +51,7 @@ class MainView(BaseView):
 		self.connectButton = self.creator.button(_("接続(Ctrl+N)"), self.events.connect)
 		self.viewHistoryButton = self.creator.button(_("接続履歴を開く(ctrl+H)"), self.events.viewHistory)
 		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く(Ctrl+I)"), self.events.viewFavorites)
+		self.settingsButton = self.creator.button(_("設定"), self.events.settings)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
 		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
@@ -121,8 +123,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
 		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
 		#設定メニュー
-		self.RegisterMenuCommand(self.hSettingsMenu,"basicSettings",_("基本設定(&G) ..."))
-		self.RegisterMenuCommand(self.hSettingsMenu,"autoReadingSettings",_("自動読み上げの設定(&R) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定(&S) ..."))
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
@@ -204,6 +205,9 @@ class Events(BaseEvents):
 		#ブラウザで開く
 		elif selected==menuItemsStore.getRef("openLive"):
 			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
+		#設定
+		elif selected==menuItemsStore.getRef("settings"):
+			self.settings()
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
 			self.accountManager()
@@ -320,3 +324,8 @@ class Events(BaseEvents):
 		accountManager = views.accountManager.Dialog([])
 		accountManager.Initialize()
 		accountManager.Show()
+
+	def settings(self, event=None):
+		settings = views.settings.settingsDialog()
+		settings.Initialize()
+		settings.Show()
