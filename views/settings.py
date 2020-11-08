@@ -113,6 +113,12 @@ class settingsDialog(BaseDialog):
 		self.startupsound, static = creator.inputbox(_("TCV起動時のサウンド(&S)"))
 		self.startupsoundBrowse = creator.button(_("参照"), self.browse)
 
+		# url
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("URL表示設定"))
+		self.deleteprotcolname = creator.checkbox(_("プロトコル名を削除(&P)"))
+		self.onlydomain = creator.checkbox(_("ドメインのみ(&D)"))
+		self.url, static = creator.inputbox(_("URLを次の文字列に置き換える(&U)"))
+
 		# buttons
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,style=wx.ALIGN_RIGHT)
 		self.okbtn = creator.okbutton("OK", self.ok)
@@ -162,6 +168,11 @@ class settingsDialog(BaseDialog):
 		self.playstartupsound.SetValue(globalVars.app.config.getboolean("fx", "playstartupsound"))
 		self.startupsound.SetValue(globalVars.app.config["fx"]["startupsound"])
 
+		# url
+		self.deleteprotcolname.SetValue(globalVars.app.config.getboolean("commentReplaceSpecial", "deleteprotcolname"))
+		self.onlydomain.SetValue(globalVars.app.config.getboolean("commentReplaceSpecial", "onlydomain"))
+		self.url.SetValue(globalVars.app.config["commentReplaceSpecial"]["url"])
+
 	def save(self):
 		# general
 		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
@@ -205,6 +216,11 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["fx"]["typingsound"] = self.typingsound.GetValue()
 		globalVars.app.config["fx"]["playstartupsound"] = self.playstartupsound.GetValue()
 		globalVars.app.config["fx"]["startupsound"] = self.startupsound.GetValue()
+
+		# url
+		globalVars.app.config["commentReplaceSpecial"]["deleteprotcolname"] = self.deleteprotcolname.GetValue()
+		globalVars.app.config["commentReplaceSpecial"]["onlydomain"] = self.onlydomain.GetValue()
+		globalVars.app.config["commentReplaceSpecial"]["url"] = self.url.GetValue()
 
 	def browse(self, event):
 		obj = event.GetEventObject()
