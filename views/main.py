@@ -47,8 +47,10 @@ class MainView(BaseView):
 		self.createStartScreen()
 
 	def createStartScreen(self):
-		status = "現在、ライブに接続されていません。\nライブに接続するにはctrl+Nを押します。\n接続履歴から選択して接続するにはCtrl+Hを押します。\nお気に入りライブを表示するにはctrl+Iを押します。\n"
-		self.statusEdit, self.statusStatic = self.creator.inputbox(_("状況"), None, status, wx.TE_READONLY | wx.TE_DONTWRAP | wx.TE_MULTILINE, 400)
+		self.connectButton = self.creator.button(_("接続(Ctrl+N)"), self.events.connect)
+		self.viewHistoryButton = self.creator.button(_("接続履歴を開く(ctrl+H)"), self.events.viewHistory)
+		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く(Ctrl+I)"), self.events.viewFavorites)
+		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
 		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
 
@@ -154,42 +156,16 @@ class Events(BaseEvents):
 			simpleDialog.dialog(_("バージョン情報"), _("%(appName)s Version %(versionNumber)s.\nCopyright (C) %(year)s %(developerName)s") %{"appName": constants.APP_NAME, "versionNumber": constants.APP_VERSION, "year":constants.APP_COPYRIGHT_YEAR, "developerName": constants.APP_DEVELOPERS})
 		#接続
 		elif selected==menuItemsStore.getRef("connect"):
-			connectDialog = views.connect.Dialog()
-			connectDialog.Initialize()
-			ret = connectDialog.Show()
-			if ret==wx.ID_CANCEL: return
-			user = str(connectDialog.GetValue())
-			user = user.replace("http://twitcasting.tv/", "")
-			user = user.replace("https://twitcasting.tv/", "")
-			if "/" in user:
-				user = user[0:user.find("/")]
-			globalVars.app.Manager.connect(user)
-			return
+			self.connect()
 		#切断
 		elif selected==menuItemsStore.getRef("disconnect"):
 			globalVars.app.Manager.disconnect()
 		#履歴
 		elif selected==menuItemsStore.getRef("viewHistory"):
-			if len(globalVars.app.Manager.history) == 0:
-				simpleDialog.errorDialog(_("接続履歴がありません。"))
-				return
-			viewHistoryDialog = views.viewHistory.Dialog()
-			viewHistoryDialog.Initialize()
-			ret = viewHistoryDialog.Show()
-			if ret==wx.ID_CANCEL: return
-			globalVars.app.Manager.connect(globalVars.app.Manager.history[viewHistoryDialog.GetValue()])
-			return
+			self.viewHistory()
 		#お気に入り
 		elif selected==menuItemsStore.getRef("viewFavorites"):
-			if len(globalVars.app.Manager.favorites) == 0:
-				simpleDialog.errorDialog(_("お気に入りライブが登録されていません。"))
-				return
-			viewFavoritesDialog = views.viewFavorites.Dialog()
-			viewFavoritesDialog.Initialize()
-			ret = viewFavoritesDialog.Show()
-			if ret==wx.ID_CANCEL: return
-			globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
-			return
+			self.viewFavorites()
 		#コメントの詳細を表示
 		elif selected==menuItemsStore.getRef("viewComment"):
 			viewCommentDialog = views.viewComment.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
@@ -230,9 +206,7 @@ class Events(BaseEvents):
 			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
-			accountManager = views.accountManager.Dialog([])
-			accountManager.Initialize()
-			accountManager.Show()
+			self.accountManager()
 		#コメント送信（ホットキー）
 		elif selected==menuItemsStore.getRef("postComment"):
 			self.postComment(None)
@@ -306,3 +280,43 @@ class Events(BaseEvents):
 			if i.IsRunning() == True:
 				i.Stop()
 		super().Exit()
+
+	def connect(self, event=None):
+		connectDialog = views.connect.Dialog()
+		connectDialog.Initialize()
+		ret = connectDialog.Show()
+		if ret==wx.ID_CANCEL: return
+		user = str(connectDialog.GetValue())
+		user = user.replace("http://twitcasting.tv/", "")
+		user = user.replace("https://twitcasting.tv/", "")
+		if "/" in user:
+			user = user[0:user.find("/")]
+		globalVars.app.Manager.connect(user)
+		return
+
+	def viewHistory(self, event=None):
+		if len(globalVars.app.Manager.history) == 0:
+			simpleDialog.errorDialog(_("接続履歴がありません。"))
+			return
+		viewHistoryDialog = views.viewHistory.Dialog()
+		viewHistoryDialog.Initialize()
+		ret = viewHistoryDialog.Show()
+		if ret==wx.ID_CANCEL: return
+		globalVars.app.Manager.connect(globalVars.app.Manager.history[viewHistoryDialog.GetValue()])
+		return
+
+	def viewFavorites(self, event=None):
+		if len(globalVars.app.Manager.favorites) == 0:
+			simpleDialog.errorDialog(_("お気に入りライブが登録されていません。"))
+			return
+		viewFavoritesDialog = views.viewFavorites.Dialog()
+		viewFavoritesDialog.Initialize()
+		ret = viewFavoritesDialog.Show()
+		if ret==wx.ID_CANCEL: return
+		globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
+		return
+
+	def accountManager(self, event=None):
+		accountManager = views.accountManager.Dialog([])
+		accountManager.Initialize()
+		accountManager.Show()
