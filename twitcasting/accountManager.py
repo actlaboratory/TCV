@@ -51,6 +51,9 @@ class AccountManager:
 		while True:
 			time.sleep(0.01)
 			wx.YieldIfNeeded()
+			if manager.getToken() == "":
+				simpleDialog.errorDialog(_("アカウントの追加に失敗しました。"))
+				return
 			if manager.getToken():
 				self.tokens.append(manager.getToken())
 				break
