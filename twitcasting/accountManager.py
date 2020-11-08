@@ -25,10 +25,7 @@ class AccountManager:
 		except:
 			pass
 		for i in range(0, len(self.tokens)):
-			try:
-				self.verifyCredentials(i)
-			except:
-				pass
+			self.verifyCredentials(i)
 
 	def loadFromFile(self):
 		with open(constants.TOKEN_FILE_NAME, "rb") as f:
