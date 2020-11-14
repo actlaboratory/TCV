@@ -1,0 +1,63 @@
+version: development.{build}-{branch}
+branches:
+  only:
+    - master
+
+skip_branch_with_pr: true
+skip_tags: true
+
+environment:
+  gitHubPassword:
+    secure: s4pKVblYXP+c03qM8gH8tQ==
+  matrix:
+
+    # For Python versions available on Appveyor, see
+    # http://www.appveyor.com/docs/installed-software#python
+    # The list here is complete (excluding Python 2.6, which
+    # isn't covered by this document) at the time of writing.
+
+    - PYTHON: "C:\\Python37"
+
+install:
+  # We need wheel installed to build wheels
+  - cmd: git tag -d TCV-latestcommit
+  - cmd: git push -d https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/tcv.git TCV-latestcommit
+  - cmd: git tag TCV-latestcommit
+  - cmd: git push https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/tcv.git TCV-latestcommit
+  - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
+
+build: off
+
+test_script:
+  # Put your test command here.
+  # If you don't need to build C extensions on 64-bit Python 3.3 or 3.4,
+  # you can remove "build.cmd" from the front of the command, as it's
+  # only needed to support those cases.
+  # Note that you must use the environment variable %PYTHON% to refer to
+  # the interpreter you're using - Appveyor does not do anything special
+  # to put the Python evrsion you want to use on PATH.
+  - "echo Skipped Tests"
+
+after_test:
+  # This step builds your wheels.
+  # Again, you only need build.cmd if you're building C extensions for
+  # 64-bit Python 3.3/3.4. And you need to use %PYTHON% to get the correct
+  # interpreter
+  - "%PYTHON%\\python.exe tools\\build.py --appveyor"
+
+artifacts:
+  - path: TCV-*.zip
+
+deploy:
+  - provider: GitHub
+    release: TCV-latestcommit
+    skip_tags: true
+    Force update: true
+    description: 'automatic build from master branch'
+    auth_token:
+      secure: UcoHc3nVwi+4feNv3QuMZy2qgZmTVElAD9iMr9UxcEUTA0PP2beWDMuiNhBoNYeA
+    artifact: TCV-snapshot.zip                # upload all NuGet packages to release assets
+    draft: false
+    prerelease: false
+    on:
+      branch: master                 # release from master branch only
