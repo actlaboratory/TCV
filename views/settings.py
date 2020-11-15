@@ -184,6 +184,7 @@ class settingsDialog(BaseDialog):
 
 		# read
 		globalVars.app.config["speech"]["reader"] = list(self.readerSelection.keys())[self.reader.GetSelection()]
+		globalVars.app.InitSpeech()
 		globalVars.app.config["autoReadingOptions"]["readreceivedcomments"] = self.readreceivedcomments.GetValue()
 		globalVars.app.config["autoReadingOptions"]["receivedcommentsannouncement"] = self.receivedcommentsannouncement.GetValue()
 		globalVars.app.config["autoReadingOptions"]["readmycomment"] = self.readmycomment.GetValue()
