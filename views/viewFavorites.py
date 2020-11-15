@@ -21,33 +21,43 @@ class Dialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.favoritesList, self.favoritesStatic = self.creator.listCtrl(_("お気に入り"), None, wx.LC_LIST)
+		self.favoritesList, self.favoritesStatic = self.creator.listbox(_("お気に入り"))
 		self.favoritesList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
+		self.favoritesList.Bind(wx.EVT_LISTBOX, self.itemSelected)
 		for i in globalVars.app.Manager.favorites:
-			self.favoritesList.Append([i])
+			self.favoritesList.Append(i)
 		self.deleteButton = self.creator.button(_("削除"), self.delete)
 		self.clearButton = self.creator.button(_("全て削除"), self.clear)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
-		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
+		self.bOk=self.creator.okbutton(_("接続"),None)
+		self.bCancel=self.creator.cancelbutton(_("閉じる"),None)
+		self.itemSelected()
 
 	def GetData(self):
-		return self.favoritesList.GetFocusedItem()
+		return self.favoritesList.GetSelection()
 
 	def closeDialog(self, event):
 		self.wnd.EndModal(wx.ID_OK)
 
 	def delete(self, event):
-		dlg = simpleDialog.yesNoDialog(_("確認"), _("%sのライブをお気に入りから削除してもよろしいですか？") %(globalVars.app.Manager.favorites[self.favoritesList.GetFocusedItem()]))
+		dlg = simpleDialog.yesNoDialog(_("確認"), _("%sのライブをお気に入りから削除してもよろしいですか？") %(globalVars.app.Manager.favorites[self.favoritesList.GetSelection()]))
 		if dlg == wx.ID_NO:
 			return
-		globalVars.app.Manager.deleteFavorites(self.favoritesList.GetFocusedItem())
-		self.favoritesList.DeleteItem(self.favoritesList.GetFocusedItem())
+		globalVars.app.Manager.deleteFavorites(self.favoritesList.GetSelection())
+		self.favoritesList.Delete(self.favoritesList.GetSelection())
+		self.itemSelected()
 
 	def clear(self, event):
 		dlg = simpleDialog.yesNoDialog(_("確認"), _("お気に入りの内容を全て消去します。よろしいですか？"))
 		if dlg == wx.ID_NO:
 			return
 		globalVars.app.Manager.clearFavorites()
-		self.favoritesList.ClearAll()
+		self.favoritesList.Clear()
+		self.itemSelected()
+
+	def itemSelected(self, event=None):
+		status = self.favoritesList.GetSelection() != wx.NOT_FOUND
+		self.deleteButton.Enable(status)
+		self.bOk.Enable(status)
+		self.favoritesList.SetFocus()
