@@ -9,6 +9,9 @@ skip_tags: true
 environment:
   gitHubPassword:
     secure: s4pKVblYXP+c03qM8gH8tQ==
+  SCRIPT_PASSWORD:
+    secure: 9RvVUKVQ8MsoG5LOZ86VyFQF19JXXS33tDzomLH/jZM=
+
   matrix:
 
     # For Python versions available on Appveyor, see
@@ -20,10 +23,6 @@ environment:
 
 install:
   # We need wheel installed to build wheels
-  - cmd: git tag -d TCV-latestcommit
-  - cmd: git push -d https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/tcv.git TCV-latestcommit
-  - cmd: git tag TCV-latestcommit
-  - cmd: git push https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/tcv.git TCV-latestcommit
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 
 build: off
@@ -44,6 +43,12 @@ after_test:
   # 64-bit Python 3.3/3.4. And you need to use %PYTHON% to get the correct
   # interpreter
   - "%PYTHON%\\python.exe tools\\build.py --appveyor"
+  - cmd: curl "https://actlab.org/git-release.php?repo_name=%APPVEYOR_REPO_NAME%&tag_name=TCV-latestcommit&password=%SCRIPT_PASSWORD%"
+  - cmd: git tag -d TCV-latestcommit
+  - cmd: git push -d https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/tcv.git TCV-latestcommit
+  - cmd: git tag TCV-latestcommit
+  - cmd: git push https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/tcv.git TCV-latestcommit
+  
 
 artifacts:
   - path: TCV-*.zip
