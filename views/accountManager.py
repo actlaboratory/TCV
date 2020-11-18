@@ -2,9 +2,6 @@
 #アカウントマネージャ
 
 import wx
-import os
-import re
-import gettext
 from logging import getLogger
 
 from .baseDialog import *
