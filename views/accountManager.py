@@ -12,9 +12,8 @@ import datetime
 
 class Dialog(BaseDialog):
 
-	def __init__(self, config):
+	def __init__(self):
 		super().__init__("accountManagerDialog")
-		self.config=config
 
 	def Initialize(self):
 		self.log.debug("created")
