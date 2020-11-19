@@ -158,7 +158,7 @@ class Events(BaseEvents):
 			self.Exit()
 		#バージョン情報
 		elif selected==menuItemsStore.getRef("versionInfo"):
-			simpleDialog.dialog(_("バージョン情報"), _("%s Version %s.\nCopyright (C) %s %s") %(constants.APP_NAME, constants.APP_VERSION, constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
+			simpleDialog.dialog(_("バージョン情報"), _("%s(%s) Version %s.\nCopyright (C) %s %s") %(constants.APP_NAME, constants.APP_FULL_NAME,constants.APP_VERSION, constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
 		#接続
 		elif selected==menuItemsStore.getRef("connect"):
 			self.connect()
