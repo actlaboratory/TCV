@@ -30,6 +30,7 @@ import views.accountManager
 import views.changeDevice
 import views.settings
 import views.commentReplace
+import views.userNamereplace
 import webbrowser
 import constants
 
@@ -126,6 +127,7 @@ class Menu(BaseMenu):
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定(&S) ..."))
 		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定(&R)"))
+		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定(&N)"))
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
@@ -213,6 +215,9 @@ class Events(BaseEvents):
 		#コメント文字列置換設定
 		elif selected==menuItemsStore.getRef("commentReplace"):
 			self.commentReplace()
+		#表示名置換設定
+		elif selected==menuItemsStore.getRef("userNameReplace"):
+			self.userNameReplace()
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
 			self.accountManager()
@@ -348,3 +353,13 @@ class Events(BaseEvents):
 				globalVars.app.config["commentReplaceBasic"][i[0]] = i[1]
 			elif i[2] == _("正規表現"):
 				globalVars.app.config["commentReplaceReg"][i[0]] = i[1]
+
+	def userNameReplace(self):
+		userNameReplace = views.userNamereplace.Dialog()
+		userNameReplace.Initialize()
+		result = userNameReplace.Show()
+		if result == wx.ID_CANCEL:
+			return
+		globalVars.app.config.remove_section("nameReplace")
+		for i in userNameReplace.GetData():
+			globalVars.app.config["nameReplace"][i[0]] = i[1]

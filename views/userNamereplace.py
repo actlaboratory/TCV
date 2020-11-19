@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#コメント文字列置換設定
+#表示名置換設定
 
 import wx
 from logging import getLogger
@@ -8,24 +8,19 @@ from .baseDialog import *
 import globalVars
 import views.ViewCreator
 import simpleDialog
-import datetime
+
 class Dialog(BaseDialog):
 	def __init__(self):
-		super().__init__("commentReplace")
+		super().__init__("userNameReplace")
 		self.values = []
-		for i in dict(globalVars.app.config["commentReplaceBasic"]).items():
+		for i in dict(globalVars.app.config["nameReplace"]).items():
 			i = list(i)
-			i.append(_("標準"))
-			self.values.append(i)
-		for i in dict(globalVars.app.config["commentReplaceReg"]).items():
-			i = list(i)
-			i.append(_("正規表現"))
 			self.values.append(i)
 
 	def Initialize(self):
 		self.log.debug("created")
 		self.app=globalVars.app
-		super().Initialize(self.app.hMainView.hFrame,_("コメント文字列置換設定"))
+		super().Initialize(self.app.hMainView.hFrame,_("表示名置換設定"))
 		self.InstallControls()
 		return True
 
@@ -37,9 +32,8 @@ class Dialog(BaseDialog):
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl("",None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
-		self.hListCtrl.InsertColumn(0,_("置換元文字列"))
-		self.hListCtrl.InsertColumn(1,_("置換先文字列"))
-		self.hListCtrl.InsertColumn(2,_("種別"))
+		self.hListCtrl.InsertColumn(0,_("ユーザ名"))
+		self.hListCtrl.InsertColumn(1,_("表示名"))
 		for i in self.values:
 			self.hListCtrl.Append(i)
 
@@ -76,7 +70,7 @@ class Dialog(BaseDialog):
 		if d.Show() == wx.ID_CANCEL:
 			return
 		self.values[idx] = d.GetData()
-		for i in range(3):
+		for i in range(2):
 			self.hListCtrl.SetItem(idx, i, d.GetData()[i])
 			self.hListCtrl.SetFocus()
 
@@ -108,15 +102,12 @@ class Dialog_sub(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.baseStr, static = self.creator.inputbox(_("置換元文字列"))
+		self.userName, static = self.creator.inputbox(_("ユーザ名"))
 		if self.mode == 1:
-			self.baseStr.SetValue(self.value[0])
-		self.newStr, static = self.creator.inputbox(_("置換先文字列"))
+			self.userName.SetValue(self.value[0])
+		self.displayName, static = self.creator.inputbox(_("表示名"))
 		if self.mode == 1:
-			self.newStr.SetValue(self.value[1])
-		self.type, static = self.creator.combobox(_("種別"), [_("標準"), _("正規表現")], state=0)
-		if self.mode == 1:
-			self.type.SetValue(self.value[2])
+			self.displayName.SetValue(self.value[1])
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"), self.onOkBtn)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
@@ -126,8 +117,7 @@ class Dialog_sub(BaseDialog):
 
 	def onOkBtn(self, event):
 		self.value = [
-			self.baseStr.GetValue(),
-			self.newStr.GetValue(),
-			self.type.GetValue()
+			self.userName.GetValue(),
+			self.displayName.GetValue()
 		]
 		self.Destroy()
