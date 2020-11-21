@@ -13,6 +13,7 @@ import simpleDialog
 import wx
 import base64
 import copy
+import views.accountManager
 
 class AccountManager:
 	def __init__(self):
@@ -45,15 +46,18 @@ class AccountManager:
 	def add(self):
 		manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
 		webbrowser.open(manager.getUrl())
+		d = views.accountManager.waitingDialog()
+		d.Initialize()
+		d.Show(False)
 		while True:
 			time.sleep(0.01)
 			wx.YieldIfNeeded()
-			if manager.getToken() == "":
-				simpleDialog.errorDialog(_("アカウントの追加に失敗しました。"))
-				return
 			if manager.getToken():
 				self.tokens.append(manager.getToken())
 				break
+			if d.canceled == 1 or manager.getToken() == "":
+				simpleDialog.dialog(_("処理結果"), _("キャンセルされました。"))
+				return
 		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
 		self.tokens[-1]["default"] = False
 		self.verifyCredentials(-1)
