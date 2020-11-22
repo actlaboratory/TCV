@@ -331,6 +331,8 @@ class manager:
 		favoritesData.write_text("\n".join(self.favorites))
 
 	def sayRemainingTime(self):
+		if globalVars.app.config.getboolean("fx", "playTimersound") == True:
+			self.playFx(globalVars.app.config["fx"]["timerSound"])
 		remainingTime = self.formatTime(self.remainingTime % 1800)
 		if remainingTime.minute == 0:
 			string = _("残り%s秒です。") %(str(remainingTime.second))

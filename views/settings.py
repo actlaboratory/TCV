@@ -109,6 +109,9 @@ class settingsDialog(BaseDialog):
 		self.playtypingsound = creator.checkbox(_("コメント入力中のユーザーがいたらサウンドを再生(&T)"))
 		self.typingsound, static = creator.inputbox(_("コメント入力中のユーザがいた際のサウンド(&T)"))
 		self.typingsoundBrowse = creator.button(_("参照"), self.browse)
+		self.playtimersound = creator.checkbox(_("残り時間の通知時にサウンドを再生(&T)"))
+		self.timersound, static = creator.inputbox(_("残り時間通知時のサウンド(&T)"))
+		self.timersoundBrowse = creator.button(_("参照"), self.browse)
 		self.playstartupsound = creator.checkbox(_("TCVの起動時にサウンドを再生(&S)"))
 		self.startupsound, static = creator.inputbox(_("TCV起動時のサウンド(&S)"))
 		self.startupsoundBrowse = creator.button(_("参照"), self.browse)
@@ -165,6 +168,8 @@ class settingsDialog(BaseDialog):
 		self.commentpostedsound.SetValue(globalVars.app.config["fx"]["commentpostedsound"])
 		self.playtypingsound.SetValue(globalVars.app.config.getboolean("fx", "playtypingsound"))
 		self.typingsound.SetValue(globalVars.app.config["fx"]["typingsound"])
+		self.playtimersound.SetValue(globalVars.app.config.getboolean("fx", "playtimersound"))
+		self.timersound.SetValue(globalVars.app.config["fx"]["timersound"])
 		self.playstartupsound.SetValue(globalVars.app.config.getboolean("fx", "playstartupsound"))
 		self.startupsound.SetValue(globalVars.app.config["fx"]["startupsound"])
 
@@ -215,6 +220,8 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["fx"]["commentpostedsound"] = self.commentpostedsound.GetValue()
 		globalVars.app.config["fx"]["playtypingsound"] = self.playtypingsound.GetValue()
 		globalVars.app.config["fx"]["typingsound"] = self.typingsound.GetValue()
+		globalVars.app.config["fx"]["playtimersound"] = self.playtimersound.GetValue()
+		globalVars.app.config["fx"]["timersound"] = self.timersound.GetValue()
 		globalVars.app.config["fx"]["playstartupsound"] = self.playstartupsound.GetValue()
 		globalVars.app.config["fx"]["startupsound"] = self.startupsound.GetValue()
 
@@ -235,6 +242,8 @@ class settingsDialog(BaseDialog):
 			target = self.commentpostedsound
 		elif obj == self.typingsoundBrowse:
 			target = self.typingsound
+		elif obj == self.timersoundBrowse:
+			target = self.timersound
 		elif obj == self.startupsoundBrowse:
 			target = self.startupsound
 		dialog = wx.FileDialog(self.wnd, _("効果音ファイルを選択"), wildcard="WAVE files (*.wav)|*.wav", style=wx.FD_OPEN)
@@ -247,7 +256,6 @@ class settingsDialog(BaseDialog):
 		result = self.save()
 		if result == False:
 			return
-		simpleDialog.dialog(_("設定完了"), _("設定を保存しました。一部の設定は再起動後から有効になります。"))
 		self.Destroy()
 
 	def cancel(self, event):
