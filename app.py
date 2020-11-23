@@ -21,6 +21,10 @@ class Main(AppBase.MainBase):
 		self.hMainView.Show()
 		self.accountManager = twitcasting.accountManager.AccountManager()
 		self.Manager = manager.manager(self.hMainView)
+		# begin of test code
+		import os
+		simpleDialog.debugDialog("cwd:%s\nsys.executable:%s\n__file__:%s\nabspath:%s" %(os.getcwd(), sys.executable, __file__, os.path.abspath(__file__)))
+		# end of test code
 		if len(self.accountManager.tokens) == 0:
 			simpleDialog.dialog("", _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			return True
@@ -30,10 +34,6 @@ class Main(AppBase.MainBase):
 				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 		if len(sys.argv) == 2:
 			self.Manager.connect(sys.argv[1])
-		# begin of test code
-		import os
-		simpleDialog.debugDialog("cwd:%s\nsys.executable:%s\n__file__:%s\nabspath:%s" %(os.getcwd(), sys.executable, __file__, os.path.abspath(__file__)))
-		# end of test code
 		return True
 
 	def OnExit(self):
