@@ -9,10 +9,6 @@ import twitcasting.accountManager
 import simpleDialog
 import datetime
 
-# begin of test code
-import os
-simpleDialog.simpleDialog("", "cwd:%s\nsys.executable:%s\n__file__:%s\nabspath:%s" %(os.getcwd(), sys.executable, __file__, os.path.abspath(__file__)))
-# end of test code
 class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
