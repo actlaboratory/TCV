@@ -30,6 +30,10 @@ class Main(AppBase.MainBase):
 				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 		if len(sys.argv) == 2:
 			self.Manager.connect(sys.argv[1])
+		# begin of test code
+		import os
+		simpleDialog.debugDialog("cwd:%s\nsys.executable:%s\n__file__:%s\nabspath:%s" %(os.getcwd(), sys.executable, __file__, os.path.abspath(__file__)))
+		# end of test code
 		return True
 
 	def OnExit(self):
