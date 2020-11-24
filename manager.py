@@ -455,6 +455,7 @@ class manager:
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
 		elif id == evtPlaystatus:
+			globalVars.app.say(str(self.livePlayer.getStatus()))
 			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING | self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
 
@@ -468,9 +469,7 @@ class manager:
 			if self.connection.movieInfo["movie"]["hls_url"] == None:
 				simpleDialog.errorDialog(_("再生URLを取得できません。"))
 				return
-			print(self.connection.movieInfo["movie"]["hls_url"])
 			setSource = self.livePlayer.setSource(self.connection.movieInfo["movie"]["hls_url"])
-			print(setSource)
 			if setSource == False:
 				simpleDialog.errorDialog(_("再生に失敗しました。"))
 				return
