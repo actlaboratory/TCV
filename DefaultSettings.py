@@ -69,6 +69,8 @@ class DefaultSettings:
 			"commentPostedSound": "fx\\comsend.wav",
 			"playTypingSound": True,
 			"typingSound": "fx\\typing.wav",
+			"playTimerSound": True,
+			"timerSound": "fx\\time.wav",
 			"playStartupSound": False,
 			"startupSound": "fx\\info.wav",
 			"syncAudioDevice": False,

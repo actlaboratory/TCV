@@ -29,6 +29,8 @@ import views.viewFavorites
 import views.accountManager
 import views.changeDevice
 import views.settings
+import views.commentReplace
+import views.userNamereplace
 import webbrowser
 import constants
 
@@ -124,6 +126,8 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定(&S) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定(&R)"))
+		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定(&N)"))
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
@@ -154,7 +158,7 @@ class Events(BaseEvents):
 			self.Exit()
 		#バージョン情報
 		elif selected==menuItemsStore.getRef("versionInfo"):
-			simpleDialog.dialog(_("バージョン情報"), _("%(appName)s Version %(versionNumber)s.\nCopyright (C) %(year)s %(developerName)s") %{"appName": constants.APP_NAME, "versionNumber": constants.APP_VERSION, "year":constants.APP_COPYRIGHT_YEAR, "developerName": constants.APP_DEVELOPERS})
+			simpleDialog.dialog(_("バージョン情報"), _("%s(%s) Version %s.\nCopyright (C) %s %s") %(constants.APP_NAME, constants.APP_FULL_NAME,constants.APP_VERSION, constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
 		#接続
 		elif selected==menuItemsStore.getRef("connect"):
 			self.connect()
@@ -208,6 +212,12 @@ class Events(BaseEvents):
 		#設定
 		elif selected==menuItemsStore.getRef("settings"):
 			self.settings()
+		#コメント文字列置換設定
+		elif selected==menuItemsStore.getRef("commentReplace"):
+			self.commentReplace()
+		#表示名置換設定
+		elif selected==menuItemsStore.getRef("userNameReplace"):
+			self.userNameReplace()
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
 			self.accountManager()
@@ -321,7 +331,7 @@ class Events(BaseEvents):
 		return
 
 	def accountManager(self, event=None):
-		accountManager = views.accountManager.Dialog([])
+		accountManager = views.accountManager.Dialog()
 		accountManager.Initialize()
 		accountManager.Show()
 
@@ -329,3 +339,27 @@ class Events(BaseEvents):
 		settings = views.settings.settingsDialog()
 		settings.Initialize()
 		settings.Show()
+
+	def commentReplace(self):
+		commentReplace = views.commentReplace.Dialog()
+		commentReplace.Initialize()
+		result = commentReplace.Show()
+		if result == wx.ID_CANCEL:
+			return
+		globalVars.app.config.remove_section("commentReplaceBasic")
+		globalVars.app.config.remove_section("commentReplaceReg")
+		for i in commentReplace.GetValue():
+			if i[2] == _("標準"):
+				globalVars.app.config["commentReplaceBasic"][i[0]] = i[1]
+			elif i[2] == _("正規表現"):
+				globalVars.app.config["commentReplaceReg"][i[0]] = i[1]
+
+	def userNameReplace(self):
+		userNameReplace = views.userNamereplace.Dialog()
+		userNameReplace.Initialize()
+		result = userNameReplace.Show()
+		if result == wx.ID_CANCEL:
+			return
+		globalVars.app.config.remove_section("nameReplace")
+		for i in userNameReplace.GetData():
+			globalVars.app.config["nameReplace"][i[0]] = i[1]

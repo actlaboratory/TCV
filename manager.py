@@ -207,11 +207,11 @@ class manager:
 		if self.connection.hasMovieId == False:
 			return
 		result = [
-			_("タイトル：%(title)s") %{"title": self.connection.movieInfo["movie"]["title"]},
-			_("テロップ：%(subtitle)s") %{"subtitle": self.connection.movieInfo["movie"]["subtitle"]},
-			_("閲覧：現在%(current)d人、合計%(total)d人") %{"current": self.connection.movieInfo["movie"]["current_view_count"], "total": self.connection.movieInfo["movie"]["total_view_count"]},
-			_("カテゴリ：%(category)s") %{"category": self.connection.categoryName},
-			_("コメント数：%(number)d") %{"number": self.connection.movieInfo["movie"]["comment_count"]},
+			_("タイトル：%s") %(self.connection.movieInfo["movie"]["title"]),
+			_("テロップ：%s") %(self.connection.movieInfo["movie"]["subtitle"]),
+			_("閲覧：現在%d人、合計%d人") %(self.connection.movieInfo["movie"]["current_view_count"], self.connection.movieInfo["movie"]["total_view_count"]),
+			_("カテゴリ：%s") %(self.connection.categoryName),
+			_("コメント数：%d") %(self.connection.movieInfo["movie"]["comment_count"]),
 			self.connection.movieInfo["broadcaster"]["screen_id"]
 		]
 		if self.connection.movieInfo["movie"]["is_live"] == True:
@@ -219,7 +219,7 @@ class manager:
 		else:
 			result.insert(0, _("オフライン"))
 		try:
-			result.insert(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+			result.insert(1, _("経過時間：%s、残り時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
 		except:
 			result.insert(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		if self.connection.movieInfo["movie"]["is_collabo"] == True:
@@ -260,7 +260,7 @@ class manager:
 				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
 				return False
 			else:
-				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%(detail)s") %{"detail": str(result)})
+				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%s") %(str(result)))
 				return False
 		else:
 			if globalVars.app.config.getboolean("fx", "playCommentPostedSound", True) == True:
@@ -331,6 +331,8 @@ class manager:
 		favoritesData.write_text("\n".join(self.favorites))
 
 	def sayRemainingTime(self):
+		if globalVars.app.config.getboolean("fx", "playTimersound") == True:
+			self.playFx(globalVars.app.config["fx"]["timerSound"])
 		remainingTime = self.formatTime(self.remainingTime % 1800)
 		if remainingTime.minute == 0:
 			string = _("残り%s秒です。") %(str(remainingTime.second))
@@ -381,7 +383,7 @@ class manager:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
 				if self.newCoins % 5 == 0:
-					globalVars.app.say(_("コイン%(coins)d枚") %{"coins": self.newCoins})
+					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
@@ -442,7 +444,7 @@ class manager:
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
-				self.MainView.liveInfo.SetString(1, _("経過時間：%(elapsedTime)s、残り時間：%(remainingTime)s") %{"elapsedTime": self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), "remainingTime": self.formatTime(self.remainingTime).strftime("%H:%M:%S")})
+				self.MainView.liveInfo.SetString(1, _("経過時間：%s、残り時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		elif id == evtTyping:
@@ -453,7 +455,8 @@ class manager:
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
 		elif id == evtPlaystatus:
-			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING:
+			globalVars.app.say(str(self.livePlayer.getStatus()))
+			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING | self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
 
 	def play(self):

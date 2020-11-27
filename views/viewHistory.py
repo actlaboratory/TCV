@@ -21,18 +21,20 @@ class Dialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.historyList, self.historyStatic = self.creator.listCtrl(_("接続履歴"), None, wx.LC_LIST)
+		self.historyList, self.historyStatic = self.creator.listbox(_("接続履歴"))
 		self.historyList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
+		self.historyList.Bind(wx.EVT_LISTBOX, self.itemSelected)
 		for i in globalVars.app.Manager.history:
-			self.historyList.Append([i])
+			self.historyList.Append(i)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
-		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
+		self.bOk=self.creator.okbutton(_("接続"),None)
+		self.bCancel=self.creator.cancelbutton(_("閉じる"),None)
 		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory)
+		self.itemSelected()
 
 	def GetData(self):
-		return self.historyList.GetFocusedItem()
+		return self.historyList.GetSelection()
 
 	def closeDialog(self, event):
 		self.wnd.EndModal(wx.ID_OK)
@@ -42,4 +44,9 @@ class Dialog(BaseDialog):
 		if dlg == wx.ID_NO:
 			return
 		globalVars.app.Manager.clearHistory()
-		self.historyList.ClearAll()
+		self.historyList.Clear()
+		self.itemSelected()
+
+	def itemSelected(self, event=None):
+		self.bOk.Enable(self.historyList.GetSelection() != wx.NOT_FOUND)
+		self.historyList.SetFocus()

@@ -2,9 +2,6 @@
 #アカウントマネージャ
 
 import wx
-import os
-import re
-import gettext
 from logging import getLogger
 
 from .baseDialog import *
@@ -15,9 +12,8 @@ import datetime
 
 class Dialog(BaseDialog):
 
-	def __init__(self, config):
+	def __init__(self):
 		super().__init__("accountManagerDialog")
-		self.config=config
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -86,6 +82,7 @@ class Dialog(BaseDialog):
 			return
 		globalVars.app.accountManager.add()
 		self.refreshList()
+		self.hListCtrl.SetFocus()
 
 	def setDefault(self, event):
 		idx = self.hListCtrl.GetFocusedItem()
@@ -111,3 +108,23 @@ class Dialog(BaseDialog):
 	def OnClose(self, event):
 		self.close()
 
+class waitingDialog(BaseDialog):
+	def __init__(self):
+		self.canceled = 0
+		super().__init__("waitingDialog")
+
+	def Initialize(self):
+		self.log.debug("created")
+		super().Initialize(self.app.hMainView.hFrame,_("接続"))
+		self.InstallControls()
+		return True
+
+	def InstallControls(self):
+		"""いろんなwidgetを設置する。"""
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
+		self.staticText = self.creator.staticText(_("ブラウザでの操作をを待っています..."))
+		self.bCancel=self.creator.cancelbutton(_("キャンセル"), self.onCancelBtn)
+
+	def onCancelBtn(self, event):
+		self.canceled = 1
+		event.Skip()
