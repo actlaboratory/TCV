@@ -26,7 +26,7 @@ class DefaultSettings:
 			"sizeY": "600",
 		}
 		config["speech"] = {
-			"reader": "AUTO",
+			"reader": "SAPI5",
 		}
 		config["autoReadingOptions"]={
 			"readReceivedComments": True,
