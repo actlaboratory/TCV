@@ -68,6 +68,7 @@ class settingsDialog(BaseDialog):
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("履歴保持件数(&H)"), -1, 50)
 		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先(&D)"))
+		self.openlivewindow = creator.checkbox(_("接続時にライブをブラウザで開く"))
 
 		# reading
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("読み上げ"))
@@ -136,6 +137,7 @@ class settingsDialog(BaseDialog):
 		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
 		self.historymax.SetValue(globalVars.app.config["general"]["historymax"])
 		self.defaultconnectaccount.SetValue(globalVars.app.config["general"]["defaultconnectaccount"])
+		self.openlivewindow.SetValue(globalVars.app.config.getboolean("general", "openlivewindow"))
 
 		# read
 		self.reader.SetValue(self.readerSelection[globalVars.app.config["speech"]["reader"]])
@@ -188,6 +190,7 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
 		globalVars.app.config["general"]["historymax"] = self.historymax.GetValue()
 		globalVars.app.config["general"]["defaultconnectaccount"] = self.defaultconnectaccount.GetValue()
+		globalVars.app.config["general"]["openlivewindow"] = self.openlivewindow.GetValue()
 
 		# read
 		globalVars.app.config["speech"]["reader"] = list(self.readerSelection.keys())[self.reader.GetSelection()]

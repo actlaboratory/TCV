@@ -15,7 +15,8 @@ class DefaultSettings:
 			"commentToSns": 0,
 			"timerType": 0,
 			"historyMax": 10,
-			"defaultConnectAccount": ""
+			"defaultConnectAccount": "",
+			"openLivewindow": False
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",

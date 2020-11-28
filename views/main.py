@@ -212,7 +212,7 @@ class Events(BaseEvents):
 			viewBroadcasterDialog.Show()
 		#ブラウザで開く
 		elif selected==menuItemsStore.getRef("openLive"):
-			webbrowser.open("http://twitcasting.tv/" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"])
+			globalVars.app.Manager.openLiveWindow()
 		#設定
 		elif selected==menuItemsStore.getRef("settings"):
 			self.settings()

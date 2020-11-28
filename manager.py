@@ -14,6 +14,7 @@ import soundPlayer.player
 from soundPlayer.constants import *
 import soundPlayer.fxPlayer
 import pyperclip
+import webbrowser
 
 evtComment = 0
 evtLiveInfo = 1
@@ -125,6 +126,8 @@ class manager:
 		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		if globalVars.app.config.getboolean("livePlay", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
+		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
+			self.openLiveWindow()
 
 	def disconnect(self):
 		if self.livePlayer != None:
@@ -584,3 +587,6 @@ class manager:
 			}
 		for key, value in menuItems.items():
 			self.MainView.menu.EnableMenu(key, value)
+
+	def openLiveWindow(self):
+		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
