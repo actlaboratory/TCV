@@ -13,6 +13,7 @@ import constants
 import soundPlayer.player
 from soundPlayer.constants import *
 import soundPlayer.fxPlayer
+import pyperclip
 
 evtComment = 0
 evtLiveInfo = 1
@@ -138,30 +139,7 @@ class manager:
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
-			commentData = {
-				"dispname": commentObject["from_user"]["name"],
-				"message": commentObject["message"],
-				"time": datetime.datetime.fromtimestamp(commentObject["created"]).strftime("%H:%M:%S"),
-				"user": commentObject["from_user"]["screen_id"]
-			}
-			for i in self.nameReplaceList:
-				if i[0] == commentData["user"]:
-					commentData["dispname"] = i[1]
-			for i in globalVars.app.config.items("commentReplaceBasic"):
-				commentData["message"] = commentData["message"].replace(i[0], i[1])
-			for i in globalVars.app.config.items("commentReplaceReg"):
-				commentData["message"] = re.sub(i[0], i[1], commentData["message"])
-			urls = list(commentObject["urls"])
-			domains = re.finditer("(https?://[^/]+/)", commentData["message"])
-			for url in urls:
-				for domain in domains:
-					if len(globalVars.app.config["commentReplaceSpecial"]["url"]) != 0:
-						commentData["message"] = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], commentData["message"])
-					if globalVars.app.config.getboolean("commentReplaceSpecial", "deleteProtcolName", False) == True:
-						commentData["message"] = commentData["message"].replace("http://", "")
-						commentData["message"] = commentData["message"].replace("https://", "")
-					if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
-						commentData["message"] = commentData["message"].replace(url.group(), domain.group())
+			commentData = self.getCommentdata(commentObject)
 			self.MainView.commentList.InsertItem(0	, "")
 			self.MainView.commentList.SetItem(0, 0, commentData["dispname"])
 			self.MainView.commentList.SetItem(0, 1, commentData["message"])
@@ -195,12 +173,41 @@ class manager:
 		if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True and mode == update and len(commentList) != 0:
 			self.playFx(globalVars.app.config["fx"]["commentReceivedSound"])
 
-	def readComment(self, commentData):
+	def getCommentdata(self, commentObject):
+		commentData = {
+			"dispname": commentObject["from_user"]["name"],
+			"message": commentObject["message"],
+			"time": datetime.datetime.fromtimestamp(commentObject["created"]).strftime("%H:%M:%S"),
+			"user": commentObject["from_user"]["screen_id"]
+		}
+		for i in self.nameReplaceList:
+			if i[0] == commentData["user"]:
+				commentData["dispname"] = i[1]
+		for i in globalVars.app.config.items("commentReplaceBasic"):
+			commentData["message"] = commentData["message"].replace(i[0], i[1])
+		for i in globalVars.app.config.items("commentReplaceReg"):
+			commentData["message"] = re.sub(i[0], i[1], commentData["message"])
+		urls = list(commentObject["urls"])
+		domains = re.finditer("(https?://[^/]+/)", commentData["message"])
+		for url in urls:
+			for domain in domains:
+				if len(globalVars.app.config["commentReplaceSpecial"]["url"]) != 0:
+					commentData["message"] = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], commentData["message"])
+				if globalVars.app.config.getboolean("commentReplaceSpecial", "deleteProtcolName", False) == True:
+					commentData["message"] = commentData["message"].replace("http://", "")
+					commentData["message"] = commentData["message"].replace("https://", "")
+				if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
+					commentData["message"] = commentData["message"].replace(url.group(), domain.group())
+		return commentData
+
+	def readComment(self, commentData, speech = True):
 		announceText = globalVars.app.config["autoReadingOptions"]["receivedCommentsAnnouncement"]
 		announceText = announceText.replace("$dispname", commentData["dispname"])
 		announceText = announceText.replace("$message", commentData["message"])
 		announceText = announceText.replace("$time", commentData["time"])
 		announceText = announceText.replace("$user", commentData["user"])
+		if speech == False:
+			return announceText
 		globalVars.app.say(announceText)
 
 	def createLiveInfoList(self, mode):
@@ -279,6 +286,10 @@ class manager:
 		else:
 			del self.connection.comments[selected]
 			self.MainView.commentList.DeleteItem(selected)
+
+	def copyComment(self):
+		selected = self.MainView.commentList.GetFocusedItem()
+		pyperclip.copy(self.readComment(self.getCommentdata(self.connection.comments[selected]), False))
 
 	def resetTimer(self, speech = False):
 		if speech == True:

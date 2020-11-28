@@ -22,6 +22,7 @@ defaultKeymap["mainView"]={
 }
 
 defaultKeymap["commentList"]={
+	"copyComment": "CTRL+C",
 	"viewComment": "Alt+RETURN",
 	"replyToSelectedComment": "ctrl+r",
 	"deleteSelectedComment": "DELETE",

@@ -116,6 +116,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hPlayMenu,"resetVolume",_("音量を１００％に設定(&R)"))
 		self.RegisterMenuCommand(self.hPlayMenu,"changeDevice",_("再生デバイスを変更(&C)"))
 		#コメントメニュー
+		self.RegisterMenuCommand(self.hCommentMenu, "copyComment", _("選択中のコメントをコピー(&C)"))
 		self.RegisterMenuCommand(self.hCommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
 		self.RegisterMenuCommand(self.hCommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
 		self.RegisterMenuCommand(self.hCommentMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
@@ -171,6 +172,9 @@ class Events(BaseEvents):
 		#お気に入り
 		elif selected==menuItemsStore.getRef("viewFavorites"):
 			self.viewFavorites()
+		#コメントのコピー
+		elif selected == menuItemsStore.getRef("copyComment"):
+			globalVars.app.Manager.copyComment()
 		#コメントの詳細を表示
 		elif selected==menuItemsStore.getRef("viewComment"):
 			viewCommentDialog = views.viewComment.Dialog(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()])
