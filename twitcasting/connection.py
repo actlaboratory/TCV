@@ -20,7 +20,7 @@ class connection:
 		offset = max(0, number-50)
 		limit = min(50, number)
 		result = GetComments(self.movieId, offset, limit)
-		if len(result) == 0 or ("error" in result.keys() and result["error"]["code"] == 500):
+		if len(result) == 0 or (type(result) == dict and "error" in result.keys() and result["error"]["code"] == 500):
 			self.lastCommentId = ""
 			return []
 		else:

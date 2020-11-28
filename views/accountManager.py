@@ -30,6 +30,10 @@ class Dialog(BaseDialog):
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl(_("アカウント"),None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
+		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
+		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
+		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
+		self.hListCtrl.InsertColumn(3,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
 		self.refreshList()
 
 		#処理ボタン
@@ -39,6 +43,10 @@ class Dialog(BaseDialog):
 		self.setDefaultButton.Enable(False)
 		self.deleteButton=self.creator.button(_("削除"),self.delete)
 		self.deleteButton.Enable(False)
+		self.moveDownButton = self.creator.button(_("下へ(&D)"), self.move)
+		self.moveDownButton.Enable(False)
+		self.moveUpButton = self.creator.button(_("上へ(&U)"), self.move)
+		self.moveUpButton.Enable(False)
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
@@ -47,10 +55,6 @@ class Dialog(BaseDialog):
 	def refreshList(self):
 		cursor = self.hListCtrl.GetFocusedItem()
 		self.hListCtrl.DeleteAllItems()
-		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
-		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(3,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
 		for i in globalVars.app.accountManager.tokens:
 			if i["default"] == True:
 				state = _("通信用アカウントとして設定済み")
@@ -71,6 +75,8 @@ class Dialog(BaseDialog):
 	def ItemSelected(self,event):
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
 		self.setDefaultButton.Enable(self.hListCtrl.GetFocusedItem()>=0 and globalVars.app.accountManager.isDefault(self.hListCtrl.GetFocusedItem()) == False)
+		self.moveUpButton.Enable(self.hListCtrl.GetFocusedItem() >= 1)
+		self.moveDownButton.Enable(self.hListCtrl.GetFocusedItem() >= 0 and self.hListCtrl.GetFocusedItem() < self.hListCtrl.GetItemCount() - 1)
 
 	def GetValue(self):
 		return self.config
@@ -96,6 +102,19 @@ class Dialog(BaseDialog):
 		globalVars.app.accountManager.deleteAccount(idx)
 		self.setDefaultButton.Enable(False)
 		self.deleteButton.Enable(False)
+
+	def move(self, event):
+		button = event.GetEventObject()
+		focus = self.hListCtrl.GetFocusedItem()
+		if button == self.moveDownButton:
+			target = focus + 1
+		elif button == self.moveUpButton:
+			target = focus - 1
+		globalVars.app.accountManager.tokens[focus], globalVars.app.accountManager.tokens[target] = globalVars.app.accountManager.tokens[target], globalVars.app.accountManager.tokens[focus]
+		self.refreshList()
+		self.hListCtrl.Focus(target)
+		self.hListCtrl.Select(target)
+		globalVars.app.accountManager.saveAsFile()
 
 	def close(self, event = None):
 		result = globalVars.app.accountManager.hasDefaultAccount()
