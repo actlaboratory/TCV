@@ -232,9 +232,11 @@ class manager:
 		else:
 			result.insert(0, _("オフライン"))
 		try:
-			result.insert(1, _("経過時間：%s、残り時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
+			result.insert(1, _("経過時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S")))
+			result.insert(2, _("残り時間：%s") %(self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
 		except:
 			result.insert(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
+			result.insert(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		if self.connection.movieInfo["movie"]["is_collabo"] == True:
 			result.insert(-1, _("コラボ可能"))
 		else:
@@ -461,9 +463,11 @@ class manager:
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
-				self.MainView.liveInfo.SetString(1, _("経過時間：%s、残り時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S"), self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
+				self.MainView.liveInfo.SetString(1, _("経過時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S")))
+				self.MainView.liveInfo.SetString(2, _("残り時間：%s") %(self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
+				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		elif id == evtTyping:
 			typingUser = self.connection.getTypingUser()
 			if typingUser != "":
