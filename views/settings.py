@@ -124,6 +124,12 @@ class settingsDialog(BaseDialog):
 		self.onlydomain = creator.checkbox(_("ドメインのみ(&D)"))
 		self.url, static = creator.inputbox(_("URLを次の文字列に置き換える(&U)"))
 
+		# proxy
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("プロキシ設定"))
+		self.usemanualsetting = creator.checkbox(_("プロキシサーバーの情報を手動で設定する"))
+		self.server, static = creator.inputbox(_("サーバーURL"))
+		self.port, static = creator.spinCtrl(_("ポート番号"), 0, 65535, defaultValue=8080)
+
 		# buttons
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,style=wx.ALIGN_RIGHT)
 		self.okbtn = creator.okbutton("OK", self.ok)
@@ -182,6 +188,11 @@ class settingsDialog(BaseDialog):
 		self.onlydomain.SetValue(globalVars.app.config.getboolean("commentReplaceSpecial", "onlydomain"))
 		self.url.SetValue(globalVars.app.config["commentReplaceSpecial"]["url"])
 
+		# proxy
+		self.usemanualsetting.SetValue(globalVars.app.config.getboolean("proxy", "usemanualsetting"))
+		self.server.SetValue(globalVars.app.config["proxy"]["server"])
+		self.port.SetValue(globalVars.app.config["proxy"]["port"])
+
 	def save(self):
 		# general
 		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
@@ -235,6 +246,11 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["commentReplaceSpecial"]["deleteprotcolname"] = self.deleteprotcolname.GetValue()
 		globalVars.app.config["commentReplaceSpecial"]["onlydomain"] = self.onlydomain.GetValue()
 		globalVars.app.config["commentReplaceSpecial"]["url"] = self.url.GetValue()
+
+		# proxy
+		globalVars.app.config["proxy"]["usemanualsetting"] = self.usemanualsetting.GetValue()
+		globalVars.app.config["proxy"]["server"] = self.server.GetValue()
+		globalVars.app.config["proxy"]["port"] = self.port.GetValue()
 
 	def browse(self, event):
 		obj = event.GetEventObject()

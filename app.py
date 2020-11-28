@@ -8,6 +8,7 @@ import manager
 import twitcasting.accountManager
 import simpleDialog
 import datetime
+import proxyUtil
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -15,6 +16,11 @@ class Main(AppBase.MainBase):
 
 	def initialize(self):
 		"""アプリを初期化する。"""
+		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
+		if self.config.getboolean("proxy", "usemanualsetting", False) == True:
+			self.proxyEnviron.set_environ(self.config["proxy"]["server"], self.config.getint("proxy", "port", 8080, 0, 65535))
+		else:
+			self.proxyEnviron.set_environ()
 		self.hMainView=main.MainView()
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()

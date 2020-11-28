@@ -78,6 +78,11 @@ class DefaultSettings:
 			"syncAudioDevice": False,
 			"fxVolume": 100
 		}
+		config["proxy"] = {
+			"useManualSetting": False,
+			"server": "",
+			"port": 8080
+		}
 		return config
 
 initialValues={}
