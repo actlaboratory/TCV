@@ -61,6 +61,7 @@ class DefaultSettings:
 		config["fx"] = {
 			"playCommentReceivedSound": True,
 			"commentReceivedSound": "fx\\receive.wav",
+			"playCommentReceivedSoundIfSkipped": False,
 			"playViewersChangedSound": True,
 			"viewersChangedSound": "fx\\info.wav",
 			"playItemReceivedSound": True,

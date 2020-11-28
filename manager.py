@@ -153,6 +153,7 @@ class manager:
 					if globalVars.app.config.getboolean("autoReadingOptions", "readMyComment", True) == False:
 						for i in self.myAccount:
 							if commentObject["from_user"]["id"] == i["id"]:
+								self.playCommentReceivedSoundIfSkipped()
 								return
 					for i in self.myAccount:
 						if commentObject["from_user"]["id"] == i["id"]:
@@ -165,9 +166,11 @@ class manager:
 							if "@%s " %(i["screen_id"]) in commentData["message"]:
 								mentionMe = True
 						if mentionMe == False and "@" in commentObject["message"]:
+							self.playCommentReceivedSoundIfSkipped()
 							return
 					elif readMentions == 0:
 						if "@" in commentObject["message"]:
+							self.play()
 							return
 					self.readComment(commentData)
 		if globalVars.app.config.getboolean("fx", "playCommentReceivedSound", True) == True and mode == update and len(commentList) != 0:
@@ -539,6 +542,9 @@ class manager:
 			device = PLAYER_DEFAULT_SPEAKER
 		soundPlayer.fxPlayer.playFx(filePath, device, globalVars.app.config.getint("fx", "fxVolume", 100, 0, 100))
 
+	def playCommentReceivedSoundIfSkipped(self):
+		if globalVars.app.config.getboolean("fx", "playcommentreceivedsound", True) == True and globalVars.app.config.getboolean("fx", "playcommentreceivedsoundifskipped", False) == True:
+			self.playFx(globalVars.app.config["fx"]["commentreceivedsound"])
 	def changeMenuState(self, connectionState):
 		if connectionState == False:
 			menuItems = {
