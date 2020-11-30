@@ -7,9 +7,13 @@ import wx
 #アプリケーション基本情報
 APP_NAME="TCV"
 APP_FULL_NAME = "Twitcasting Viewer"
-APP_VERSION="0.01"
+APP_VERSION="0.0.1"
+APP_ICON = None
 APP_COPYRIGHT_YEAR="2020"
-APP_DEVELOPERS="Kazto Kitabatake"
+APP_DEVELOPERS="ACT Laboratory"
+APP_DEVELOPERS_URL="https://actlab.org/"
+APP_DETAILS_URL=""
+APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRIGHT_YEAR, APP_DEVELOPERS)
 
 #対応言語
 SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
