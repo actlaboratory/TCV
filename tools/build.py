@@ -42,11 +42,28 @@ if os.path.isdir(package_path):
 	shutil.rmtree("dist\\")
 	shutil.rmtree("build\\")
 
+print("making version info...")
+with open("tools/baseVersionInfo.txt", mode = "r") as f:
+	version_text = f.read()
+version_text = version_text.replace("%FILE_VERSION%", constants.APP_VERSION.replace(".", ","))
+version_text = version_text.replace("%PRODUCT_VERSION%", constants.APP_VERSION.replace(".", ","))
+version_text = version_text.replace("%COMPANY_NAME%", constants.APP_DEVELOPERS)
+version_text = version_text.replace("%FILE_DESCRIPTION%", constants.APP_FULL_NAME)
+version_text = version_text.replace("%FILE_VERSION_TEXT%", constants.APP_VERSION)
+version_text = version_text.replace("%REGAL_COPYRIGHT%", constants.APP_COPYRIGHT_MESSAGE)
+original_file_name = os.path.splitext(os.path.basename(constants.STARTUP_FILE))[0]+".exe"
+version_text = version_text.replace("%ORIGINAL_FILENAME%", original_file_name)
+version_text = version_text.replace("%PRODUCT_NAME%", constants.APP_NAME)
+version_text = version_text.replace("%PRODUCT_VERSION_TEXT%", constants.APP_VERSION)
+with open("version.txt", mode = "w") as f:
+	f.write(version_text)
 print("Building...")
 for hook in constants.NEED_HOOKS:
 	shutil.copy(hook, hooks_path)
-runcmd("%s --windowed --log-level=ERROR %s" % (pyinstaller_path, constants.STARTUP_FILE))
-
+if constants.APP_ICON == None:
+	runcmd("%s --windowed --log-level=ERROR --version-file=version.txt %s" % (pyinstaller_path, constants.STARTUP_FILE))
+else:
+	runcmd("%s --windowed --log-level=ERROR --version-file=version.txt --icon=%s %s" % (pyinstaller_path, constants.APP_ICON, constants.STARTUP_FILE))
 shutil.copytree("locale\\",os.path.join(package_path, "locale"), ignore=shutil.ignore_patterns("*.po", "*.pot", "*.po~"))
 for item in constants.PACKAGE_CONTAIN_ITEMS:
 	if os.path.isdir(item):
@@ -59,7 +76,8 @@ for elem in glob.glob("public\\*"):
 	else:
 		shutil.copytree(elem, os.path.join(package_path, os.path.basename(elem)))
 #end copypublic
-
+print("deleting temporary version file...")
+os.remove("version.txt")
 print("Compressing into package...")
 shutil.make_archive("%s-%s" % (constants.APP_NAME, build_filename),'zip','dist')
 
