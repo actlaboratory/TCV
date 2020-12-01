@@ -43,3 +43,8 @@ BASE_PACKAGE_URL = None#差分元のpackageのファイル名またはURL
 PACKAGE_CONTAIN_ITEMS = ("fx",)#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "tcv.py"#起動用ファイルを指定
+
+# update情報
+UPDATE_URL = "https://actlab.org/api/checkUpdate"
+UPDATER_VERSION = "1.0.0"
+UPDATER_WAKE_WORD = "hello"

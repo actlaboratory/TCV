@@ -16,8 +16,11 @@ class DefaultSettings:
 			"timerType": 0,
 			"historyMax": 10,
 			"defaultConnectAccount": "",
-			"openLivewindow": False
+			"openLivewindow": False,
+			"update": True,
+			"timeout": 3
 		}
+
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
 			"colorMode":"normal"
