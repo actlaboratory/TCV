@@ -9,6 +9,8 @@ import twitcasting.accountManager
 import simpleDialog
 import datetime
 import proxyUtil
+import globalVars
+import update
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -21,6 +23,10 @@ class Main(AppBase.MainBase):
 			self.proxyEnviron.set_environ(self.config["proxy"]["server"], self.config.getint("proxy", "port", 8080, 0, 65535))
 		else:
 			self.proxyEnviron.set_environ()
+		self.setGlobalVars()
+		# update関係を準備
+		if self.config.getboolean("general", "update"):
+			globalVars.update.update(True)
 		self.hMainView=main.MainView()
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
@@ -37,6 +43,10 @@ class Main(AppBase.MainBase):
 		if len(sys.argv) == 2:
 			self.Manager.connect(sys.argv[1])
 		return True
+
+	def setGlobalVars(self):
+		globalVars.update = update.update()
+		return
 
 	def OnExit(self):
 		#設定の保存やリソースの開放など、終了前に行いたい処理があれば記述できる
