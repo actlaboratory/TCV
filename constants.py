@@ -16,7 +16,7 @@ APP_DETAILS_URL=""
 APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRIGHT_YEAR, APP_DEVELOPERS)
 
 #対応言語
-SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
+SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 #各種ファイル名
 SETTING_FILE_NAME="settings.ini"
