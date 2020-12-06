@@ -132,7 +132,6 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
-		self.RegisterMenuCommand(self.hHelpMenu,"viewErrorLog",_("エラーログを開く（開発用）"))
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
