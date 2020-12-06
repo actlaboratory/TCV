@@ -127,8 +127,8 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定(&S) ..."))
-		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定(&R)"))
-		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定(&N)"))
+		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定(&R) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定(&N) ..."))
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
