@@ -119,7 +119,11 @@ class connection:
 def getCategoryName(id):
 	if id == None:
 		return _("カテゴリなし")
-	categories = GetCategories()
+	if globalVars.app.config["general"]["language"] == "ja-JP":
+		lang = "ja"
+	else:
+		lang = "en"
+	categories = GetCategories(lang)
 	for category in categories:
 		for subCategory in category["sub_categories"]:
 			if subCategory["id"] == id:

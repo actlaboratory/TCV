@@ -58,7 +58,7 @@ def DeleteComment(movie_id, comment_id):
 	return dict
 
 # Category
-def GetCategories(lang = "ja"):
+def GetCategories(lang):
 	result = requests.get(baseURL + "/categories?lang=" + lang, headers=makeHeader())
 	dict = result.json()
 	return dict["categories"]
