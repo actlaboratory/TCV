@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 20:00+0900\n"
-"PO-Revision-Date: 2020-12-08 20:11+0900\n"
+"POT-Creation-Date: 2020-12-08 20:17+0900\n"
+"PO-Revision-Date: 2020-12-08 20:18+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -911,7 +911,7 @@ msgid "TCV起動時のサウンド"
 msgstr "startup sound"
 
 #: views\settings.py:122
-msgid "URL表示設定"
+msgid "URL設定"
 msgstr "URL settings"
 
 #: views\settings.py:123
@@ -1034,6 +1034,9 @@ msgstr "clear history"
 #: views\viewHistory.py:43
 msgid "接続履歴を全て消去します。よろしいですか？"
 msgstr "History will be cleared. Are you sure?"
+
+#~ msgid "URL表示設定"
+#~ msgstr "URL settings"
 
 #~ msgid "接続(Ctrl+N)"
 #~ msgstr "connect(Ctrl+N)"
