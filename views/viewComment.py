@@ -30,7 +30,7 @@ class Dialog(BaseDialog):
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		for key, value in self.comment.items():
 			self.creator.inputbox(key, None, value, wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP, 500)
-		self.closeButton=self.creator.cancelbutton(_("閉じる(&C)"), None)
+		self.closeButton=self.creator.cancelbutton(_("閉じる") + "(&C)", None)
 
 	def GetData(self):
 		return self.iText.GetLineText(0)
