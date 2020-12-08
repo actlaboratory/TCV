@@ -119,7 +119,7 @@ class settingsDialog(BaseDialog):
 		self.startupsoundBrowse = creator.button(_("参照"), self.browse)
 
 		# url
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("URL表示設定"))
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("URL設定"))
 		self.deleteprotcolname = creator.checkbox(_("プロトコル名を削除") + "(&P)")
 		self.onlydomain = creator.checkbox(_("ドメインのみ") + "(&D)")
 		self.url, static = creator.inputbox(_("URLを次の文字列に置き換える") + "(&U)")
