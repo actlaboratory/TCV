@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-06 13:31+0900\n"
+"POT-Creation-Date: 2020-12-06 13:44+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -431,12 +431,12 @@ msgstr ""
 msgid "ＯＫ"
 msgstr ""
 
-#: views\commentReplace.py:18 views\commentReplace.py:117 views\main.py:356
+#: views\commentReplace.py:18 views\commentReplace.py:117 views\main.py:355
 #: views\settings.py:25
 msgid "標準"
 msgstr ""
 
-#: views\commentReplace.py:22 views\commentReplace.py:117 views\main.py:358
+#: views\commentReplace.py:22 views\commentReplace.py:117 views\main.py:357
 msgid "正規表現"
 msgstr ""
 
@@ -557,7 +557,7 @@ msgstr ""
 msgid "終了(&Q)"
 msgstr ""
 
-#: views\main.py:112 views\main.py:139
+#: views\main.py:112 views\main.py:138
 msgid "再生(&P)"
 msgstr ""
 
@@ -585,23 +585,23 @@ msgstr ""
 msgid "選択中のコメントをコピー(&C)"
 msgstr ""
 
-#: views\main.py:120 views\main.py:269
+#: views\main.py:120 views\main.py:268
 msgid "コメントの詳細を表示(&V) ..."
 msgstr ""
 
-#: views\main.py:121 views\main.py:267
+#: views\main.py:121 views\main.py:266
 msgid "選択中のコメントに返信(&R)"
 msgstr ""
 
-#: views\main.py:122 views\main.py:268
+#: views\main.py:122 views\main.py:267
 msgid "選択中のコメントを削除(&D)"
 msgstr ""
 
-#: views\main.py:123 views\main.py:284
+#: views\main.py:123 views\main.py:283
 msgid "配信者に返信(&B)"
 msgstr ""
 
-#: views\main.py:125 views\main.py:285
+#: views\main.py:125 views\main.py:284
 msgid "配信者の情報を表示(&B) ..."
 msgstr ""
 
@@ -609,7 +609,7 @@ msgstr ""
 msgid "このライブをブラウザで開く(&O)"
 msgstr ""
 
-#: views\main.py:127 views\main.py:286
+#: views\main.py:127 views\main.py:285
 msgid "お気に入りに追加(&A) ..."
 msgstr ""
 
@@ -633,64 +633,60 @@ msgstr ""
 msgid "バージョン情報(&V) ..."
 msgstr ""
 
-#: views\main.py:135
-msgid "エラーログを開く（開発用）"
-msgstr ""
-
-#: views\main.py:138
+#: views\main.py:137
 msgid "ファイル(&F)"
 msgstr ""
 
-#: views\main.py:140
+#: views\main.py:139
 msgid "コメント(&C)"
 msgstr ""
 
-#: views\main.py:141
+#: views\main.py:140
 msgid "ライブ(&L)"
 msgstr ""
 
-#: views\main.py:142
+#: views\main.py:141
 msgid "設定(&S)"
 msgstr ""
 
-#: views\main.py:143
+#: views\main.py:142
 msgid "ヘルプ(&H)"
 msgstr ""
 
-#: views\main.py:162
+#: views\main.py:161
 msgid "バージョン情報"
 msgstr ""
 
-#: views\main.py:162
+#: views\main.py:161
 #, python-format
 msgid ""
 "%s(%s) Version %s.\n"
 "Copyright (C) %s %s"
 msgstr ""
 
-#: views\main.py:195 views\main.py:204 views\viewFavorites.py:44
+#: views\main.py:194 views\main.py:203 views\viewFavorites.py:44
 #: views\viewFavorites.py:52 views\viewHistory.py:43
 msgid "確認"
 msgstr ""
 
-#: views\main.py:195
+#: views\main.py:194
 msgid "選択中のコメントを削除しますか？"
 msgstr ""
 
-#: views\main.py:202
+#: views\main.py:201
 msgid "すでに登録されています。"
 msgstr ""
 
-#: views\main.py:204
+#: views\main.py:203
 #, python-format
 msgid "%sのライブをお気に入りに追加しますか？"
 msgstr ""
 
-#: views\main.py:317
+#: views\main.py:316
 msgid "接続履歴がありません。"
 msgstr ""
 
-#: views\main.py:328
+#: views\main.py:327
 msgid "お気に入りライブが登録されていません。"
 msgstr ""
 
