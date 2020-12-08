@@ -50,9 +50,9 @@ class MainView(BaseView):
 		self.createStartScreen()
 
 	def createStartScreen(self):
-		self.connectButton = self.creator.button(_("接続(Ctrl+N)"), self.events.connect)
-		self.viewHistoryButton = self.creator.button(_("接続履歴を開く(ctrl+H)"), self.events.viewHistory)
-		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く(Ctrl+I)"), self.events.viewFavorites)
+		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect)
+		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory)
+		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites)
 		self.settingsButton = self.creator.button(_("設定"), self.events.settings)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
