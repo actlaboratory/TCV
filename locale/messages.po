@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 19:26+0900\n"
+"POT-Creation-Date: 2020-12-08 20:00+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -382,8 +382,8 @@ msgstr ""
 msgid "通信用アカウントが設定されていません。"
 msgstr ""
 
-#: views\accountManager.py:137 views\connect.py:16 views\main.py:106
-#: views\viewFavorites.py:33 views\viewHistory.py:31
+#: views\accountManager.py:137 views\connect.py:16 views\main.py:53
+#: views\main.py:106 views\viewFavorites.py:33 views\viewHistory.py:31
 msgid "接続"
 msgstr ""
 
@@ -478,16 +478,12 @@ msgstr ""
 msgid "原因不明のエラーにより、フォントの変更に失敗しました。"
 msgstr ""
 
-#: views\main.py:53
-msgid "接続(Ctrl+N)"
-msgstr ""
-
 #: views\main.py:54
-msgid "接続履歴を開く(ctrl+H)"
+msgid "接続履歴を開く"
 msgstr ""
 
 #: views\main.py:55
-msgid "お気に入り一覧を開く(Ctrl+I)"
+msgid "お気に入り一覧を開く"
 msgstr ""
 
 #: views\main.py:56 views\main.py:129 views\main.py:141 views\settings.py:51

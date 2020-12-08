@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 13:43+0900\n"
-"PO-Revision-Date: 2020-12-08 18:11+0900\n"
+"POT-Creation-Date: 2020-12-08 19:26+0900\n"
+"PO-Revision-Date: 2020-12-08 19:57+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.4.2\n"
 
 #: app.py:37 manager.py:68
@@ -82,11 +82,11 @@ msgstr "Timer started."
 #: manager.py:99 manager.py:236 manager.py:467
 #, python-format
 msgid "残り時間：%s"
-msgstr "remaining time:: %s"
+msgstr "remaining time: %s"
 
 #: manager.py:101 manager.py:238 manager.py:239 manager.py:469 manager.py:470
 msgid "配信時間が４時間を超えているため、タイマーを使用できません。"
-msgstr "Timer is not usable."
+msgstr "Timer is not usable because more than 4 hours elapsed."
 
 #: manager.py:104
 msgid "接続。現在オフライン。"
@@ -178,7 +178,7 @@ msgstr "You can continue this live by %d coins."
 
 #: manager.py:332
 msgid "30分が経過しました。"
-msgstr "30 minutes has passed."
+msgstr "30 minutes elapsed."
 
 #: manager.py:357
 #, python-format
@@ -251,7 +251,7 @@ msgstr "%s is typing"
 
 #: manager.py:491
 msgid "再生URLを取得できません。"
-msgstr "Faild to get playlist URL."
+msgstr "Faild to get playback URL."
 
 #: manager.py:495
 msgid "再生に失敗しました。"
@@ -283,7 +283,7 @@ msgstr "Updater is not available. Download this software again."
 
 #: update.py:53
 msgid "サーバーへの通信がタイムアウトしました。"
-msgstr "Connection timeout."
+msgstr "Connection timed out."
 
 #: update.py:58
 msgid "サーバーへの接続に失敗しました。インターネット接続などをご確認ください"

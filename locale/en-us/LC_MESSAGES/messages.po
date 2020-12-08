@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 19:26+0900\n"
-"PO-Revision-Date: 2020-12-08 19:57+0900\n"
+"POT-Creation-Date: 2020-12-08 20:00+0900\n"
+"PO-Revision-Date: 2020-12-08 20:11+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -387,8 +387,8 @@ msgstr "Open browser and start authentication. Are you sure?"
 msgid "通信用アカウントが設定されていません。"
 msgstr "Connection account is not configured."
 
-#: views\accountManager.py:137 views\connect.py:16 views\main.py:106
-#: views\viewFavorites.py:33 views\viewHistory.py:31
+#: views\accountManager.py:137 views\connect.py:16 views\main.py:53
+#: views\main.py:106 views\viewFavorites.py:33 views\viewHistory.py:31
 msgid "接続"
 msgstr "connect"
 
@@ -485,17 +485,13 @@ msgstr "Font configuration is invalid. Default settings will be applied."
 msgid "原因不明のエラーにより、フォントの変更に失敗しました。"
 msgstr "Font configuration has failed."
 
-#: views\main.py:53
-msgid "接続(Ctrl+N)"
-msgstr "connect(Ctrl+N)"
-
 #: views\main.py:54
-msgid "接続履歴を開く(ctrl+H)"
-msgstr "open history(Ctrl+H)"
+msgid "接続履歴を開く"
+msgstr "open history"
 
 #: views\main.py:55
-msgid "お気に入り一覧を開く(Ctrl+I)"
-msgstr "open favorites(Ctrl+I)"
+msgid "お気に入り一覧を開く"
+msgstr "open favorites"
 
 #: views\main.py:56 views\main.py:129 views\main.py:141 views\settings.py:51
 msgid "設定"
@@ -822,7 +818,7 @@ msgstr "read item posted user"
 
 #: views\settings.py:89
 msgid "ライブ再生"
-msgstr "live playing"
+msgstr "live playback"
 
 #: views\settings.py:90
 msgid "自動的に再生を開始する"
@@ -830,11 +826,11 @@ msgstr "automatically start playback"
 
 #: views\settings.py:91
 msgid "規定の音量"
-msgstr "devault volume"
+msgstr "default volume"
 
 #: views\settings.py:92
 msgid "ライブ再生の遅延時間"
-msgstr "delay time for live playing"
+msgstr "delay time for live playback"
 
 #: views\settings.py:95
 msgid "効果音"
@@ -928,7 +924,7 @@ msgstr "only domain"
 
 #: views\settings.py:125
 msgid "URLを次の文字列に置き換える"
-msgstr "replace"
+msgstr "replace to following string"
 
 #: views\settings.py:128
 msgid "プロキシ設定"
@@ -1038,6 +1034,9 @@ msgstr "clear history"
 #: views\viewHistory.py:43
 msgid "接続履歴を全て消去します。よろしいですか？"
 msgstr "History will be cleared. Are you sure?"
+
+#~ msgid "接続(Ctrl+N)"
+#~ msgstr "connect(Ctrl+N)"
 
 #~ msgid "接続(&C) ..."
 #~ msgstr "connect(&C) ..."
