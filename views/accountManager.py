@@ -43,9 +43,9 @@ class Dialog(BaseDialog):
 		self.setDefaultButton.Enable(False)
 		self.deleteButton=self.creator.button(_("削除"),self.delete)
 		self.deleteButton.Enable(False)
-		self.moveDownButton = self.creator.button(_("下へ(&D)"), self.move)
+		self.moveDownButton = self.creator.button(_("下へ") + "(&D)", self.move)
 		self.moveDownButton.Enable(False)
-		self.moveUpButton = self.creator.button(_("上へ(&U)"), self.move)
+		self.moveUpButton = self.creator.button(_("上へ") + "(&U)", self.move)
 		self.moveUpButton.Enable(False)
 
 		#ボタンエリア

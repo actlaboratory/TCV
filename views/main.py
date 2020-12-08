@@ -103,43 +103,43 @@ class Menu(BaseMenu):
 
 		#メニューの中身
 		#ファイルメニュー
-		self.RegisterMenuCommand(self.hFileMenu,"connect",_("接続(&C) ..."))
-		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("最近接続したライブに接続(&H) ..."))
-		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入りライブに接続(&F) ..."))
-		self.RegisterMenuCommand(self.hFileMenu,"disconnect",_("切断(&D)"))
-		self.RegisterMenuCommand(self.hFileMenu,"exit",_("終了(&Q)"))
+		self.RegisterMenuCommand(self.hFileMenu,"connect",_("接続") + "(&C) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("最近接続したライブに接続") + "(&H) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入りライブに接続") + "(&F) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"disconnect",_("切断") + "(&D)")
+		self.RegisterMenuCommand(self.hFileMenu,"exit",_("終了") + "(&Q)")
 		#再生メニュー
-		self.RegisterMenuCommand(self.hPlayMenu,"play",_("再生(&P)"))
-		self.RegisterMenuCommand(self.hPlayMenu,"stop",_("停止(&S)"))
-		self.RegisterMenuCommand(self.hPlayMenu,"volumeUp",_("音量を上げる(&U)"))
-		self.RegisterMenuCommand(self.hPlayMenu,"volumeDown",_("音量を下げる(&D)"))
-		self.RegisterMenuCommand(self.hPlayMenu,"resetVolume",_("音量を１００％に設定(&R)"))
-		self.RegisterMenuCommand(self.hPlayMenu,"changeDevice",_("再生デバイスを変更(&C)"))
+		self.RegisterMenuCommand(self.hPlayMenu,"play",_("再生") + "(&P)")
+		self.RegisterMenuCommand(self.hPlayMenu,"stop",_("停止") + "(&S)")
+		self.RegisterMenuCommand(self.hPlayMenu,"volumeUp",_("音量を上げる") + "(&U)")
+		self.RegisterMenuCommand(self.hPlayMenu,"volumeDown",_("音量を下げる") + "(&D)")
+		self.RegisterMenuCommand(self.hPlayMenu,"resetVolume",_("音量を１００％に設定") + "(&R)")
+		self.RegisterMenuCommand(self.hPlayMenu,"changeDevice",_("再生デバイスを変更") + "(&C)")
 		#コメントメニュー
-		self.RegisterMenuCommand(self.hCommentMenu, "copyComment", _("選択中のコメントをコピー(&C)"))
-		self.RegisterMenuCommand(self.hCommentMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
-		self.RegisterMenuCommand(self.hCommentMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
-		self.RegisterMenuCommand(self.hCommentMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
-		self.RegisterMenuCommand(self.hCommentMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
+		self.RegisterMenuCommand(self.hCommentMenu, "copyComment", _("選択中のコメントをコピー") + "(&C)")
+		self.RegisterMenuCommand(self.hCommentMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")
+		self.RegisterMenuCommand(self.hCommentMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
+		self.RegisterMenuCommand(self.hCommentMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
+		self.RegisterMenuCommand(self.hCommentMenu,"replyToBroadcaster",_("配信者に返信") + "(&B)")
 		#ライブメニュー
-		self.RegisterMenuCommand(self.hLiveMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
-		self.RegisterMenuCommand(self.hLiveMenu,"openLive",_("このライブをブラウザで開く(&O)"))
-		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
+		self.RegisterMenuCommand(self.hLiveMenu,"viewBroadcaster",_("配信者の情報を表示") + "(&B) ...")
+		self.RegisterMenuCommand(self.hLiveMenu,"openLive",_("このライブをブラウザで開く") + "(&O)")
+		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
 		#設定メニュー
-		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定(&S) ..."))
-		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定(&R) ..."))
-		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定(&N) ..."))
-		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ(&M) ..."))
+		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定") + "(&S) ...")
+		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定") + "(&R) ...")
+		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定") + "(&N) ...")
+		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ") + "(&M) ...")
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報(&V) ..."))
+		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報") + "(&V) ...")
 
 		#メニューバーの生成
-		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
-		self.hMenuBar.Append(self.hPlayMenu,_("再生(&P)"))
-		self.hMenuBar.Append(self.hCommentMenu,_("コメント(&C)"))
-		self.hMenuBar.Append(self.hLiveMenu,_("ライブ(&L)"))
-		self.hMenuBar.Append(self.hSettingsMenu,_("設定(&S)"))
-		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ(&H)"))
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
+		self.hMenuBar.Append(self.hPlayMenu,_("再生") + "(&P)")
+		self.hMenuBar.Append(self.hCommentMenu,_("コメント") + "(&C)")
+		self.hMenuBar.Append(self.hLiveMenu,_("ライブ") + "(&L)")
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定") + "(&S)")
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ") + "(&H)")
 		target.SetMenuBar(self.hMenuBar)
 
 class Events(BaseEvents):
@@ -263,9 +263,9 @@ class Events(BaseEvents):
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
 			contextMenu = wx.Menu()
-			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信(&R)"))
-			self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除(&D)"))
-			self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示(&V) ..."))
+			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
+			self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
+			self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")
 			urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
 			for i, j in zip(urls, range(len(urls))):
 				contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
@@ -280,9 +280,9 @@ class Events(BaseEvents):
 			if focusedItem != self.parent.liveInfo.GetCount() - 1:
 				return
 			contextMenu = wx.Menu()
-			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信(&B)"))
-			self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示(&B) ..."))
-			self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加(&A) ..."))
+			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信") + "(&B)")
+			self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示") + "(&B) ...")
+			self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
 			self.parent.hFrame.PopupMenu(contextMenu)
 
 
