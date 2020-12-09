@@ -88,7 +88,9 @@ class Dialog(BaseDialog):
 		q = simpleDialog.yesNoDialog(_("アカウントの追加"), _("ブラウザを開いてアカウントの認証作業を行います。よろしいですか？"))
 		if q == wx.ID_NO:
 			return
+		self.wnd.Enable(False)
 		globalVars.app.accountManager.add()
+		self.wnd.Enable(True)
 		self.refreshList()
 		self.hListCtrl.SetFocus()
 
@@ -136,7 +138,7 @@ class waitingDialog(BaseDialog):
 
 	def Initialize(self):
 		self.log.debug("created")
-		super().Initialize(self.app.hMainView.hFrame,_("接続"))
+		super().Initialize(self.app.hMainView.hFrame,_("アカウントの追加"))
 		self.InstallControls()
 		return True
 
