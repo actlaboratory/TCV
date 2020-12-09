@@ -120,8 +120,8 @@ class Menu(BaseMenu):
 		#メニューの中身
 		#ファイルメニュー
 		self.RegisterMenuCommand(self.hFileMenu,"connect",_("接続") + "(&C) ...")
-		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("最近接続したライブに接続") + "(&H) ...")
-		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入りライブに接続") + "(&F) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("接続履歴を開く") + "(&H) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入り一覧を開く") + "(&F) ...")
 		self.RegisterMenuCommand(self.hFileMenu,"disconnect",_("切断") + "(&D)")
 		self.RegisterMenuCommand(self.hFileMenu,"exit",_("終了") + "(&Q)")
 		#再生メニュー
