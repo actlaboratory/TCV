@@ -31,9 +31,9 @@ class settingsDialog(BaseDialog):
 			"2": _("通常の投稿")
 		}
 		self.timertypeSelection = {
-			"0": _("コインの枚数を加味せず30分を計測"),
-			"1": _("コインの枚数を加味して最大まで延長したと仮定した残り時間を計測し各枠ごとの残り時間を詳細に通知する"),
-			"2": _("コインの枚数を加味して最大まで延長したと仮定した残り時間を計測し延長が予定される枠の残り時間は３分前のみを通知する")
+			"0": _("延長を加味せず30分を計測"),
+			"1": _("各枠ごとの残り時間を詳細に通知"),
+			"2": _("延長可能な枠では３分前のみ通知")
 		}
 		self.readmentionsSelection = {
 			"0": _("読み上げない"),
@@ -63,7 +63,7 @@ class settingsDialog(BaseDialog):
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("一般"))
 		self.colormode, static = creator.combobox(_("画面表示モード"), list(self.colorModeSelection.values()))
-		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込むコメント数") + "(&N)", 1, 50)
+		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数") + "(&N)", 1, 50)
 		self.commenttosns, static = creator.combobox(_("コメントをSNSに投稿する") + "(&S)", list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類") + "(&T)", list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("履歴保持件数") + "(&H)", -1, 50)
@@ -75,15 +75,21 @@ class settingsDialog(BaseDialog):
 		self.reader, static = creator.combobox(_("出力先") + "(&O)", list(self.readerSelection.values()))
 		self.readreceivedcomments = creator.checkbox(_("受信したコメントを読み上げる") + "(&C)")
 		self.receivedcommentsannouncement, static = creator.inputbox(_("コメント受信時の読み上げ内容") + "(&C)")
-		self.readmycomment = creator.checkbox(_("自分が投稿したコメントを読み上げる") + "(&S)")
-		self.readmentions_mylive, static = creator.combobox(_("自分のライブに接続した際の返信の読み方") + "(&R)", list(self.readmentionsSelection.values()))
-		self.readmentions_otherlive, static = creator.combobox(_("自分以外のライブに接続した際の返信の読み方") + "(&R)", list(self.readmentionsSelection.values()))
+
+		group=views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.VERTICAL,space=20,label=_("コメントの読み上げスキップ"))
+		group.AddSpace(20)
+		self.readmycomment = group.checkbox(_("自分が投稿したコメントを読み上げる") + "(&S)")
+		grid=views.ViewCreator.ViewCreator(self.viewMode,group.GetPanel(),group.GetSizer(),views.ViewCreator.FlexGridSizer,space=20,label=2)
+		self.readmentions_mylive, static = grid.combobox(_("自分のライブ") + "(&R)", list(self.readmentionsSelection.values()))
+		self.readmentions_otherlive, static = grid.combobox(_("自分以外のライブ") + "(&R)", list(self.readmentionsSelection.values()))
+		creator.AddSpace()
+
 		self.readviewers = creator.checkbox(_("閲覧者数が変化したら読み上げる") + "(&V)")
 		self.viewersincreasedannouncement, static = creator.inputbox(_("閲覧者数が増加した際の読み上げ") + "(&I)")
 		self.viewersdecreasedannouncement, static = creator.inputbox(_("閲覧者数が減少した際の読み上げ") + "(&D)")
 		self.readtypinguser = creator.checkbox(_("入力中のユーザーを読み上げる") + "(&T)")
 		self.readreceiveditems = creator.checkbox(_("受信したアイテムを読み上げる") + "(&I)")
-		self.readitemposteduser, static = creator.combobox(_("アイテム投稿者の読み上げ") + "(&U)", list(self.readitemposteduserSelection.values()))
+		self.readitemposteduser, static = creator.combobox(_("アイテム投稿者の読み方") + "(&U)", list(self.readitemposteduserSelection.values()),textLayout=wx.HORIZONTAL)
 
 		# live play
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("ライブ再生"))
@@ -96,27 +102,42 @@ class settingsDialog(BaseDialog):
 		self.fxvolume, static = creator.slider(_("効果音の音量") + "(&V)", 0, 100)
 		self.syncaudiodevice = creator.checkbox(_("効果音の出力先をライブ音声の出力先と同期") + "(&D)")
 		self.playcommentreceivedsound = creator.checkbox(_("コメント受信時にサウンドを再生") + "(&C)")
-		self.commentreceivedsound, static = creator.inputbox(_("コメント受信時のサウンド") + "(&C)")
-		self.commentreceivedsoundBrowse = creator.button(_("参照"), self.browse)
+
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.commentreceivedsound, static = hCreator.inputbox(_("コメント受信時のサウンド") + "(&C)",proportion=1,textLayout=wx.VERTICAL)
+		self.commentreceivedsoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
+
 		self.playcommentreceivedsoundifskipped = creator.checkbox(_("読み上げを省略したコメントも通知音を再生する"))
 		self.playviewerschangedsound = creator.checkbox(_("閲覧者数が変化したらサウンドを再生") + "(&V)")
-		self.viewerschangedsound, static = creator.inputbox(_("閲覧者数が変化した際のサウンド") + "(&V)")
-		self.viewerschangedsoundBrowse = creator.button(_("参照"), self.browse)
+
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.viewerschangedsound, static = hCreator.inputbox(_("閲覧者数が変化した際のサウンド") + "(&V)",proportion=1,textLayout=wx.VERTICAL)
+		self.viewerschangedsoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
+
 		self.playitemreceivedsound = creator.checkbox(_("アイテム受信時にサウンドを再生") + "(&I)")
-		self.itemreceivedsound, static = creator.inputbox(_("アイテム受信時のサウンド") + "(&I)")
-		self.itemreceivedsoundBrowse = creator.button(_("参照"), self.browse)
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.itemreceivedsound, static = hCreator.inputbox(_("アイテム受信時のサウンド") + "(&I)",proportion=1,textLayout=wx.VERTICAL)
+		self.itemreceivedsoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
+
 		self.playcommentpostedsound = creator.checkbox(_("コメント投稿時にサウンドを再生") + "(&S)")
-		self.commentpostedsound, static = creator.inputbox(_("コメント投稿時のサウンド") + "(&S)")
-		self.commentpostedsoundBrowse = creator.button(_("参照"), self.browse)
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.commentpostedsound, static = hCreator.inputbox(_("コメント投稿時のサウンド") + "(&S)",proportion=1,textLayout=wx.VERTICAL)
+		self.commentpostedsoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
+
 		self.playtypingsound = creator.checkbox(_("コメント入力中のユーザーがいたらサウンドを再生") + "(&T)")
-		self.typingsound, static = creator.inputbox(_("コメント入力中のユーザがいた際のサウンド") + "(&T)")
-		self.typingsoundBrowse = creator.button(_("参照"), self.browse)
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.typingsound, static = hCreator.inputbox(_("コメント入力中のユーザがいた際のサウンド") + "(&T)",proportion=1,textLayout=wx.VERTICAL)
+		self.typingsoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
+
 		self.playtimersound = creator.checkbox(_("残り時間の通知時にサウンドを再生") + "(&T)")
-		self.timersound, static = creator.inputbox(_("残り時間通知時のサウンド") + "(&T)")
-		self.timersoundBrowse = creator.button(_("参照"), self.browse)
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.timersound, static = hCreator.inputbox(_("残り時間通知時のサウンド") + "(&T)",proportion=1,textLayout=wx.VERTICAL)
+		self.timersoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
+
 		self.playstartupsound = creator.checkbox(_("TCVの起動時にサウンドを再生") + "(&S)")
-		self.startupsound, static = creator.inputbox(_("TCV起動時のサウンド") + "(&S)")
-		self.startupsoundBrowse = creator.button(_("参照"), self.browse)
+		hCreator = views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.HORIZONTAL,space=10,style=wx.EXPAND)
+		self.startupsound, static = hCreator.inputbox(_("TCV起動時のサウンド") + "(&S)",proportion=1,textLayout=wx.VERTICAL)
+		self.startupsoundBrowse = hCreator.button(_("参照"), self.browse,sizerFlag=wx.ALIGN_BOTTOM|wx.BOTTOM,margin=10)
 
 		# url
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("URL設定"))

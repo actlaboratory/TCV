@@ -41,8 +41,8 @@ class MainView(BaseView):
 		title=constants.APP_NAME
 		super().Initialize(
 			title,
-			self.app.config.getint(self.identifier,"sizeX",800),
-			self.app.config.getint(self.identifier,"sizeY",600),
+			self.app.config.getint(self.identifier,"sizeX",600),
+			self.app.config.getint(self.identifier,"sizeY",540),
 			self.app.config.getint(self.identifier,"positionX"),
 			self.app.config.getint(self.identifier,"positionY")
 		)
@@ -50,13 +50,25 @@ class MainView(BaseView):
 		self.createStartScreen()
 
 	def createStartScreen(self):
-		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect)
-		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory)
-		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites)
-		self.settingsButton = self.creator.button(_("設定"), self.events.settings)
-		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager)
-		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
-		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
+		self.hFrame.SetMinSize((600,540))
+
+		#タイトル表示
+		self.titleText = self.creator.staticText("TCV",sizerFlag=wx.CENTER | wx.ALL, margin=20)
+		font = self.titleText.GetFont()
+		font.SetPointSize(60)
+		font.SetNumericWeight(1000)
+		self.titleText.SetFont(font)
+
+		#メニューボタン
+		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.helpButton = self.creator.button(_("ヘルプを表示"), None, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.hPanel.Layout()
+		self.connectButton.SetFocus()
 
 	def createMainView(self):
 		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
@@ -64,27 +76,31 @@ class MainView(BaseView):
 		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
 
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=1)
-		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT,proportion=1, sizerFlag=wx.EXPAND)
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=2)
+		self.c1=creator.GetSizer()
+		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
 
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.EXPAND | wx.LEFT | wx.RIGHT)
-		self.selectAccount, self.selectAccountstatic = creator.combobox(_("コメント投稿アカウント"), [], proportion=1, textLayout=None)
+		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None)
 		for i in globalVars.app.accountManager.tokens:
 			self.selectAccount.Append("%s(%s)" %(i["user"]["screen_id"], i["user"]["name"]))
 		self.selectAccount.SetSelection(0)
-		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP, proportion=4, textLayout=None)
-		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
-		self.commentSend = creator.button(_("送信"), self.events.postComment)
 
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.EXPAND | wx.ALL)
-		self.liveInfo, self.liveInfoStatic = creator.listbox(_("ライブ情報"), proportion=1, sizerFlag=wx.EXPAND | wx.RIGHT, textLayout=wx.VERTICAL, margin=20)
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.LEFT | wx.RIGHT | wx.EXPAND)
+		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP | wx.TE_NOHIDESEL , sizerFlag=wx.EXPAND, proportion=1, textLayout=None)
+		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
+		self.commentBodyEdit.hideScrollBar(wx.VERTICAL | wx.HORIZONTAL)
+		self.commentSend = creator.button(_("送信"), self.events.postComment, sizerFlag=wx.ALIGN_BOTTOM | wx.ALL)
+
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, space=20, style=wx.EXPAND | wx.ALL, proportion=1)
+		self.liveInfo, self.liveInfoStatic = creator.listbox(_("ライブ情報"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
-		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
 

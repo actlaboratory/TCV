@@ -26,38 +26,40 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 
 		#情報の表示
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.hListCtrl,self.hListStatic=self.creator.listCtrl(_("アカウント"),None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL)
+		self.hListCtrl,self.hListStatic=self.creator.listCtrl(_("アカウント"),None,wx.LC_REPORT,(800,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
 		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
-		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=350)
-		self.hListCtrl.InsertColumn(3,_("通信アカウント設定"),format=wx.LIST_FORMAT_LEFT,width=350)
+		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=250)
+		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=180)
+		self.hListCtrl.InsertColumn(3,_("通信用"),format=wx.LIST_FORMAT_LEFT,width=110)
 		self.refreshList()
 
 		#処理ボタン
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.addButton=self.creator.button(_("追加"),self.add)
-		self.setDefaultButton=self.creator.button(_("通信用アカウントとして設定"),self.setDefault)
-		self.setDefaultButton.Enable(False)
-		self.deleteButton=self.creator.button(_("削除"),self.delete)
+		g1=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.VERTICAL,20,"")
+		g1r1=views.ViewCreator.ViewCreator(self.viewMode,self.panel,g1.GetSizer(),wx.HORIZONTAL,20,"",wx.EXPAND)
+		g1r2=views.ViewCreator.ViewCreator(self.viewMode,self.panel,g1.GetSizer(),wx.HORIZONTAL,20,"",wx.EXPAND)
+		self.addButton=g1r1.button(_("追加"),self.add,proportion=1)
+		self.deleteButton=g1r1.button(_("削除"),self.delete,proportion=1)
 		self.deleteButton.Enable(False)
-		self.moveDownButton = self.creator.button(_("下へ") + "(&D)", self.move)
-		self.moveDownButton.Enable(False)
-		self.moveUpButton = self.creator.button(_("上へ") + "(&U)", self.move)
-		self.moveUpButton.Enable(False)
+		self.setDefaultButton=g1r2.button(_("通信用アカウントに設定"),self.setDefault)
+		self.setDefaultButton.Enable(False)
 
-		#ボタンエリア
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bClose=self.creator.cancelbutton(_("閉じる"),self.close)
+		g2=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.VERTICAL,0)
+		self.moveUpButton = g2.button(_("上へ") + "(&U)", self.move)
+		self.moveUpButton.Enable(False)
+		self.moveDownButton = g2.button(_("下へ") + "(&D)", self.move)
+		self.moveDownButton.Enable(False)
+		self.bClose=self.creator.okbutton(_("閉じる"),self.close)
 
 	def refreshList(self):
 		cursor = self.hListCtrl.GetFocusedItem()
 		self.hListCtrl.DeleteAllItems()
 		for i in globalVars.app.accountManager.tokens:
 			if i["default"] == True:
-				state = _("通信用アカウントとして設定済み")
+				state = _("設定中")
 			else:
 				state = ""
 			self.hListCtrl.Append([

@@ -10,12 +10,7 @@ from views.baseDialog import *
 class Dialog(BaseDialog):
 	def __init__(self, broadcaster):
 		super().__init__("viewBroadcasterDialog")
-		self.broadcaster = {
-			_("名前"): broadcaster["name"],
-			_("ユーザ名"): broadcaster["screen_id"],
-			_("レベル"): str(broadcaster["level"]),
-			_("自己紹介"): broadcaster["profile"]
-		}
+		self.broadcaster = broadcaster
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -26,10 +21,18 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		for key, value in self.broadcaster.items():
-			self.creator.inputbox(key, None, value, wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP, 500)
-		self.closeButton=self.creator.cancelbutton(_("閉じる") + "(&C)", None)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL,margin=20)
 
-	def GetData(self):
-		return self.iText.GetLineText(0)
+		grid=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),views.ViewCreator.FlexGridSizer,20,2)
+		name,dummy = grid.inputbox(_("名前"), None, self.broadcaster["name"], wx.TE_READONLY, 300)
+		userName,dummy = grid.inputbox(_("ユーザ名"), None, self.broadcaster["screen_id"], wx.TE_READONLY, 300)
+		level,dummy = grid.inputbox(_("レベル"), None, str(self.broadcaster["level"]), wx.TE_READONLY, 300)
+
+		introduction,dummy = self.creator.inputbox(_("自己紹介"), None, self.broadcaster["profile"], wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP|wx.TE_PROCESS_ENTER, 500)
+		introduction.hideScrollBar(wx.VERTICAL)
+		introduction.Bind(wx.EVT_TEXT_ENTER,self.processEnter)
+		self.closeButton=self.creator.okbutton(_("閉じる") + "(&C)", None)
+
+	def processEnter(self,event):
+		self.wnd.EndModal(wx.OK)
+

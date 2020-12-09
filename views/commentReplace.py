@@ -37,9 +37,9 @@ class Dialog(BaseDialog):
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl("",None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
-		self.hListCtrl.InsertColumn(0,_("置換元文字列"))
-		self.hListCtrl.InsertColumn(1,_("置換先文字列"))
-		self.hListCtrl.InsertColumn(2,_("種別"))
+		self.hListCtrl.InsertColumn(0,_("置換元文字列"),width=200)
+		self.hListCtrl.InsertColumn(1,_("置換文字列"),width=200)
+		self.hListCtrl.InsertColumn(2,_("種別"),width=200)
 		for i in self.values:
 			self.hListCtrl.Append(i)
 
@@ -107,16 +107,19 @@ class Dialog_sub(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL)
 		self.baseStr, static = self.creator.inputbox(_("置換元文字列"))
 		if self.mode == 1:
 			self.baseStr.SetValue(self.value[0])
 		self.newStr, static = self.creator.inputbox(_("置換先文字列"))
 		if self.mode == 1:
 			self.newStr.SetValue(self.value[1])
+
+		grid = self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),views.ViewCreator.GridSizer,0,2,style=0)
 		self.type, static = self.creator.combobox(_("種別"), [_("標準"), _("正規表現")], state=0)
 		if self.mode == 1:
 			self.type.SetValue(self.value[2])
+
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"), self.onOkBtn)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)

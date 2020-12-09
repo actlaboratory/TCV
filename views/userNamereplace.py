@@ -19,7 +19,6 @@ class Dialog(BaseDialog):
 
 	def Initialize(self):
 		self.log.debug("created")
-		self.app=globalVars.app
 		super().Initialize(self.app.hMainView.hFrame,_("表示名置換設定"))
 		self.InstallControls()
 		return True
@@ -32,8 +31,8 @@ class Dialog(BaseDialog):
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl("",None,wx.LC_REPORT,(600,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
-		self.hListCtrl.InsertColumn(0,_("ユーザ名"))
-		self.hListCtrl.InsertColumn(1,_("表示名"))
+		self.hListCtrl.InsertColumn(0,_("ユーザ名"),width=290)
+		self.hListCtrl.InsertColumn(1,_("表示名"),width=290)
 		for i in self.values:
 			self.hListCtrl.Append(i)
 
@@ -44,6 +43,7 @@ class Dialog(BaseDialog):
 		self.modifyButton.Enable(False)
 		self.deleteButton=self.creator.button(_("削除"),self.delete)
 		self.deleteButton.Enable(False)
+		self.sizer.AddSpacer(20)
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
@@ -101,11 +101,11 @@ class Dialog_sub(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.userName, static = self.creator.inputbox(_("ユーザ名"))
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL)
+		self.userName, static = self.creator.inputbox(_("ユーザ名"),sizerFlag=wx.EXPAND)
 		if self.mode == 1:
 			self.userName.SetValue(self.value[0])
-		self.displayName, static = self.creator.inputbox(_("表示名"))
+		self.displayName, static = self.creator.inputbox(_("表示名"),sizerFlag=wx.EXPAND)
 		if self.mode == 1:
 			self.displayName.SetValue(self.value[1])
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)

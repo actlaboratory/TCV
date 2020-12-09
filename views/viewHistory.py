@@ -20,18 +20,19 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL,margin=20)
 		self.historyList, self.historyStatic = self.creator.listbox(_("接続履歴"))
 		self.historyList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		self.historyList.Bind(wx.EVT_LISTBOX, self.itemSelected)
 		for i in globalVars.app.Manager.history:
 			self.historyList.Append(i)
 
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.bOk=self.creator.okbutton(_("接続"),None)
-		self.bCancel=self.creator.cancelbutton(_("閉じる"),None)
-		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory)
+		self.buttonArea=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.bOk=self.buttonArea.okbutton(_("接続"),None)
+		self.bCancel=self.buttonArea.cancelbutton(_("閉じる"),None)
 		self.itemSelected()
+
+		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory,sizerFlag=wx.ALIGN_RIGHT)
 
 	def GetData(self):
 		return self.historyList.GetSelection()
