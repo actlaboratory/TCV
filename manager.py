@@ -451,7 +451,10 @@ class manager:
 					if readItemPostedUser == 0:
 						globalVars.app.say(_("%sをもらいました。") %name)
 					else:
-						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
+						if readItemPostedUser == 1:
+							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
+						elif readItemPostedUser == 2:
+							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
 						if sameUser == True:
 							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
 						else:
