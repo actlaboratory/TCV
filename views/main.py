@@ -148,6 +148,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ") + "(&M) ...")
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報") + "(&V) ...")
+		self.RegisterMenuCommand(self.hHelpMenu, "checkforUpdate", _("更新を確認") + "(&C) ...")
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
@@ -276,6 +277,9 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("viewErrorLog"):
 			import subprocess
 			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
+		#更新を確認
+		elif selected==menuItemsStore.getRef("checkforUpdate"):
+			globalVars.update.update(False)
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
 			contextMenu = wx.Menu()
