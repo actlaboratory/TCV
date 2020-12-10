@@ -442,23 +442,34 @@ class manager:
 				count = i["count"]
 				users = self.connection.getItemPostedUser(id, count)
 				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
-				sameUser = False
-				for k in range(1, len(users) - 1):
-					if users[0] == users[k]:
-						sameUser = True
+				multiUser = False
+				if len(users) > 1:
+					for k in range(1, len(users) - 1):
+						if users[0] != users[k]:
+							multiUser = True
+							break
 				readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
 				if readReceivedItems == True:
 					if readItemPostedUser == 0:
-						globalVars.app.say(_("%sをもらいました。") %name)
+						if count == 1:
+							globalVars.app.say(_("%sをもらいました。") %name)
+						else:
+							globalVars.app.say(_("%sを%i個もらいました。") %(name, count))
 					else:
 						if readItemPostedUser == 1:
 							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
 						elif readItemPostedUser == 2:
 							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
-						if sameUser == True:
-							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+						if multiUser == False:
+							if count == 1:
+								globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+							else:
+								globalVars.app.say(_("%sさんから%sを%i個もらいました。") %(users[0], name, count))
 						else:
-							globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+							if count == 1:
+								globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+							else:
+								globalVars.app.say(_("%sさんなどから%sを%i個もらいました。") %(users[0], name, count))
 			if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
 				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
