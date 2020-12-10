@@ -479,7 +479,7 @@ class manager:
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
 		elif id == evtPlaystatus:
-			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING | self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
+			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING and self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
 
 	def play(self):
