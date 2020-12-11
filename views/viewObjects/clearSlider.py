@@ -4,7 +4,7 @@
 import wx
 from views.viewObjectBase import sliderBase, toolTipBase
 
-def unsupported(*pArg, **kArg):
+def unsupported(*pArg, **kwargs):
     raise NotImplementedError("ClearSlider is not support this function.")
 
 class clearSlider(sliderBase.slider):
@@ -16,11 +16,11 @@ class clearSlider(sliderBase.slider):
     # 上下左右の枠の太さ(上＋下、左＋右の２本分の値を偶数で指定)
     BORDER_WIDTH = 6
 
-    def __init__(self, *pArg, **kArg):
+    def __init__(self, *pArg, **kwargs):
         #非対応のスタイルの設定はエラーにする
         style = 0
-        if "style" in kArg:
-            style = kArg["style"]
+        if "style" in kwargs:
+            style = kwargs["style"]
         elif len(pArg)>=8:
             style = pArg[7]
         if style!=0:
@@ -31,7 +31,7 @@ class clearSlider(sliderBase.slider):
                     or (style & wx.SL_BOTH == wx.SL_BOTH) or (style & wx.SL_SELRANGE == wx.SL_SELRANGE)):
                 raise ValueError("ClearSlider is not support tick, label, and Lange style.")
 
-        super().__init__(*pArg, **kArg)
+        super().__init__(*pArg, **kwargs)
         self.Bind(wx.EVT_PAINT, self.paintEvent)
         self.Bind(wx.EVT_SLIDER, self.sliderEvent)
         self.SetThumbLength(50)

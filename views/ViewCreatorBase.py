@@ -25,6 +25,8 @@ from views.viewObjectBase import textCtrlBase
 from views.viewObjectBase import spinCtrlBase
 from views.viewObjectBase import sliderBase
 from views.viewObjects import clearSlider
+from views.viewObjects import gridBagSizer
+
 
 viewHelper=ctypes.cdll.LoadLibrary("viewHelper.dll")
 
@@ -34,6 +36,7 @@ SKIP_COLOUR=2
 
 GridSizer = -1
 FlexGridSizer = -2
+GridBagSizer = -3
 
 MODE_WHITE=0
 MODE_DARK=1
@@ -81,7 +84,6 @@ class ViewCreatorBase():
 			parent.InsertPage(parent.GetPageCount(),self.parent,label)
 			label=""
 			parentSizer=self.BoxSizer(parentSizer,wx.VERTICAL,"",margin,style,proportion)
-
 		else:
 			raise ValueError("ViewCreatorの親はパネルまたはブックコントロールである必要があります。")
 
@@ -90,6 +92,8 @@ class ViewCreatorBase():
 			self.sizer=self.FlexGridSizer(parentSizer,margin,style,label)
 		elif orient==GridSizer:
 			self.sizer=self.GridSizer(parentSizer,margin,style,label)
+		elif orient==GridBagSizer:
+			self.sizer=self.GridBagSizer(parentSizer,margin,style,label)
 		else:
 			self.sizer=self.BoxSizer(parentSizer,orient,label,margin,style,proportion)
 
@@ -118,6 +122,8 @@ class ViewCreatorBase():
 		return sizer
 
 	def GridSizer(self,parent,space=0,style=0,x=2):
+		if type(x)!=int:
+			x=2
 		sizer=wx.GridSizer(x,space,space)
 		if type(parent) in (wx.Panel,wx.Window):
 			parent.SetSizer(sizer)
@@ -128,6 +134,8 @@ class ViewCreatorBase():
 		return sizer
 
 	def FlexGridSizer(self,parent,space=0,style=0,x=2):
+		if type(x)!=int:
+			x=2
 		sizer=wx.FlexGridSizer(x,space,space)
 		if type(parent) in (wx.Panel,wx.Window):
 			parent.SetSizer(sizer)
@@ -137,6 +145,17 @@ class ViewCreatorBase():
 			parent.Add(sizer,0,wx.ALL | style,space)
 		return sizer
 
+	def GridBagSizer(self,parent,space=0,style=0,x=2):
+		if type(x)!=int:
+			x=2
+		sizer=gridBagSizer.GridBagSizer(x,space,space)
+		if type(parent) in (wx.Panel,wx.Window):
+			parent.SetSizer(sizer)
+		elif (parent==None):
+			self.parent.SetSizer(sizer)
+		else:
+			parent.Add(sizer,0,wx.ALL | style,space)
+		return sizer
 
 	def button(self,text, event=None, style=wx.BORDER_RAISED, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,margin=5, enableTabFocus=True):
 		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=style, size=size, enableTabFocus=enableTabFocus)
@@ -374,7 +393,7 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
-	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0, margin=5, enableTabFocus=True):
+	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME, sizerFlag=0, proportion=0, margin=5, enableTabFocus=True):
 		htab=self.winObject["notebook"](self.parent, wx.ID_ANY,name=title,style=style, enableTabFocus=enableTabFocus)
 		htab.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED,event)
 		self._setFace(htab)
@@ -499,13 +518,19 @@ class ViewCreatorBase():
 			Add(sizer,hStaticText, 0, wx.ALIGN_CENTER_VERTICAL)
 			Add(self.sizer,panel, proportion, sizerFlag,margin)
 			return hStaticText,sizer,panel
+		elif isinstance(self.sizer,(wx.GridSizer,wx.FlexGridSizer,wx.GridBagSizer)) and textLayout==None:
+			hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text,size=(0,0))
+			self._setFace(hStaticText)
+			sizer=self.BoxSizer(self.sizer,style=sizerFlag&(wx.ALIGN_LEFT|wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_BOTTOM|wx.EXPAND))
+			Add(sizer,hStaticText)
+			return hStaticText,sizer,self.parent
 		else:
 			if textLayout!=None:
 				hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text)
 			else:
 				hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text,size=(0,0))
 			self._setFace(hStaticText)
-			Add(self.sizer,hStaticText,0,wx.ALIGN_CENTER_VERTICAL)
+			Add(self.sizer,hStaticText,0,sizerFlag&(wx.ALIGN_LEFT|wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_BOTTOM|wx.EXPAND))
 			return hStaticText,self.sizer,self.parent
 
 	def _setFace(self,target,mode=NORMAL):
@@ -531,6 +556,10 @@ class ViewCreatorBase():
 		else:
 			return default
 
+	def SetItemSpan(self,col,row=1):
+		assert(isinstance(self.sizer,wx.GridBagSizer))
+		self.sizer.SetItemSpan(wx.GBSpan(row,col))
+
 
 #parentで指定したsizerの下に、新たなBoxSizerを設置
 def BoxSizer(parent,orient=wx.VERTICAL,flg=0,border=0):
@@ -552,6 +581,8 @@ def Add(sizer, window, proportion=0, flag=0, border=0, expandFlag=None):
 			sizer.Add(window,proportion,flag | wx.EXPAND, border)
 		else:
 			sizer.Add(window,1,flag,border)
+	elif isinstance(sizer,wx.GridBagSizer):
+		sizer.Add(window,flag=flag,border=border)
 	else:
 		sizer.Add(window,proportion,flag,border)
 
