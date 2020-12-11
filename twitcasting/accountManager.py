@@ -57,6 +57,7 @@ class AccountManager:
 				break
 			if d.canceled == 1 or manager.getToken() == "":
 				simpleDialog.dialog(_("処理結果"), _("キャンセルされました。"))
+				manager.shutdown()
 				return
 		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
 		self.tokens[-1]["default"] = False
