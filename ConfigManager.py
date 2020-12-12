@@ -108,7 +108,7 @@ class ConfigManager(configparser.ConfigParser):
 
 	def items(self,section):
 		try:
-			super().items(section)
+			return super().items(section)
 		except configparser.NoSectionError:
 			return []
 
