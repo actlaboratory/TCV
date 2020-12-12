@@ -84,6 +84,9 @@ class MainView(BaseView):
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
+		self.commentList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.events.commentSelected)
+		self.commentList.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.events.commentSelected)
+		self.events.commentSelected(None)
 
 		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None)
 		for i in globalVars.app.accountManager.tokens:
@@ -282,6 +285,8 @@ class Events(BaseEvents):
 			globalVars.update.update(False)
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
+			if self.parent.commentList.GetFocusedItem() < 0:
+				return
 			contextMenu = wx.Menu()
 			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
 			self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
@@ -386,3 +391,13 @@ class Events(BaseEvents):
 		globalVars.app.config.remove_section("nameReplace")
 		for i in userNameReplace.GetData():
 			globalVars.app.config["nameReplace"][i[0]] = i[1]
+
+	def commentSelected(self, event):
+		if event == None:
+			enable = False
+		else:
+			enable = True
+		self.parent.menu.EnableMenu("copyComment", enable)
+		self.parent.menu.EnableMenu("viewComment", enable)
+		self.parent.menu.EnableMenu("replyToSelectedComment", enable)
+		self.parent.menu.EnableMenu("deleteSelectedComment", enable)
