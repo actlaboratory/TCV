@@ -414,11 +414,15 @@ class KeymapHandlerBase():
 		identifier=identifier.upper()
 
 		try:
-			r=self.map[identifier][ref]
+			return self.map[identifier][ref]
 		except KeyError:
-			r=None
+			#他のビューを検索
+			for i in self.map:
+				if ref in self.map[i]:
+					return self.map[i][ref]
+			return None
 		#end except
-		return r
+
 
 	def GetTable(self, identifier):
 		"""
