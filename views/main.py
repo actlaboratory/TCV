@@ -172,6 +172,14 @@ class Events(BaseEvents):
 
 		selected=event.GetId()#メニュー識別しの数値が出る
 
+		#特殊なイベントと思われる
+		if selected<10 and selected>0:
+			event.Skip()
+			return
+
+		if not self.parent.menu.IsEnable(selected):
+			event.Skip()
+			return
 
 		#終了
 		if selected==menuItemsStore.getRef("exit"):

@@ -164,7 +164,11 @@ class BaseMenu(object):
 		return self.hMenuBar.Enable(ref,self.blockCount[ref]==0 and ref not in self.desableItems)
 
 	def IsEnable(self,ref):
-		return self.blockCount[menuItemsStore.getRef(ref)]<=0
+		if type(ref)==str:
+			ref=menuItemsStore.getRef(ref)
+		if ref not in self.blockCount:
+			self.blockCount[ref]=0
+		return self.blockCount[ref]<=0 and (ref not in self.desableItems)
 
 	def RegisterMenuCommand(self,menu_handle,ref_id,title="",subMenu=None,index=-1):
 		if type(ref_id)==dict:
