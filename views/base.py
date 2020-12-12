@@ -158,9 +158,9 @@ class BaseMenu(object):
 			ref=int
 		"""
 		if enable:
-			self.desableItems.add(ref)
-		else:
 			self.desableItems.discard(ref)
+		else:
+			self.desableItems.add(ref)
 		return self.hMenuBar.Enable(ref,self.blockCount[ref]==0 and ref not in self.desableItems)
 
 	def IsEnable(self,ref):
