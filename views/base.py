@@ -125,7 +125,7 @@ class BaseMenu(object):
 	def Block(self,ref):
 		"""
 			メニュー項目の利用をブロックし、無効状態にする
-			refはリスト
+			refはlist(str)
 		"""
 		for i in ref:
 			try:
@@ -140,7 +140,7 @@ class BaseMenu(object):
 	def UnBlock(self,ref):
 		"""
 			メニュー項目のブロック事由が消滅したので、ブロックカウントを減らす。0になったら有効化する
-			refはリスト
+			refはlist(str)
 		"""
 		for i in ref:
 			try:
@@ -153,6 +153,10 @@ class BaseMenu(object):
 				self.hMenuBar.Enable(menuItemsStore.getRef(i),True)
 
 	def Enable(self,ref,enable):
+		"""
+			メニューの有効・無効を切り替える
+			ref=int
+		"""
 		if enable:
 			self.desableItems.add(ref)
 		else:
@@ -193,7 +197,7 @@ class BaseMenu(object):
 				menu_handle.Insert(index,menuItemsStore.getRef(ref_id),s,subMenu)
 			else:
 				menu_handle.Append(menuItemsStore.getRef(ref_id),s,subMenu)
-		self.blockCount[menuItemsStore.getRef(ref_id)]=0
+		self.blockCount[menuItemsStore.getRef(ref_id.upper())]=0
 
 	def RegisterCheckMenuCommand(self,menu_handle,ref_id,title=None,index=-1):
 		"""チェックメニューアイテム生成補助関数"""
@@ -205,7 +209,7 @@ class BaseMenu(object):
 			menu_handle.InsertCheckItem(index,menuItemsStore.getRef(ref_id),s)
 		else:
 			menu_handle.AppendCheckItem(menuItemsStore.getRef(ref_id),s)
-		self.blockCount[menuItemsStore.getRef(ref_id)]=0
+		self.blockCount[menuItemsStore.getRef(ref_id.upper())]=0
 
 	def RegisterRadioMenuCommand(self,menu_handle,ref_id,title=None,index=-1):
 		"""ラジオメニューアイテム生成補助関数"""
@@ -217,13 +221,16 @@ class BaseMenu(object):
 			menu_handle.InsertRadioItem(index,menuItemsStore.getRef(ref_id),s)
 		else:
 			menu_handle.AppendRadioItem(menuItemsStore.getRef(ref_id),s)
-		self.blockCount[menuItemsStore.getRef(ref_id)]=0
+		self.blockCount[menuItemsStore.getRef(ref_id.upper())]=0
 
 	def CheckMenu(ref_id,state=True):
 		return self.menu.Check(menuItemsStore.getRef(ref_id),state)
 
 	def EnableMenu(self,ref_id,enable=True):
-		return self.Enable(menuItemsStore.getRef(ref_id),enable)
+		if type(ref_id)==int:
+			return self.Enable(ref_id,enable)
+		else:
+			return self.Enable(menuItemsStore.getRef(ref_id),enable)
 
 	def getItemInfo(self):
 		"""
