@@ -112,6 +112,8 @@ class manager:
 		self.timers.append(self.liveInfoTimer)
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
+		if self.hasEnoughCoins(self.connection.coins) == True:
+			globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		self.oldCoins = self.connection.coins
 		self.oldCategory = self.connection.categoryName
 		self.oldViewers = self.connection.viewers
@@ -403,6 +405,8 @@ class manager:
 					globalVars.app.say(_("コイン消費"))
 				if self.newCoins % 5 == 0:
 					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
+				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
+					globalVars.app.say(_("完走に必要なコインが集まりました。"))
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
@@ -604,3 +608,8 @@ class manager:
 
 	def openLiveWindow(self):
 		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
+
+	def hasEnoughCoins(self, count):
+		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
+		current = current * 5
+		return current + count >= 35
