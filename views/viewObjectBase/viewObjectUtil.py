@@ -16,9 +16,9 @@ def isset(args,keyargs,i,name=None,type=None):
 		return p==None
 
 def getParam(args,keyargs,i,name=None):
-	#args�̊m�F
+	#argsの確認
 	if len(args)>i:
 		return args[i]
-	#keyargs�̊m�F
+	#keyargsの確認
 	if name:
 		return keyargs.pop(name,None)
