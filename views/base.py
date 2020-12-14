@@ -201,7 +201,7 @@ class BaseMenu(object):
 				menu_handle.Insert(index,menuItemsStore.getRef(ref_id),s,subMenu)
 			else:
 				menu_handle.Append(menuItemsStore.getRef(ref_id),s,subMenu)
-		self.blockCount[menuItemsStore.getRef(ref_id.upper())]=0
+		self.blockCount[menuItemsStore.getRef(ref_id)]=0
 
 	def RegisterCheckMenuCommand(self,menu_handle,ref_id,title=None,index=-1):
 		"""チェックメニューアイテム生成補助関数"""
@@ -213,7 +213,7 @@ class BaseMenu(object):
 			menu_handle.InsertCheckItem(index,menuItemsStore.getRef(ref_id),s)
 		else:
 			menu_handle.AppendCheckItem(menuItemsStore.getRef(ref_id),s)
-		self.blockCount[menuItemsStore.getRef(ref_id.upper())]=0
+		self.blockCount[menuItemsStore.getRef(ref_id)]=0
 
 	def RegisterRadioMenuCommand(self,menu_handle,ref_id,title=None,index=-1):
 		"""ラジオメニューアイテム生成補助関数"""
@@ -225,7 +225,14 @@ class BaseMenu(object):
 			menu_handle.InsertRadioItem(index,menuItemsStore.getRef(ref_id),s)
 		else:
 			menu_handle.AppendRadioItem(menuItemsStore.getRef(ref_id),s)
-		self.blockCount[menuItemsStore.getRef(ref_id.upper())]=0
+		self.blockCount[menuItemsStore.getRef(ref_id)]=0
+
+	def SetMenuLabel(self, ref_id, label=None):
+		if not label:
+			label=menuItemsDic.dic[ref_id]
+		shortcut=self.keymap.GetKeyString(self.keymap_identifier,ref_id)
+		s=label if shortcut is None else "%s\t%s" % (label,shortcut)
+		self.hMenuBar.SetLabel(menuItemsStore.getRef(ref_id), s)
 
 	def CheckMenu(ref_id,state=True):
 		return self.menu.Check(menuItemsStore.getRef(ref_id),state)
@@ -267,7 +274,7 @@ class BaseEvents(object):
 		self.identifier=identifier
 
 	def Exit(self,event=None):
-		self.parent.hFrame.Destroy()
+		event.Skip()
 
 	# wx.EVT_MOVE_END→wx.MoveEvent
 	def WindowMove(self,event):
