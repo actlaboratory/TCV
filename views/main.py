@@ -86,6 +86,8 @@ class MainView(BaseView):
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
 		self.commentList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.events.commentSelected)
 		self.commentList.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.events.commentSelected)
+		self.commentList.Bind(wx.EVT_CONTEXT_MENU, self.events.commentContextMenu)
+
 		self.events.commentSelected(None)
 
 		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None)
@@ -102,6 +104,8 @@ class MainView(BaseView):
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, space=20, style=wx.EXPAND | wx.ALL, proportion=1)
 		self.liveInfo, self.liveInfoStatic = creator.listbox(_("ライブ情報"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
+		self.liveInfo.Bind(wx.EVT_CONTEXT_MENU, self.events.userInfoContextMenu)
+		self.liveInfo.Bind(wx.EVT_RIGHT_DOWN,self.liveInfo.setCursorOnMouse)
 		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
 
 		self.hPanel.Layout()
@@ -293,30 +297,14 @@ class Events(BaseEvents):
 			globalVars.update.update(False)
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
-			if self.parent.commentList.GetFocusedItem() < 0:
-				return
-			contextMenu = wx.Menu()
-			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")
-			urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
-			for i, j in zip(urls, range(len(urls))):
-				contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
-			self.parent.hFrame.PopupMenu(contextMenu)
+				return self.commentContextMenu()
 		#URLを開く
 		elif selected >= constants.MENU_URL_FIRST:
 			obj = event.GetEventObject()
 			webbrowser.open(obj.GetLabel(selected))
 		#ユーザー情報のコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openUserInfoContextMenu"):
-			focusedItem = self.parent.liveInfo.GetSelection()
-			if focusedItem != self.parent.liveInfo.GetCount() - 1:
-				return
-			contextMenu = wx.Menu()
-			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信") + "(&B)")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示") + "(&B) ...")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
-			self.parent.hFrame.PopupMenu(contextMenu)
+			return self.userInfoContextMenu()
 
 
 	def postComment(self, event):
@@ -409,3 +397,28 @@ class Events(BaseEvents):
 		self.parent.menu.EnableMenu("viewComment", enable)
 		self.parent.menu.EnableMenu("replyToSelectedComment", enable)
 		self.parent.menu.EnableMenu("deleteSelectedComment", enable)
+
+	#コメント一覧でのコンテキストメニュー
+	#Shift+F10の場合はメニューイベント経由の為event=Noneとなる
+	def commentContextMenu(self, event=None):
+		if self.parent.commentList.GetFocusedItem() < 0:
+			return
+		contextMenu = wx.Menu()
+		self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")
+		urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
+		for i, j in zip(urls, range(len(urls))):
+			contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
+		pos=wx.DefaultPosition
+		self.parent.commentList.PopupMenu(contextMenu,event)
+
+	def userInfoContextMenu(self,event=None):
+		focusedItem = self.parent.liveInfo.GetSelection()
+		if focusedItem != self.parent.liveInfo.GetCount() - 1:
+			return
+		contextMenu = wx.Menu()
+		self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信") + "(&B)")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示") + "(&B) ...")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
+		self.parent.liveInfo.PopupMenu(contextMenu,event)
