@@ -187,7 +187,7 @@ class Events(BaseEvents):
 
 		#終了
 		if selected==menuItemsStore.getRef("exit"):
-			self.Exit()
+			self.parent.hFrame.Close()
 		#バージョン情報
 		elif selected==menuItemsStore.getRef("versionInfo"):
 			simpleDialog.dialog(_("バージョン情報"), _("%s(%s) Version %s.\nCopyright (C) %s %s") %(constants.APP_NAME, constants.APP_FULL_NAME,constants.APP_VERSION, constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
@@ -313,11 +313,11 @@ class Events(BaseEvents):
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
 
-	def Exit(self, event = None):
+	def Exit(self, event):
 		for i in globalVars.app.Manager.timers:
 			if i.IsRunning() == True:
 				i.Stop()
-		super().Exit()
+		super().Exit(event)
 
 	def connect(self, event=None):
 		connectDialog = views.connect.Dialog()
