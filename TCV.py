@@ -8,7 +8,6 @@ if hasattr(sys,"frozen"): os.chdir(os.path.dirname(sys.executable))
 else: os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 import win32timezone#ダミー
-def _(string): pass#dummy
 
 #dllを相対パスで指定した時のため、カレントディレクトリを変更
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
