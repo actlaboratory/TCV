@@ -112,6 +112,8 @@ class manager:
 		self.timers.append(self.liveInfoTimer)
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
+		if self.hasEnoughCoins(self.connection.coins) == True:
+			globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		self.oldCoins = self.connection.coins
 		self.oldCategory = self.connection.categoryName
 		self.oldViewers = self.connection.viewers
@@ -403,6 +405,8 @@ class manager:
 					globalVars.app.say(_("コイン消費"))
 				if self.newCoins % 5 == 0:
 					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
+				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
+					globalVars.app.say(_("完走に必要なコインが集まりました。"))
 			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
@@ -442,20 +446,34 @@ class manager:
 				count = i["count"]
 				users = self.connection.getItemPostedUser(id, count)
 				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
-				sameUser = False
-				for k in range(1, len(users) - 1):
-					if users[0] == users[k]:
-						sameUser = True
+				multiUser = False
+				if len(users) > 1:
+					for k in range(1, len(users) - 1):
+						if users[0] != users[k]:
+							multiUser = True
+							break
 				readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
 				if readReceivedItems == True:
 					if readItemPostedUser == 0:
-						globalVars.app.say(_("%sをもらいました。") %name)
-					else:
-						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
-						if sameUser == True:
-							globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+						if count == 1:
+							globalVars.app.say(_("%sをもらいました。") %name)
 						else:
-							globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+							globalVars.app.say(_("%sを%i個もらいました。") %(name, count))
+					else:
+						if readItemPostedUser == 1:
+							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
+						elif readItemPostedUser == 2:
+							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
+						if multiUser == False:
+							if count == 1:
+								globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+							else:
+								globalVars.app.say(_("%sさんから%sを%i個もらいました。") %(users[0], name, count))
+						else:
+							if count == 1:
+								globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+							else:
+								globalVars.app.say(_("%sさんなどから%sを%i個もらいました。") %(users[0], name, count))
 			if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
 				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
@@ -476,8 +494,7 @@ class manager:
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
 		elif id == evtPlaystatus:
-			globalVars.app.say(str(self.livePlayer.getStatus()))
-			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING | self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
+			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING and self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
 
 	def play(self):
@@ -580,9 +597,6 @@ class manager:
 				"viewFavorites": False,
 				"disconnect": True,
 				"play": True,
-				"viewComment": True,
-				"replyToSelectedComment": True,
-				"deleteSelectedComment": True,
 				"replyToBroadcaster": True,
 				"viewBroadcaster": True,
 				"openLive": True,
@@ -594,3 +608,8 @@ class manager:
 
 	def openLiveWindow(self):
 		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
+
+	def hasEnoughCoins(self, count):
+		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
+		current = current * 5
+		return current + count >= 35

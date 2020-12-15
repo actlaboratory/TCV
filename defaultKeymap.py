@@ -26,7 +26,7 @@ defaultKeymap["commentList"]={
 	"viewComment": "Alt+RETURN",
 	"replyToSelectedComment": "ctrl+r",
 	"deleteSelectedComment": "DELETE",
-	"openCommentListContextMenu": "RBUTTON/APPLICATIONS/SHIFT+F10"
+	"openCommentListContextMenu": "APPLICATIONS/SHIFT+F10"
 }
 
 defaultKeymap["commentBody"]={
@@ -34,5 +34,5 @@ defaultKeymap["commentBody"]={
 }
 
 defaultKeymap["userInfo"]= {
-	"openUserInfoContextMenu": "RBUTTON/APPLICATIONS/SHIFT+F10"
+	"openUserInfoContextMenu": "APPLICATIONS/SHIFT+F10"
 }

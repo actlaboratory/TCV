@@ -94,10 +94,11 @@ class MaiｎBase(wx.App):
 
 	def InitTranslation(self):
 		"""翻訳を初期化する。"""
+		loc = locale.getdefaultlocale()[0].replace("_", "-")
 		lang=self.config.getstring("general","language","",constants.SUPPORTING_LANGUAGE.keys())
 		if lang == "":
-			if locale.getdefaultlocale()[0] in constants.SUPPORTING_LANGUAGE:
-				self.config["general"]["language"] = locale.getdefaultlocale()[0]
+			if loc in list(constants.SUPPORTING_LANGUAGE.keys()):
+				self.config["general"]["language"] = loc
 			else:
 				# 言語選択を表示
 				langSelect = views.langDialog.langDialog()

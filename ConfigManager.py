@@ -106,6 +106,12 @@ class ConfigManager(configparser.ConfigParser):
 		if not self.has_section(name):
 			return super().add_section(name)
 
+	def items(self,section):
+		try:
+			return super().items(section)
+		except configparser.NoSectionError:
+			return []
+
 class ConfigSection(configparser.SectionProxy):
 	def __init__(self,proxy):
 		super().__init__(proxy._parser, proxy._name)

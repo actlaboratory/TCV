@@ -41,8 +41,8 @@ class MainView(BaseView):
 		title=constants.APP_NAME
 		super().Initialize(
 			title,
-			self.app.config.getint(self.identifier,"sizeX",800),
-			self.app.config.getint(self.identifier,"sizeY",600),
+			self.app.config.getint(self.identifier,"sizeX",600),
+			self.app.config.getint(self.identifier,"sizeY",540),
 			self.app.config.getint(self.identifier,"positionX"),
 			self.app.config.getint(self.identifier,"positionY")
 		)
@@ -50,13 +50,25 @@ class MainView(BaseView):
 		self.createStartScreen()
 
 	def createStartScreen(self):
-		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect)
-		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory)
-		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites)
-		self.settingsButton = self.creator.button(_("設定"), self.events.settings)
-		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager)
-		self.helpButton = self.creator.button(_("ヘルプを表示"), None)
-		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit)
+		self.hFrame.SetMinSize((600,540))
+
+		#タイトル表示
+		self.titleText = self.creator.staticText("TCV",sizerFlag=wx.CENTER | wx.ALL, margin=20)
+		font = self.titleText.GetFont()
+		font.SetPointSize(60)
+		font.SetNumericWeight(1000)
+		self.titleText.SetFont(font)
+
+		#メニューボタン
+		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.helpButton = self.creator.button(_("ヘルプを表示"), None, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.hPanel.Layout()
+		self.connectButton.SetFocus()
 
 	def createMainView(self):
 		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
@@ -64,27 +76,38 @@ class MainView(BaseView):
 		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
 
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=1)
-		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT,proportion=1, sizerFlag=wx.EXPAND)
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=2)
+		self.c1=creator.GetSizer()
+		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
 		self.commentList.InsertColumn(0, _("名前"))
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
+		self.commentList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.events.commentSelected)
+		self.commentList.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.events.commentSelected)
+		self.commentList.Bind(wx.EVT_CONTEXT_MENU, self.events.commentContextMenu)
 
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.EXPAND | wx.LEFT | wx.RIGHT)
-		self.selectAccount, self.selectAccountstatic = creator.combobox(_("コメント投稿アカウント"), [], proportion=1, textLayout=None)
+		self.events.commentSelected(None)
+
+		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None)
 		for i in globalVars.app.accountManager.tokens:
 			self.selectAccount.Append("%s(%s)" %(i["user"]["screen_id"], i["user"]["name"]))
 		self.selectAccount.SetSelection(0)
-		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP, proportion=4, textLayout=None)
-		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
-		self.commentSend = creator.button(_("送信"), self.events.postComment)
 
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.EXPAND | wx.ALL)
-		self.liveInfo, self.liveInfoStatic = creator.listbox(_("ライブ情報"), proportion=1, sizerFlag=wx.EXPAND | wx.RIGHT, textLayout=wx.VERTICAL, margin=20)
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.LEFT | wx.RIGHT | wx.EXPAND)
+		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP | wx.TE_NOHIDESEL , sizerFlag=wx.EXPAND, proportion=1, textLayout=None)
+		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
+		self.commentBodyEdit.hideScrollBar(wx.VERTICAL | wx.HORIZONTAL)
+		self.commentSend = creator.button(_("送信"), self.events.postComment, sizerFlag=wx.ALIGN_BOTTOM | wx.ALL)
+
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, space=20, style=wx.EXPAND | wx.ALL, proportion=1)
+		self.liveInfo, self.liveInfoStatic = creator.listbox(_("ライブ情報"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
 		self.liveInfo.SetAcceleratorTable(self.userInfoAcceleratorTable)
-		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+		self.liveInfo.Bind(wx.EVT_CONTEXT_MENU, self.events.userInfoContextMenu)
+		self.liveInfo.Bind(wx.EVT_RIGHT_DOWN,self.liveInfo.setCursorOnMouse)
+		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
 
@@ -104,8 +127,8 @@ class Menu(BaseMenu):
 		#メニューの中身
 		#ファイルメニュー
 		self.RegisterMenuCommand(self.hFileMenu,"connect",_("接続") + "(&C) ...")
-		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("最近接続したライブに接続") + "(&H) ...")
-		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入りライブに接続") + "(&F) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"viewHistory",_("接続履歴を開く") + "(&H) ...")
+		self.RegisterMenuCommand(self.hFileMenu,"viewFavorites",_("お気に入り一覧を開く") + "(&F) ...")
 		self.RegisterMenuCommand(self.hFileMenu,"disconnect",_("切断") + "(&D)")
 		self.RegisterMenuCommand(self.hFileMenu,"exit",_("終了") + "(&Q)")
 		#再生メニュー
@@ -132,6 +155,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ") + "(&M) ...")
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報") + "(&V) ...")
+		self.RegisterMenuCommand(self.hHelpMenu, "checkforUpdate", _("更新を確認") + "(&C) ...")
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
@@ -152,6 +176,14 @@ class Events(BaseEvents):
 
 		selected=event.GetId()#メニュー識別しの数値が出る
 
+		#特殊なイベントと思われる
+		if selected<10 and selected>0:
+			event.Skip()
+			return
+
+		if not self.parent.menu.IsEnable(selected):
+			event.Skip()
+			return
 
 		#終了
 		if selected==menuItemsStore.getRef("exit"):
@@ -260,30 +292,19 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("viewErrorLog"):
 			import subprocess
 			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
+		#更新を確認
+		elif selected==menuItemsStore.getRef("checkforUpdate"):
+			globalVars.update.update(False)
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openCommentListContextMenu"):
-			contextMenu = wx.Menu()
-			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")
-			urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
-			for i, j in zip(urls, range(len(urls))):
-				contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
-			self.parent.hFrame.PopupMenu(contextMenu)
+				return self.commentContextMenu()
 		#URLを開く
 		elif selected >= constants.MENU_URL_FIRST:
 			obj = event.GetEventObject()
 			webbrowser.open(obj.GetLabel(selected))
 		#ユーザー情報のコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("openUserInfoContextMenu"):
-			focusedItem = self.parent.liveInfo.GetSelection()
-			if focusedItem != self.parent.liveInfo.GetCount() - 1:
-				return
-			contextMenu = wx.Menu()
-			self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信") + "(&B)")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示") + "(&B) ...")
-			self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
-			self.parent.hFrame.PopupMenu(contextMenu)
+			return self.userInfoContextMenu()
 
 
 	def postComment(self, event):
@@ -366,3 +387,38 @@ class Events(BaseEvents):
 		globalVars.app.config.remove_section("nameReplace")
 		for i in userNameReplace.GetData():
 			globalVars.app.config["nameReplace"][i[0]] = i[1]
+
+	def commentSelected(self, event):
+		if event == None:
+			enable = False
+		else:
+			enable = True
+		self.parent.menu.EnableMenu("copyComment", enable)
+		self.parent.menu.EnableMenu("viewComment", enable)
+		self.parent.menu.EnableMenu("replyToSelectedComment", enable)
+		self.parent.menu.EnableMenu("deleteSelectedComment", enable)
+
+	#コメント一覧でのコンテキストメニュー
+	#Shift+F10の場合はメニューイベント経由の為event=Noneとなる
+	def commentContextMenu(self, event=None):
+		if self.parent.commentList.GetFocusedItem() < 0:
+			return
+		contextMenu = wx.Menu()
+		self.parent.menu.RegisterMenuCommand(contextMenu,"replyToSelectedComment",_("選択中のコメントに返信") + "(&R)")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"deleteSelectedComment",_("選択中のコメントを削除") + "(&D)")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")
+		urls = list(globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["urls"])
+		for i, j in zip(urls, range(len(urls))):
+			contextMenu.Append(constants.MENU_URL_FIRST + j, i.group())
+		pos=wx.DefaultPosition
+		self.parent.commentList.PopupMenu(contextMenu,event)
+
+	def userInfoContextMenu(self,event=None):
+		focusedItem = self.parent.liveInfo.GetSelection()
+		if focusedItem != self.parent.liveInfo.GetCount() - 1:
+			return
+		contextMenu = wx.Menu()
+		self.parent.menu.RegisterMenuCommand(contextMenu,"replyToBroadcaster",_("配信者に返信") + "(&B)")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"viewBroadcaster",_("配信者の情報を表示") + "(&B) ...")
+		self.parent.menu.RegisterMenuCommand(contextMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
+		self.parent.liveInfo.PopupMenu(contextMenu,event)

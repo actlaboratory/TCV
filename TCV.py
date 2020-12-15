@@ -8,7 +8,6 @@ if hasattr(sys,"frozen"): os.chdir(os.path.dirname(sys.executable))
 else: os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 import win32timezone#ダミー
-def _(string): pass#dummy
 
 #dllを相対パスで指定した時のため、カレントディレクトリを変更
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -23,6 +22,7 @@ import app as application
 import constants
 import globalVars
 import winsound
+import requests.exceptions
 import simpleDialog
 import pathlib
 import traceback
@@ -37,6 +37,9 @@ def main():
 	app.config.write()
 
 def exchandler(type, exc, tb):
+	if type == requests.exceptions.ConnectionError:
+		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
+		sys.exit(-1)
 	winsound.Beep(1000, 1000)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))

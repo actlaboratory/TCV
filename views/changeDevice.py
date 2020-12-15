@@ -20,8 +20,8 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.deviceList, self.static = self.creator.listCtrl(_("再生デバイス"), None, wx.LC_LIST)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL,margin=20)
+		self.deviceList, self.static = self.creator.listCtrl(_("再生デバイス"), None, wx.LC_LIST|wx.LC_SINGLE_SEL,sizerFlag=wx.EXPAND)
 		self.deviceList.ClearAll()
 		self.deviceList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		self.deviceList.InsertItem(0, _("規定のデバイス"))
@@ -29,7 +29,8 @@ class Dialog(BaseDialog):
 		del deviceList[deviceList.index("No sound")]
 		for i in deviceList:
 			self.deviceList.Append([i])
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 

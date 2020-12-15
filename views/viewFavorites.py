@@ -20,12 +20,14 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.favoritesList, self.favoritesStatic = self.creator.listbox(_("お気に入り"))
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL|wx.EXPAND,margin=20)
+		self.favoritesList, self.favoritesStatic = self.creator.listbox(_("お気に入り"),sizerFlag=wx.EXPAND)
 		self.favoritesList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		self.favoritesList.Bind(wx.EVT_LISTBOX, self.itemSelected)
 		for i in globalVars.app.Manager.favorites:
 			self.favoritesList.Append(i)
+
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.BOTTOM,margin=20)
 		self.deleteButton = self.creator.button(_("削除"), self.delete)
 		self.clearButton = self.creator.button(_("全て削除"), self.clear)
 
