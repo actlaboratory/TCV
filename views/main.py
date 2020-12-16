@@ -33,6 +33,7 @@ import views.commentReplace
 import views.userNamereplace
 import webbrowser
 import constants
+import subprocess
 
 class MainView(BaseView):
 	def __init__(self):
@@ -290,7 +291,6 @@ class Events(BaseEvents):
 				pass
 		#エラーログを開く
 		elif selected==menuItemsStore.getRef("viewErrorLog"):
-			import subprocess
 			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
 		#更新を確認
 		elif selected==menuItemsStore.getRef("checkforUpdate"):
@@ -325,10 +325,6 @@ class Events(BaseEvents):
 		ret = connectDialog.Show()
 		if ret==wx.ID_CANCEL: return
 		user = str(connectDialog.GetValue())
-		user = user.replace("http://twitcasting.tv/", "")
-		user = user.replace("https://twitcasting.tv/", "")
-		if "/" in user:
-			user = user[0:user.find("/")]
 		globalVars.app.Manager.connect(user)
 		return
 

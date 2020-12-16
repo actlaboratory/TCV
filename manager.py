@@ -63,6 +63,10 @@ class manager:
 		self.timers.append(self.playStatusTimer)
 
 	def connect(self, userId):
+		userId = userId.replace("http://twitcasting.tv/", "")
+		userId = userId.replace("https://twitcasting.tv/", "")
+		if "/" in userId:
+			userId = userId[0:userId.find("/")]
 		if globalVars.app.accountManager.hasDefaultAccount() == False:
 			simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			return
