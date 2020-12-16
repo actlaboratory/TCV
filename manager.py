@@ -265,6 +265,7 @@ class manager:
 			self.MainView.itemList.Insert(result[i], i)
 
 	def postComment(self, commentBody, idx):
+		commentBody = commentBody.strip()
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
 			return False
