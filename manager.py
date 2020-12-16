@@ -52,7 +52,6 @@ class manager:
 		self.myAccount = []
 		for i in globalVars.app.accountManager.tokens:
 			self.myAccount.append(i["user"])
-		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
 		self.livePlayer = None
 		self.fxPlayer = None
@@ -188,7 +187,7 @@ class manager:
 			"time": datetime.datetime.fromtimestamp(commentObject["created"]).strftime("%H:%M:%S"),
 			"user": commentObject["from_user"]["screen_id"]
 		}
-		for i in self.nameReplaceList:
+		for i in globalVars.app.config.items("nameReplace"):
 			if i[0] == commentData["user"]:
 				commentData["dispname"] = i[1]
 		for i in globalVars.app.config.items("commentReplaceBasic"):
@@ -614,3 +613,30 @@ class manager:
 		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
 		current = current * 5
 		return current + count >= 35
+
+	def refreshReplaceSettings(self):
+		if hasattr(self, "connection") == False:
+			return
+		for idx in range(len(self.connection.comments)):
+			name = self.connection.comments[idx]["from_user"]["name"]
+			for i in globalVars.app.config.items("nameReplace"):
+				if i[0] == self.connection.comments[idx]["from_user"]["screen_id"]:
+					name = i[1]
+			self.MainView.commentList.SetItem(idx, 0, name)
+			body = self.connection.comments[idx]["message"]
+			for i in globalVars.app.config.items("commentReplaceBasic"):
+				body = body.replace(i[0], i[1])
+			for i in globalVars.app.config.items("commentReplaceReg"):
+				body = re.sub(i[0], i[1], body)
+			urls = list(self.connection.comments[idx]["urls"])
+			domains = re.finditer("(https?://[^/]+/)", body)
+			for url in urls:
+				for domain in domains:
+					if len(globalVars.app.config["commentReplaceSpecial"]["url"]) != 0:
+						body = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], body)
+					if globalVars.app.config.getboolean("commentReplaceSpecial", "deleteProtcolName", False) == True:
+						body = body.replace("http://", "")
+						body = body.replace("https://", "")
+					if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
+						body = body.replace(url.group(), domain.group())
+			self.MainView.commentList.SetItem(idx, 1, body)

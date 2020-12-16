@@ -377,6 +377,7 @@ class Events(BaseEvents):
 				globalVars.app.config["commentReplaceBasic"][i[0]] = i[1]
 			elif i[2] == _("正規表現"):
 				globalVars.app.config["commentReplaceReg"][i[0]] = i[1]
+		globalVars.app.Manager.refreshReplaceSettings()
 
 	def userNameReplace(self):
 		userNameReplace = views.userNamereplace.Dialog()
@@ -387,6 +388,7 @@ class Events(BaseEvents):
 		globalVars.app.config.remove_section("nameReplace")
 		for i in userNameReplace.GetData():
 			globalVars.app.config["nameReplace"][i[0]] = i[1]
+		globalVars.app.Manager.refreshReplaceSettings()
 
 	def commentSelected(self, event):
 		if event == None:
