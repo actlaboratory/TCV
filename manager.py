@@ -262,10 +262,18 @@ class manager:
 		for i in self.connection.item:
 			result.append(i["name"] + ":" + str(i["count"]))
 		result.sort()
+		for i in range(len(result)):
+			if result[i][0:2] == "MP":
+				mp = i
+				break
+		result[mp], result[-1] = result[-1], result[mp]
 		if mode == update:
+			cursor = self.MainView.itemList.GetSelection()
 			self.MainView.itemList.Clear()
 		for i in range(0, len(result)):
 			self.MainView.itemList.Insert(result[i], i)
+		if mode == update and cursor != wx.NOT_FOUND and self.MainView.itemList.GetCount() - 1 >= cursor:
+			self.MainView.itemList.SetSelection(cursor)
 
 	def postComment(self, commentBody, idx):
 		commentBody = commentBody.strip()
@@ -403,15 +411,6 @@ class manager:
 			if self.newCategory != self.oldCategory:
 				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
 			self.oldCategory = self.newCategory
-			self.newCoins = self.connection.coins
-			if self.newCoins != self.oldCoins:
-				if self.newCoins < self.oldCoins:
-					globalVars.app.say(_("コイン消費"))
-				if self.newCoins % 5 == 0:
-					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
-				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
-					globalVars.app.say(_("完走に必要なコインが集まりました。"))
-			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
@@ -445,6 +444,8 @@ class manager:
 					if new["name"] == old["name"] and new["count"] > old["count"]:
 						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
 			for i in receivedItem:
+				if i["name"] == "MP":
+					continue
 				id = i["id"]
 				name = i["name"]
 				count = i["count"]
@@ -482,6 +483,15 @@ class manager:
 				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
 			self.createItemList(update)
+			self.newCoins = self.connection.coins
+			if self.newCoins != self.oldCoins:
+				if self.newCoins < self.oldCoins:
+					globalVars.app.say(_("コイン消費"))
+				if self.newCoins % 5 == 0:
+					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
+				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
+					globalVars.app.say(_("完走に必要なコインが集まりました。"))
+			self.oldCoins = self.newCoins
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
