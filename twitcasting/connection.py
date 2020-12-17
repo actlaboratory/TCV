@@ -72,6 +72,8 @@ class connection:
 			return True
 
 	def getItemPostedUser(self, itemId, count):
+		if itemId == "MP":
+			return
 		users = getItemPostedUser(self.userId, itemId)
 		return users[0:count]
 

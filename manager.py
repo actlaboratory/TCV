@@ -262,6 +262,11 @@ class manager:
 		for i in self.connection.item:
 			result.append(i["name"] + ":" + str(i["count"]))
 		result.sort()
+		for i in range(len(result)):
+			if result[i][0:2] == "MP":
+				mp = i
+				break
+		result[mp], result[-1] = result[-1], result[mp]
 		if mode == update:
 			self.MainView.itemList.Clear()
 		for i in range(0, len(result)):
@@ -436,6 +441,8 @@ class manager:
 					if new["name"] == old["name"] and new["count"] > old["count"]:
 						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
 			for i in receivedItem:
+				if i["name"] == "MP":
+					continue
 				id = i["id"]
 				name = i["name"]
 				count = i["count"]
