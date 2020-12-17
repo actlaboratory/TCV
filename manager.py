@@ -268,9 +268,12 @@ class manager:
 				break
 		result[mp], result[-1] = result[-1], result[mp]
 		if mode == update:
+			cursor = self.MainView.itemList.GetSelection()
 			self.MainView.itemList.Clear()
 		for i in range(0, len(result)):
 			self.MainView.itemList.Insert(result[i], i)
+		if mode == update and cursor != wx.NOT_FOUND and self.MainView.itemList.GetCount() - 1 >= cursor:
+			self.MainView.itemList.SetSelection(cursor)
 
 	def postComment(self, commentBody, idx):
 		commentBody = commentBody.strip()
