@@ -84,6 +84,8 @@ class MainView(BaseView):
 		self.commentList.InsertColumn(1, _("投稿"))
 		self.commentList.InsertColumn(2, _("時刻"))
 		self.commentList.InsertColumn(3, _("ユーザ名"))
+		self.commentList.loadColumnInfo(self.identifier,"commentList")
+
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
 		self.commentList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.events.commentSelected)
 		self.commentList.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.events.commentSelected)
@@ -321,6 +323,7 @@ class Events(BaseEvents):
 			self.parent.commentBodyEdit.Clear()
 
 	def Exit(self, event=None):
+		self.parent.commentList.saveColumnInfo()
 		for i in globalVars.app.Manager.timers:
 			if i.IsRunning() == True:
 				i.Stop()
