@@ -27,7 +27,8 @@ def getItem(screenId):
 			end = href.index("'", start)
 			itemId.append(href[start: end])
 	for name, count, id in zip(itemName, itemCount, itemId):
-		result.append({"name": name, "count": count, "id": id})
+		if count > 0:
+			result.append({"name": name, "count": count, "id": id})
 	return result
 
 def getItemPostedUser(screenId, itemId):

@@ -403,15 +403,6 @@ class manager:
 			if self.newCategory != self.oldCategory:
 				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
 			self.oldCategory = self.newCategory
-			self.newCoins = self.connection.coins
-			if self.newCoins != self.oldCoins:
-				if self.newCoins < self.oldCoins:
-					globalVars.app.say(_("コイン消費"))
-				if self.newCoins % 5 == 0:
-					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
-				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
-					globalVars.app.say(_("完走に必要なコインが集まりました。"))
-			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
@@ -482,6 +473,15 @@ class manager:
 				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
 			self.createItemList(update)
+			self.newCoins = self.connection.coins
+			if self.newCoins != self.oldCoins:
+				if self.newCoins < self.oldCoins:
+					globalVars.app.say(_("コイン消費"))
+				if self.newCoins % 5 == 0:
+					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
+				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
+					globalVars.app.say(_("完走に必要なコインが集まりました。"))
+			self.oldCoins = self.newCoins
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
