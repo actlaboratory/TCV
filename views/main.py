@@ -154,6 +154,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定") + "(&R) ...")
 		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定") + "(&N) ...")
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ") + "(&M) ...")
+		self.RegisterMenuCommand(self.hSettingsMenu, "sapiSetting", _("SAPI設定を開く") + "(&A) ...")
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu,"versionInfo",_("バージョン情報") + "(&V) ...")
 		self.RegisterMenuCommand(self.hHelpMenu, "checkforUpdate", _("更新を確認") + "(&C) ...")
@@ -257,6 +258,12 @@ class Events(BaseEvents):
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("accountManager"):
 			self.accountManager()
+		#SAPI設定を開く
+		elif selected == menuItemsStore.getRef("sapiSetting"):
+			file = os.path.join(os.getenv("windir"), "SysWOW64", "Speech", "SpeechUX", "sapi.cpl")
+			if os.path.exists(file) == False:
+				file = file.replace("syswow64", "system32")
+			subprocess.Popen(["start", file])
 		#コメント送信（ホットキー）
 		elif selected==menuItemsStore.getRef("postComment"):
 			self.postComment(None)
