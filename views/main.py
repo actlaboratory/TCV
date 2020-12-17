@@ -320,11 +320,14 @@ class Events(BaseEvents):
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
 
-	def Exit(self, event):
+	def Exit(self, event=None):
 		for i in globalVars.app.Manager.timers:
 			if i.IsRunning() == True:
 				i.Stop()
-		super().Exit(event)
+		if event and isinstance(event,wx.CloseEvent):
+			super().Exit(event)
+		else:
+			self.parent.hFrame.Close()
 
 	def connect(self, event=None):
 		connectDialog = views.connect.Dialog()
