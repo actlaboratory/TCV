@@ -29,6 +29,7 @@ import views.viewFavorites
 import views.accountManager
 import views.changeDevice
 import views.settings
+import views.indicatorSoundSettings
 import views.commentReplace
 import views.userNamereplace
 import webbrowser
@@ -153,6 +154,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu,"addFavorites",_("お気に入りに追加") + "(&A) ...")
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,"settings",_("設定") + "(&S) ...")
+		self.RegisterMenuCommand(self.hSettingsMenu, "indicatorSoundSettings", _("効果音設定") + "(&F)")
 		self.RegisterMenuCommand(self.hSettingsMenu,"commentReplace",_("コメント文字列置換設定") + "(&R) ...")
 		self.RegisterMenuCommand(self.hSettingsMenu,"userNameReplace",_("表示名置換設定") + "(&N) ...")
 		self.RegisterMenuCommand(self.hSettingsMenu,"accountManager",_("アカウントマネージャ") + "(&M) ...")
@@ -251,6 +253,9 @@ class Events(BaseEvents):
 		#設定
 		elif selected==menuItemsStore.getRef("settings"):
 			self.settings()
+		#効果音設定
+		elif selected == menuItemsStore.getRef("indicatorSoundSettings"):
+			self.indicatorSoundSettings()
 		#コメント文字列置換設定
 		elif selected==menuItemsStore.getRef("commentReplace"):
 			self.commentReplace()
@@ -373,6 +378,11 @@ class Events(BaseEvents):
 		settings = views.settings.settingsDialog()
 		settings.Initialize()
 		settings.Show()
+
+	def indicatorSoundSettings(self):
+		d = views.indicatorSoundSettings.Dialog()
+		d.Initialize()
+		d.show()
 
 	def commentReplace(self):
 		commentReplace = views.commentReplace.Dialog()
