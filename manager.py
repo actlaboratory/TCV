@@ -438,8 +438,8 @@ class manager:
 			self.newItem = self.connection.item
 			receivedItem = []
 			for new in self.newItem:
-				#if new["name"] not in self.oldItem:
-					#receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+				if new["name"] not in [i["name"] for i in self.oldItem]:
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
 				for old in self.oldItem:
 					if new["name"] == old["name"] and new["count"] > old["count"]:
 						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
