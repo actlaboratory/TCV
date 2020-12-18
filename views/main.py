@@ -114,6 +114,12 @@ class MainView(BaseView):
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
 
+	def Clear(self):
+		if hasattr(self,"commentList") and self.commentList:
+			self.commentList.saveColumnInfo()
+			self.commentList = None
+		super().Clear()
+
 class Menu(BaseMenu):
 	def Apply(self,target):
 		"""指定されたウィンドウに、メニューを適用する。"""
@@ -323,7 +329,7 @@ class Events(BaseEvents):
 			self.parent.commentBodyEdit.Clear()
 
 	def Exit(self, event=None):
-		if hasattr(self.parent,"commentList"):
+		if hasattr(self.parent,"commentList") and self.parent.commentList:
 			self.parent.commentList.saveColumnInfo()
 		for i in globalVars.app.Manager.timers:
 			if i.IsRunning() == True:
