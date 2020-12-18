@@ -26,12 +26,16 @@ def getItem(screenId):
 			start = href.index(",") + 3
 			end = href.index("'", start)
 			itemId.append(href[start: end])
-	mp = soup.find("span", class_ = "tw-item-mp").text.split()
+	mp = soup.find("span", class_ = "tw-item-mp")
+	if mp == None:
+		mp = ["0", "MP"]
+	else:
+		mp = mp.text.split()
 	itemName.append(mp[1])
 	itemCount.append(int(mp[0]))
 	itemId.append(mp[1])
 	for name, count, id in zip(itemName, itemCount, itemId):
-		if count > 0:
+		if count > 0 or name == "MP":
 			result.append({"name": name, "count": count, "id": id})
 	return result
 
