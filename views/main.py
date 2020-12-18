@@ -265,7 +265,7 @@ class Events(BaseEvents):
 			file = os.path.join(os.getenv("windir"), "SysWOW64", "Speech", "SpeechUX", "sapi.cpl")
 			if os.path.exists(file) == False:
 				file = file.replace("syswow64", "system32")
-			subprocess.Popen(["start", file])
+			subprocess.Popen(file)
 		#コメント送信（ホットキー）
 		elif selected==menuItemsStore.getRef("postComment"):
 			self.postComment(None)
