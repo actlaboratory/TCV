@@ -410,7 +410,7 @@ class manager:
 				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
 			self.newSubtitle = self.connection.subtitle
-			if self.newSubtitle != self.oldSubtitle:
+			if self.newSubtitle != self.oldSubtitle and self.connection.isLive == True:
 				if self.newSubtitle == None:
 					globalVars.app.say(_("テロップ削除"))
 				else:
@@ -418,7 +418,7 @@ class manager:
 					globalVars.app.say(self.newSubtitle)
 			self.oldSubtitle = self.newSubtitle
 			self.newCategory = self.connection.categoryName
-			if self.newCategory != self.oldCategory:
+			if self.newCategory != self.oldCategory and self.connection.isLive == True:
 				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
 			self.oldCategory = self.newCategory
 			self.newMovieId = self.connection.movieId
@@ -432,7 +432,7 @@ class manager:
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			readViewers = globalVars.app.config.getboolean("autoReadingOptions", "readViewers", True)
-			if readViewers == True:
+			if readViewers == True and self.connection.isLive == True:
 				if self.newViewers < self.oldViewers:
 					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
