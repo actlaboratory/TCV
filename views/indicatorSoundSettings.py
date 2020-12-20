@@ -10,9 +10,9 @@ import globalVars
 class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 	def __init__(self):
 		info=[
-			(_("種類"),wx.LIST_FORMAT_LEFT,200),
-			(_("再生"),wx.LIST_FORMAT_LEFT,350),
-			(_("ファイル"),wx.LIST_FORMAT_LEFT,200)
+			(_("種類"),wx.LIST_FORMAT_LEFT,350),
+			(_("再生"),wx.LIST_FORMAT_LEFT,180),
+			(_("ファイル"),wx.LIST_FORMAT_LEFT,400)
 		]
 		self.types = [
 			_("コメント受信時"),
