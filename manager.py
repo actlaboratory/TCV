@@ -441,8 +441,13 @@ class manager:
 					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
 					globalVars.app.say(viewersInfo)
-			if globalVars.app.config.getboolean("fx", "playViewersChangedSound", True) == True and self.newViewers != self.oldViewers:
-				self.playFx(globalVars.app.config["fx"]["viewersChangedSound"])
+			if self.newViewers != self.oldViewers and self.connection.isLive == True:
+				if self.newViewers > self.oldViewers:
+					if globalVars.app.config.getboolean("fx", "playviewersincreasedsound", True) == True:
+						self.playFx(globalVars.app.config["fx"]["viewersincreasedSound"])
+				elif self.newViewers < self.oldViewers:
+					if globalVars.app.config.getboolean("fx", "playviewersdecreasedsound", True) == True:
+						self.playFx(globalVars.app.config["fx"]["viewersdecreasedSound"])
 			self.oldViewers = self.newViewers
 			self.createLiveInfoList(update)
 			self.newItem = self.connection.item
