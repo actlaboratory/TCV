@@ -39,10 +39,7 @@ def GetCurrentLive(user_id):
 def GetComments(movie_id, offset=0, limit=10, slice_id=""):
 	result = requests.get(baseURL + "/movies/" + str(movie_id) + "/comments?offset=" + str(offset) + "&limit=" + str(limit) + "&slice_id=" + str(slice_id), headers=makeHeader())
 	dict = result.json()
-	if "error" in dict:
-		return dict
-	else:
-		return dict["comments"]
+	return dict
 
 def PostComment(movie_id, comment, sns="none", token=None):
 	result = requests.post(baseURL + "/movies/" + movie_id + "/comments", json = {"comment": comment, "sns": sns}, headers=makeHeader(token))
@@ -61,4 +58,4 @@ def DeleteComment(movie_id, comment_id):
 def GetCategories(lang = "ja"):
 	result = requests.get(baseURL + "/categories?lang=" + lang, headers=makeHeader())
 	dict = result.json()
-	return dict["categories"]
+	return dict

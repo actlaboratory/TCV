@@ -106,6 +106,7 @@ class Dialog(BaseDialog):
 		globalVars.app.accountManager.deleteAccount(idx)
 		self.setDefaultButton.Enable(False)
 		self.deleteButton.Enable(False)
+		self.hListCtrl.SetFocus()
 
 	def move(self, event):
 		button = event.GetEventObject()
@@ -119,6 +120,7 @@ class Dialog(BaseDialog):
 		self.hListCtrl.Focus(target)
 		self.hListCtrl.Select(target)
 		globalVars.app.accountManager.saveAsFile()
+		self.hListCtrl.SetFocus()
 
 	def close(self, event = None):
 		result = globalVars.app.accountManager.hasDefaultAccount()

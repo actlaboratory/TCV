@@ -13,6 +13,7 @@ class connection:
 		self.userId = userId
 		self.update()
 		self.comments = []
+		self.errorFlag = 0
 
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
@@ -20,7 +21,13 @@ class connection:
 		offset = max(0, number-50)
 		limit = min(50, number)
 		result = GetComments(self.movieId, offset, limit)
-		if len(result) == 0 or (type(result) == dict and "error" in result.keys() and result["error"]["code"] == 500):
+		try:
+			result = result["comments"]
+		except KeyError:
+			if "error" in result:
+				self.errorFlag = result["error"]["code"]
+			result = []
+		if len(result) == 0:
 			self.lastCommentId = ""
 			return []
 		else:
@@ -39,13 +46,25 @@ class connection:
 			return []
 		ret = []
 		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
-		if len(result) == 0 or "error" in result or type(result) != list:
+		try:
+			result = result["comments"]
+		except KeyError:
+			if "error" in result:
+				self.errorFlag = result["error"]["code"]
+			result = []
+		if len(result) == 0:
 			return []
 		else:
 			while result != []:
 				self.lastCommentId = result[0]["id"]
 				ret = result + ret
 				result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+				try:
+					result = result["comments"]
+				except KeyError:
+					if "error" in result:
+						self.errorFlag = result["error"]["code"]
+					result = []
 			for i in ret:
 				i["movieId"] = self.movieId
 				i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
@@ -66,7 +85,7 @@ class connection:
 
 	def deleteComment(self, comment):
 		result = DeleteComment(comment["movieId"], comment["id"])
-		if "error" in result and result["error"]["code"] == 403:
+		if "error" in result:
 			return False
 		else:
 			return True
@@ -83,8 +102,10 @@ class connection:
 
 	def update(self):
 		userInfo = GetUserInfo(self.userId)
-		if "error" in userInfo and userInfo["error"]["code"] == 404:
+		if "error" in userInfo:
 			self.connected = False
+			if userInfo["error"]["code"] != 404:
+				self.errorFlag = userInfo["error"]["code"]
 			return
 		else:
 			self.connected = True
@@ -99,16 +120,19 @@ class connection:
 			self.isLive = False
 		if self.hasMovieId == True:
 			self.movieInfo = GetMovieInfo(self.movieId)
-			if "error" in self.movieInfo and self.movieInfo["error"]["code"] == 404:
-				self.hasMovieId = False
+			if "error" in self.movieInfo:
+				if self.movieInfo["error"]["code"] == 404:
+					self.hasMovieId = False
+				else:
+					self.errorFlag = self.movieInfo["error"]["code"]
 			if self.hasMovieId == True:
 				self.category = self.movieInfo["movie"]["category"]
-				self.categoryName = getCategoryName(self.category)
+				self.categoryName = self.getCategoryName(self.category)
 				self.viewers = self.movieInfo["movie"]["current_view_count"]
 				self.subtitle = self.movieInfo["movie"]["subtitle"]
 		if self.hasMovieId == False:
 			self.category = None
-			self.categoryName = getCategoryName(self.category)
+			self.categoryName = self.getCategoryName(self.category)
 			self.viewers = 0
 			self.subtitle = None
 		self.item = getItem(self.userId)
@@ -118,11 +142,17 @@ class connection:
 				self.coins = i["count"]
 
 
-def getCategoryName(id):
-	if id == None:
-		return _("カテゴリなし")
-	categories = GetCategories()
-	for category in categories:
-		for subCategory in category["sub_categories"]:
-			if subCategory["id"] == id:
-				return subCategory["name"]
+	def getCategoryName(self, id):
+		if id == None:
+			return _("カテゴリなし")
+		categories = GetCategories()
+		try:
+			categories = categories["categories"]
+		except KeyError:
+			if "error" in categories:
+				self.errorFlag = categories["error"]["code"]
+			categories = []
+		for category in categories:
+			for subCategory in category["sub_categories"]:
+				if subCategory["id"] == id:
+					return subCategory["name"]
