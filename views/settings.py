@@ -87,8 +87,9 @@ class settingsDialog(BaseDialog):
 
 		# reading-2
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("読み上げ-2"),style=wx.TOP|wx.LEFT|wx.RIGHT,margin=20)
-		self.readviewers = creator.checkbox(_("閲覧者数が変化したら読み上げる") + "(&V)")
+		self.readviewersincreased = creator.checkbox(_("閲覧者数が増加したら読み上げる") + "(&V)")
 		self.viewersincreasedannouncement, static = creator.inputbox(_("閲覧者数が増加した際の読み上げ") + "(&I)")
+		self.readviewersdecreased = creator.checkbox(_("閲覧者数が減少したら読み上げる") + "(&V)")
 		self.viewersdecreasedannouncement, static = creator.inputbox(_("閲覧者数が減少した際の読み上げ") + "(&D)")
 		self.readtypinguser = creator.checkbox(_("入力中のユーザーを読み上げる") + "(&T)")
 		self.readreceiveditems = creator.checkbox(_("受信したアイテムを読み上げる") + "(&I)")
@@ -145,8 +146,9 @@ class settingsDialog(BaseDialog):
 		self.readmycomment.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readmycomment"))
 		self.readmentions_mylive.SetValue(self.readmentionsSelection[globalVars.app.config["autoReadingOptions"]["readmentions_mylive"]])
 		self.readmentions_otherlive.SetValue(self.readmentionsSelection[globalVars.app.config["autoReadingOptions"]["readmentions_otherlive"]])
-		self.readviewers.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readviewers"))
+		self.readviewersincreased.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readviewersincreased"))
 		self.viewersincreasedannouncement.SetValue(globalVars.app.config["autoReadingOptions"]["viewersincreasedannouncement"])
+		self.readviewersdecreased.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readviewersdecreased"))
 		self.viewersdecreasedannouncement.SetValue(globalVars.app.config["autoReadingOptions"]["viewersdecreasedannouncement"])
 		self.readtypinguser.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readtypinguser"))
 		self.readreceiveditems.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readreceiveditems"))
@@ -190,8 +192,9 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["autoReadingOptions"]["readmycomment"] = self.readmycomment.GetValue()
 		globalVars.app.config["autoReadingOptions"]["readmentions_mylive"] = list(self.readmentionsSelection.keys())[self.readmentions_mylive.GetSelection()]
 		globalVars.app.config["autoReadingOptions"]["readmentions_otherlive"] = list(self.readmentionsSelection.keys())[self.readmentions_otherlive.GetSelection()]
-		globalVars.app.config["autoReadingOptions"]["readviewers"] = self.readviewers.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readviewersincreased"] = self.readviewersincreased.GetValue()
 		globalVars.app.config["autoReadingOptions"]["viewersincreasedannouncement"] = self.viewersincreasedannouncement.GetValue()
+		globalVars.app.config["autoReadingOptions"]["readviewersdecreased"] = self.readviewersdecreased.GetValue()
 		globalVars.app.config["autoReadingOptions"]["viewersdecreasedannouncement"] = self.viewersdecreasedannouncement.GetValue()
 		globalVars.app.config["autoReadingOptions"]["readtypinguser"] = self.readtypinguser.GetValue()
 		globalVars.app.config["autoReadingOptions"]["readreceiveditems"] = self.readreceiveditems.GetValue()
