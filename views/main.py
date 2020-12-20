@@ -399,9 +399,9 @@ class Events(BaseEvents):
 		globalVars.app.config.remove_section("commentReplaceBasic")
 		globalVars.app.config.remove_section("commentReplaceReg")
 		for i in commentReplace.GetValue():
-			if i[2] == _("標準"):
+			if i[2] == False:
 				globalVars.app.config["commentReplaceBasic"][i[0]] = i[1]
-			elif i[2] == _("正規表現"):
+			elif i[2] == True:
 				globalVars.app.config["commentReplaceReg"][i[0]] = i[1]
 		globalVars.app.Manager.refreshReplaceSettings()
 
