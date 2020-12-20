@@ -14,6 +14,7 @@ import wx
 import base64
 import copy
 import views.accountManager
+import sys
 
 class AccountManager:
 	def __init__(self):
@@ -25,8 +26,24 @@ class AccountManager:
 			self.loadFromFile()
 		except:
 			pass
+		rm = []
+		cl = []
 		for i in range(0, len(self.tokens)):
-			self.verifyCredentials(i)
+			result = self.verifyCredentials(i)
+			if result == 1000:
+				rm.append(i)
+			elif result == 2000:
+				cl.append(i)
+			elif result == 2001:
+				simpleDialog.errorDialog(_("現在TCVは使用できません。開発者に連絡してください。"))
+				sys.exit(-1)
+		if len(rm) > 0:
+			simpleDialog.errorDialog(_("無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
+			for i in err:
+				del self.tokens[i]
+		if len(cl) > 0:
+			simpleDialog.errorDialog(_("APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この情報を再度取得するには、数分待ってからTCVを再起動してください。"))
+		self.saveAsFile()
 
 	def loadFromFile(self):
 		with open(constants.TOKEN_FILE_NAME, "rb") as f:
@@ -62,6 +79,12 @@ class AccountManager:
 		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
 		self.tokens[-1]["default"] = False
 		self.verifyCredentials(-1)
+		rm = []
+		for i in range(len(self.tokens) - 1):
+			if self.tokens[i]["user"]["id"] == self.tokens[-1]["user"]["id"]:
+				rm.append(i)
+		for i in rm:
+			del self.tokens[i]
 		self.saveAsFile()
 
 	def verifyCredentials(self, idx):
@@ -70,6 +93,14 @@ class AccountManager:
 			"X-Api-Version": "2.0",
 			"Authorization": "Bearer " + token
 		}).json()
+		if "error" in result:
+			if result["error"]["code"] == 2000:
+				self.tokens[idx]["user"] = {
+					"id": "0",
+					"screen_id": "unavailable",
+					"name": _("不明"),
+				}
+			return result["error"]["code"]
 		self.tokens[idx]["user"] = result["user"]
 
 	def setDefaultAccount(self, idx):
@@ -94,9 +125,9 @@ class AccountManager:
 		self.saveAsFile()
 
 	def getDefaultToken(self):
-		for i in self.tokens:
-			if i["default"] == True:
-				return i["access_token"]
+		for i in range(len(self.tokens)):
+			if self.tokens[i]["default"] == True:
+				return self.getToken(i)
 
 	def getToken(self, idx):
 		return self.tokens[idx]["access_token"]

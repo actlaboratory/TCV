@@ -15,12 +15,14 @@ from soundPlayer.constants import *
 import soundPlayer.fxPlayer
 import pyperclip
 import webbrowser
+import sys
 
 evtComment = 0
 evtLiveInfo = 1
 evtCountDown = 2
 evtTyping = 3
 evtPlaystatus = 4
+evtError = 5
 
 first = 0
 update = 1
@@ -30,6 +32,7 @@ liveInfoTimerInterval = 10000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 playstatusTimerInterval = 500
+errorCheckTimerInterval = 1000
 
 historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
 favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
@@ -68,11 +71,17 @@ class manager:
 		if "/" in userId:
 			userId = userId[0:userId.find("/")]
 		if globalVars.app.accountManager.hasDefaultAccount() == False:
-			simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			if len(globalVars.app.accountManager.tokens) == 0:
+				simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			else:
+				simpleDialog.errorDialog(_("通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのアカウントマネージャから通信用アカウントの設定を行ってください。"))
 			return
 		self.connection = twitcasting.connection.connection(userId)
+		self.errorCheckTimer = wx.Timer(self.evtHandler, evtError)
+		self.timers.append(self.errorCheckTimer)
+		self.errorCheckTimer.Start(errorCheckTimerInterval)
 		if self.connection.connected == False:
-			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
+			simpleDialog.errorDialog(_("接続に失敗しました。"))
 			return
 		self.MainView.Clear()
 		self.MainView.createMainView()
@@ -144,6 +153,7 @@ class manager:
 		self.MainView.hFrame.SetTitle(constants.APP_NAME)
 		self.MainView.createStartScreen()
 		self.changeMenuState(False)
+		self.connection.connected = False
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
@@ -510,6 +520,8 @@ class manager:
 		elif id == evtPlaystatus:
 			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING and self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
+		elif id == evtError:
+			self.checkError()
 
 	def play(self):
 		if self.livePlayer == None:
@@ -654,3 +666,32 @@ class manager:
 					if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
 						body = body.replace(url.group(), domain.group())
 			self.MainView.commentList.SetItem(idx, 1, body)
+
+	def checkError(self):
+		code = self.connection.errorFlag
+		if code != 0:
+			self.errorCheckTimer.Stop()
+			if code == 1000:
+				simpleDialog.errorDialog(_("アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
+			elif code == 2000:
+				simpleDialog.errorDialog(_("APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"))
+			elif code == 500:
+				simpleDialog.errorDialog(_("ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してください。"))
+			elif code == 2001:
+				simpleDialog.errorDialog(_("現在TCVは使用できません。開発者に連絡してください。"))
+				sys.exit(-1)
+			else:
+				detail = {
+					1001: "Validation Error",
+					1002: "Invalid WebHook URL",
+					2002: "Protected",
+					2003: "Duplicate",
+					2004: "Too Many Comments",
+					2005: "Out Of Scope",
+					2006: "Email Unverified",
+					400: "Bad Request",
+					403: "Forbidden",
+					404: "Not Found",
+				}
+				simpleDialog.errorDialog(_("ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s") %(detail[code]))
+			self.disconnect()
