@@ -382,7 +382,7 @@ class Events(BaseEvents):
 	def indicatorSoundSettings(self):
 		d = views.indicatorSoundSettings.Dialog()
 		d.Initialize()
-		d.show()
+		d.Show()
 
 	def commentReplace(self):
 		commentReplace = views.commentReplace.Dialog()

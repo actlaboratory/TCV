@@ -26,11 +26,18 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.columnInfo=columnInfo
 		self.values=values
 		self.columnNames=[]
+		self.checkResultValueString=[("○","×")]*len(columnInfo)
+		self.initialized=False
+
+	def SetCheckResultValueString(self,column,t,f):
+		assert not self.initialized		#Initialized()呼び出し後の変更は不可
+		self.checkResultValueString[column]=(t,f)
 
 	def Initialize(self,parent,title):
 		super().Initialize(parent,title)
 		self.InstallControls()
 		return True
+		self.initialized=True
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
@@ -41,12 +48,10 @@ class KeyValueSettingDialogBase(BaseDialog):
 			self.hListCtrl.InsertColumn(i,info[0],format=info[1],width=info[2])
 			self.columnNames.append(info[0])
 
-		for i in self.values[0]:
-			l=[]
-			l.append(i)
-			for v in self.values:
-				l.append(v[i])
-			self.hListCtrl.Append(l)
+		for key in self.values[0]:
+			self._SetItem(-1,0,key)
+			for i in range(0,len(self.values)):
+				self._SetItem(-1,i+1,self.values[i][key])
 
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
@@ -60,7 +65,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.deleteButton.Enable(False)
 
 		#ボタンエリア
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT | wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),self.OkButtonEvent)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
@@ -95,12 +100,14 @@ class KeyValueSettingDialogBase(BaseDialog):
 			if dlg.ShowModal()==wx.ID_NO:
 				return
 			index=self.hListCtrl.FindItem(-1,v[0])
-			for i in range(1,len(self.values)):
-				self.hListCtrl.SetItem(index,i,v[i])
+			for i in range(0,len(self.values)):
+				self._SetItem(index,i,v[i+1])
 		else:
-			self.hListCtrl.Append(v)
+			for i in range(0,len(v)):
+				self._SetItem(-1,i,v[i])
 		for i in range(0,len(self.values)):
 			self.values[i][v[0]]=v[i+1]
+		self.hListCtrl.SetFocus()
 
 	def edit(self,event):
 		index=self.hListCtrl.GetFocusedItem()
@@ -134,11 +141,12 @@ class KeyValueSettingDialogBase(BaseDialog):
 
 		#新たなデータをビューに反映(古いデータに上書き)
 		for i in range(len(v)):
-			self.hListCtrl.SetItem(index,i,v[i])
+			self._SetItem(index,i,v[i])
 
 		#新たなデータを登録
 		for i in range(len(self.values)):
 			self.values[i][v[0]]=v[i+1]
+		self.hListCtrl.SetFocus()
 
 	def delete(self,event):
 		index=self.hListCtrl.GetFocusedItem()
@@ -146,6 +154,23 @@ class KeyValueSettingDialogBase(BaseDialog):
 		for i in range(len(self.values)):
 			del self.values[i][key]
 		self.hListCtrl.DeleteItem(index)
+
+	def _SetItem(self,index,column,data):
+		"""
+			画面上のリストを更新
+			index=-1で末尾に追加
+		"""
+		if isinstance(data,bool):
+			if data:
+				data=self.checkResultValueString[column][0]
+			else:
+				data=self.checkResultValueString[column][1]
+		print("%d,%d,%s" %(index,column,data))
+		if index==-1:
+			index=self.hListCtrl.GetItemCount()-1
+			if column==0:
+				return self.hListCtrl.InsertItem(index+1,data)
+		return self.hListCtrl.SetItem(index,column,data)
 
 	def SettingDialogHook(self,dialog):
 		"""
@@ -180,7 +205,6 @@ class SettingDialogBase(BaseDialog):
 		self.buttons=buttons
 		self.values=list(v)
 		self.edits=[None]*len(self.valueNames)
-		self.checkResultValueString=[None]*len(self.valueNames)
 
 	def Initialize(self,title):
 		super().Initialize(self.parent,title,style=wx.WS_EX_VALIDATE_RECURSIVELY|wx.DEFAULT_FRAME_STYLE)
@@ -195,7 +219,6 @@ class SettingDialogBase(BaseDialog):
 			self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.baseCreator.GetPanel(),self.baseCreator.GetSizer(),wx.HORIZONTAL,10)
 			if type(name[1])==str:
 				self.edits[i]=self.creator.checkbox(name[1],state=self.values[i], x=500)
-				self.SetCheckResultValueString(i,"○","×")
 			elif name[1]:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i], textLayout=wx.VERTICAL)
 			else:
@@ -213,11 +236,8 @@ class SettingDialogBase(BaseDialog):
 	def GetData(self):
 		ret=[None]*len(self.edits)
 		for i in range(len(self.edits)):
-			if instanceof(self.edits[i],wx.CheckBox):
-				if self.edits[i].GetValue():
-					ret[i]=self.checkResultValueString[i][0]
-				else:
-					ret[i]=self.checkResultValueString[i][1]
+			if isinstance(self.edits[i],wx.CheckBox):
+				ret[i]=self.edits[i].GetValue()
 			else:
 				ret[i]=self.edits[i].GetLineText(0)
 		ret[0]=ret[0].lower()			#iniファイルへの保存の為キーは小文字に統一
@@ -234,9 +254,6 @@ class SettingDialogBase(BaseDialog):
 			dialog(_("エラー"),_("%sを空白や半角の=を含む値に設定することはできません。") % self.valueNames[0][0])
 			return
 		return self.Validation(event)
-
-	def SetCheckResultValueString(self,index,t,f):
-		self.checkResultValueString[index]=(t,f)
 
 	def Validation(self,event):
 		"""
