@@ -16,6 +16,7 @@ import soundPlayer.fxPlayer
 import pyperclip
 import webbrowser
 import sys
+from copy import deepcopy
 
 evtComment = 0
 evtLiveInfo = 1
@@ -431,23 +432,21 @@ class manager:
 						self.play()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
-			readViewers = globalVars.app.config.getboolean("autoReadingOptions", "readViewers", True)
-			if readViewers == True and self.connection.isLive == True:
-				if self.newViewers < self.oldViewers:
-					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
-					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
-					globalVars.app.say(viewersInfo)
-				elif self.newViewers > self.oldViewers:
-					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
-					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
-					globalVars.app.say(viewersInfo)
 			if self.newViewers != self.oldViewers and self.connection.isLive == True:
 				if self.newViewers > self.oldViewers:
 					if globalVars.app.config.getboolean("fx", "playviewersincreasedsound", True) == True:
 						self.playFx(globalVars.app.config["fx"]["viewersincreasedSound"])
+					if globalVars.app.config.getboolean("autoReadingOptions", "readviewersincreased", True) == True:
+						viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersincreasedAnnouncement"]
+						viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+						globalVars.app.say(viewersInfo)
 				elif self.newViewers < self.oldViewers:
 					if globalVars.app.config.getboolean("fx", "playviewersdecreasedsound", True) == True:
 						self.playFx(globalVars.app.config["fx"]["viewersdecreasedSound"])
+					if globalVars.app.config.getboolean("autoReadingOptions", "readviewersdecreased", True) == True:
+						viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
+						viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+						globalVars.app.say(viewersInfo)
 			self.oldViewers = self.newViewers
 			self.createLiveInfoList(update)
 			self.newItem = self.connection.item
@@ -648,18 +647,21 @@ class manager:
 	def refreshReplaceSettings(self):
 		if hasattr(self, "connection") == False:
 			return
-		for idx in range(len(self.connection.comments)):
-			name = self.connection.comments[idx]["from_user"]["name"]
+		tmplst = deepcopy(self.connection.comments)
+		if len(tmplst) > self.MainView.commentList.GetItemCount():
+			tmplst = tmplst[-1 * self.MainView.commentList.GetItemCount():]
+		for idx in range(len(tmplst)):
+			name = tmplst[idx]["from_user"]["name"]
 			for i in globalVars.app.config.items("nameReplace"):
-				if i[0] == self.connection.comments[idx]["from_user"]["screen_id"]:
+				if i[0] == tmplst[idx]["from_user"]["screen_id"]:
 					name = i[1]
 			self.MainView.commentList.SetItem(idx, 0, name)
-			body = self.connection.comments[idx]["message"]
+			body = tmplst[idx]["message"]
 			for i in globalVars.app.config.items("commentReplaceBasic"):
 				body = body.replace(i[0], i[1])
 			for i in globalVars.app.config.items("commentReplaceReg"):
 				body = re.sub(i[0], i[1], body)
-			urls = list(self.connection.comments[idx]["urls"])
+			urls = list(tmplst[idx]["urls"])
 			domains = re.finditer("(https?://[^/]+/)", body)
 			for url in urls:
 				for domain in domains:
