@@ -34,8 +34,6 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		result = []
 		for i in data[0]:
 			result.append([i, data[0][i], data[1][i]])
-		import simpleDialog
-		simpleDialog.debugDialog(result)
 		return result
 
 class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
