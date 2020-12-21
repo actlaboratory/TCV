@@ -6,6 +6,7 @@
 import wx
 
 import globalVars
+import constants
 import keymap
 import views.ViewCreator
 
@@ -276,7 +277,7 @@ def KeySettingValidation(oldKeyConfig,newKeyConfig,logger,entries=None,AllowNewK
 		AllowNewKeyDuplication	bool	newKey内での重複を許すならTrue
 	"""
 	if logger==None:
-		logger=getLogger("falcon.%s" % "KeySettingValidation")
+		logger=getLogger("%s.%s" % (constants.LOG_PREFIX,"KeySettingValidation"))
 	errors=""
 	oldKeys={}
 	for k,vs in oldKeyConfig.items():

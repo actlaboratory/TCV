@@ -238,9 +238,9 @@ class manager:
 		result = [
 			_("タイトル：%s") %(self.connection.movieInfo["movie"]["title"]),
 			_("テロップ：%s") %(self.connection.movieInfo["movie"]["subtitle"]),
-			_("閲覧：現在%d人、合計%d人") %(self.connection.movieInfo["movie"]["current_view_count"], self.connection.movieInfo["movie"]["total_view_count"]),
+			_("閲覧者数：現在%d人、合計%d人") %(self.connection.movieInfo["movie"]["current_view_count"], self.connection.movieInfo["movie"]["total_view_count"]),
 			_("カテゴリ：%s") %(self.connection.categoryName),
-			_("コメント数：%d") %(self.connection.movieInfo["movie"]["comment_count"]),
+			_("コメント：%d件") %(self.connection.movieInfo["movie"]["comment_count"]),
 			self.connection.movieInfo["broadcaster"]["screen_id"]
 		]
 		if self.connection.movieInfo["movie"]["is_live"] == True:
