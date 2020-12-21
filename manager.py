@@ -28,8 +28,8 @@ evtError = 5
 first = 0
 update = 1
 
-commentTimerInterval = 5000
-liveInfoTimerInterval = 10000
+commentTimerInterval = 3000
+liveInfoTimerInterval = 5000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 playstatusTimerInterval = 500
