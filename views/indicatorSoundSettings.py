@@ -46,6 +46,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		}
 		super().__init__("indicatorSoundSettingsDialog",SettingDialog,info,play,files)
 		self.SetCheckResultValueString(1, _("再生する"), _("再生しない"))
+		self.AddSpecialButton(_("プレビュー"),self.preview)
 
 	def Initialize(self):
 		super().Initialize(self.app.hMainView.hFrame,_("効果音設定"))
@@ -75,6 +76,9 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 	def OkButtonEvent(self, event):
 		self.save()
 		event.Skip()
+
+	def preview(self,event):
+		pass
 
 class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 	"""設定内容を入力するダイアログ"""
