@@ -80,7 +80,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		event.Skip()
 
 	def preview(self,event):
-		pass
+		globalVars.app.Manager.playFx(self.hListCtrl.GetItemText(self.hListCtrl.GetFocusedItem(), 2))
 
 class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 	"""設定内容を入力するダイアログ"""
