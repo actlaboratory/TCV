@@ -501,10 +501,12 @@ class manager:
 			if self.newCoins != self.oldCoins:
 				if self.newCoins < self.oldCoins:
 					globalVars.app.say(_("コイン消費"))
-				if self.newCoins % 5 == 0:
-					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
-				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
-					globalVars.app.say(_("完走に必要なコインが集まりました。"))
+				elif self.newCoins > self.oldCoins:
+					c = [i for i in range(self.oldCoins + 1, self.newCoins + 1) if i % 5 == 0]
+					if len(c) > 0:
+						globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
+						if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(c[-1]) == True:
+							globalVars.app.say(_("完走に必要なコインが集まりました。"))
 			self.oldCoins = self.newCoins
 		elif id == evtCountDown:
 			self.resetTimer()
