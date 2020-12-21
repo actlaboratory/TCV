@@ -93,6 +93,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		d.Initialize()
 		self.SettingDialogHook(d)
 		if d.Show()==wx.ID_CANCEL:
+			self.hListCtrl.SetFocus()
 			return
 		v=d.GetValue()
 		if v[0] in self.values[0]:
@@ -121,6 +122,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		d.Initialize()
 		self.SettingDialogHook(d)
 		if d.Show()==wx.ID_CANCEL:
+			self.hListCtrl.SetFocus()
 			return
 		v=d.GetValue()
 		if oldKey!=v[0]:
@@ -154,6 +156,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		for i in range(len(self.values)):
 			del self.values[i][key]
 		self.hListCtrl.DeleteItem(index)
+		self.hListCtrl.SetFocus()
 
 	def _SetItem(self,index,column,data):
 		"""
