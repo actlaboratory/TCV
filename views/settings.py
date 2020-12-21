@@ -120,7 +120,7 @@ class settingsDialog(BaseDialog):
 
 		# proxy
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("プロキシ設定"),style=wx.ALL,margin=20)
-		self.usemanualsetting = creator.checkbox(_("プロキシサーバーの情報を手動で設定する"))
+		self.usemanualsetting = creator.checkbox(_("プロキシサーバーの情報を手動で設定する"), self.checkBoxStatusChanged)
 		self.server, static = creator.inputbox(_("サーバーURL"))
 		self.port, static = creator.spinCtrl(_("ポート番号"), 0, 65535, defaultValue=8080)
 
@@ -270,3 +270,6 @@ class settingsDialog(BaseDialog):
 		self.viewersdecreasedannouncement.Enable(result)
 		result = self.readreceiveditems.GetValue()
 		self.readitemposteduser.GetParent().Enable(result)
+		result = self.usemanualsetting.GetValue()
+		self.server.Enable(result)
+		self.port.Enable(result)

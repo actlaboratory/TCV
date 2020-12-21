@@ -147,7 +147,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hPlayMenu,"volumeUp",_("音量を上げる") + "(&U)")
 		self.RegisterMenuCommand(self.hPlayMenu,"volumeDown",_("音量を下げる") + "(&D)")
 		self.RegisterMenuCommand(self.hPlayMenu,"resetVolume",_("音量を１００％に設定") + "(&R)")
-		self.RegisterMenuCommand(self.hPlayMenu,"changeDevice",_("再生デバイスを変更") + "(&C)")
+		self.RegisterMenuCommand(self.hPlayMenu,"changeDevice",_("再生デバイスを変更") + "(&C) ...")
 		#コメントメニュー
 		self.RegisterMenuCommand(self.hCommentMenu, "copyComment", _("選択中のコメントをコピー") + "(&C)")
 		self.RegisterMenuCommand(self.hCommentMenu,"viewComment",_("コメントの詳細を表示") + "(&V) ...")

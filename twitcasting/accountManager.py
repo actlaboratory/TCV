@@ -39,7 +39,7 @@ class AccountManager:
 				sys.exit(-1)
 		if len(rm) > 0:
 			simpleDialog.errorDialog(_("無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
-			for i in err:
+			for i in rm:
 				del self.tokens[i]
 		if len(cl) > 0:
 			simpleDialog.errorDialog(_("APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この情報を再度取得するには、数分待ってからTCVを再起動してください。"))
