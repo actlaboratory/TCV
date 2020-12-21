@@ -412,8 +412,9 @@ class Events(BaseEvents):
 		if result == wx.ID_CANCEL:
 			return
 		globalVars.app.config.remove_section("nameReplace")
-		for i in userNameReplace.GetData():
-			globalVars.app.config["nameReplace"][i[0]] = i[1]
+		data = userNameReplace.GetData()[0]
+		for i in data:
+			globalVars.app.config["nameReplace"][i] = data[i]
 		globalVars.app.Manager.refreshReplaceSettings()
 
 	def commentSelected(self, event):
