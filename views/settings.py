@@ -74,7 +74,7 @@ class settingsDialog(BaseDialog):
 		# reading-1
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("読み上げ-1"),style=wx.TOP|wx.LEFT|wx.RIGHT,margin=20)
 		self.reader, static = creator.combobox(_("出力先") + "(&O)", list(self.readerSelection.values()), textLayout=wx.HORIZONTAL)
-		self.readreceivedcomments = creator.checkbox(_("受信したコメントを読み上げる") + "(&C)")
+		self.readreceivedcomments = creator.checkbox(_("受信したコメントを読み上げる") + "(&C)", self.checkBoxStatusChanged)
 		self.receivedcommentsannouncement, static = creator.inputbox(_("コメント受信時の読み上げ内容") + "(&C)")
 
 		group=views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.VERTICAL,space=20,label=_("コメントの読み上げスキップ"))
@@ -87,12 +87,12 @@ class settingsDialog(BaseDialog):
 
 		# reading-2
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("読み上げ-2"),style=wx.TOP|wx.LEFT|wx.RIGHT,margin=20)
-		self.readviewersincreased = creator.checkbox(_("閲覧者数が増加したら読み上げる") + "(&V)")
+		self.readviewersincreased = creator.checkbox(_("閲覧者数が増加したら読み上げる") + "(&V)", self.checkBoxStatusChanged)
 		self.viewersincreasedannouncement, static = creator.inputbox(_("閲覧者数が増加した際の読み上げ") + "(&I)")
-		self.readviewersdecreased = creator.checkbox(_("閲覧者数が減少したら読み上げる") + "(&V)")
+		self.readviewersdecreased = creator.checkbox(_("閲覧者数が減少したら読み上げる") + "(&V)", self.checkBoxStatusChanged)
 		self.viewersdecreasedannouncement, static = creator.inputbox(_("閲覧者数が減少した際の読み上げ") + "(&D)")
 		self.readtypinguser = creator.checkbox(_("入力中のユーザーを読み上げる") + "(&T)")
-		self.readreceiveditems = creator.checkbox(_("受信したアイテムを読み上げる") + "(&I)")
+		self.readreceiveditems = creator.checkbox(_("受信したアイテムを読み上げる") + "(&I)", self.checkBoxStatusChanged)
 		self.readitemposteduser, static = creator.combobox(_("アイテム投稿者の読み方") + "(&U)", list(self.readitemposteduserSelection.values()),textLayout=wx.HORIZONTAL)
 
 		# live play
@@ -173,6 +173,8 @@ class settingsDialog(BaseDialog):
 		self.usemanualsetting.SetValue(globalVars.app.config.getboolean("proxy", "usemanualsetting"))
 		self.server.SetValue(globalVars.app.config["proxy"]["server"])
 		self.port.SetValue(globalVars.app.config["proxy"]["port"])
+
+		self.checkBoxStatusChanged()
 
 	def save(self):
 		# general
@@ -255,3 +257,16 @@ class settingsDialog(BaseDialog):
 	def Destroy(self, events = None):
 		self.log.debug("destroy")
 		self.wnd.Destroy()
+
+	def checkBoxStatusChanged(self, event=None):
+		result = self.readreceivedcomments.GetValue()
+		self.receivedcommentsannouncement.Enable(result)
+		self.readmycomment.GetParent().Enable(result)
+		self.readmentions_mylive.Enable(result)
+		self.readmentions_otherlive.Enable(result)
+		result = self.readviewersincreased.GetValue()
+		self.viewersincreasedannouncement.Enable(result)
+		result = self.readviewersdecreased.GetValue()
+		self.viewersdecreasedannouncement.Enable(result)
+		result = self.readreceiveditems.GetValue()
+		self.readitemposteduser.GetParent().Enable(result)
