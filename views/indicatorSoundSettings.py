@@ -6,6 +6,8 @@
 import views.KeyValueSettingDialogBase
 import wx
 import globalVars
+import os
+import simpleDialog
 
 class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 	def __init__(self):
@@ -97,3 +99,9 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 		if result == wx.ID_CANCEL:
 			return
 		self.edits[2].SetValue(dialog.GetPath())
+
+	def OkButtonEvent(self, event):
+		if os.path.isfile(self.edits[2].GetValue()) == False:
+			simpleDialog.errorDialog(_("効果音ファイルが見つかりません。設定内容を確認してください。"))
+			return
+		super().OkButtonEvent(event)
