@@ -29,10 +29,15 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.columnNames=[]
 		self.checkResultValueString=[("○","×")]*len(columnInfo)
 		self.initialized=False
+		self.specialButtons=[]
 
 	def SetCheckResultValueString(self,column,t,f):
 		assert not self.initialized		#Initialized()呼び出し後の変更は不可
 		self.checkResultValueString[column]=(t,f)
+
+	def AddSpecialButton(self,name,event):
+		assert not self.initialized		#Initialized()呼び出し後の変更は不可
+		self.specialButtons.append((name,event))
 
 	def Initialize(self,parent,title):
 		super().Initialize(parent,title)
@@ -42,7 +47,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL,proportion=20)
 		self.hListCtrl, dammy=self.creator.listCtrl(_("現在の登録内容"), proportion=0, sizerFlag=wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(750,300),style=wx.LC_REPORT | wx.LC_NO_HEADER | wx.LC_SINGLE_SEL)
 
 		for i,info in enumerate(self.columnInfo):
@@ -58,7 +63,12 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
 
 		#処理ボタン
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.EXPAND)
+		for i in range(len(self.specialButtons)):
+			self.specialButtons[i] = self.creator.button(self.specialButtons[i][0],self.specialButtons[i][1])
+			self.specialButtons[i].Enable(False)
+
+		self.creator.AddSpace(-1)
 		self.addButton=self.creator.button(_("追加"),self.add)
 		self.editButton=self.creator.button(_("変更"),self.edit)
 		self.editButton.Enable(False)
@@ -74,10 +84,14 @@ class KeyValueSettingDialogBase(BaseDialog):
 		if self.hListCtrl.GetFocusedItem()<0:	#選択解除の通知
 			self.editButton.Enable(False)
 			self.deleteButton.Enable(False)
+			for i in range(len(self.specialButtons)):
+				self.specialButtons[i].Enable(False)
 		else:									#選択追加の通知
 			self.editButton.Enable(True)
 			key=self.hListCtrl.GetItemText(self.hListCtrl.GetFocusedItem(),0)
 			self.deleteButton.Enable(self.DeleteValidation(key))
+			for i in range(len(self.specialButtons)):
+				self.specialButtons[i].Enable(self.SpecialButtonValidation(key))
 
 	def DeleteValidation(self,key):
 		"""
@@ -86,6 +100,13 @@ class KeyValueSettingDialogBase(BaseDialog):
 		"""
 		return True
 
+	def SpecialButtonValidation(self,key):
+		"""
+			指定されたキー(String)のデータに対してSpecialButtonが有効か否かを返す
+			デフォルトではキーに関係なく有効なので、制限したい場合はオーバーライドする。
+		"""
+		return True
+		
 	def GetData(self):
 		return self.values
 
@@ -102,8 +123,8 @@ class KeyValueSettingDialogBase(BaseDialog):
 			if dlg.ShowModal()==wx.ID_NO:
 				return
 			index=self.hListCtrl.FindItem(-1,v[0])
-			for i in range(0,len(self.values)):
-				self._SetItem(index,i,v[i+1])
+			for i in range(0,len(v)):
+				self._SetItem(index,i,v[i])
 		else:
 			for i in range(0,len(v)):
 				self._SetItem(-1,i,v[i])
@@ -169,7 +190,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 				data=self.checkResultValueString[column][0]
 			else:
 				data=self.checkResultValueString[column][1]
-		print("%d,%d,%s" %(index,column,data))
+		#print("%d,%d,%s" %(index,column,data))
 		if index==-1:
 			index=self.hListCtrl.GetItemCount()-1
 			if column==0:
