@@ -4,7 +4,7 @@
 
 defaultKeymap={}
 
-defaultKeymap["mainView"]={
+defaultKeymap["MAINVIEW"]={
 	"CONNECT":"ctrl+n",
 	"VIEW_HISTORY": "ctrl+h",
 	"VIEW_FAVORITES": "ctrl+i",
@@ -25,6 +25,8 @@ defaultKeymap["mainView"]={
 	"OPEN_LIVE": "",
 	"ADD_FAVORITES": "ctrl+d",
 	"SETTING": "",
+	"SET_KEYMAP": "",
+	"SET_HOTKEY": "",
  "INDICATOR_SOUND_SETTING": "",
 	"COMMENT_REPLACE": "",
 	"USER_NAME_REPLACE": "",
@@ -50,4 +52,14 @@ defaultKeymap["commentBody"]={
 
 defaultKeymap["userInfo"]= {
 	"POPUP_OPEN_USER_INFO": "APPLICATIONS/SHIFT+F10"
+}
+
+defaultKeymap["HOTKEY"]= {
+	"DISCONNECT": "",
+	"PLAY": "",
+	"STOP": "",
+	"VOLUME_UP": "",
+	"VOLUME_DOWN": "",
+	"RESET_VOLUME": "",
+	"OPEN_LIVE": ""
 }

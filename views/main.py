@@ -10,7 +10,10 @@ import wx
 import re
 import ctypes
 import pywintypes
+import ConfigManager
 import keymap
+import hotkeyHandler
+from views import globalKeyConfig
 
 import constants
 import errorCodes
@@ -115,6 +118,19 @@ class MainView(BaseView):
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
 
+		self.applyHotKey()
+
+	def applyHotKey(self):
+		self.hotkey = hotkeyHandler.HotkeyHandler(None,hotkeyHandler.HotkeyFilter().SetDefault())
+		if self.hotkey.addFile(constants.KEYMAP_FILE_NAME,["HOTKEY"])==errorCodes.OK:
+			errors=self.hotkey.GetError("HOTKEY")
+			if errors:
+				tmp=_(constants.KEYMAP_FILE_NAME+"で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容をご確認ください。\n\n")
+				for v in errors:
+					tmp+=v+"\n"
+				dialog(_("エラー"),tmp)
+			self.hotkey.Set("HOTKEY",self.hFrame)
+
 	def Clear(self):
 		if hasattr(self,"commentList") and self.commentList:
 			self.commentList.saveColumnInfo()
@@ -148,7 +164,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING"])
+			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING"])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, ["VERSION_INFO", "CHECK4UPDATE"])
 
@@ -184,6 +200,17 @@ class Events(BaseEvents):
 		if selected==menuItemsStore.getRef("EXIT"):
 			self.parent.hFrame.Close()
 		#バージョン情報
+		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
+			if self.setKeymap("MainView",filter=keymap.KeyFilter().SetDefault(False,False)):
+				#ショートカットキーの変更適用とメニューバーの再描画
+				self.parent.menu.InitShortcut()
+				self.parent.menu.ApplyShortcut(self.parent.hFrame)
+				self.parent.menu.Apply(self.parent.hFrame)
+		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
+			if self.setKeymap("HOTKEY",self.parent.hotkey,filter=self.parent.hotkey.filter):
+				#変更適用
+				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
+				self.parent.applyHotKey()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			simpleDialog.dialog(_("バージョン情報"), _("%s(%s) Version %s.\nCopyright (C) %s %s") %(constants.APP_NAME, constants.APP_FULL_NAME,constants.APP_VERSION, constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
 		#接続
@@ -372,6 +399,51 @@ class Events(BaseEvents):
 		d = views.indicatorSoundSettings.Dialog()
 		d.Initialize()
 		d.Show()
+
+	def setKeymap(self, identifier,keymap=None,filter=None):
+		if keymap:
+			try:
+				keys=keymap.map[identifier.upper()]
+			except KeyError:
+				keys={}
+		else:
+			try:
+				keys=self.parent.menu.keymap.map[identifier.upper()]
+			except KeyError:
+				keys={}
+		keyData={}
+		menuData={}
+		for refName in defaultKeymap.defaultKeymap[identifier.upper()].keys():
+			title=menuItemsDic.dic[refName]
+			if refName in keys:
+				keyData[title]=keys[refName]
+			else:
+				keyData[title]="なし"
+			menuData[title]=refName
+
+		entries=[]
+		for map in (self.parent.menu.keymap,self.parent.hotkey):
+			for i in map.entries.keys():
+				if identifier.upper()!=i:	#今回の変更対象以外のビューのものが対象
+					entries.extend(map.entries[i])
+
+		d=views.globalKeyConfig.Dialog(keyData,menuData,entries,filter)
+		d.Initialize()
+		if d.Show()==wx.ID_CANCEL: return False
+
+		result={}
+		keyData,menuData=d.GetValue()
+
+		#キーマップの既存設定を置き換える
+		newMap=ConfigManager.ConfigManager()
+		newMap.read(constants.KEYMAP_FILE_NAME)
+		for name,key in keyData.items():
+			if key!=_("なし"):
+				newMap[identifier.upper()][menuData[name]]=key
+			else:
+				newMap[identifier.upper()][menuData[name]]=""
+		newMap.write()
+		return True
 
 	def commentReplace(self):
 		commentReplace = views.commentReplace.Dialog()
