@@ -238,7 +238,6 @@ class BaseMenu(object):
 		return self.menu.Check(menuItemsStore.getRef(ref_id),state)
 
 	def EnableMenu(self,ref_id,enable=True):
-		print("%s - base.py l241" %ref_id)
 		if type(ref_id)==int:
 			return self.Enable(ref_id,enable)
 		else:

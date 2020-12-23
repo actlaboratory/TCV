@@ -105,7 +105,6 @@ class ViewCreatorBase():
 			if space==-2:
 				space=self.space
 			elif space==-1:
-				print("aa")
 				return self.sizer.AddStretchSpacer(1)
 			return self.sizer.AddSpacer(space)
 

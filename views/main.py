@@ -53,6 +53,7 @@ class MainView(BaseView):
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
 		self.createStartScreen()
+		self.applyHotKey()
 
 	def createStartScreen(self):
 		self.hFrame.SetMinSize((600,540))
@@ -118,7 +119,6 @@ class MainView(BaseView):
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
 
-		self.applyHotKey()
 
 	def applyHotKey(self):
 		self.hotkey = hotkeyHandler.HotkeyHandler(None,hotkeyHandler.HotkeyFilter().SetDefault())
@@ -414,7 +414,7 @@ class Events(BaseEvents):
 		keyData={}
 		menuData={}
 		for refName in defaultKeymap.defaultKeymap[identifier.upper()].keys():
-			title=menuItemsDic.dic[refName]
+			title=menuItemsDic.getValueString(refName)
 			if refName in keys:
 				keyData[title]=keys[refName]
 			else:
