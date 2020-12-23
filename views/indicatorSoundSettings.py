@@ -80,7 +80,11 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		event.Skip()
 
 	def preview(self,event):
-		globalVars.app.Manager.playFx(self.hListCtrl.GetItemText(self.hListCtrl.GetFocusedItem(), 2))
+		file = self.hListCtrl.GetItemText(self.hListCtrl.GetFocusedItem(), 2)
+		if os.path.isfile(file) == False:
+			simpleDialog.errorDialog(_("効果音ファイルが見つかりません。設定内容を確認してください。"))
+			return
+		globalVars.app.Manager.playFx(file)
 
 class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 	"""設定内容を入力するダイアログ"""
