@@ -147,6 +147,7 @@ class manager:
 	def disconnect(self):
 		if self.livePlayer != None:
 			self.stop()
+			self.livePlayer.exit()
 		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
