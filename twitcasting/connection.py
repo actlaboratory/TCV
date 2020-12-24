@@ -49,7 +49,7 @@ class connection:
 		try:
 			result = result["comments"]
 		except KeyError:
-			if "error" in result:
+			if "error" in result and result["error"]["code"] != 404:
 				self.errorFlag = result["error"]["code"]
 			result = []
 		if len(result) == 0:
