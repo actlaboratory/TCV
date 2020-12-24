@@ -545,11 +545,11 @@ class manager:
 				return
 			self.livePlayer.play()
 			globalVars.app.say(_("再生"))
-		self.MainView.menu.EnableMenu("play", False)
-		self.MainView.menu.EnableMenu("stop", True)
-		self.MainView.menu.EnableMenu("volumeUp", True)
-		self.MainView.menu.EnableMenu("volumeDown", True)
-		self.MainView.menu.EnableMenu("resetVolume", True)
+		self.MainView.menu.EnableMenu("PLAY", False)
+		self.MainView.menu.EnableMenu("STOP", True)
+		self.MainView.menu.EnableMenu("VOLUME_UP", True)
+		self.MainView.menu.EnableMenu("VOLUME_DOWN", True)
+		self.MainView.menu.EnableMenu("RESET_VOLUME", True)
 		self.playStatusTimer.Start(playstatusTimerInterval)
 
 	def stop(self):
@@ -558,11 +558,11 @@ class manager:
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
 			self.livePlayer.stop()
 			globalVars.app.say(_("停止"))
-		self.MainView.menu.EnableMenu("stop", False)
-		self.MainView.menu.EnableMenu("play", True)
-		self.MainView.menu.EnableMenu("volumeUp", False)
-		self.MainView.menu.EnableMenu("volumeDown", False)
-		self.MainView.menu.EnableMenu("resetVolume", False)
+		self.MainView.menu.EnableMenu("STOP", False)
+		self.MainView.menu.EnableMenu("PLAY", True)
+		self.MainView.menu.EnableMenu("VOLUME_UP", False)
+		self.MainView.menu.EnableMenu("VOLUME_DOWN", False)
+		self.MainView.menu.EnableMenu("RESET_VOLUME", False)
 
 	def volumeUp(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
