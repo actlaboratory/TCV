@@ -55,7 +55,11 @@ class connection:
 		if len(result) == 0:
 			return []
 		else:
+			count = 0
 			while result != []:
+				count += 1
+				if count == 3:
+					break
 				self.lastCommentId = result[0]["id"]
 				ret = result + ret
 				result = GetComments(self.movieId, 0, 50, self.lastCommentId)
