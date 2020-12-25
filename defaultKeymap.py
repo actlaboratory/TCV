@@ -4,35 +4,62 @@
 
 defaultKeymap={}
 
-defaultKeymap["mainView"]={
-	"connect":"ctrl+n",
-	"viewHistory": "ctrl+h",
-	"viewFavorites": "ctrl+i",
-	"disconnect":"ctrl+w/ctrl+F4",
-	"play": "F1",
-	"stop": "F2",
-	"volumeUp": "F3",
-	"volumeDown": "F4",
-	"changeDevice": "f5",
-	"replyToBroadcaster": "ctrl+shift+r",
-	"viewBroadcaster": "ctrl+b",
-	"addFavorites": "ctrl+d",
-	"silence": "ESCAPE",
-	"viewErrorLog": "ctrl+shift+f1"
+defaultKeymap["MAINVIEW"]={
+	"CONNECT":"ctrl+n",
+	"VIEW_HISTORY": "ctrl+h",
+	"VIEW_FAVORITES": "ctrl+i",
+	"DISCONNECT":"ctrl+w/ctrl+F4",
+	"EXIT": "",
+	"PLAY": "F1",
+	"STOP": "F2",
+	"VOLUME_UP": "F3",
+	"VOLUME_DOWN": "F4",
+	"RESET_VOLUME": "",
+	"CHANGE_DEVICE": "f5",
+	"COPY_COMMENT": "",
+	"VIEW_COMMENT": "",
+	"REPLY2SELECTED_COMMENT": "",
+	"DELETE_SELECTED_COMMENT": "",
+	"REPLY2BROADCASTER": "ctrl+shift+r",
+	"VIEW_BROADCASTER": "ctrl+b",
+	"OPEN_LIVE": "",
+	"ADD_FAVORITES": "ctrl+d",
+	"SETTING": "",
+	"SET_KEYMAP": "",
+	"SET_HOTKEY": "",
+	"INDICATOR_SOUND_SETTING": "",
+	"COMMENT_REPLACE": "",
+	"USER_NAME_REPLACE": "",
+	"ACCOUNT_MANAGER": "",
+	"SAPI_SETTING": "",
+	"VERSION_INFO": "",
+	"CHECK4UPDATE": "",
+	"SILENCE": "ESCAPE",
+	"VIEW_ERROR_LOG": "ctrl+shift+f1"
 }
 
 defaultKeymap["commentList"]={
-	"copyComment": "CTRL+C",
-	"viewComment": "Alt+RETURN",
-	"replyToSelectedComment": "ctrl+r",
-	"deleteSelectedComment": "DELETE",
-	"openCommentListContextMenu": "APPLICATIONS/SHIFT+F10"
+	"COPY_COMMENT": "CTRL+C",
+	"VIEW_COMMENT": "Alt+RETURN",
+	"REPLY2SELECTED_COMMENT": "ctrl+r",
+	"DELETE_SELECTED_COMMENT": "DELETE",
+	"POPUP_OPEN_COMMENT": "APPLICATIONS/SHIFT+F10"
 }
 
 defaultKeymap["commentBody"]={
-	"postComment": "ctrl+RETURN"
+	"POST_COMMENT": "ctrl+RETURN"
 }
 
 defaultKeymap["userInfo"]= {
-	"openUserInfoContextMenu": "APPLICATIONS/SHIFT+F10"
+	"POPUP_OPEN_USER_INFO": "APPLICATIONS/SHIFT+F10"
+}
+
+defaultKeymap["HOTKEY"]= {
+	"DISCONNECT": "",
+	"PLAY": "",
+	"STOP": "",
+	"VOLUME_UP": "",
+	"VOLUME_DOWN": "",
+	"RESET_VOLUME": "",
+	"OPEN_LIVE": ""
 }

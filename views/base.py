@@ -48,8 +48,13 @@ class BaseView(object):
 
 	def Show(self):
 		self.creator.GetPanel().Layout()
-		self.hFrame.Show()
-		self.app.SetTopWindow(self.hFrame)
+		#self.hFrame.Freeze()
+		#self.hFrame.Show(False)
+		self.hFrame.ShowWithoutActivating()
+		#self.hFrame.Iconize()
+		#self.hFrame.Thaw()
+
+		#self.app.SetTopWindow(self.hFrame)
 		return True
 
 	def InstallMenuEvent(self,menu,event):
