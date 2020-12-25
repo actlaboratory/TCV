@@ -34,12 +34,10 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.mainArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL,wx.ALIGN_CENTER)
-
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.mainArea,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL,margin=20)
 		self.creator.staticText(_("設定するには、使用したいキーの組み合わせを押します。\n設定を解除するには、Escキーを押します。"))
-		self.keyNameText=self.creator.staticText("")
-		self.errorText=self.creator.staticText("")
+		self.keyNameText=self.creator.staticText("",sizerFlag=wx.ALIGN_CENTER | wx.ALL,margin=20)
+		self.errorText=self.creator.staticText("",sizerFlag=wx.ALIGN_CENTER)
 
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALIGN_RIGHT)
@@ -92,6 +90,7 @@ class Dialog(BaseDialog):
 			if len(self.result)<len(self.key):
 				self.result=self.key
 			self.keyNameText.SetLabel(self.result)
+			self.panel.Layout()
 		else:									#キーが放されたら前の入力を検証する
 			self.bCancel.Enable()
 			if self.result!="":
@@ -100,6 +99,7 @@ class Dialog(BaseDialog):
 					return
 				else:
 					self.errorText.SetLabel(self.filter.GetLastError())
+					self.panel.Layout()
 					globalVars.app.say(self.filter.GetLastError(),True)
 
 				self.key=""

@@ -17,8 +17,8 @@ from simpleDialog import dialog
 class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 	def __init__(self,keyConfig,menuIds,checkEntries=[],filter=None):
 		info=[
-			(_("名前"),wx.LIST_FORMAT_LEFT,200),
-			(_("ショートカット"),wx.LIST_FORMAT_LEFT,350),
+			(_("名前"),wx.LIST_FORMAT_LEFT,350),
+			(_("ショートカット"),wx.LIST_FORMAT_LEFT,370),
 			(_("識別子"),wx.LIST_FORMAT_LEFT,200)
 		]
 		super().__init__("globalKeyConfigDialog",SettingDialog,info,keyConfig,menuIds)
