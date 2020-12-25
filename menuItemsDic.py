@@ -35,9 +35,9 @@ dic={
 	"ADD_FAVORITES": _("お気に入りに追加(&A)") + "...",
 	#設定メニュー
 	"SETTING": _("設定(&S)") + "...",
-	"SET_KEYMAP": _("ショートカットキーの設定"),
-	"SET_HOTKEY": _("グローバルホットキーの設定"),
-	 "INDICATOR_SOUND_SETTING": _("効果音設定(&F)"),
+	"SET_KEYMAP": _("ショートカットキーの設定") + "...",
+	"SET_HOTKEY": _("グローバルホットキーの設定") + "...",
+	 "INDICATOR_SOUND_SETTING": _("効果音設定(&F)") + "...",
 	"COMMENT_REPLACE": _("コメント文字列置換設定(&R)") + "...",
 	"USER_NAME_REPLACE": _("表示名置換設定(&N)") + "...",
 	"ACCOUNT_MANAGER": _("アカウントマネージャ(&M)") + "...",
