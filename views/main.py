@@ -37,7 +37,6 @@ import views.commentReplace
 import views.userNamereplace
 import webbrowser
 import constants
-import subprocess
 
 class MainView(BaseView):
 	def __init__(self):
@@ -71,7 +70,7 @@ class MainView(BaseView):
 		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.helpButton = self.creator.button(_("ヘルプを表示"), None, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.helpButton = self.creator.button(_("ヘルプを表示"), self.events.help, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.hPanel.Layout()
 		self.connectButton.SetFocus()
@@ -169,7 +168,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,
 			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING"])
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.hHelpMenu, ["VERSION_INFO", "CHECK4UPDATE"])
+		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
@@ -204,13 +203,13 @@ class Events(BaseEvents):
 			self.parent.hFrame.Close()
 		#バージョン情報
 		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
-			if self.setKeymap("MainView",filter=keymap.KeyFilter().SetDefault(False,False)):
+			if self.setKeymap("MainView",_("ショートカットキーの設定"),filter=keymap.KeyFilter().SetDefault(False,False)):
 				#ショートカットキーの変更適用とメニューバーの再描画
 				self.parent.menu.InitShortcut()
 				self.parent.menu.ApplyShortcut(self.parent.hFrame)
 				self.parent.menu.Apply(self.parent.hFrame)
 		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
-			if self.setKeymap("HOTKEY",self.parent.hotkey,filter=self.parent.hotkey.filter):
+			if self.setKeymap("HOTKEY",_("グローバルホットキーの設定"), self.parent.hotkey,filter=self.parent.hotkey.filter):
 				#変更適用
 				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
 				self.parent.applyHotKey()
@@ -322,9 +321,13 @@ class Events(BaseEvents):
 				globalVars.app.speech.silence()
 			except AttributeError:
 				pass
+		#ヘルプを開く
+		elif selected == menuItemsStore.getRef("HELP"):
+			self.help()
 		#エラーログを開く
 		elif selected==menuItemsStore.getRef("VIEW_ERROR_LOG"):
-			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
+			if os.path.isfile("errorLog.txt"):
+				os.startfile("errorLog.txt")
 		#更新を確認
 		elif selected==menuItemsStore.getRef("CHECK4UPDATE"):
 			globalVars.update.update(False)
@@ -403,7 +406,7 @@ class Events(BaseEvents):
 		d.Initialize()
 		d.Show()
 
-	def setKeymap(self, identifier,keymap=None,filter=None):
+	def setKeymap(self, identifier,ttl, keymap=None,filter=None):
 		if keymap:
 			try:
 				keys=keymap.map[identifier.upper()]
@@ -431,7 +434,7 @@ class Events(BaseEvents):
 					entries.extend(map.entries[i])
 
 		d=views.globalKeyConfig.Dialog(keyData,menuData,entries,filter)
-		d.Initialize()
+		d.Initialize(ttl)
 		if d.Show()==wx.ID_CANCEL: return False
 
 		result={}
@@ -474,6 +477,12 @@ class Events(BaseEvents):
 		for i in data:
 			globalVars.app.config["nameReplace"][i] = data[i]
 		globalVars.app.Manager.refreshReplaceSettings()
+
+	def help(self, event=None):
+		if os.path.isfile("readme.txt"):
+			os.startfile("readme.txt")
+		else:
+			simpleDialog.errorDialog(_("readme.txtが見つかりません。"))
 
 	def commentSelected(self, event):
 		if event == None:
