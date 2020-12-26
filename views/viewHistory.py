@@ -32,7 +32,7 @@ class Dialog(BaseDialog):
 		self.bCancel=self.buttonArea.cancelbutton(_("閉じる"),None)
 		self.itemSelected()
 
-		self.clearButton = self.creator.button(_("履歴消去"), self.clearHistory,sizerFlag=wx.ALIGN_RIGHT)
+		self.clearButton = self.creator.button(_("履歴消去(&C)"), self.clearHistory,sizerFlag=wx.ALIGN_RIGHT)
 
 	def GetData(self):
 		return self.historyList.GetSelection()

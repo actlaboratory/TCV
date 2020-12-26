@@ -28,8 +28,8 @@ class Dialog(BaseDialog):
 			self.favoritesList.Append(i)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.BOTTOM,margin=20)
-		self.deleteButton = self.creator.button(_("削除"), self.delete)
-		self.clearButton = self.creator.button(_("全て削除"), self.clear)
+		self.deleteButton = self.creator.button(_("削除(&D)"), self.delete)
+		self.clearButton = self.creator.button(_("全て削除(&C)"), self.clear)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("接続"),None)

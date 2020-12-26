@@ -69,10 +69,10 @@ class KeyValueSettingDialogBase(BaseDialog):
 			self.specialButtons[i].Enable(False)
 
 		self.creator.AddSpace(-1)
-		self.addButton=self.creator.button(_("追加"),self.add)
-		self.editButton=self.creator.button(_("変更"),self.edit)
+		self.addButton=self.creator.button(_("追加(&A)"),self.add)
+		self.editButton=self.creator.button(_("変更(&M)"),self.edit)
 		self.editButton.Enable(False)
-		self.deleteButton=self.creator.button(_("削除"),self.delete)
+		self.deleteButton=self.creator.button(_("削除(&D)"),self.delete)
 		self.deleteButton.Enable(False)
 
 		#ボタンエリア
