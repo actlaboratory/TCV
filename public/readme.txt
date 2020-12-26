@@ -1,4 +1,4 @@
-		Twitcasting Viewer -TCV-
+		TwitCasting Viewer -TCV-
 
 	バージョン:　　ver.3.0.0
 	リリース:　　　2021-01-01
@@ -8,8 +8,8 @@
 　　ライセンス:　　GPLv2 or later
 
 第１章　はじめに
-１．１　Twitcasting Viewer(TCV)の概要
-Twitcasting Viewer(TCV)は、ライブ配信サイト「ツイキャス」（https://twitcasting.tv/）の閲覧を簡単に行うことができるツールです。
+１．１　TwitCasting Viewer(TCV)の概要
+TwitCasting Viewer(TCV)は、ライブ配信サイト「ツイキャス」（https://twitcasting.tv/）の閲覧を簡単に行うことができるツールです。
 「ツイキャス」は、パソコン、スマートフォン、タブレットなどでライブ配信ができるサービスです。
 視聴者と配信者がリアルタイムにコミュニケーションを楽しめるコメント機能、各種SNSとの連携機能など、多くの特徴があります。
 詳細については、上記Webサイトを参照してください。
