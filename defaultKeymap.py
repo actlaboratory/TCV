@@ -35,7 +35,6 @@ defaultKeymap["MAINVIEW"]={
 	"VERSION_INFO": "",
 	"CHECK4UPDATE": "",
 	"SILENCE": "ESCAPE",
-	"VIEW_ERROR_LOG": "ctrl+shift+f1"
 }
 
 defaultKeymap["commentList"]={

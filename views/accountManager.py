@@ -41,10 +41,10 @@ class Dialog(BaseDialog):
 		g1=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.VERTICAL,20,"")
 		g1r1=views.ViewCreator.ViewCreator(self.viewMode,self.panel,g1.GetSizer(),wx.HORIZONTAL,20,"",wx.EXPAND)
 		g1r2=views.ViewCreator.ViewCreator(self.viewMode,self.panel,g1.GetSizer(),wx.HORIZONTAL,20,"",wx.EXPAND)
-		self.addButton=g1r1.button(_("追加"),self.add,proportion=1)
-		self.deleteButton=g1r1.button(_("削除"),self.delete,proportion=1)
+		self.addButton=g1r1.button(_("追加(&A)"),self.add,proportion=1)
+		self.deleteButton=g1r1.button(_("削除(&D)"),self.delete,proportion=1)
 		self.deleteButton.Enable(False)
-		self.setDefaultButton=g1r2.button(_("通信用アカウントに設定"),self.setDefault)
+		self.setDefaultButton=g1r2.button(_("通信用アカウントに設定(&C)"),self.setDefault)
 		self.setDefaultButton.Enable(False)
 
 		g2=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.VERTICAL,0)

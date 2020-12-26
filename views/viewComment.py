@@ -33,7 +33,7 @@ class Dialog(BaseDialog):
 		introduction,dummy = self.creator.inputbox(_("自己紹介"), None, self.comment["from_user"]["profile"], wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP|wx.TE_PROCESS_ENTER, 500)
 		introduction.hideScrollBar(wx.VERTICAL)
 		introduction.Bind(wx.EVT_TEXT_ENTER,self.processEnter)
-		self.closeButton=self.creator.okbutton(_("閉じる") + "(&C)", None)
+		self.closeButton=self.creator.okbutton(_("閉じる"), None)
 
 	def processEnter(self,event):
 		self.wnd.EndModal(wx.OK)

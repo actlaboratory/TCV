@@ -15,7 +15,7 @@ dic={
 	"VIEW_HISTORY": _("接続履歴を開く(&H)") + "...",
 	"VIEW_FAVORITES": _("お気に入り一覧を開く(&F)") + "...",
 	"DISCONNECT": _("切断(&D)"),
-	"EXIT": _("終了(&Q)"),
+	"EXIT": _("終了(&X)"),
 	#再生メニュー
 	"PLAY": _("再生(&P)"),
 	"STOP": _("停止(&S)"),
@@ -35,10 +35,10 @@ dic={
 	"ADD_FAVORITES": _("お気に入りに追加(&A)") + "...",
 	#設定メニュー
 	"SETTING": _("設定(&S)") + "...",
-	"SET_KEYMAP": _("ショートカットキーの設定") + "...",
-	"SET_HOTKEY": _("グローバルホットキーの設定") + "...",
-	 "INDICATOR_SOUND_SETTING": _("効果音設定(&F)") + "...",
-	"COMMENT_REPLACE": _("コメント文字列置換設定(&R)") + "...",
+	"SET_KEYMAP": _("ショートカットキーの設定(&K)") + "...",
+	"SET_HOTKEY": _("グローバルホットキーの設定(&G)") + "...",
+	 "INDICATOR_SOUND_SETTING": _("効果音設定(&I)") + "...",
+	"COMMENT_REPLACE": _("コメント文字列置換設定(&C)") + "...",
 	"USER_NAME_REPLACE": _("表示名置換設定(&N)") + "...",
 	"ACCOUNT_MANAGER": _("アカウントマネージャ(&M)") + "...",
 	"SAPI_SETTING": _("SAPI設定を開く(&A)") + "...",
@@ -48,6 +48,5 @@ dic={
 	"CHECK4UPDATE": _("更新を確認(&C)") + "...",
 	#その他
 	"SILENCE": _("読み上げの中断"),
-	"VIEW_ERROR_LOG": _("エラーログの表示"),
 	"":""		#セパレータ追加時用
 }
