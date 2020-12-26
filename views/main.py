@@ -71,7 +71,7 @@ class MainView(BaseView):
 		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.helpButton = self.creator.button(_("ヘルプを表示"), None, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.helpButton = self.creator.button(_("ヘルプを表示"), self.events.help, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.hPanel.Layout()
 		self.connectButton.SetFocus()
@@ -169,7 +169,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu,
 			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING"])
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.hHelpMenu, ["VERSION_INFO", "CHECK4UPDATE"])
+		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
@@ -322,6 +322,9 @@ class Events(BaseEvents):
 				globalVars.app.speech.silence()
 			except AttributeError:
 				pass
+		#ヘルプを開く
+		elif selected == menuItemsStore.getRef("HELP"):
+			self.help()
 		#エラーログを開く
 		elif selected==menuItemsStore.getRef("VIEW_ERROR_LOG"):
 			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
@@ -475,6 +478,8 @@ class Events(BaseEvents):
 			globalVars.app.config["nameReplace"][i] = data[i]
 		globalVars.app.Manager.refreshReplaceSettings()
 
+	def help(self, event=None):
+		pass
 	def commentSelected(self, event):
 		if event == None:
 			enable = False
