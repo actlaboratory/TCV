@@ -37,7 +37,6 @@ import views.commentReplace
 import views.userNamereplace
 import webbrowser
 import constants
-import subprocess
 
 class MainView(BaseView):
 	def __init__(self):
@@ -327,7 +326,8 @@ class Events(BaseEvents):
 			self.help()
 		#エラーログを開く
 		elif selected==menuItemsStore.getRef("VIEW_ERROR_LOG"):
-			subprocess.Popen(["start", ".\\errorLog.txt"], shell=True)
+			if os.path.isfile("errorLog.txt"):
+				os.startfile("errorLog.txt")
 		#更新を確認
 		elif selected==menuItemsStore.getRef("CHECK4UPDATE"):
 			globalVars.update.update(False)
@@ -479,7 +479,11 @@ class Events(BaseEvents):
 		globalVars.app.Manager.refreshReplaceSettings()
 
 	def help(self, event=None):
-		pass
+		if os.path.isfile("readme.txt"):
+			os.startfile("readme.txt")
+		else:
+			simpleDialog.errorDialog(_("readme.txtが見つかりません。"))
+
 	def commentSelected(self, event):
 		if event == None:
 			enable = False
