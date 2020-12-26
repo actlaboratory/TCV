@@ -100,11 +100,13 @@ class ViewCreatorBase():
 		self.space=space
 
 	#BoxSizerの下にスペースを挿入
-	def AddSpace(self,space=-1):
+	def AddSpace(self,space=-2):
 		if self.sizer.__class__==wx.BoxSizer or self.sizer.__class__==wx.StaticBoxSizer:
-			if space==-1:
+			if space==-2:
 				space=self.space
-			self.sizer.AddSpacer(space)
+			elif space==-1:
+				return self.sizer.AddStretchSpacer(1)
+			return self.sizer.AddSpacer(space)
 
 	#parentで指定したsizerの下に、新たなBoxSizerを設置
 	def BoxSizer(self,parent,orient=wx.VERTICAL,label="",space=0,style=0,proportion=0):

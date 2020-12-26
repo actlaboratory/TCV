@@ -2,21 +2,25 @@
 #Application Main
 
 import AppBase
-from views import main
 import sys
-import manager
-import twitcasting.accountManager
 import simpleDialog
 import datetime
 import proxyUtil
 import globalVars
 import update
 
+def _import():
+	global main, manager, twitcasting
+	from views import main
+	import manager
+	import twitcasting.accountManager
+
 class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
 
 	def initialize(self):
+		_import()
 		"""アプリを初期化する。"""
 		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
 		if self.config.getboolean("proxy", "usemanualsetting", False) == True:

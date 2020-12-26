@@ -29,6 +29,16 @@ class Dialog(BaseDialog):
 		del deviceList[deviceList.index("No sound")]
 		for i in deviceList:
 			self.deviceList.Append([i])
+		current = globalVars.app.config["livePlay"]["device"]
+		if len(current) > 0:
+			try:
+				idx = deviceList.index(current) + 1
+			except ValueError:
+				idx = 0
+		else:
+			idx = 0
+		self.deviceList.Focus(idx)
+		self.deviceList.Select(idx)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)

@@ -15,21 +15,25 @@ from soundPlayer.constants import *
 import soundPlayer.fxPlayer
 import pyperclip
 import webbrowser
+import sys
+from copy import deepcopy
 
 evtComment = 0
 evtLiveInfo = 1
 evtCountDown = 2
 evtTyping = 3
 evtPlaystatus = 4
+evtError = 5
 
 first = 0
 update = 1
 
-commentTimerInterval = 5000
-liveInfoTimerInterval = 10000
+commentTimerInterval = 3000
+liveInfoTimerInterval = 5000
 countDownTimerInterval = 1000
 typingTimerInterval = 5000
 playstatusTimerInterval = 500
+errorCheckTimerInterval = 1000
 
 historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
 favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
@@ -52,7 +56,6 @@ class manager:
 		self.myAccount = []
 		for i in globalVars.app.accountManager.tokens:
 			self.myAccount.append(i["user"])
-		self.nameReplaceList = globalVars.app.config.items("nameReplace")
 		self.timers = []
 		self.livePlayer = None
 		self.fxPlayer = None
@@ -64,12 +67,22 @@ class manager:
 		self.timers.append(self.playStatusTimer)
 
 	def connect(self, userId):
+		userId = userId.replace("http://twitcasting.tv/", "")
+		userId = userId.replace("https://twitcasting.tv/", "")
+		if "/" in userId:
+			userId = userId[0:userId.find("/")]
 		if globalVars.app.accountManager.hasDefaultAccount() == False:
-			simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			if len(globalVars.app.accountManager.tokens) == 0:
+				simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			else:
+				simpleDialog.errorDialog(_("通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのアカウントマネージャから通信用アカウントの設定を行ってください。"))
 			return
 		self.connection = twitcasting.connection.connection(userId)
+		self.errorCheckTimer = wx.Timer(self.evtHandler, evtError)
+		self.timers.append(self.errorCheckTimer)
+		self.errorCheckTimer.Start(errorCheckTimerInterval)
 		if self.connection.connected == False:
-			simpleDialog.errorDialog(_("指定されたユーザが見つかりません。"))
+			simpleDialog.errorDialog(_("接続に失敗しました。"))
 			return
 		self.MainView.Clear()
 		self.MainView.createMainView()
@@ -134,6 +147,7 @@ class manager:
 	def disconnect(self):
 		if self.livePlayer != None:
 			self.stop()
+			self.livePlayer.exit()
 		self.livePlayer = None
 		for i in self.timers:
 			i.Stop()
@@ -141,6 +155,7 @@ class manager:
 		self.MainView.hFrame.SetTitle(constants.APP_NAME)
 		self.MainView.createStartScreen()
 		self.changeMenuState(False)
+		self.connection.connected = False
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
@@ -188,7 +203,7 @@ class manager:
 			"time": datetime.datetime.fromtimestamp(commentObject["created"]).strftime("%H:%M:%S"),
 			"user": commentObject["from_user"]["screen_id"]
 		}
-		for i in self.nameReplaceList:
+		for i in globalVars.app.config.items("nameReplace"):
 			if i[0] == commentData["user"]:
 				commentData["dispname"] = i[1]
 		for i in globalVars.app.config.items("commentReplaceBasic"):
@@ -224,9 +239,9 @@ class manager:
 		result = [
 			_("タイトル：%s") %(self.connection.movieInfo["movie"]["title"]),
 			_("テロップ：%s") %(self.connection.movieInfo["movie"]["subtitle"]),
-			_("閲覧：現在%d人、合計%d人") %(self.connection.movieInfo["movie"]["current_view_count"], self.connection.movieInfo["movie"]["total_view_count"]),
+			_("閲覧者数：現在%d人、合計%d人") %(self.connection.movieInfo["movie"]["current_view_count"], self.connection.movieInfo["movie"]["total_view_count"]),
 			_("カテゴリ：%s") %(self.connection.categoryName),
-			_("コメント数：%d") %(self.connection.movieInfo["movie"]["comment_count"]),
+			_("コメント：%d件") %(self.connection.movieInfo["movie"]["comment_count"]),
 			self.connection.movieInfo["broadcaster"]["screen_id"]
 		]
 		if self.connection.movieInfo["movie"]["is_live"] == True:
@@ -259,12 +274,21 @@ class manager:
 		for i in self.connection.item:
 			result.append(i["name"] + ":" + str(i["count"]))
 		result.sort()
+		for i in range(len(result)):
+			if result[i][0:2] == "MP":
+				mp = i
+				break
+		result[mp], result[-1] = result[-1], result[mp]
 		if mode == update:
+			cursor = self.MainView.itemList.GetSelection()
 			self.MainView.itemList.Clear()
 		for i in range(0, len(result)):
 			self.MainView.itemList.Insert(result[i], i)
+		if mode == update and cursor != wx.NOT_FOUND and self.MainView.itemList.GetCount() - 1 >= cursor:
+			self.MainView.itemList.SetSelection(cursor)
 
 	def postComment(self, commentBody, idx):
+		commentBody = commentBody.strip()
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
 			return False
@@ -388,7 +412,7 @@ class manager:
 				self.commentTimer.Start(commentTimerInterval)
 			self.oldIsLive = self.newIsLive
 			self.newSubtitle = self.connection.subtitle
-			if self.newSubtitle != self.oldSubtitle:
+			if self.newSubtitle != self.oldSubtitle and self.connection.isLive == True:
 				if self.newSubtitle == None:
 					globalVars.app.say(_("テロップ削除"))
 				else:
@@ -396,18 +420,9 @@ class manager:
 					globalVars.app.say(self.newSubtitle)
 			self.oldSubtitle = self.newSubtitle
 			self.newCategory = self.connection.categoryName
-			if self.newCategory != self.oldCategory:
+			if self.newCategory != self.oldCategory and self.connection.isLive == True:
 				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
 			self.oldCategory = self.newCategory
-			self.newCoins = self.connection.coins
-			if self.newCoins != self.oldCoins:
-				if self.newCoins < self.oldCoins:
-					globalVars.app.say(_("コイン消費"))
-				if self.newCoins % 5 == 0:
-					globalVars.app.say(_("コイン%d枚") %(self.newCoins))
-				if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(self.newCoins) == True:
-					globalVars.app.say(_("完走に必要なコインが集まりました。"))
-			self.oldCoins = self.newCoins
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
 				if self.connection.isLive == True:
@@ -418,29 +433,34 @@ class manager:
 						self.play()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
-			readViewers = globalVars.app.config.getboolean("autoReadingOptions", "readViewers", True)
-			if readViewers == True:
-				if self.newViewers < self.oldViewers:
-					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
-					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
-					globalVars.app.say(viewersInfo)
-				elif self.newViewers > self.oldViewers:
-					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersIncreasedAnnouncement"]
-					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
-					globalVars.app.say(viewersInfo)
-			if globalVars.app.config.getboolean("fx", "playViewersChangedSound", True) == True and self.newViewers != self.oldViewers:
-				self.playFx(globalVars.app.config["fx"]["viewersChangedSound"])
+			if self.newViewers != self.oldViewers and self.connection.isLive == True:
+				if self.newViewers > self.oldViewers:
+					if globalVars.app.config.getboolean("fx", "playviewersincreasedsound", True) == True:
+						self.playFx(globalVars.app.config["fx"]["viewersincreasedSound"])
+					if globalVars.app.config.getboolean("autoReadingOptions", "readviewersincreased", True) == True:
+						viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersincreasedAnnouncement"]
+						viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+						globalVars.app.say(viewersInfo)
+				elif self.newViewers < self.oldViewers:
+					if globalVars.app.config.getboolean("fx", "playviewersdecreasedsound", True) == True:
+						self.playFx(globalVars.app.config["fx"]["viewersdecreasedSound"])
+					if globalVars.app.config.getboolean("autoReadingOptions", "readviewersdecreased", True) == True:
+						viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
+						viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+						globalVars.app.say(viewersInfo)
 			self.oldViewers = self.newViewers
 			self.createLiveInfoList(update)
 			self.newItem = self.connection.item
 			receivedItem = []
 			for new in self.newItem:
-				#if new["name"] not in self.oldItem:
-					#receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+				if new["name"] not in [i["name"] for i in self.oldItem]:
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
 				for old in self.oldItem:
 					if new["name"] == old["name"] and new["count"] > old["count"]:
 						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
 			for i in receivedItem:
+				if i["name"] == "MP":
+					continue
 				id = i["id"]
 				name = i["name"]
 				count = i["count"]
@@ -478,6 +498,17 @@ class manager:
 				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
 			self.createItemList(update)
+			self.newCoins = self.connection.coins
+			if self.newCoins != self.oldCoins:
+				if self.newCoins < self.oldCoins:
+					globalVars.app.say(_("コイン消費"))
+				elif self.newCoins > self.oldCoins:
+					c = [i for i in range(self.oldCoins + 1, self.newCoins + 1) if i % 5 == 0]
+					if len(c) > 0:
+						globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
+						if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(c[-1]) == True:
+							globalVars.app.say(_("完走に必要なコインが集まりました。"))
+			self.oldCoins = self.newCoins
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
@@ -496,6 +527,8 @@ class manager:
 		elif id == evtPlaystatus:
 			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING and self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
+		elif id == evtError:
+			self.checkError()
 
 	def play(self):
 		if self.livePlayer == None:
@@ -513,11 +546,11 @@ class manager:
 				return
 			self.livePlayer.play()
 			globalVars.app.say(_("再生"))
-		self.MainView.menu.EnableMenu("play", False)
-		self.MainView.menu.EnableMenu("stop", True)
-		self.MainView.menu.EnableMenu("volumeUp", True)
-		self.MainView.menu.EnableMenu("volumeDown", True)
-		self.MainView.menu.EnableMenu("resetVolume", True)
+		self.MainView.menu.EnableMenu("PLAY", False)
+		self.MainView.menu.EnableMenu("STOP", True)
+		self.MainView.menu.EnableMenu("VOLUME_UP", True)
+		self.MainView.menu.EnableMenu("VOLUME_DOWN", True)
+		self.MainView.menu.EnableMenu("RESET_VOLUME", True)
 		self.playStatusTimer.Start(playstatusTimerInterval)
 
 	def stop(self):
@@ -526,11 +559,11 @@ class manager:
 		if self.livePlayer.getStatus() != PLAYER_STATUS_STOPPED:
 			self.livePlayer.stop()
 			globalVars.app.say(_("停止"))
-		self.MainView.menu.EnableMenu("stop", False)
-		self.MainView.menu.EnableMenu("play", True)
-		self.MainView.menu.EnableMenu("volumeUp", False)
-		self.MainView.menu.EnableMenu("volumeDown", False)
-		self.MainView.menu.EnableMenu("resetVolume", False)
+		self.MainView.menu.EnableMenu("STOP", False)
+		self.MainView.menu.EnableMenu("PLAY", True)
+		self.MainView.menu.EnableMenu("VOLUME_UP", False)
+		self.MainView.menu.EnableMenu("VOLUME_DOWN", False)
+		self.MainView.menu.EnableMenu("RESET_VOLUME", False)
 
 	def volumeUp(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
@@ -572,36 +605,36 @@ class manager:
 	def changeMenuState(self, connectionState):
 		if connectionState == False:
 			menuItems = {
-				"connect": True,
-				"viewHistory": True,
-				"viewFavorites": True,
-				"disconnect": False,
-				"play": False,
-				"stop": False,
-				"volumeUp": False,
-				"volumeDown": False,
-				"resetVolume": False,
-				"viewComment": False,
-				"replyToSelectedComment": False,
-				"deleteSelectedComment": False,
-				"replyToBroadcaster": False,
-				"viewBroadcaster": False,
-				"openLive": False,
-				"addFavorites": False,
-				"accountManager": True,
+				"CONNECT": True,
+				"VIEW_HISTORY": True,
+				"VIEW_FAVORITES": True,
+				"DISCONNECT": False,
+				"PLAY": False,
+				"STOP": False,
+				"VOLUME_UP": False,
+				"VOLUME_DOWN": False,
+				"RESET_VOLUME": False,
+				"VIEW_COMMENT": False,
+				"REPLY2SELECTED_COMMENT": False,
+				"DELETE_SELECTED_COMMENT": False,
+				"REPLY2BROADCASTER": False,
+				"VIEW_BROADCASTER": False,
+				"OPEN_LIVE": False,
+				"ADD_FAVORITES": False,
+				"ACCOUNT_MANAGER": True,
 			}
 		elif connectionState == True:
 			menuItems = {
-				"connect": False,
-				"viewHistory": False,
-				"viewFavorites": False,
-				"disconnect": True,
-				"play": True,
-				"replyToBroadcaster": True,
-				"viewBroadcaster": True,
-				"openLive": True,
-				"addFavorites": True,
-				"accountManager": False,
+				"CONNECT": False,
+				"VIEW_HISTORY": False,
+				"VIEW_FAVORITES": False,
+				"DISCONNECT": True,
+				"PLAY": True,
+				"REPLY2BROADCASTER": True,
+				"VIEW_BROADCASTER": True,
+				"OPEN_LIVE": True,
+				"ADD_FAVORITES": True,
+				"ACCOUNT_MANAGER": False,
 			}
 		for key, value in menuItems.items():
 			self.MainView.menu.EnableMenu(key, value)
@@ -613,3 +646,62 @@ class manager:
 		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
 		current = current * 5
 		return current + count >= 35
+
+	def refreshReplaceSettings(self):
+		if hasattr(self, "connection") == False or self.MainView.commentList == None:
+			return
+		tmplst = deepcopy(self.connection.comments)
+		if len(tmplst) > self.MainView.commentList.GetItemCount():
+			tmplst = tmplst[-1 * self.MainView.commentList.GetItemCount():]
+		for idx in range(len(tmplst)):
+			name = tmplst[idx]["from_user"]["name"]
+			for i in globalVars.app.config.items("nameReplace"):
+				if i[0] == tmplst[idx]["from_user"]["screen_id"]:
+					name = i[1]
+			self.MainView.commentList.SetItem(idx, 0, name)
+			body = tmplst[idx]["message"]
+			for i in globalVars.app.config.items("commentReplaceBasic"):
+				body = body.replace(i[0], i[1])
+			for i in globalVars.app.config.items("commentReplaceReg"):
+				body = re.sub(i[0], i[1], body)
+			urls = list(tmplst[idx]["urls"])
+			domains = re.finditer("(https?://[^/]+/)", body)
+			for url in urls:
+				for domain in domains:
+					if len(globalVars.app.config["commentReplaceSpecial"]["url"]) != 0:
+						body = re.sub(url.group(), globalVars.app.config["commentReplaceSpecial"]["url"], body)
+					if globalVars.app.config.getboolean("commentReplaceSpecial", "deleteProtcolName", False) == True:
+						body = body.replace("http://", "")
+						body = body.replace("https://", "")
+					if globalVars.app.config.getboolean("commentReplaceSpecial", "onlyDomain", False) == True:
+						body = body.replace(url.group(), domain.group())
+			self.MainView.commentList.SetItem(idx, 1, body)
+
+	def checkError(self):
+		code = self.connection.errorFlag
+		if code != 0:
+			self.errorCheckTimer.Stop()
+			if code == 1000:
+				simpleDialog.errorDialog(_("アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
+			elif code == 2000:
+				simpleDialog.errorDialog(_("APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"))
+			elif code == 500:
+				simpleDialog.errorDialog(_("ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してください。"))
+			elif code == 2001:
+				simpleDialog.errorDialog(_("現在TCVは使用できません。開発者に連絡してください。"))
+				sys.exit(-1)
+			else:
+				detail = {
+					1001: "Validation Error",
+					1002: "Invalid WebHook URL",
+					2002: "Protected",
+					2003: "Duplicate",
+					2004: "Too Many Comments",
+					2005: "Out Of Scope",
+					2006: "Email Unverified",
+					400: "Bad Request",
+					403: "Forbidden",
+					404: "Not Found",
+				}
+				simpleDialog.errorDialog(_("ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s") %(detail[code]))
+			self.disconnect()

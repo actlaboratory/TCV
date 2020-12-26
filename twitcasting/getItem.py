@@ -26,11 +26,22 @@ def getItem(screenId):
 			start = href.index(",") + 3
 			end = href.index("'", start)
 			itemId.append(href[start: end])
+	mp = soup.find("span", class_ = "tw-item-mp")
+	if mp == None:
+		mp = ["0", "MP"]
+	else:
+		mp = mp.text.split()
+	itemName.append(mp[1])
+	itemCount.append(int(mp[0]))
+	itemId.append(mp[1])
 	for name, count, id in zip(itemName, itemCount, itemId):
-		result.append({"name": name, "count": count, "id": id})
+		if count > 0 or name == "MP":
+			result.append({"name": name, "count": count, "id": id})
 	return result
 
 def getItemPostedUser(screenId, itemId):
+	if itemId == "MP":
+		return
 	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=ja").text
 	soup = BeautifulSoup(req, "lxml")
 	tmp = soup.find_all("span", class_ = "tw-user-name-screen-name")
