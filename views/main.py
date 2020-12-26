@@ -224,7 +224,7 @@ class Events(BaseEvents):
 			globalVars.app.Manager.disconnect()
 		#履歴
 		elif selected==menuItemsStore.getRef("VIEW_HISTORY"):
-			self.view_History()
+			self.viewHistory()
 		#お気に入り
 		elif selected==menuItemsStore.getRef("VIEW_FAVORITES"):
 			self.viewFavorites()
