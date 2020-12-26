@@ -324,10 +324,6 @@ class Events(BaseEvents):
 		#ヘルプを開く
 		elif selected == menuItemsStore.getRef("HELP"):
 			self.help()
-		#エラーログを開く
-		elif selected==menuItemsStore.getRef("VIEW_ERROR_LOG"):
-			if os.path.isfile("errorLog.txt"):
-				os.startfile("errorLog.txt")
 		#更新を確認
 		elif selected==menuItemsStore.getRef("CHECK4UPDATE"):
 			globalVars.update.update(False)
