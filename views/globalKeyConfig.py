@@ -58,7 +58,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 				for name in names:
 					entries.append(keymap.makeEntry(self.values[1][name],key,None,self.log))
 				if not keymap.permitConfrict(entries,self.log):
-					dialog(_("エラー"),_("以下の項目において、重複するキー %s が設定されています。\n\n%s") % (key,names))
+					dialog(_("エラー"),_("以下の項目において、重複するキー %(key)s が設定されています。\n\n%(command)s") % {"key": key,"command": names})
 					return
 		event.Skip()
 
