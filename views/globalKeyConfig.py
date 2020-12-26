@@ -28,8 +28,8 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		if filter==None:
 			self.filter=globalVars.app.hMainView.menu.keymap.filter
 
-	def Initialize(self):
-		super().Initialize(self.app.hMainView.hFrame,_("ショートカットキーの設定"))
+	def Initialize(self,title=_("ショートカットキーの設定")):
+		super().Initialize(self.app.hMainView.hFrame,title)
 		self.addButton.Hide()
 		self.deleteButton.Hide()
 		return
