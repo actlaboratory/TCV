@@ -11,6 +11,7 @@ import views.ViewCreator
 
 from logging import getLogger
 from views.baseDialog import *
+import simpleDialog
 
 TIMER_INTERVAL=100
 
@@ -100,7 +101,7 @@ class Dialog(BaseDialog):
 				else:
 					self.errorText.SetLabel(self.filter.GetLastError())
 					self.panel.Layout()
-					globalVars.app.say(self.filter.GetLastError(),True)
+					simpleDialog.errorDialog(self.filter.GetLastError())
 
 				self.key=""
 				self.result=""

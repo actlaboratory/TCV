@@ -122,9 +122,9 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 		d=views.keyConfig.Dialog(self.wnd,self.filter)
 		d.Initialize()
 		if d.Show()==wx.ID_CANCEL:
-			globalVars.app.say(_("解除しました。"))
+			dialog(_("設定完了"), _("解除しました。"))
 			self.edits[no].SetValue(_("なし"))
 		else:
-			globalVars.app.say(_("%s に設定しました。") % (d.GetValue()))
+			dialog(_("設定完了"), _("%s に設定しました。") % (d.GetValue()))
 			self.edits[no].SetValue(d.GetValue())
 		return
