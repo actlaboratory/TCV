@@ -614,6 +614,7 @@ class manager:
 				"VOLUME_UP": False,
 				"VOLUME_DOWN": False,
 				"RESET_VOLUME": False,
+				"COPY_COMMENT": False,
 				"VIEW_COMMENT": False,
 				"REPLY2SELECTED_COMMENT": False,
 				"DELETE_SELECTED_COMMENT": False,
