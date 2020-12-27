@@ -171,12 +171,12 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
 		#メニューバーの生成
-		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
-		self.hMenuBar.Append(self.hPlayMenu,_("再生") + "(&P)")
-		self.hMenuBar.Append(self.hCommentMenu,_("コメント") + "(&C)")
-		self.hMenuBar.Append(self.hLiveMenu,_("ライブ") + "(&L)")
-		self.hMenuBar.Append(self.hSettingsMenu,_("設定") + "(&S)")
-		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ") + "(&H)")
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.hPlayMenu,_("再生(&P)"))
+		self.hMenuBar.Append(self.hCommentMenu,_("コメント(&C)"))
+		self.hMenuBar.Append(self.hLiveMenu,_("ライブ(&L)"))
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定(&S)"))
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
 class Events(BaseEvents):
