@@ -65,7 +65,7 @@ class settingsDialog(BaseDialog):
 		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
 		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 50)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
-		self.timertype, static = creator.combobox(_("タイマーの種類(&T)") + "(&T)", list(self.timertypeSelection.values()))
+		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
 		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先(&A)"),sizerFlag=wx.EXPAND)
 		self.openlivewindow = creator.checkbox(_("接続時にブラウザでライブを開く(&O)"))
