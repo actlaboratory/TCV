@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 17:43+0900\n"
-"PO-Revision-Date: 2020-12-27 17:44+0900\n"
+"POT-Creation-Date: 2020-12-27 18:02+0900\n"
+"PO-Revision-Date: 2020-12-27 18:09+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -304,7 +304,7 @@ msgstr "stop"
 msgid "音量%d"
 msgstr "volume %d"
 
-#: manager.py:685
+#: manager.py:686
 msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
@@ -312,27 +312,27 @@ msgstr ""
 "Access token is invalid. Add your account again from Account Manager on "
 "Settings menu."
 
-#: manager.py:687
+#: manager.py:688
 msgid ""
 "APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"
 msgstr ""
 "The API has reached its maximum number of runs. Please try again after a "
 "while."
 
-#: manager.py:689
+#: manager.py:690
 msgid ""
 "ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してくださ"
 "い。"
 msgstr ""
 "TwitCasting API returned a 500 error. Wait a while and try to connect again."
 
-#: manager.py:691 twitcasting\accountManager.py:38
+#: manager.py:692 twitcasting\accountManager.py:38
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 "Currently you cannot use TCV. Contact to the developer for further "
 "assistance."
 
-#: manager.py:706
+#: manager.py:707
 #, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
 msgstr "An error has occured. Details: %s"

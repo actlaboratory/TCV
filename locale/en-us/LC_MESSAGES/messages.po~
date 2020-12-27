@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 17:28+0900\n"
-"PO-Revision-Date: 2020-12-27 17:35+0900\n"
+"POT-Creation-Date: 2020-12-27 17:43+0900\n"
+"PO-Revision-Date: 2020-12-27 17:44+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -291,7 +291,7 @@ msgstr "Faild to get playback URL."
 msgid "再生に失敗しました。"
 msgstr "Failed to start playback."
 
-#: manager.py:548 views\indicatorSoundSettings.py:16 views\main.py:175
+#: manager.py:548 views\indicatorSoundSettings.py:16
 msgid "再生"
 msgstr "play"
 
@@ -357,7 +357,7 @@ msgstr "&Disconnect"
 msgid "終了(&X)"
 msgstr "E&xit"
 
-#: menuItemsDic.py:20
+#: menuItemsDic.py:20 views\main.py:175
 msgid "再生(&P)"
 msgstr "&Play"
 
@@ -413,7 +413,7 @@ msgstr "&Open this live in browser"
 msgid "お気に入りに追加(&A)"
 msgstr "&Add to favorites"
 
-#: menuItemsDic.py:37
+#: menuItemsDic.py:37 views\main.py:178
 msgid "設定(&S)"
 msgstr "&Settings"
 
@@ -751,8 +751,7 @@ msgstr "shortcut 4"
 msgid "ショートカット5"
 msgstr "shortcut 5"
 
-#: views\globalKeyConfig.py:75 views\main.py:71 views\main.py:178
-#: views\settings.py:51
+#: views\globalKeyConfig.py:75 views\main.py:71 views\settings.py:51
 msgid "設定"
 msgstr "settings"
 
@@ -781,7 +780,7 @@ msgstr "Registered as %s."
 msgid "種類"
 msgstr "Type"
 
-#: views\indicatorSoundSettings.py:17 views\main.py:174
+#: views\indicatorSoundSettings.py:17
 msgid "ファイル"
 msgstr "file"
 
@@ -981,17 +980,21 @@ msgstr ""
 "and key names.\n"
 "\n"
 
+#: views\main.py:174
+msgid "ファイル(&F)"
+msgstr "&File"
+
 #: views\main.py:176
-msgid "コメント"
-msgstr "comment"
+msgid "コメント(&C)"
+msgstr "&Comment"
 
 #: views\main.py:177
-msgid "ライブ"
-msgstr "live"
+msgid "ライブ(&L)"
+msgstr "&Live"
 
 #: views\main.py:179
-msgid "ヘルプ"
-msgstr "help"
+msgid "ヘルプ(&H)"
+msgstr "&Help"
 
 #: views\main.py:212
 msgid "グローバルホットキーの設定"
@@ -1351,6 +1354,12 @@ msgstr "&Clear history"
 #: views\viewHistory.py:44
 msgid "接続履歴を全て消去します。よろしいですか？"
 msgstr "History will be cleared. Are you sure?"
+
+#~ msgid "ライブ"
+#~ msgstr "live"
+
+#~ msgid "ヘルプ"
+#~ msgstr "help"
 
 #~ msgid "パラメータの個数が不正です。"
 #~ msgstr "Parameter count is invalid."
