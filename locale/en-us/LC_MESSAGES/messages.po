@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-26 21:59+0900\n"
-"PO-Revision-Date: 2020-12-27 17:08+0900\n"
+"POT-Creation-Date: 2020-12-27 17:28+0900\n"
+"PO-Revision-Date: 2020-12-27 17:35+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -577,12 +577,12 @@ msgid "通信用アカウントに設定(&C)"
 msgstr "set as &Connection account"
 
 #: views\accountManager.py:51
-msgid "上へ"
-msgstr "move up"
+msgid "上へ(&U)"
+msgstr "move &Up"
 
 #: views\accountManager.py:53
-msgid "下へ"
-msgstr "move down"
+msgid "下へ(&D)"
+msgstr "move &Down"
 
 #: views\accountManager.py:55 views\viewBroadcaster.py:34
 #: views\viewComment.py:36 views\viewFavorites.py:36 views\viewHistory.py:32
@@ -839,7 +839,7 @@ msgstr "File could not be found. Please check the settings."
 
 #: views\indicatorSoundSettings.py:95
 msgid "ファイルパス"
-msgstr "Filepath"
+msgstr "File path"
 
 #: views\indicatorSoundSettings.py:96
 msgid "参照"
@@ -847,7 +847,7 @@ msgstr "browse"
 
 #: views\indicatorSoundSettings.py:105 views\settings.py:242
 msgid "効果音ファイルを選択"
-msgstr "select indicator sound"
+msgstr "select indicator sound file"
 
 #: views\keyConfig.py:31
 msgid "キー設定"
@@ -864,10 +864,6 @@ msgstr ""
 #: views\keyConfig.py:45
 msgid "設定解除"
 msgstr "remove registered configuration"
-
-#: views\KeyValueSettingDialogBase.py:25
-msgid "パラメータの個数が不正です。"
-msgstr "Parameter count is invalid."
 
 #: views\KeyValueSettingDialogBase.py:51
 msgid "現在の登録内容"
@@ -887,10 +883,6 @@ msgstr "This %s is already registered. Do you wish to overwrite?"
 #: views\KeyValueSettingDialogBase.py:152
 msgid "上書き確認"
 msgstr "Overwriting Confirmation"
-
-#: views\KeyValueSettingDialogBase.py:227
-msgid "項目名と初期値の指定件数が一致しません。"
-msgstr "項目名と初期値の指定件数が一致しません。"
 
 #: views\KeyValueSettingDialogBase.py:279
 #, python-format
@@ -914,7 +906,9 @@ msgstr "%(key)s is registered at %(count)i items, %(v1)s, %(v2)s and more.\n"
 msgid ""
 "設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセー"
 "ジを作者へご連絡ください。\n"
-msgstr "Configured shortcut %s cannot be recognized. Contact to developer.\n"
+msgstr ""
+"Configured shortcut %s cannot be recognized. Contact to the developer for "
+"further assistance.\n"
 
 #: views\KeyValueSettingDialogBase.py:328
 #, python-format
@@ -1055,7 +1049,7 @@ msgstr "high contrast"
 
 #: views\settings.py:29
 msgid "投稿しない"
-msgstr "not post"
+msgstr "do not post"
 
 #: views\settings.py:30
 msgid "配信者へ返信する形式で投稿"
@@ -1167,7 +1161,7 @@ msgstr "my live"
 
 #: views\settings.py:85
 msgid "自分以外のライブ"
-msgstr "other lives"
+msgstr "other live"
 
 #: views\settings.py:89
 msgid "読み上げ-2"
@@ -1357,6 +1351,18 @@ msgstr "&Clear history"
 #: views\viewHistory.py:44
 msgid "接続履歴を全て消去します。よろしいですか？"
 msgstr "History will be cleared. Are you sure?"
+
+#~ msgid "パラメータの個数が不正です。"
+#~ msgstr "Parameter count is invalid."
+
+#~ msgid "項目名と初期値の指定件数が一致しません。"
+#~ msgstr "項目名と初期値の指定件数が一致しません。"
+
+#~ msgid "上へ"
+#~ msgstr "move up"
+
+#~ msgid "下へ"
+#~ msgstr "move down"
 
 #~ msgid ""
 #~ "%s(%s) Version %s.\n"

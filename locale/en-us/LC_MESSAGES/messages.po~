@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-26 21:58+0900\n"
-"PO-Revision-Date: 2020-12-15 18:34+0900\n"
+"POT-Creation-Date: 2020-12-27 17:11+0900\n"
+"PO-Revision-Date: 2020-12-27 17:21+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -68,18 +68,16 @@ msgid "この組み合わせは別の用途で予約されているため、利�
 msgstr "This keystroke is already reserved."
 
 #: manager.py:78
-#, fuzzy
 msgid ""
 "通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのア"
 "カウントマネージャから通信用アカウントの設定を行ってください。"
 msgstr ""
-"No accounts are registered. Add at least one account from account manager on "
-"settings menu."
+"Connection account is not configured. Add at least one account from account "
+"manager on settings menu."
 
 #: manager.py:85
-#, fuzzy
 msgid "接続に失敗しました。"
-msgstr "Failed to start playback."
+msgstr "Connection failed."
 
 #: manager.py:107
 msgid "接続。現在配信中。"
@@ -104,7 +102,7 @@ msgstr "Connected. currently offline."
 
 #: manager.py:129
 msgid "完走に必用なコインが集まっています。"
-msgstr ""
+msgstr "There are a lot of coins that are required for completing the live."
 
 #: manager.py:240
 #, python-format
@@ -117,9 +115,9 @@ msgid "テロップ：%s"
 msgstr "subtitle: %s"
 
 #: manager.py:242
-#, fuzzy, python-format
+#, python-format
 msgid "閲覧者数：現在%(current)d人、合計%(total)d人"
-msgstr "viewers: currently %d, %d in total"
+msgstr "viewers: currently %(current)d, %(total)d in total"
 
 #: manager.py:243
 #, python-format
@@ -127,9 +125,9 @@ msgid "カテゴリ：%s"
 msgstr "category: %s"
 
 #: manager.py:244
-#, fuzzy, python-format
+#, python-format
 msgid "コメント：%d件"
-msgstr "comments: %d"
+msgstr "comments: %d items"
 
 #: manager.py:248
 msgid "現在配信中"
@@ -208,17 +206,17 @@ msgid "残り%s分です。"
 msgstr "%s minutes remaining."
 
 #: manager.py:387
-#, fuzzy, python-format
+#, python-format
 msgid "残り%(minutes)s分%(seconds)s秒です。"
-msgstr "%s minutes and %s seconds remaining."
+msgstr "%(minutes)s minutes and %(seconds)s seconds remaining."
 
 #: manager.py:400
 msgid "ライブ終了。"
-msgstr "Broadcasting ended."
+msgstr "Live ended."
 
 #: manager.py:408
 msgid "ライブ開始。"
-msgstr "Broadcasting started."
+msgstr "Live started."
 
 #: manager.py:417
 msgid "テロップ削除"
@@ -243,42 +241,42 @@ msgid "%sをもらいました。"
 msgstr "You took %s."
 
 #: manager.py:481
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)sを%(count)i個もらいました。"
-msgstr "You took %s."
+msgstr "You took %(count)i %(name)s."
 
 #: manager.py:489
-#, fuzzy, python-format
+#, python-format
 msgid "%(user)sさんから%(item)sをもらいました。"
-msgstr "From %s, you took %s."
+msgstr "You took %(item)s from %(user)s."
 
 #: manager.py:491
-#, fuzzy, python-format
+#, python-format
 msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
-msgstr "From %s, you took %s."
+msgstr "You took %(count)i %(item)s from %(user)s."
 
 #: manager.py:494
-#, fuzzy, python-format
+#, python-format
 msgid "%(user)sさんなどから%(item)sをもらいました。"
-msgstr "From %s, you took %s."
+msgstr "You took %(item)s from %(user)s and others."
 
 #: manager.py:496
-#, fuzzy, python-format
+#, python-format
 msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
-msgstr "From %s, you took %s."
+msgstr "You took %(count)i %(item)s from %(user)s and others."
 
 #: manager.py:504
 msgid "コイン消費"
 msgstr "Coin was used"
 
 #: manager.py:508
-#, fuzzy, python-format
+#, python-format
 msgid "コインが%d枚集まりました。"
-msgstr "You can continue this live by %d coins."
+msgstr "You got %d coins."
 
 #: manager.py:510
 msgid "完走に必要なコインが集まりました。"
-msgstr ""
+msgstr "The coins needed to finish the live have been collected."
 
 #: manager.py:524
 #, python-format
@@ -307,180 +305,161 @@ msgid "音量%d"
 msgstr "volume %d"
 
 #: manager.py:685
-#, fuzzy
 msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
 msgstr ""
-"Expired tokens were found. Add accounts again by using account manager on "
-"settings menu."
+"Access token is invalid. Add your account again from Account Manager on "
+"Settings menu."
 
 #: manager.py:687
 msgid ""
 "APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"
 msgstr ""
+"The API has reached its maximum number of runs. Please try again after a "
+"while."
 
 #: manager.py:689
 msgid ""
 "ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してくださ"
 "い。"
 msgstr ""
+"TwitCasting API returned a 500 error. Wait a while and try to connect again."
 
 #: manager.py:691 twitcasting\accountManager.py:38
-#, fuzzy
 msgid "現在TCVは使用できません。開発者に連絡してください。"
-msgstr "Updater is not registered. Contact to the developer."
+msgstr ""
+"Currently you cannot use TCV. Contact to the developer for further "
+"assistance."
 
 #: manager.py:706
-#, fuzzy, python-format
+#, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
-msgstr "Error. Details: %s"
+msgstr "An error has occured. Details: %s"
 
 #: menuItemsDic.py:14
-#, fuzzy
 msgid "接続(&C)"
-msgstr "connect(&C) ..."
+msgstr "&Connect"
 
 #: menuItemsDic.py:15
-#, fuzzy
 msgid "接続履歴を開く(&H)"
-msgstr "open history"
+msgstr "open &History"
 
 #: menuItemsDic.py:16
-#, fuzzy
 msgid "お気に入り一覧を開く(&F)"
-msgstr "open favorites"
+msgstr "open &Favorites"
 
 #: menuItemsDic.py:17
 msgid "切断(&D)"
-msgstr ""
+msgstr "&Disconnect"
 
 #: menuItemsDic.py:18
 msgid "終了(&X)"
-msgstr ""
+msgstr "E&xit"
 
 #: menuItemsDic.py:20
 msgid "再生(&P)"
-msgstr "play(&P)"
+msgstr "&Play"
 
 #: menuItemsDic.py:21
 msgid "停止(&S)"
-msgstr "stop(&S)"
+msgstr "&Stop"
 
 #: menuItemsDic.py:22
-#, fuzzy
 msgid "音量を上げる(&U)"
-msgstr "volume up"
+msgstr "Volume &Up"
 
 #: menuItemsDic.py:23
-#, fuzzy
 msgid "音量を下げる(&D)"
-msgstr "volume down"
+msgstr "Volume &Down"
 
 #: menuItemsDic.py:24
-#, fuzzy
 msgid "音量を１００％に設定(&R)"
-msgstr "set volume to 100%"
+msgstr "&Reset volume to 100%"
 
 #: menuItemsDic.py:25
 msgid "再生デバイスを変更(&C)"
-msgstr "change playback device(&C)"
+msgstr "&Change playback device"
 
 #: menuItemsDic.py:27
-#, fuzzy
 msgid "選択中のコメントをコピー(&C)"
-msgstr "copy selected comment"
+msgstr "&Copy selected comment"
 
 #: menuItemsDic.py:28
-#, fuzzy
 msgid "コメントの詳細を表示(&V)"
-msgstr "view comment details"
+msgstr "&View comment details"
 
 #: menuItemsDic.py:29
-#, fuzzy
 msgid "選択中のコメントに返信(&R)"
-msgstr "reply to selected comment"
+msgstr "&Reply to selected comment"
 
 #: menuItemsDic.py:30
-#, fuzzy
 msgid "選択中のコメントを削除(&D)"
-msgstr "delete selected comment"
+msgstr "&Delete selected comment"
 
 #: menuItemsDic.py:31
-#, fuzzy
 msgid "配信者に返信(&B)"
-msgstr "reply to broadcaster"
+msgstr "reply to &Broadcaster"
 
 #: menuItemsDic.py:33
-#, fuzzy
 msgid "配信者の情報を表示(&B)"
-msgstr "view information about broadcaster"
+msgstr "view information about &Broadcaster"
 
 #: menuItemsDic.py:34
-#, fuzzy
 msgid "このライブをブラウザで開く(&O)"
-msgstr "open in browser"
+msgstr "&Open this live in browser"
 
 #: menuItemsDic.py:35
-#, fuzzy
 msgid "お気に入りに追加(&A)"
-msgstr "add to favorite"
+msgstr "&Add to favorites"
 
 #: menuItemsDic.py:37
 msgid "設定(&S)"
-msgstr "settings(&S)"
+msgstr "&Settings"
 
 #: menuItemsDic.py:38
 msgid "ショートカットキーの設定(&K)"
-msgstr ""
+msgstr "Shortcut &Key Settings"
 
 #: menuItemsDic.py:39
 msgid "グローバルホットキーの設定(&G)"
-msgstr ""
+msgstr "&Global Hot Keys Settings"
 
 #: menuItemsDic.py:40
-#, fuzzy
 msgid "効果音設定(&I)"
-msgstr "settings(&S)"
+msgstr "&Indicator sound settings"
 
 #: menuItemsDic.py:41
-#, fuzzy
 msgid "コメント文字列置換設定(&C)"
-msgstr "comment replace setting"
+msgstr "&Comment replace settings"
 
 #: menuItemsDic.py:42
-#, fuzzy
 msgid "表示名置換設定(&N)"
-msgstr "name replace settings(&N)"
+msgstr "&Name replace settings"
 
 #: menuItemsDic.py:43
-#, fuzzy
 msgid "アカウントマネージャ(&M)"
-msgstr "account manager(&M) ..."
+msgstr "account &Manager"
 
 #: menuItemsDic.py:44
 msgid "SAPI設定を開く(&A)"
-msgstr ""
+msgstr "Open S&API Settings"
 
 #: menuItemsDic.py:46
-#, fuzzy
 msgid "ヘルプを開く(&H)"
-msgstr "view help"
+msgstr "open &Help"
 
 #: menuItemsDic.py:47
-#, fuzzy
 msgid "バージョン情報(&V)"
-msgstr "version information(&V) ..."
+msgstr "&Version Info"
 
 #: menuItemsDic.py:48
-#, fuzzy
 msgid "更新を確認(&C)"
-msgstr "check for update"
+msgstr "&Check for update"
 
 #: menuItemsDic.py:50
-#, fuzzy
 msgid "読み上げの中断"
-msgstr "read nothing"
+msgstr "stop speech"
 
 #: TCV.py:41
 msgid "通信に失敗しました。インターネット接続を確認してください。"
@@ -515,26 +494,30 @@ msgstr "This is the latest version."
 
 #: update.py:72
 msgid "リクエストパラメーターが不正です。開発者まで連絡してください"
-msgstr "Request parameter is invalid. Contact to the developer."
+msgstr ""
+"Request parameter is invalid. Contact to the developer for further "
+"assistance."
 
 #: update.py:76
 msgid "アップデーターが登録されていません。開発者に連絡してください。"
 msgstr "Updater is not registered. Contact to the developer."
 
 #: twitcasting\accountManager.py:41
-#, fuzzy
 msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
 msgstr ""
-"Expired tokens were found. Add accounts again by using account manager on "
-"settings menu."
+"Unavailable tokens were found. Add accounts again by using account manager "
+"on settings menu."
 
 #: twitcasting\accountManager.py:45
 msgid ""
 "APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この"
 "情報を再度取得するには、数分待ってからTCVを再起動してください。"
 msgstr ""
+"Some user information could not be retrieved because the API execution limit "
+"was reached. To get this information again, wait a few minutes and restart "
+"TCV."
 
 #: twitcasting\accountManager.py:76
 msgid "処理結果"
@@ -546,7 +529,7 @@ msgstr "Canceled."
 
 #: twitcasting\accountManager.py:101
 msgid "不明"
-msgstr ""
+msgstr "unknown"
 
 #: twitcasting\connection.py:151
 msgid "カテゴリなし"
@@ -582,25 +565,24 @@ msgstr "for connection"
 
 #: views\accountManager.py:44 views\KeyValueSettingDialogBase.py:72
 msgid "追加(&A)"
-msgstr ""
+msgstr "&Add "
 
 #: views\accountManager.py:45 views\KeyValueSettingDialogBase.py:75
 #: views\viewFavorites.py:31
 msgid "削除(&D)"
-msgstr ""
+msgstr "&Delete"
 
 #: views\accountManager.py:47
-#, fuzzy
 msgid "通信用アカウントに設定(&C)"
-msgstr "set as connection account"
+msgstr "set as &Connection account"
 
 #: views\accountManager.py:51
-msgid "上へ"
-msgstr "move up"
+msgid "上へ(&U)"
+msgstr "move &Up"
 
 #: views\accountManager.py:53
-msgid "下へ"
-msgstr "move down"
+msgid "下へ(&D)"
+msgstr "move &Down"
 
 #: views\accountManager.py:55 views\viewBroadcaster.py:34
 #: views\viewComment.py:36 views\viewFavorites.py:36 views\viewHistory.py:32
@@ -701,9 +683,8 @@ msgid "置換先文字列"
 msgstr "new string"
 
 #: views\commentReplace.py:45
-#, fuzzy
 msgid "正規表現を使用"
-msgstr "regular expression"
+msgstr "use regular expression"
 
 #: views\commentReplace.py:51 views\userNamereplace.py:35
 msgid "置換内容設定"
@@ -729,15 +710,15 @@ msgstr "Font configuration has failed."
 
 #: views\globalKeyConfig.py:21
 msgid "ショートカット"
-msgstr ""
+msgstr "shortcut"
 
 #: views\globalKeyConfig.py:22 views\globalKeyConfig.py:74
 msgid "識別子"
-msgstr ""
+msgstr "identifier"
 
 #: views\globalKeyConfig.py:31 views\main.py:206
 msgid "ショートカットキーの設定"
-msgstr ""
+msgstr "Shortcut Key Configuration"
 
 #: views\globalKeyConfig.py:61
 #, python-format
@@ -746,26 +727,29 @@ msgid ""
 "\n"
 "%(command)s"
 msgstr ""
+"%(key)s is configured in following items.\\n\n"
+"\n"
+"%(command)s"
 
 #: views\globalKeyConfig.py:74
 msgid "ショートカット1"
-msgstr ""
+msgstr "shortcut 1"
 
 #: views\globalKeyConfig.py:74
 msgid "ショートカット2"
-msgstr ""
+msgstr "shortcut 2"
 
 #: views\globalKeyConfig.py:74
 msgid "ショートカット3"
-msgstr ""
+msgstr "shortcut 3"
 
 #: views\globalKeyConfig.py:74
 msgid "ショートカット4"
-msgstr ""
+msgstr "shortcut 4"
 
 #: views\globalKeyConfig.py:74
 msgid "ショートカット5"
-msgstr ""
+msgstr "shortcut 5"
 
 #: views\globalKeyConfig.py:75 views\main.py:71 views\main.py:178
 #: views\settings.py:51
@@ -774,30 +758,28 @@ msgstr "settings"
 
 #: views\globalKeyConfig.py:80
 msgid "登録内容の入力"
-msgstr ""
+msgstr "register set contents"
 
 #: views\globalKeyConfig.py:120
-#, fuzzy
 msgid "このショートカットは変更できません。"
-msgstr "Keystroke which consists of only modifier keys cannot be added."
+msgstr "This shortcut cannot be modified."
 
 #: views\globalKeyConfig.py:125 views\globalKeyConfig.py:128
 msgid "設定完了"
-msgstr ""
+msgstr "Setup has been completed"
 
 #: views\globalKeyConfig.py:125
-#, fuzzy
 msgid "解除しました。"
-msgstr "30 minutes elapsed."
+msgstr "unregistered."
 
 #: views\globalKeyConfig.py:128
-#, fuzzy, python-format
+#, python-format
 msgid "%s に設定しました。"
-msgstr "Failed to start playback."
+msgstr "Registered as %s."
 
 #: views\indicatorSoundSettings.py:15 views\indicatorSoundSettings.py:95
 msgid "種類"
-msgstr ""
+msgstr "Type"
 
 #: views\indicatorSoundSettings.py:17 views\main.py:174
 msgid "ファイル"
@@ -805,65 +787,59 @@ msgstr "file"
 
 #: views\indicatorSoundSettings.py:20
 msgid "コメント受信時"
-msgstr "when received comment "
+msgstr "when received comments"
 
 #: views\indicatorSoundSettings.py:21
-#, fuzzy
 msgid "閲覧者数増加時"
-msgstr "when viewers count changed"
+msgstr "when viewers count increased"
 
 #: views\indicatorSoundSettings.py:22
-#, fuzzy
 msgid "閲覧者数減少時"
-msgstr "when viewers count changed"
+msgstr "when viewers count decreased"
 
 #: views\indicatorSoundSettings.py:23
 msgid "アイテム受信時"
-msgstr "when received item "
+msgstr "when received items"
 
 #: views\indicatorSoundSettings.py:24
 msgid "コメント投稿時"
 msgstr "when comment posted"
 
 #: views\indicatorSoundSettings.py:25
-#, fuzzy
 msgid "コメント入力中検知時"
-msgstr "message"
+msgstr "when currently-typing user is recognized"
 
 #: views\indicatorSoundSettings.py:26
-#, fuzzy
 msgid "残り時間通知時"
-msgstr "timer sound"
+msgstr "when notifying remaining time"
 
 #: views\indicatorSoundSettings.py:27
-#, fuzzy
 msgid "プログラムの起動時"
-msgstr "exit"
+msgstr "When program is launched"
 
 #: views\indicatorSoundSettings.py:50 views\indicatorSoundSettings.py:95
 msgid "再生する"
-msgstr ""
+msgstr "Play"
 
 #: views\indicatorSoundSettings.py:50
 msgid "再生しない"
-msgstr ""
+msgstr "Don't play"
 
 #: views\indicatorSoundSettings.py:51
 msgid "プレビュー(&P)"
-msgstr ""
+msgstr "&Preview"
 
 #: views\indicatorSoundSettings.py:54 views\indicatorSoundSettings.py:102
 msgid "効果音設定"
-msgstr ""
+msgstr "Indicator sound settings"
 
 #: views\indicatorSoundSettings.py:85 views\indicatorSoundSettings.py:113
 msgid "効果音ファイルが見つかりません。設定内容を確認してください。"
-msgstr ""
+msgstr "File could not be found. Please check the settings."
 
 #: views\indicatorSoundSettings.py:95
-#, fuzzy
 msgid "ファイルパス"
-msgstr "file"
+msgstr "File path"
 
 #: views\indicatorSoundSettings.py:96
 msgid "参照"
@@ -871,79 +847,82 @@ msgstr "browse"
 
 #: views\indicatorSoundSettings.py:105 views\settings.py:242
 msgid "効果音ファイルを選択"
-msgstr "select indicator sound"
+msgstr "select indicator sound file"
 
 #: views\keyConfig.py:31
 msgid "キー設定"
-msgstr ""
+msgstr "Key Configuration"
 
 #: views\keyConfig.py:39
 msgid ""
 "設定するには、使用したいキーの組み合わせを押します。\n"
 "設定を解除するには、Escキーを押します。"
 msgstr ""
+"Press preferred key combination to register.\n"
+"Press Esc to remove configuration."
 
 #: views\keyConfig.py:45
 msgid "設定解除"
-msgstr ""
+msgstr "remove registered configuration"
 
 #: views\KeyValueSettingDialogBase.py:25
 msgid "パラメータの個数が不正です。"
-msgstr ""
+msgstr "Parameter count is invalid."
 
 #: views\KeyValueSettingDialogBase.py:51
 msgid "現在の登録内容"
-msgstr ""
+msgstr "Current Settings"
 
 #: views\KeyValueSettingDialogBase.py:73
 msgid "変更(&M)"
-msgstr ""
+msgstr "&Modify"
 
 #: views\KeyValueSettingDialogBase.py:122
 #: views\KeyValueSettingDialogBase.py:152
-#, fuzzy, python-format
+#, python-format
 msgid "この%sは既に登録されています。登録を上書きしますか？"
-msgstr "It is already registered."
+msgstr "This %s is already registered. Do you wish to overwrite?"
 
 #: views\KeyValueSettingDialogBase.py:122
 #: views\KeyValueSettingDialogBase.py:152
 msgid "上書き確認"
-msgstr ""
+msgstr "Overwriting Confirmation"
 
 #: views\KeyValueSettingDialogBase.py:227
 msgid "項目名と初期値の指定件数が一致しません。"
-msgstr ""
+msgstr "項目名と初期値の指定件数が一致しません。"
 
 #: views\KeyValueSettingDialogBase.py:279
-#, fuzzy, python-format
+#, python-format
 msgid "%sを空白や半角の=を含む値に設定することはできません。"
-msgstr "This key combination is not supported."
+msgstr "%s cannot include space and equals sign."
 
 #: views\KeyValueSettingDialogBase.py:319
-#, fuzzy, python-format
+#, python-format
 msgid "%(v1)sと%(v2)sに同じショートカットキー%(key)sが設定されています。\n"
-msgstr "Connection account is not configured."
+msgstr "%(v1)s and %(v2)s has same shortcut key %(key)s.\n"
 
 #: views\KeyValueSettingDialogBase.py:322
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(v1)s、%(v2)sなど計%(count)d箇所に同じショートカットキー%(key)sが設定されて"
 "います。\n"
-msgstr "Connection account is not configured."
+msgstr "%(key)s is registered at %(count)i items, %(v1)s, %(v2)s and more.\n"
 
 #: views\KeyValueSettingDialogBase.py:326
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセー"
 "ジを作者へご連絡ください。\n"
-msgstr "Updater is not available. Download this software again."
+msgstr "Configured shortcut %s cannot be recognized. Contact to developer.\n"
 
 #: views\KeyValueSettingDialogBase.py:328
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(command)sに設定されたショートカットキー%(key)sは、別の場所で利用されていま"
 "す。\n"
-msgstr "Connection account is not configured."
+msgstr ""
+"The key combination %(key)s, configured as %(command)s, is reserved.\\n\n"
 
 #: views\main.py:69
 msgid "接続履歴を開く"
@@ -998,15 +977,15 @@ msgid "アイテム"
 msgstr "items"
 
 #: views\main.py:127
-#, fuzzy
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
 "ご確認ください。\n"
 "\n"
 msgstr ""
-"keyboard shortcut is invalid. Please check for conflicting / unusable key "
-"combinations and key names.\n"
+"hot key is invalid. Please check for conflicting / unusable key combinations "
+"and key names.\n"
+"\n"
 
 #: views\main.py:176
 msgid "コメント"
@@ -1022,20 +1001,11 @@ msgstr "help"
 
 #: views\main.py:212
 msgid "グローバルホットキーの設定"
-msgstr ""
+msgstr "Global Hot Keys Settings"
 
 #: views\main.py:217
 msgid "バージョン情報"
 msgstr "version information"
-
-#: views\main.py:217
-#, python-format
-msgid ""
-"%s(%s) Version %s.\n"
-"Copyright (C) %s %s"
-msgstr ""
-"%s(%s) Version %s.\n"
-"Copyright (C) %s %s"
 
 #: views\main.py:250 views\main.py:259 views\viewFavorites.py:46
 #: views\viewFavorites.py:54 views\viewHistory.py:44
@@ -1064,9 +1034,8 @@ msgid "お気に入りライブが登録されていません。"
 msgstr "No items."
 
 #: views\main.py:481
-#, fuzzy
 msgid "readme.txtが見つかりません。"
-msgstr "Such user is not found."
+msgstr "Readme.txt could not be found."
 
 #: views\settings.py:16
 msgid "音声なし"
@@ -1098,15 +1067,15 @@ msgstr "post as normally"
 
 #: views\settings.py:34
 msgid "常に30分を計測"
-msgstr ""
+msgstr "Always measure 30 minutes"
 
 #: views\settings.py:35
 msgid "各枠ごとの残り時間を詳細に通知"
-msgstr ""
+msgstr "Detailed notification of remaining time for each frame"
 
 #: views\settings.py:36
 msgid "延長可能な枠では３分前のみ通知"
-msgstr ""
+msgstr "Only 3 minutes' notice in the frame that can be extended"
 
 #: views\settings.py:39 views\settings.py:44
 msgid "読み上げない"
@@ -1137,41 +1106,36 @@ msgid "一般"
 msgstr "general"
 
 #: views\settings.py:65
-#, fuzzy
 msgid "画面表示モード(&D)"
-msgstr "display mode"
+msgstr "&Display mode"
 
 #: views\settings.py:66
-#, fuzzy
 msgid ""
 "ライブ接続時に読み込む\n"
 "コメント数(&C)"
-msgstr "initial comment count"
+msgstr ""
+"number of &Comments\n"
+"which will be loaded initially"
 
 #: views\settings.py:67
-#, fuzzy
 msgid "コメントのSNS投稿(&S)"
-msgstr "post comment to SNS"
+msgstr "post comment to &SNS"
 
 #: views\settings.py:68
-#, fuzzy
 msgid "タイマーの種類(&T)"
-msgstr "timer type"
+msgstr "&Timer type"
 
 #: views\settings.py:69
-#, fuzzy
 msgid "接続履歴の保持件数(&H)"
-msgstr "max count of history"
+msgstr "max count of &History"
 
 #: views\settings.py:70
-#, fuzzy
 msgid "規定の接続先(&A)"
-msgstr "default connect account"
+msgstr "default &Account"
 
 #: views\settings.py:71
-#, fuzzy
 msgid "接続時にブラウザでライブを開く(&O)"
-msgstr "automatically open in browser when connected"
+msgstr "automatically &Open the live in browser when connected"
 
 #: views\settings.py:75
 msgid "読み上げ-1"
@@ -1179,12 +1143,11 @@ msgstr "reading-1"
 
 #: views\settings.py:76
 msgid "出力先(&O)"
-msgstr ""
+msgstr "&Output"
 
 #: views\settings.py:77
-#, fuzzy
 msgid "受信したコメントを読み上げる(&C)"
-msgstr "read received comments"
+msgstr "read received &Comments"
 
 #: views\settings.py:78
 msgid "コメント受信時の読み上げ内容"
@@ -1211,35 +1174,30 @@ msgid "読み上げ-2"
 msgstr "reading-2"
 
 #: views\settings.py:90
-#, fuzzy
 msgid "閲覧者数が増加したら読み上げる(&I)"
-msgstr "read viewers count when changed"
+msgstr "read viewers count when &Increased"
 
 #: views\settings.py:91
 msgid "閲覧者数が増加した際の読み上げ"
 msgstr "reading string when viewers are increased"
 
 #: views\settings.py:92
-#, fuzzy
 msgid "閲覧者数が減少したら読み上げる(&D)"
-msgstr "read viewers count when changed"
+msgstr "read viewers count when &Decreased"
 
 #: views\settings.py:93
 msgid "閲覧者数が減少した際の読み上げ"
 msgstr "reading string when viewers are decreased"
 
 #: views\settings.py:94
-#, fuzzy
 msgid "入力中のユーザーを読み上げる(&T)"
-msgstr "read typing user"
+msgstr "read &Typing user if exists"
 
 #: views\settings.py:95
-#, fuzzy
 msgid "受信したアイテムを読み上げる(&E)"
-msgstr "read received items"
+msgstr "read received it&ems"
 
 #: views\settings.py:96
-#, fuzzy
 msgid "アイテム投稿者の読み方"
 msgstr "read item posted user"
 
@@ -1248,66 +1206,56 @@ msgid "ライブ再生"
 msgstr "live playback"
 
 #: views\settings.py:100
-#, fuzzy
 msgid "自動的に再生を開始する(&A)"
-msgstr "automatically start playback"
+msgstr "&Automatically start playback"
 
 #: views\settings.py:101
-#, fuzzy
 msgid "規定の音量(&V)"
-msgstr "default volume"
+msgstr "Default &Volume"
 
 #: views\settings.py:102
-#, fuzzy
 msgid "ライブ再生の遅延時間(&D)"
-msgstr "delay time for live playback"
+msgstr "&Delay time for live playback"
 
 #: views\settings.py:105
 msgid "効果音"
 msgstr "indicator sound"
 
 #: views\settings.py:107
-#, fuzzy
 msgid "効果音の出力先をライブ音声の出力先と同期(&S)"
-msgstr "sync indicator sound output device with live playback output device"
+msgstr "&Sync indicator sound output device with live playback output device"
 
 #: views\settings.py:109
-#, fuzzy
 msgid "効果音の音量(&V)"
-msgstr "indicator sound volume"
+msgstr "indicator sound &Volume"
 
 #: views\settings.py:111
-#, fuzzy
 msgid "読み上げを省略したコメントも通知音を再生する(&C)"
-msgstr "play comment received sound for reading skipped comment"
+msgstr "play &Comment received sound for reading skipped comment"
 
 #: views\settings.py:116
 msgid "URL設定"
 msgstr "URL settings"
 
 #: views\settings.py:117
-#, fuzzy
 msgid "プロトコル名を削除(&P)"
-msgstr "delete protocol name"
+msgstr "delete &Protocol name"
 
 #: views\settings.py:118
-#, fuzzy
 msgid "ドメインのみ(&D)"
-msgstr "only domain"
+msgstr "only &Domain"
 
 #: views\settings.py:119
-#, fuzzy
 msgid "URLを次の文字列に置き換える(&R)"
-msgstr "replace to following string"
+msgstr "&Replace URLs to following string"
 
 #: views\settings.py:122
 msgid "プロキシ設定"
 msgstr "proxy settings"
 
 #: views\settings.py:123
-#, fuzzy
 msgid "プロキシサーバーの情報を手動で設定する(&M)"
-msgstr "use manual proxy settings"
+msgstr "&Manually configure proxy information"
 
 #: views\settings.py:124
 msgid "サーバーURL"
@@ -1382,9 +1330,8 @@ msgid "お気に入り"
 msgstr "favorites"
 
 #: views\viewFavorites.py:32
-#, fuzzy
 msgid "全て削除(&C)"
-msgstr "delete all"
+msgstr "&Clear all"
 
 #: views\viewFavorites.py:46
 #, python-format
@@ -1404,13 +1351,25 @@ msgid "接続履歴"
 msgstr "history"
 
 #: views\viewHistory.py:35
-#, fuzzy
 msgid "履歴消去(&C)"
-msgstr "clear history"
+msgstr "&Clear history"
 
 #: views\viewHistory.py:44
 msgid "接続履歴を全て消去します。よろしいですか？"
 msgstr "History will be cleared. Are you sure?"
+
+#~ msgid "上へ"
+#~ msgstr "move up"
+
+#~ msgid "下へ"
+#~ msgstr "move down"
+
+#~ msgid ""
+#~ "%s(%s) Version %s.\n"
+#~ "Copyright (C) %s %s"
+#~ msgstr ""
+#~ "%s(%s) Version %s.\n"
+#~ "Copyright (C) %s %s"
 
 #, fuzzy
 #~ msgid "%sさんなどから%sを%i個もらいました。"

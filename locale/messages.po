@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-26 23:11+0900\n"
+"POT-Creation-Date: 2020-12-27 17:28+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -556,11 +556,11 @@ msgid "通信用アカウントに設定(&C)"
 msgstr ""
 
 #: views\accountManager.py:51
-msgid "上へ"
+msgid "上へ(&U)"
 msgstr ""
 
 #: views\accountManager.py:53
-msgid "下へ"
+msgid "下へ(&D)"
 msgstr ""
 
 #: views\accountManager.py:55 views\viewBroadcaster.py:34
@@ -837,10 +837,6 @@ msgstr ""
 msgid "設定解除"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:25
-msgid "パラメータの個数が不正です。"
-msgstr ""
-
 #: views\KeyValueSettingDialogBase.py:51
 msgid "現在の登録内容"
 msgstr ""
@@ -858,10 +854,6 @@ msgstr ""
 #: views\KeyValueSettingDialogBase.py:122
 #: views\KeyValueSettingDialogBase.py:152
 msgid "上書き確認"
-msgstr ""
-
-#: views\KeyValueSettingDialogBase.py:227
-msgid "項目名と初期値の指定件数が一致しません。"
 msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:279
