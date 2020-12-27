@@ -22,7 +22,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		"""
 		super().__init__(identifier)
 		if len(columnInfo)!=len(values)+1:
-			raise ValueError(_("パラメータの個数が不正です。"))
+			raise ValueError("Parameter count is invalid.")
 		self.settingDialog=settingDialog
 		self.columnInfo=columnInfo
 		self.values=values
@@ -224,7 +224,7 @@ class SettingDialogBase(BaseDialog):
 		"""
 		super().__init__("valueSettingDialog")
 		if len(valueNames)!=len(v):
-			raise ValueError(_("項目名と初期値の指定件数が一致しません。"))
+			raise ValueError("Specified initial values did not match value names.")
 		self.parent=parent
 		self.valueNames=valueNames
 		self.buttons=buttons
