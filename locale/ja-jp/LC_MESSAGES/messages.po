@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 17:28+0900\n"
+"POT-Creation-Date: 2020-12-27 17:43+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -284,7 +284,7 @@ msgstr ""
 msgid "再生に失敗しました。"
 msgstr ""
 
-#: manager.py:548 views\indicatorSoundSettings.py:16 views\main.py:175
+#: manager.py:548 views\indicatorSoundSettings.py:16
 msgid "再生"
 msgstr ""
 
@@ -343,7 +343,7 @@ msgstr ""
 msgid "終了(&X)"
 msgstr ""
 
-#: menuItemsDic.py:20
+#: menuItemsDic.py:20 views\main.py:175
 msgid "再生(&P)"
 msgstr ""
 
@@ -399,7 +399,7 @@ msgstr ""
 msgid "お気に入りに追加(&A)"
 msgstr ""
 
-#: menuItemsDic.py:37
+#: menuItemsDic.py:37 views\main.py:178
 msgid "設定(&S)"
 msgstr ""
 
@@ -725,8 +725,7 @@ msgstr ""
 msgid "ショートカット5"
 msgstr ""
 
-#: views\globalKeyConfig.py:75 views\main.py:71 views\main.py:178
-#: views\settings.py:51
+#: views\globalKeyConfig.py:75 views\main.py:71 views\settings.py:51
 msgid "設定"
 msgstr ""
 
@@ -755,7 +754,7 @@ msgstr ""
 msgid "種類"
 msgstr ""
 
-#: views\indicatorSoundSettings.py:17 views\main.py:174
+#: views\indicatorSoundSettings.py:17
 msgid "ファイル"
 msgstr ""
 
@@ -947,16 +946,20 @@ msgid ""
 "\n"
 msgstr ""
 
+#: views\main.py:174
+msgid "ファイル(&F)"
+msgstr ""
+
 #: views\main.py:176
-msgid "コメント"
+msgid "コメント(&C)"
 msgstr ""
 
 #: views\main.py:177
-msgid "ライブ"
+msgid "ライブ(&L)"
 msgstr ""
 
 #: views\main.py:179
-msgid "ヘルプ"
+msgid "ヘルプ(&H)"
 msgstr ""
 
 #: views\main.py:212
