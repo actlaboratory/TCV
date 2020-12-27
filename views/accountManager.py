@@ -48,9 +48,9 @@ class Dialog(BaseDialog):
 		self.setDefaultButton.Enable(False)
 
 		g2=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.VERTICAL,0)
-		self.moveUpButton = g2.button(_("上へ") + "(&U)", self.move)
+		self.moveUpButton = g2.button(_("上へ(&U)"), self.move)
 		self.moveUpButton.Enable(False)
-		self.moveDownButton = g2.button(_("下へ") + "(&D)", self.move)
+		self.moveDownButton = g2.button(_("下へ(&D)"), self.move)
 		self.moveDownButton.Enable(False)
 		self.bClose=self.creator.okbutton(_("閉じる"),self.close)
 
