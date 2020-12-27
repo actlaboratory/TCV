@@ -38,7 +38,7 @@ class Main(AppBase.MainBase):
 		self.accountManager = twitcasting.accountManager.AccountManager()
 		self.Manager = manager.manager(self.hMainView)
 		if len(self.accountManager.tokens) == 0:
-			simpleDialog.dialog("", _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			simpleDialog.dialog(_("アカウント登録"), _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			return True
 		for i in self.accountManager.tokens:
 			if datetime.datetime.now().timestamp() > i["expires_at"]:
