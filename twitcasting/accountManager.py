@@ -62,6 +62,12 @@ class AccountManager:
 
 	def add(self):
 		manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
+		manager.setMessage(
+			lang="ja",
+			success="認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってください。",
+			failed="認証に失敗しました。もう一度お試しください。",
+			transfer="しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。"
+		)
 		webbrowser.open(manager.getUrl())
 		d = views.accountManager.waitingDialog()
 		d.Initialize()
