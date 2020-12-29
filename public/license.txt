@@ -1,0 +1,23 @@
+CopyLight (c)2019-2021 Kazto Kitabatake,ACT laboratory All lights reserved.
+
+本ソフトウェアは、GPL v3(or later)またはApache license v2の条件に従い、自由に利用することができます。
+また、本ソフトウェアには、以下の各ライセンスに従い他者の成果物を含みます。
+また、以下に掲載のないライブラリも多数使用しています(PSFライセンス等に基づき、ライセンスの明示が必要ないものなど)。
+
+
+・Apacheライセンスv2に基づく以下のライブラリ
+　　requests　(https://github.com/psf/requests)
+	pypac	(https://pypi.org/project/pypac/)
+
+・BSDライセンス
+　　pyperclip	(https://pypi.org/project/pyperclip/)
+	pybass　(https://pypi.org/project/pybass/)
+		Copyright(c) Maxim Kolosov 2009-2013 pyirrlicht@gmail.com
+
+・MITライセンスに基づく以下のライブラリ
+	pytags
+
+その他、個別のライセンスに基づく複数のライブラリ
+
+各ライセンスは、licensesディレクトリ内に格納されています。
+
