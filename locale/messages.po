@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 18:02+0900\n"
+"POT-Creation-Date: 2020-12-29 12:00+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: app.py:41
+msgid "アカウント登録"
+msgstr ""
 
 #: app.py:41 manager.py:76
 msgid ""
@@ -314,7 +318,7 @@ msgid ""
 "い。"
 msgstr ""
 
-#: manager.py:692 twitcasting\accountManager.py:38
+#: manager.py:692 twitcasting\accountManager.py:39
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 
@@ -486,27 +490,42 @@ msgstr ""
 msgid "アップデーターが登録されていません。開発者に連絡してください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:41
+#: twitcasting\accountManager.py:42
 msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:45
+#: twitcasting\accountManager.py:46
 msgid ""
 "APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この"
 "情報を再度取得するには、数分待ってからTCVを再起動してください。"
 msgstr ""
 
+#: twitcasting\accountManager.py:74
+msgid ""
+"認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってくださ"
+"い。"
+msgstr ""
+
+#: twitcasting\accountManager.py:75
+msgid "認証に失敗しました。もう一度お試しください。"
+msgstr ""
+
 #: twitcasting\accountManager.py:76
+msgid ""
+"しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。"
+msgstr ""
+
+#: twitcasting\accountManager.py:89
 msgid "処理結果"
 msgstr ""
 
-#: twitcasting\accountManager.py:76
+#: twitcasting\accountManager.py:89
 msgid "キャンセルされました。"
 msgstr ""
 
-#: twitcasting\accountManager.py:101
+#: twitcasting\accountManager.py:114
 msgid "不明"
 msgstr ""
 
