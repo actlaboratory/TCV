@@ -62,6 +62,7 @@ class settingsDialog(BaseDialog):
 
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
+		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
 		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
 		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 50)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
@@ -131,6 +132,7 @@ class settingsDialog(BaseDialog):
 
 	def load(self):
 		# general
+		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
 		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
 		self.initialcommentcount.SetValue(globalVars.app.config["general"]["initialcommentcount"])
 		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
@@ -178,6 +180,7 @@ class settingsDialog(BaseDialog):
 
 	def save(self):
 		# general
+		globalVars.app.config["general"]["update"] = self.update.GetValue()
 		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
 		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
 		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
