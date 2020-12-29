@@ -322,8 +322,12 @@ class manager:
 			self.MainView.commentList.DeleteItem(selected)
 
 	def copyComment(self):
-		selected = self.MainView.commentList.GetFocusedItem()
-		pyperclip.copy(self.readComment(self.getCommentdata(self.connection.comments[selected]), False))
+		selections = self.MainView.commentList.getItemSelections()
+		tmplst = deepcopy(self.connection.comments)
+		if len(tmplst) > self.MainView.commentList.GetItemCount():
+			tmplst = tmplst[-1 * self.MainView.commentList.GetItemCount():]
+		items = [self.readComment(self.getCommentdata(tmplst[i]), False) for i in selections]
+		pyperclip.copy("\n\n".join(items))
 
 	def resetTimer(self, speech = False):
 		if speech == True:
