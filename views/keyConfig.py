@@ -49,7 +49,7 @@ class Dialog(BaseDialog):
 		self.sizer.Fit(self.wnd)
 		self.wnd.Centre()
 		self.timer=wx.Timer(self.wnd)
-		self.timer.Start(TIMER_INTERVAL)
+		self.timer.StartOnce(TIMER_INTERVAL)
 		result=self.wnd.ShowModal()
 		if result!=wx.ID_CANCEL:
 			self.value=self.GetData()
