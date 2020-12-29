@@ -40,10 +40,11 @@ def exchandler(type, exc, tb):
 	if type == requests.exceptions.ConnectionError:
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
 		sys.exit(-1)
-	winsound.Beep(1000, 1000)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))
-	globalVars.app.say(str(msg[-1]))
+	if hasattr(sys, "frozen") == False:
+		winsound.Beep(1000, 1000)
+		globalVars.app.say(str(msg[-1]))
 	f=open("errorLog.txt", "a")
 	f.writelines(msg)
 	f.close()
