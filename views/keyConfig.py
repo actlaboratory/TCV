@@ -42,7 +42,7 @@ class Dialog(BaseDialog):
 
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALIGN_RIGHT)
-		self.bCancel=self.creator.cancelbutton(_("設定解除"),None)
+		self.bCancel=self.creator.cancelbutton(_("設定解除"),self.cancelButton)
 
 	def Show(self):
 		self.panel.Layout()
@@ -107,4 +107,9 @@ class Dialog(BaseDialog):
 				self.result=""
 		self.timer.Start(TIMER_INTERVAL)
 		return
+
+	def cancelButton(self,event):
+		self.timer.Stop()
+		self.timer.Stop()
+		event.Skip()
 
