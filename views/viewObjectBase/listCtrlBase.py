@@ -5,11 +5,10 @@
 import globalVars
 import json
 import wx
-from views.viewObjectBase import viewObjectUtil, controlBase
+from views.viewObjectBase import viewObjectUtil, controlBase,listCtrlBase
 
 class listCtrl(controlBase.controlBase, wx.ListCtrl):
 	def __init__(self, *pArg, **kArg):
-		self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True) #キーボードフォーカスの初期値
 		self._needSaveColumnInfo = False
 		self.sectionName = ""
 		self.keyName = ""
@@ -17,6 +16,7 @@ class listCtrl(controlBase.controlBase, wx.ListCtrl):
 
 	#ポップアップメニューの表示位置をクライアント座標のwx.Pointで返す
 	def getPopupMenuPosition(self):
+		print("きた")
 		if  self.GetFocusedItem()>=0:
 			rect=self.GetItemRect(self.GetFocusedItem(),wx.LIST_RECT_LABEL)
 			return rect.GetBottomRight()
@@ -63,3 +63,19 @@ class listCtrl(controlBase.controlBase, wx.ListCtrl):
 		for i in range(0,self.GetColumnCount()):
 			width=self.GetColumnWidth(i)
 			globalVars.app.config[self.sectionName][self.keyName+"_column_width_"+str(i)]=str(width)
+	
+	def getItemSelections(self):
+		"""
+		現在選択されている項目のインデックスを取得 
+		:returns: 選択中インデックスのリスト
+		:rtype: list
+		"""
+		ret = []
+		i = self.GetFirstSelected()
+		if i >= 0: ret.append(i)
+		else: return ret
+		while True:
+			iTmp = i
+			i = self.GetNextSelected(iTmp)
+			if i >= 0: ret.append(i)
+			else: return ret
