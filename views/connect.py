@@ -19,13 +19,20 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
+		displayOnConnectDialog = globalVars.app.config.getint("general", "displayonconnectdialog", 1, 0, 2)
+		items = []
+		if displayOnConnectDialog == 1:
+			# history
+			items = globalVars.app.Manager.history
+		elif displayOnConnectDialog == 2:
+			# favorites
+			items = globalVars.app.Manager.favorites
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL|wx.EXPAND,margin=20)
-		self.iText,self.static=self.creator.inputbox(_("接続先"),None,"",0,400,sizerFlag=wx.EXPAND)
+		self.iText,self.static=self.creator.comboEdit(_("接続先"), items)
 		self.iText.SetValue(globalVars.app.config["general"]["defaultConnectAccount"])
-
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
 	def GetData(self):
-		return self.iText.GetLineText(0)
+		return self.iText.GetValue()

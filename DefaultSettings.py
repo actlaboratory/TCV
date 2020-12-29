@@ -18,7 +18,8 @@ class DefaultSettings:
 			"defaultConnectAccount": "",
 			"openLivewindow": False,
 			"update": True,
-			"timeout": 3
+			"timeout": 3,
+			"displayOnConnectDialog": 1
 		}
 
 		config["view"]={
