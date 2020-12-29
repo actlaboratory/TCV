@@ -418,10 +418,14 @@ class manager:
 				else:
 					globalVars.app.say(_("テロップ変更。"))
 					globalVars.app.say(self.newSubtitle)
+				if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["othersound"])
 			self.oldSubtitle = self.newSubtitle
 			self.newCategory = self.connection.categoryName
 			if self.newCategory != self.oldCategory and self.connection.isLive == True:
 				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
+				if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["othersound"])
 			self.oldCategory = self.newCategory
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:

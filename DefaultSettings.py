@@ -83,6 +83,8 @@ class DefaultSettings:
 			"timerSound": "fx\\time.wav",
 			"playStartupSound": False,
 			"startupSound": "fx\\info.wav",
+			"playOtherSound": True,
+			"otherSound": "fx\\info.wav",
 			"syncAudioDevice": False,
 			"fxVolume": 100
 		}
