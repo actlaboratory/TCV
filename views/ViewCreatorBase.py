@@ -18,7 +18,7 @@ from views.viewObjectBase import checkBoxBase
 from views.viewObjectBase import radioBoxBase
 from views.viewObjectBase import radioButtonBase
 from views.viewObjectBase import listBoxBase
-from views.viewObjectBase import listCtrlBase
+from views.viewObjectBase import normalListCtrlBase
 from views.viewObjectBase import virtualListCtrlBase
 from views.viewObjectBase import notebookBase
 from views.viewObjectBase import textCtrlBase
@@ -52,7 +52,7 @@ class ViewCreatorBase():
 			"radioBox": radioBoxBase.radioBox,
 			"radioButton": radioButtonBase.radioButton,
 			"listBox": listBoxBase.listBox,
-			"listCtrl": listCtrlBase.listCtrl,
+			"listCtrl": normalListCtrlBase.listCtrl,
 			"virtualListCtrl": virtualListCtrlBase.virtualListCtrl,
 			"notebook": notebookBase.notebook,
 			"textCtrl": textCtrlBase.textCtrl,
