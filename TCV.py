@@ -1,8 +1,33 @@
 # -*- coding: utf-8 -*-
 #Application startup file
 
-import os
 import sys
+import winsound
+import requests.exceptions
+import simpleDialog
+import traceback
+import globalVars
+
+def exchandler(type, exc, tb):
+	if type == requests.exceptions.ConnectionError:
+		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
+		sys.exit(-1)
+	msg=traceback.format_exception(type, exc, tb)
+	print("".join(msg))
+	if hasattr(sys, "frozen") == False:
+		winsound.Beep(1000, 1000)
+		globalVars.app.say(str(msg[-1]))
+	else:
+		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance.")
+		sys.exit(-1)
+	f=open("errorLog.txt", "a")
+	f.writelines(msg)
+	f.close()
+
+#global schope
+sys.excepthook=exchandler
+
+import os
 #カレントディレクトリを設定
 if hasattr(sys,"frozen"): os.chdir(os.path.dirname(sys.executable))
 else: os.chdir(os.path.abspath(os.path.dirname(__file__)))
@@ -20,13 +45,7 @@ if sys.version_info.major>=3 and sys.version_info.minor>=8:
 
 import app as application
 import constants
-import globalVars
-import winsound
-import requests.exceptions
-import simpleDialog
 import pathlib
-import traceback
-import simpleDialog
 
 def main():
 	if os.path.exists("errorLog.txt"): os.remove("errorLog.txt")
@@ -35,23 +54,5 @@ def main():
 	app.initialize()
 	app.MainLoop()
 	app.config.write()
-
-def exchandler(type, exc, tb):
-	if type == requests.exceptions.ConnectionError:
-		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
-		sys.exit(-1)
-	msg=traceback.format_exception(type, exc, tb)
-	print("".join(msg))
-	if hasattr(sys, "frozen") == False:
-		winsound.Beep(1000, 1000)
-		globalVars.app.say(str(msg[-1]))
-	f=open("errorLog.txt", "a")
-	f.writelines(msg)
-	f.close()
-
-
-
-#global schope
-sys.excepthook=exchandler
 
 if __name__ == "__main__": main()
