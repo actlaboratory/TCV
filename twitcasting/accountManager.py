@@ -30,7 +30,17 @@ class AccountManager:
 		rm = []
 		cl = []
 		for i in range(0, len(self.tokens)):
-			result = self.verifyCredentials(i)
+			while True:
+				try:
+					result = self.verifyCredentials(i)
+					break
+				except:
+					d = simpleDialog.yesNoDialog(_("通信エラー"), _("通信に失敗しました。設定からプロキシサーバーの設定を変更することで、この問題が解消する場合があります。今すぐ設定を行いますか？"))
+					if d == wx.ID_NO:
+						simpleDialog.dialog(_("通信エラー"), _("[いいえ]が選択されました。プログラムを終了します。"))
+						globalVars.app.hMainView.events.Exit()
+						return
+					globalVars.app.hMainView.events.settings()
 			if result == 1000:
 				rm.append(i)
 			elif result == 2000:

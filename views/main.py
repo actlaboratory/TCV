@@ -348,9 +348,10 @@ class Events(BaseEvents):
 	def Exit(self, event=None):
 		if hasattr(self.parent,"commentList") and self.parent.commentList:
 			self.parent.commentList.saveColumnInfo()
-		for i in globalVars.app.Manager.timers:
-			if i.IsRunning() == True:
-				i.Stop()
+		if hasattr(globalVars.app, "Manager"):
+			for i in globalVars.app.Manager.timers:
+				if i.IsRunning() == True:
+					i.Stop()
 		if event and isinstance(event,wx.CloseEvent):
 			super().Exit(event)
 		else:
