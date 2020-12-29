@@ -110,6 +110,5 @@ class Dialog(BaseDialog):
 
 	def cancelButton(self,event):
 		self.timer.Stop()
-		self.timer.Stop()
 		event.Skip()
 
