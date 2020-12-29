@@ -1,9 +1,9 @@
 CopyLight (c)2019-2021 Kazto Kitabatake,ACT laboratory All lights reserved.
 
 本ソフトウェアは、GPL v3(or later)またはApache license v2の条件に従い、自由に利用することができます。
-また、本ソフトウェアには、以下の各ライセンスに従い他者の成果物を含みます。
-また、以下に掲載のないライブラリも多数使用しています(PSFライセンス等に基づき、ライセンスの明示が必要ないものなど)。
+本ソフトウェアのソースコードは、readme.txtに記載のURLよりダウンロード可能です。
 
+※本ソフトウェアには、以下の各ライセンスに従い他者の成果物を含みます。
 
 ・Apacheライセンスv2に基づく以下のライブラリ
 　　requests　(https://github.com/psf/requests)
