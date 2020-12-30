@@ -8,6 +8,7 @@ from logging import getLogger
 from views.baseDialog import *
 import globalVars
 import simpleDialog
+import constants
 
 class settingsDialog(BaseDialog):
 	def __init__(self):
@@ -197,6 +198,13 @@ class settingsDialog(BaseDialog):
 	def save(self):
 		# general
 		globalVars.app.config["general"]["titlebar"] = list(self.titlebarSelection.keys())[self.titlebar.GetSelection()]
+		globalVars.app.hMainView.hFrame.SetTitle(constants.APP_NAME)
+		if globalVars.app.config.getint("general", "titlebar", 1, 0, 2) == constants.TB_USER:
+			try:
+				if globalVars.app.Manager.connection.connected == True:
+					globalVars.app.hMainView.hFrame.SetTitle("%s - %s" %(globalVars.app.Manager.connection.userId, constants.APP_NAME))
+			except:
+				pass
 		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
 		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
 		globalVars.app.config["general"]["update"] = self.update.GetValue()

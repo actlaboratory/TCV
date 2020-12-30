@@ -65,7 +65,6 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
-		self.titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
 
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
@@ -139,7 +138,8 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
-		if self.titlebar == constants.TB_USER:
+		titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+		if titlebar == constants.TB_USER:
 			self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		if globalVars.app.config.getboolean("livePlay", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
@@ -405,7 +405,8 @@ class manager:
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
-				if self.titlebar == constants.TB_TIME:
+				titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+				if titlebar == constants.TB_TIME:
 					self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
 				self.resetTimer()
 				self.commentTimer.Stop()
@@ -526,9 +527,17 @@ class manager:
 			try:
 				self.MainView.liveInfo.SetString(1, _("経過時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S")))
 				self.MainView.liveInfo.SetString(2, _("残り時間：%s") %(self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
-				if self.titlebar == constants.TB_TIME:
+				titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+				if titlebar == constants.TB_TIME:
 					t = self.formatTime(self.remainingTime)
-					self.MainView.hFrame.SetTitle(_("残り%(minutes)d分%(seconds)d秒") %{"minutes": t.minute, "seconds": t.second} + " - %s" %constants.APP_NAME)
+					map = {"hour": t.hour, "minute": t.minute, "second": t.second}
+					if t.hour > 0:
+						disp = _("残り%(hour)d時間%(minute)d分%(second)d秒") %map
+					elif t.minute > 0:
+						disp = _("残り%(minute)d分%(second)d秒") %map
+					else:
+						disp = _("残り%(second)d秒") %map
+				self.MainView.hFrame.SetTitle(disp)
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
