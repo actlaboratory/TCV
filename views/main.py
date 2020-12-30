@@ -6,6 +6,8 @@
 import logging
 import os
 import sys
+
+from wx.core import EnableTopLevelWindows
 import wx
 import re
 import ctypes
@@ -94,6 +96,8 @@ class MainView(BaseView):
 		self.commentList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.events.commentSelected)
 		self.commentList.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.events.commentSelected)
 		self.commentList.Bind(wx.EVT_CONTEXT_MENU, self.events.commentContextMenu)
+		self.commentList.Bind(wx.EVT_SET_FOCUS, self.events.commentSelected)
+		self.commentList.Bind(wx.EVT_KILL_FOCUS, self.events.commentSelected)
 
 		self.events.commentSelected(None)
 
@@ -484,14 +488,12 @@ class Events(BaseEvents):
 			simpleDialog.errorDialog(_("readme.txtが見つかりません。"))
 
 	def commentSelected(self, event):
-		if event == None:
-			enable = False
-		else:
-			enable = True
+		enable = self.parent.commentList.HasFocus() == True and self.parent.commentList.GetFirstSelected() >= 0
 		self.parent.menu.EnableMenu("COPY_COMMENT", enable)
 		self.parent.menu.EnableMenu("VIEW_COMMENT", enable)
 		self.parent.menu.EnableMenu("REPLY2SELECTED_COMMENT", enable)
 		self.parent.menu.EnableMenu("DELETE_SELECTED_COMMENT", enable)
+		self.parent.menu.EnableMenu("SELECT_ALL_COMMENT", self.parent.commentList.HasFocus() == True)
 
 	#コメント一覧でのコンテキストメニュー
 	#Shift+F10の場合はメニューイベント経由の為event=Noneとなる
@@ -519,3 +521,12 @@ class Events(BaseEvents):
 	def selectAllComment(self):
 		for i in range(self.parent.commentList.GetItemCount()):
 			self.parent.commentList.Select(i)
+
+	def  focusChanged(self, event):
+		import winsound
+		winsound.Beep(440, 100)
+		enable = self.parent.commentList.HasFocus()
+		self.parent.menu.EnableMenu("COPY_COMMENT", enable)
+		self.parent.menu.EnableMenu("VIEW_COMMENT", enable)
+		self.parent.menu.EnableMenu("REPLY2SELECTED_COMMENT", enable)
+		self.parent.menu.EnableMenu("DELETE_SELECTED_COMMENT", enable)
