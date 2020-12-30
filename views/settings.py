@@ -8,6 +8,7 @@ from logging import getLogger
 from views.baseDialog import *
 import globalVars
 import simpleDialog
+import constants
 
 class settingsDialog(BaseDialog):
 	def __init__(self):
@@ -55,6 +56,7 @@ class settingsDialog(BaseDialog):
 			"1": _("残り時間"),
 			"2": _("接続先ユーザ名")
 		}
+		self.languageSelection = constants.SUPPORTING_LANGUAGE
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -72,18 +74,23 @@ class settingsDialog(BaseDialog):
 
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
-		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
 		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
-		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログに表示する項目(&O)"), list(self.displayonconnectdialogSelection.values()))
-		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
-		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
-		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 250)
+		creator.GetSizer().SetItemSpan(self.autoconnect.GetParent(),2)
+
+		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログの表示項目(&O)"), list(self.displayonconnectdialogSelection.values()))
+		self.initialcommentcount, static = creator.spinCtrl(_("接続時に読み込むコメント数(&C)"), 1, 250)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
 		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先(&A)"),sizerFlag=wx.EXPAND)
 		self.openlivewindow = creator.checkbox(_("接続時にブラウザでライブを開く(&O)"))
 		creator.GetSizer().SetItemSpan(self.openlivewindow.GetParent(),2)
+
+		# view
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("表示"),style=wx.ALL,margin=20)
+		self.language, static = creator.combobox(_("言語(&L)"), list(self.languageSelection.values()))
+		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
+		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
 
 		# reading-1
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("読み上げ-1"),style=wx.TOP|wx.LEFT|wx.RIGHT,margin=20)
@@ -94,7 +101,7 @@ class settingsDialog(BaseDialog):
 		group=views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.VERTICAL,space=20,label=_("コメントの読み上げスキップ"))
 		group.AddSpace(20)
 		self.readmycomment = group.checkbox(_("自分が投稿したコメントを読み上げる"))
-		grid=views.ViewCreator.ViewCreator(self.viewMode,group.GetPanel(),group.GetSizer(),views.ViewCreator.FlexGridSizer,space=20,label=2)
+		grid=views.ViewCreator.ViewCreator(self.viewMode,group.GetPanel(),group.GetSizer(),views.ViewCreator.FlexGridSizer,space=0,label=2,margin=10)
 		self.readmentions_mylive, static = grid.combobox(_("自分のライブ"), list(self.readmentionsSelection.values()))
 		self.readmentions_otherlive, static = grid.combobox(_("自分以外のライブ"), list(self.readmentionsSelection.values()))
 		creator.AddSpace()
@@ -132,8 +139,9 @@ class settingsDialog(BaseDialog):
 		self.onlydomain = creator.checkbox(_("ドメインのみ(&D)"))
 		self.url, static = creator.inputbox(_("URLを次の文字列に置き換える(&R)"))
 
-		# proxy
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("プロキシ設定"),style=wx.ALL,margin=20)
+		# network
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("ネットワーク"),style=wx.ALL,margin=20)
+		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
 		self.usemanualsetting = creator.checkbox(_("プロキシサーバーの情報を手動で設定する(&M)"), self.checkBoxStatusChanged)
 		self.server, static = creator.inputbox(_("サーバーURL"))
 		self.port, static = creator.spinCtrl(_("ポート番号"), 0, 65535, defaultValue=8080)
@@ -145,17 +153,19 @@ class settingsDialog(BaseDialog):
 
 	def load(self):
 		# general
-		self.titlebar.SetValue(self.titlebarSelection[globalVars.app.config["general"]["titlebar"]])
 		self.autoconnect.SetValue(globalVars.app.config.getboolean("general", "autoconnect"))
 		self.displayonconnectdialog.SetValue(self.displayonconnectdialogSelection[globalVars.app.config["general"]["displayonconnectdialog"]])
-		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
-		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
 		self.initialcommentcount.SetValue(globalVars.app.config["general"]["initialcommentcount"])
 		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
 		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
 		self.historymax.SetValue(globalVars.app.config["general"]["historymax"])
 		self.defaultconnectaccount.SetValue(globalVars.app.config["general"]["defaultconnectaccount"])
 		self.openlivewindow.SetValue(globalVars.app.config.getboolean("general", "openlivewindow"))
+
+		# view
+		self.language.SetValue(self.languageSelection[globalVars.app.config["general"]["language"]])
+		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
+		self.titlebar.SetValue(self.titlebarSelection[globalVars.app.config["general"]["titlebar"]])
 
 		# read
 		self.reader.SetValue(self.readerSelection[globalVars.app.config["speech"]["reader"]])
@@ -187,7 +197,8 @@ class settingsDialog(BaseDialog):
 		self.onlydomain.SetValue(globalVars.app.config.getboolean("commentReplaceSpecial", "onlydomain"))
 		self.url.SetValue(globalVars.app.config["commentReplaceSpecial"]["url"])
 
-		# proxy
+		# network
+		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
 		self.usemanualsetting.SetValue(globalVars.app.config.getboolean("proxy", "usemanualsetting"))
 		self.server.SetValue(globalVars.app.config["proxy"]["server"])
 		self.port.SetValue(globalVars.app.config["proxy"]["port"])
@@ -196,17 +207,26 @@ class settingsDialog(BaseDialog):
 
 	def save(self):
 		# general
-		globalVars.app.config["general"]["titlebar"] = list(self.titlebarSelection.keys())[self.titlebar.GetSelection()]
 		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
 		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
-		globalVars.app.config["general"]["update"] = self.update.GetValue()
-		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
 		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
 		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
 		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
 		globalVars.app.config["general"]["historymax"] = self.historymax.GetValue()
 		globalVars.app.config["general"]["defaultconnectaccount"] = self.defaultconnectaccount.GetValue()
 		globalVars.app.config["general"]["openlivewindow"] = self.openlivewindow.GetValue()
+
+		# view
+		globalVars.app.config["general"]["language"] = list(self.languageSelection.keys())[self.language.GetSelection()]
+		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
+		globalVars.app.config["general"]["titlebar"] = list(self.titlebarSelection.keys())[self.titlebar.GetSelection()]
+		globalVars.app.hMainView.hFrame.SetTitle(constants.APP_NAME)
+		if globalVars.app.config.getint("general", "titlebar", 1, 0, 2) == constants.TB_USER:
+			try:
+				if globalVars.app.Manager.connection.connected == True:
+					globalVars.app.hMainView.hFrame.SetTitle("%s - %s" %(globalVars.app.Manager.connection.userId, constants.APP_NAME))
+			except:
+				pass
 
 		# read
 		globalVars.app.config["speech"]["reader"] = list(self.readerSelection.keys())[self.reader.GetSelection()]
@@ -240,7 +260,8 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["commentReplaceSpecial"]["url"] = self.url.GetValue()
 		globalVars.app.Manager.refreshReplaceSettings()
 
-		# proxy
+		# network
+		globalVars.app.config["general"]["update"] = self.update.GetValue()
 		globalVars.app.config["proxy"]["usemanualsetting"] = self.usemanualsetting.GetValue()
 		globalVars.app.config["proxy"]["server"] = self.server.GetValue()
 		globalVars.app.config["proxy"]["port"] = self.port.GetValue()
