@@ -37,6 +37,7 @@ import views.settings
 import views.indicatorSoundSettings
 import views.commentReplace
 import views.userNamereplace
+import views.changeSpeechOutput
 import webbrowser
 import constants
 
@@ -170,7 +171,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING"])
+			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
@@ -296,6 +297,11 @@ class Events(BaseEvents):
 			if os.path.exists(file) == False:
 				file = file.replace("syswow64", "system32")
 			os.system(file)
+		#読み上げ出力先の変更
+		elif selected == menuItemsStore.getRef("CHANGE_SPEECH_OUTPUT"):
+			d = views.changeSpeechOutput.Dialog()
+			d.Initialize()
+			d.Show()
 		#コメント送信（ホットキー）
 		elif selected==menuItemsStore.getRef("POIST_COMMENT"):
 			self.postComment(None)
