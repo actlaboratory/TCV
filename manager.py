@@ -65,6 +65,7 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
+		self.titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
 
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
@@ -138,7 +139,8 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
-		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
+		if self.titlebar == constants.TB_USER:
+			self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		if globalVars.app.config.getboolean("livePlay", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
@@ -322,8 +324,12 @@ class manager:
 			self.MainView.commentList.DeleteItem(selected)
 
 	def copyComment(self):
-		selected = self.MainView.commentList.GetFocusedItem()
-		pyperclip.copy(self.readComment(self.getCommentdata(self.connection.comments[selected]), False))
+		selections = self.MainView.commentList.getItemSelections()
+		tmplst = deepcopy(self.connection.comments)
+		if len(tmplst) > self.MainView.commentList.GetItemCount():
+			tmplst = tmplst[-1 * self.MainView.commentList.GetItemCount():]
+		items = [self.readComment(self.getCommentdata(tmplst[i]), False) for i in selections]
+		pyperclip.copy("\n\n".join(items))
 
 	def resetTimer(self, speech = False):
 		if speech == True:
@@ -399,6 +405,8 @@ class manager:
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
+				if self.titlebar == constants.TB_TIME:
+					self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
 				self.resetTimer()
 				self.commentTimer.Stop()
 				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
@@ -518,6 +526,9 @@ class manager:
 			try:
 				self.MainView.liveInfo.SetString(1, _("経過時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S")))
 				self.MainView.liveInfo.SetString(2, _("残り時間：%s") %(self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
+				if self.titlebar == constants.TB_TIME:
+					t = self.formatTime(self.remainingTime)
+					self.MainView.hFrame.SetTitle(_("残り%(minutes)d分%(seconds)d秒") %{"minutes": t.minute, "seconds": t.second} + " - %s" %constants.APP_NAME)
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))

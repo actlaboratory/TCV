@@ -20,7 +20,8 @@ class DefaultSettings:
 			"update": True,
 			"timeout": 3,
 			"displayOnConnectDialog": 1,
-			"autoconnect": True
+			"autoconnect": True,
+			"titlebar": 1,
 		}
 
 		config["view"]={

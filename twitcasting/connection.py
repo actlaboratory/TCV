@@ -18,9 +18,8 @@ class connection:
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
 			return []
-		offset = max(0, number-50)
 		limit = min(50, number)
-		result = GetComments(self.movieId, offset, limit)
+		result = GetComments(self.movieId, limit=limit)
 		try:
 			result = result["comments"]
 		except KeyError:
@@ -30,22 +29,38 @@ class connection:
 		if len(result) == 0:
 			self.lastCommentId = ""
 			return []
-		else:
-			self.lastCommentId = result[0]["id"]
-			result2 = self.getComment()
-			result3 = result2 + result
-			for i in result3:
-				i["movieId"] = self.movieId
-				i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
-			self.comments = result3 + self.comments
-			result3.reverse()
-			return result3
+		self.lastCommentId = result[0]["id"]
+		if number > len(result):
+			while True:
+				offset = len(result)
+				limit = min(50, number - len(result))
+				if limit == 0:
+					break
+				result2 = GetComments(self.movieId, offset, limit)
+				try:
+					result2 = result2["comments"]
+				except KeyError:
+					if "error" in result2:
+						self.errorFlag = result2["error"]["code"]
+					result2 = []
+				for i in result2:
+					if i in result:
+						result2.remove(i)
+				result = result + result2
+				if len(result2) == 0 or len(result) == number:
+					break
+		for i in result:
+			i["movieId"] = self.movieId
+			i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
+		self.comments = result + self.comments
+		result.reverse()
+		return result
 
 	def getComment(self):
 		if self.hasMovieId == False:
 			return []
 		ret = []
-		result = GetComments(self.movieId, 0, 50, self.lastCommentId)
+		result = GetComments(self.movieId, slice_id=self.lastCommentId)
 		try:
 			result = result["comments"]
 		except KeyError:
@@ -54,27 +69,14 @@ class connection:
 			result = []
 		if len(result) == 0:
 			return []
-		else:
-			count = 0
-			while result != []:
-				count += 1
-				if count == 3:
-					break
-				self.lastCommentId = result[0]["id"]
-				ret = result + ret
-				result = GetComments(self.movieId, 0, 50, self.lastCommentId)
-				try:
-					result = result["comments"]
-				except KeyError:
-					if "error" in result:
-						self.errorFlag = result["error"]["code"]
-					result = []
-			for i in ret:
-				i["movieId"] = self.movieId
-				i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
-			self.comments = ret + self.comments
-			ret.reverse()
-			return ret
+		self.lastCommentId = result[0]["id"]
+		ret = result
+		for i in ret:
+			i["movieId"] = self.movieId
+			i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
+		self.comments = ret + self.comments
+		ret.reverse()
+		return ret
 
 	def postComment(self, body, idx):
 		commentToSns = globalVars.app.config.getint("general", "commentToSns", 0)
