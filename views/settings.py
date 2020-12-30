@@ -50,6 +50,11 @@ class settingsDialog(BaseDialog):
 			"1": _("接続履歴"),
 			"2": _("お気に入り")
 		}
+		self.titlebarSelection = {
+			"0": _("なし"),
+			"1": _("残り時間"),
+			"2": _("接続先ユーザ名")
+		}
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -67,6 +72,7 @@ class settingsDialog(BaseDialog):
 
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
+		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
 		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
 		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログに表示する項目(&O)"), list(self.displayonconnectdialogSelection.values()))
 		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
@@ -139,6 +145,7 @@ class settingsDialog(BaseDialog):
 
 	def load(self):
 		# general
+		self.titlebar.SetValue(self.titlebarSelection[globalVars.app.config["general"]["titlebar"]])
 		self.autoconnect.SetValue(globalVars.app.config.getboolean("general", "autoconnect"))
 		self.displayonconnectdialog.SetValue(self.displayonconnectdialogSelection[globalVars.app.config["general"]["displayonconnectdialog"]])
 		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
@@ -189,6 +196,7 @@ class settingsDialog(BaseDialog):
 
 	def save(self):
 		# general
+		globalVars.app.config["general"]["titlebar"] = list(self.titlebarSelection.keys())[self.titlebar.GetSelection()]
 		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
 		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
 		globalVars.app.config["general"]["update"] = self.update.GetValue()
