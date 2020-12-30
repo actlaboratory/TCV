@@ -35,12 +35,16 @@ class AccountManager:
 					result = self.verifyCredentials(i)
 					break
 				except:
-					d = simpleDialog.yesNoDialog(_("通信エラー"), _("通信に失敗しました。設定からプロキシサーバーの設定を変更することで、この問題が解消する場合があります。今すぐ設定を行いますか？"))
-					if d == wx.ID_NO:
-						simpleDialog.dialog(_("通信エラー"), _("[いいえ]が選択されました。プログラムを終了します。"))
+					d = wx.MessageDialog(None, _("通信に失敗しました。インターネット接続を確認してください。\nプロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要があります。\n今すぐプロキシ設定を開きますか？"), _("通信エラー"), style=wx.YES_NO|wx.NO_DEFAULT|wx.ICON_ERROR)
+					result = d.ShowModal()
+					if result == wx.ID_NO:
 						globalVars.app.hMainView.events.Exit()
 						return
-					globalVars.app.hMainView.events.settings()
+					import views.settings
+					d = views.settings.settingsDialog()
+					d.Initialize()
+					d.tab.ChangeSelection(6)
+					d.Show()
 			if result == 1000:
 				rm.append(i)
 			elif result == 2000:
