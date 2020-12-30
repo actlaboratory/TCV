@@ -75,8 +75,10 @@ class settingsDialog(BaseDialog):
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
 		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
-		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログに表示する項目(&O)"), list(self.displayonconnectdialogSelection.values()))
-		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 250)
+		creator.GetSizer().SetItemSpan(self.autoconnect.GetParent(),2)
+
+		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログの表示項目(&O)"), list(self.displayonconnectdialogSelection.values()))
+		self.initialcommentcount, static = creator.spinCtrl(_("接続時に読み込むコメント数(&C)"), 1, 250)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
@@ -99,7 +101,7 @@ class settingsDialog(BaseDialog):
 		group=views.ViewCreator.ViewCreator(self.viewMode,creator.GetPanel(),creator.GetSizer(),wx.VERTICAL,space=20,label=_("コメントの読み上げスキップ"))
 		group.AddSpace(20)
 		self.readmycomment = group.checkbox(_("自分が投稿したコメントを読み上げる"))
-		grid=views.ViewCreator.ViewCreator(self.viewMode,group.GetPanel(),group.GetSizer(),views.ViewCreator.FlexGridSizer,space=20,label=2)
+		grid=views.ViewCreator.ViewCreator(self.viewMode,group.GetPanel(),group.GetSizer(),views.ViewCreator.FlexGridSizer,space=0,label=2,margin=10)
 		self.readmentions_mylive, static = grid.combobox(_("自分のライブ"), list(self.readmentionsSelection.values()))
 		self.readmentions_otherlive, static = grid.combobox(_("自分以外のライブ"), list(self.readmentionsSelection.values()))
 		creator.AddSpace()
