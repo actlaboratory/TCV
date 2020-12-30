@@ -6,6 +6,7 @@ import globalVars
 import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
+import webbrowser
 
 class Dialog(BaseDialog):
 	def __init__(self, broadcaster):
@@ -31,8 +32,12 @@ class Dialog(BaseDialog):
 		introduction,dummy = self.creator.inputbox(_("自己紹介"), None, self.broadcaster["profile"], wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_DONTWRAP|wx.TE_PROCESS_ENTER, 500)
 		introduction.hideScrollBar(wx.VERTICAL)
 		introduction.Bind(wx.EVT_TEXT_ENTER,self.processEnter)
+		twitter = self.creator.button(_("配信者のTwitterを開く"), self.twitter)
+		twitter.Enable(self.broadcaster["screen_id"][1] != ":")
 		self.closeButton=self.creator.okbutton(_("閉じる"), None)
 
 	def processEnter(self,event):
 		self.wnd.EndModal(wx.OK)
 
+	def twitter(self, event):
+		webbrowser.open("https://twitter.com/%s" %self.broadcaster["screen_id"])
