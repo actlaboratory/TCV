@@ -103,6 +103,8 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 				if ret[1]!="":
 					ret[1]+="/"
 				ret[1]+=self.edits[i].GetLineText(0)
+		if ret[1]=="":
+			ret[1]=_("なし")
 		ret[2]=self.edits[6].GetLineText(0)
 		return ret
 
