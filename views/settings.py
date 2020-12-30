@@ -76,7 +76,6 @@ class settingsDialog(BaseDialog):
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
 		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
 		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログに表示する項目(&O)"), list(self.displayonconnectdialogSelection.values()))
-		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
 		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 250)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
@@ -138,8 +137,9 @@ class settingsDialog(BaseDialog):
 		self.onlydomain = creator.checkbox(_("ドメインのみ(&D)"))
 		self.url, static = creator.inputbox(_("URLを次の文字列に置き換える(&R)"))
 
-		# proxy
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("プロキシ設定"),style=wx.ALL,margin=20)
+		# network
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("ネットワーク"),style=wx.ALL,margin=20)
+		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
 		self.usemanualsetting = creator.checkbox(_("プロキシサーバーの情報を手動で設定する(&M)"), self.checkBoxStatusChanged)
 		self.server, static = creator.inputbox(_("サーバーURL"))
 		self.port, static = creator.spinCtrl(_("ポート番号"), 0, 65535, defaultValue=8080)
@@ -153,7 +153,6 @@ class settingsDialog(BaseDialog):
 		# general
 		self.autoconnect.SetValue(globalVars.app.config.getboolean("general", "autoconnect"))
 		self.displayonconnectdialog.SetValue(self.displayonconnectdialogSelection[globalVars.app.config["general"]["displayonconnectdialog"]])
-		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
 		self.initialcommentcount.SetValue(globalVars.app.config["general"]["initialcommentcount"])
 		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
 		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
@@ -196,7 +195,8 @@ class settingsDialog(BaseDialog):
 		self.onlydomain.SetValue(globalVars.app.config.getboolean("commentReplaceSpecial", "onlydomain"))
 		self.url.SetValue(globalVars.app.config["commentReplaceSpecial"]["url"])
 
-		# proxy
+		# network
+		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
 		self.usemanualsetting.SetValue(globalVars.app.config.getboolean("proxy", "usemanualsetting"))
 		self.server.SetValue(globalVars.app.config["proxy"]["server"])
 		self.port.SetValue(globalVars.app.config["proxy"]["port"])
@@ -207,7 +207,6 @@ class settingsDialog(BaseDialog):
 		# general
 		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
 		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
-		globalVars.app.config["general"]["update"] = self.update.GetValue()
 		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
 		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
 		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
@@ -259,7 +258,8 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["commentReplaceSpecial"]["url"] = self.url.GetValue()
 		globalVars.app.Manager.refreshReplaceSettings()
 
-		# proxy
+		# network
+		globalVars.app.config["general"]["update"] = self.update.GetValue()
 		globalVars.app.config["proxy"]["usemanualsetting"] = self.usemanualsetting.GetValue()
 		globalVars.app.config["proxy"]["server"] = self.server.GetValue()
 		globalVars.app.config["proxy"]["port"] = self.port.GetValue()
