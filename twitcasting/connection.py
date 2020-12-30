@@ -69,6 +69,7 @@ class connection:
 			result = []
 		if len(result) == 0:
 			return []
+		self.lastCommentId = result[0]["id"]
 		ret = result
 		for i in ret:
 			i["movieId"] = self.movieId
