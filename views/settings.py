@@ -56,6 +56,7 @@ class settingsDialog(BaseDialog):
 			"1": _("残り時間"),
 			"2": _("接続先ユーザ名")
 		}
+		self.languageSelection = constants.SUPPORTING_LANGUAGE
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -73,11 +74,9 @@ class settingsDialog(BaseDialog):
 
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
-		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
 		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
 		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログに表示する項目(&O)"), list(self.displayonconnectdialogSelection.values()))
 		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
-		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
 		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 250)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
@@ -85,6 +84,12 @@ class settingsDialog(BaseDialog):
 		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先(&A)"),sizerFlag=wx.EXPAND)
 		self.openlivewindow = creator.checkbox(_("接続時にブラウザでライブを開く(&O)"))
 		creator.GetSizer().SetItemSpan(self.openlivewindow.GetParent(),2)
+
+		# view
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("表示"),style=wx.ALL,margin=20)
+		self.language, static = creator.combobox(_("言語(&L)"), list(self.languageSelection.values()))
+		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
+		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
 
 		# reading-1
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("読み上げ-1"),style=wx.TOP|wx.LEFT|wx.RIGHT,margin=20)
@@ -146,17 +151,20 @@ class settingsDialog(BaseDialog):
 
 	def load(self):
 		# general
-		self.titlebar.SetValue(self.titlebarSelection[globalVars.app.config["general"]["titlebar"]])
 		self.autoconnect.SetValue(globalVars.app.config.getboolean("general", "autoconnect"))
 		self.displayonconnectdialog.SetValue(self.displayonconnectdialogSelection[globalVars.app.config["general"]["displayonconnectdialog"]])
 		self.update.SetValue(globalVars.app.config.getboolean("general", "update"))
-		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
 		self.initialcommentcount.SetValue(globalVars.app.config["general"]["initialcommentcount"])
 		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
 		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
 		self.historymax.SetValue(globalVars.app.config["general"]["historymax"])
 		self.defaultconnectaccount.SetValue(globalVars.app.config["general"]["defaultconnectaccount"])
 		self.openlivewindow.SetValue(globalVars.app.config.getboolean("general", "openlivewindow"))
+
+		# view
+		self.language.SetValue(self.languageSelection[globalVars.app.config["general"]["language"]])
+		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
+		self.titlebar.SetValue(self.titlebarSelection[globalVars.app.config["general"]["titlebar"]])
 
 		# read
 		self.reader.SetValue(self.readerSelection[globalVars.app.config["speech"]["reader"]])
@@ -197,6 +205,19 @@ class settingsDialog(BaseDialog):
 
 	def save(self):
 		# general
+		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
+		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
+		globalVars.app.config["general"]["update"] = self.update.GetValue()
+		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
+		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
+		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
+		globalVars.app.config["general"]["historymax"] = self.historymax.GetValue()
+		globalVars.app.config["general"]["defaultconnectaccount"] = self.defaultconnectaccount.GetValue()
+		globalVars.app.config["general"]["openlivewindow"] = self.openlivewindow.GetValue()
+
+		# view
+		globalVars.app.config["general"]["language"] = list(self.languageSelection.keys())[self.language.GetSelection()]
+		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
 		globalVars.app.config["general"]["titlebar"] = list(self.titlebarSelection.keys())[self.titlebar.GetSelection()]
 		globalVars.app.hMainView.hFrame.SetTitle(constants.APP_NAME)
 		if globalVars.app.config.getint("general", "titlebar", 1, 0, 2) == constants.TB_USER:
@@ -205,16 +226,6 @@ class settingsDialog(BaseDialog):
 					globalVars.app.hMainView.hFrame.SetTitle("%s - %s" %(globalVars.app.Manager.connection.userId, constants.APP_NAME))
 			except:
 				pass
-		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
-		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
-		globalVars.app.config["general"]["update"] = self.update.GetValue()
-		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
-		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
-		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
-		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
-		globalVars.app.config["general"]["historymax"] = self.historymax.GetValue()
-		globalVars.app.config["general"]["defaultconnectaccount"] = self.defaultconnectaccount.GetValue()
-		globalVars.app.config["general"]["openlivewindow"] = self.openlivewindow.GetValue()
 
 		# read
 		globalVars.app.config["speech"]["reader"] = list(self.readerSelection.keys())[self.reader.GetSelection()]
