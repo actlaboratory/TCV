@@ -303,7 +303,7 @@ class Events(BaseEvents):
 			d.Initialize()
 			d.Show()
 		#コメント送信（ホットキー）
-		elif selected==menuItemsStore.getRef("POIST_COMMENT"):
+		elif selected==menuItemsStore.getRef("POST_COMMENT"):
 			self.postComment(None)
 		#再生
 		elif selected==menuItemsStore.getRef("PLAY"):
