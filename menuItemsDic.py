@@ -24,11 +24,12 @@ dic={
 	"RESET_VOLUME": _("音量を１００％に設定(&R)"),
 	"CHANGE_DEVICE": _("再生デバイスを変更(&C)") + "...",
 	#コメントメニュー
-	 "COPY_COMMENT":  _("選択中のコメントをコピー(&C)"),
+	"COPY_COMMENT":  _("選択中のコメントをコピー(&C)"),
 	"VIEW_COMMENT": _("コメントの詳細を表示(&V)") + "...",
 	"REPLY2SELECTED_COMMENT": _("選択中のコメントに返信(&R)"),
 	"DELETE_SELECTED_COMMENT": _("選択中のコメントを削除(&D)"),
 	"REPLY2BROADCASTER": _("配信者に返信(&B)"),
+	"SELECT_ALL_COMMENT": _("全てのコメントを選択(&A)"),
 	#ライブメニュー
 	"VIEW_BROADCASTER": _("配信者の情報を表示(&B)") + "...",
 	"OPEN_LIVE": _("このライブをブラウザで開く(&O)"),

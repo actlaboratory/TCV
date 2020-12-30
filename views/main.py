@@ -161,7 +161,7 @@ class Menu(BaseMenu):
 			["PLAY", "STOP", "VOLUME_UP", "VOLUME_DOWN", "RESET_VOLUME", "CHANGE_DEVICE"])
 		#コメントメニュー
 		self.RegisterMenuCommand(self.hCommentMenu,
-			["COPY_COMMENT", "VIEW_COMMENT", "REPLY2SELECTED_COMMENT", "DELETE_SELECTED_COMMENT", "REPLY2BROADCASTER"])
+			["COPY_COMMENT", "VIEW_COMMENT", "REPLY2SELECTED_COMMENT", "DELETE_SELECTED_COMMENT", "SELECT_ALL_COMMENT", "REPLY2BROADCASTER"])
 		#ライブメニュー
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
@@ -240,6 +240,9 @@ class Events(BaseEvents):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["from_user"]["screen_id"] + " ")
 			self.parent.commentBodyEdit.SetInsertionPointEnd()
 			self.parent.commentBodyEdit.SetFocus()
+		#全てのコメントを選択
+		elif selected == menuItemsStore.getRef("SELECT_ALL_COMMENT"):
+			self.selectAllComment()
 		#配信者に返信
 		elif selected==menuItemsStore.getRef("REPLY2BROADCASTER"):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"] + " ")
@@ -512,3 +515,7 @@ class Events(BaseEvents):
 		self.parent.menu.RegisterMenuCommand(contextMenu,
 			["REPLY2BROADCASTER", "VIEW_BROADCASTER", "ADD_FAVORITES"])
 		self.parent.liveInfo.PopupMenu(contextMenu,event)
+
+	def selectAllComment(self):
+		for i in range(self.parent.commentList.GetItemCount()):
+			self.parent.commentList.Select(i)
