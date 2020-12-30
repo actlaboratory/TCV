@@ -71,7 +71,7 @@ class settingsDialog(BaseDialog):
 		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログに表示する項目(&O)"), list(self.displayonconnectdialogSelection.values()))
 		self.update = creator.checkbox(_("起動時に更新を確認(&U)"))
 		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
-		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 50)
+		self.initialcommentcount, static = creator.spinCtrl(_("ライブ接続時に読み込む\nコメント数(&C)"), 1, 250)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
