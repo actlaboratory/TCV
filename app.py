@@ -22,12 +22,10 @@ class Main(AppBase.MainBase):
 	def initialize(self):
 		_import()
 		"""アプリを初期化する。"""
-		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
-		if self.config.getboolean("proxy", "usemanualsetting", False) == True:
-			self.proxyEnviron.set_environ(self.config["proxy"]["server"], self.config.getint("proxy", "port", 8080, 0, 65535))
-		else:
-			self.proxyEnviron.set_environ()
 		self.setGlobalVars()
+
+		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
+		self.setProxyEnviron()
 		# update関係を準備
 		if self.config.getboolean("general", "update"):
 			globalVars.update.update(True)
@@ -54,6 +52,12 @@ class Main(AppBase.MainBase):
 			self.hMainView.events.connect()
 			return True
 
+	def setProxyEnviron(self):
+		if self.config.getboolean("proxy", "usemanualsetting", False) == True:
+			self.proxyEnviron.set_environ(self.config["proxy"]["server"], self.config.getint("proxy", "port", 8080, 0, 65535))
+		else:
+			self.proxyEnviron.set_environ()
+
 	def setGlobalVars(self):
 		globalVars.update = update.update()
 		return
@@ -64,6 +68,9 @@ class Main(AppBase.MainBase):
 
 		if self.Manager.livePlayer != None:
 			self.Manager.livePlayer.exit()
+
+		# アップデート
+		globalVars.update.runUpdate()
 
 		#戻り値は無視される
 		return 0

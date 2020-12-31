@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 02:49+0900\n"
-"PO-Revision-Date: 2020-12-31 02:57+0900\n"
+"POT-Creation-Date: 2020-12-31 10:49+0900\n"
+"PO-Revision-Date: 2020-12-31 10:55+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: app.py:42
+#: app.py:40
 msgid "アカウント登録"
 msgstr "account registration"
 
-#: app.py:42 manager.py:76
+#: app.py:40 manager.py:76
 msgid ""
 "アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウン"
 "トマネージャからアカウントの登録を行ってください。"
@@ -29,7 +29,7 @@ msgstr ""
 "No accounts are registered. Add at least one account from account manager on "
 "settings menu."
 
-#: app.py:47
+#: app.py:45
 msgid ""
 "期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャか"
 "ら、再度アカウントの追加を行ってください。"
@@ -158,7 +158,7 @@ msgstr "collabo is unavailable"
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
-#: views\main.py:456 views\settings.py:50 views\settings.py:55
+#: views\main.py:458 views\settings.py:50 views\settings.py:55
 msgid "なし"
 msgstr "None"
 
@@ -346,7 +346,7 @@ msgid ""
 msgstr ""
 "TwitCasting API returned a 500 error. Wait a while and try to connect again."
 
-#: manager.py:716 twitcasting\accountManager.py:39
+#: manager.py:716 twitcasting\accountManager.py:55
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 "Currently you cannot use TCV. Please contact the developer for further "
@@ -377,7 +377,7 @@ msgstr "&Disconnect"
 msgid "終了(&X)"
 msgstr "E&xit"
 
-#: menuItemsDic.py:20 views\main.py:180
+#: menuItemsDic.py:20 views\main.py:181
 msgid "再生(&P)"
 msgstr "&Play"
 
@@ -437,7 +437,7 @@ msgstr "&Open this live in browser"
 msgid "お気に入りに追加(&A)"
 msgstr "&Add to favorites"
 
-#: menuItemsDic.py:38 views\main.py:183
+#: menuItemsDic.py:38 views\main.py:184
 msgid "設定(&S)"
 msgstr "&Settings"
 
@@ -489,9 +489,13 @@ msgstr "&Check for updates"
 msgid "読み上げの中断"
 msgstr "stop speech"
 
-#: TCV.py:13
+#: TCV.py:15
 msgid "通信に失敗しました。インターネット接続を確認してください。"
 msgstr "Connection failed. Check your internet connection."
+
+#: TCV.py:18
+msgid "通信に失敗しました。プロキシサーバーの設定を確認してください。"
+msgstr "Connection failed. Check the proxy settings."
 
 #: update.py:47 update.py:56 update.py:70 update.py:76 update.py:87
 #: update.py:95 update.py:100 update.py:105 update.py:157
@@ -547,7 +551,26 @@ msgstr ""
 "Download has successfully finished.\n"
 "Update will be started when closing the application."
 
-#: twitcasting\accountManager.py:42
+#: twitcasting\accountManager.py:38
+msgid ""
+"通信に失敗しました。インターネット接続を確認してください。\n"
+"プロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要がありま"
+"す。\n"
+"今すぐプロキシ設定を開きますか？"
+msgstr ""
+"Connection failed. Check your Internet connection.\n"
+"If you use a proxy server, you must configure the proxy from the settings.\n"
+"Do you wish to open proxy settings now?"
+
+#: twitcasting\accountManager.py:38
+msgid "通信エラー"
+msgstr "Connection Error"
+
+#: twitcasting\accountManager.py:47 views\settings.py:143
+msgid "ネットワーク"
+msgstr "network"
+
+#: twitcasting\accountManager.py:58
 msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
@@ -555,7 +578,7 @@ msgstr ""
 "Some accounts have automatically been deleted because of invalid token. Add accounts again by using account manager "
 "on settings menu."
 
-#: twitcasting\accountManager.py:46
+#: twitcasting\accountManager.py:62
 msgid ""
 "APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この"
 "情報を再度取得するには、数分待ってからTCVを再起動してください。"
@@ -564,33 +587,33 @@ msgstr ""
 "was reached. To get this information again, wait a few minutes and restart "
 "TCV."
 
-#: twitcasting\accountManager.py:74
+#: twitcasting\accountManager.py:90
 msgid ""
 "認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってくださ"
 "い。"
 msgstr ""
 "Authorization successful.  Close this window and go back to your application."
 
-#: twitcasting\accountManager.py:75
+#: twitcasting\accountManager.py:91
 msgid "認証に失敗しました。もう一度お試しください。"
 msgstr "Authorization failed.  Please try again."
 
-#: twitcasting\accountManager.py:76
+#: twitcasting\accountManager.py:92
 msgid ""
 "しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。"
 msgstr ""
 "If the screen does not change after a while, open this page in another "
 "browser."
 
-#: twitcasting\accountManager.py:89
+#: twitcasting\accountManager.py:105
 msgid "処理結果"
 msgstr "result"
 
-#: twitcasting\accountManager.py:89
+#: twitcasting\accountManager.py:105
 msgid "キャンセルされました。"
 msgstr "Canceled."
 
-#: twitcasting\accountManager.py:114
+#: twitcasting\accountManager.py:130
 msgid "不明"
 msgstr "unknown"
 
@@ -606,14 +629,14 @@ msgstr "account manager"
 msgid "アカウント"
 msgstr "account"
 
-#: views\accountManager.py:33 views\main.py:93 views\userNamereplace.py:13
+#: views\accountManager.py:33 views\main.py:94 views\userNamereplace.py:13
 #: views\userNamereplace.py:29 views\viewBroadcaster.py:29
 #: views\viewComment.py:31
 msgid "ユーザ名"
 msgstr "user name"
 
 #: views\accountManager.py:34 views\globalKeyConfig.py:20
-#: views\globalKeyConfig.py:74 views\main.py:90 views\viewBroadcaster.py:28
+#: views\globalKeyConfig.py:74 views\main.py:91 views\viewBroadcaster.py:28
 #: views\viewComment.py:30
 msgid "名前"
 msgstr "name"
@@ -647,8 +670,9 @@ msgstr "move &Up"
 msgid "下へ(&D)"
 msgstr "move &Down"
 
-#: views\accountManager.py:55 views\viewBroadcaster.py:37
-#: views\viewComment.py:39 views\viewFavorites.py:36 views\viewHistory.py:32
+#: views\accountManager.py:55 views\versionDialog.py:46
+#: views\viewBroadcaster.py:37 views\viewComment.py:39
+#: views\viewFavorites.py:36 views\viewHistory.py:32
 msgid "閉じる"
 msgstr "close"
 
@@ -675,7 +699,7 @@ msgstr "waiting for browser..."
 #: views\accountManager.py:151 views\changeDevice.py:45
 #: views\changeSpeechOutput.py:43 views\connect.py:35
 #: views\KeyValueSettingDialogBase.py:81 views\KeyValueSettingDialogBase.py:259
-#: views\settings.py:152 views\updateDialog.py:44
+#: views\mkDialog.py:30 views\settings.py:152 views\updateDialog.py:44
 msgid "キャンセル"
 msgstr "cancel"
 
@@ -696,7 +720,7 @@ msgstr ""
 #: views\base.py:119 views\fontManager.py:25 views\fontManager.py:50
 #: views\globalKeyConfig.py:61 views\globalKeyConfig.py:122
 #: views\KeyValueSettingDialogBase.py:279
-#: views\KeyValueSettingDialogBase.py:330 views\main.py:135
+#: views\KeyValueSettingDialogBase.py:330 views\main.py:136
 #: views\updateDialog.py:65
 msgid "エラー"
 msgstr "error"
@@ -774,7 +798,7 @@ msgstr "use regular expression"
 msgid "置換内容設定"
 msgstr "replace setting"
 
-#: views\connect.py:16 views\main.py:71 views\viewFavorites.py:35
+#: views\connect.py:16 views\main.py:72 views\viewFavorites.py:35
 #: views\viewHistory.py:31
 msgid "接続"
 msgstr "connect"
@@ -800,7 +824,7 @@ msgstr "shortcut"
 msgid "識別子"
 msgstr "identifier"
 
-#: views\globalKeyConfig.py:31 views\main.py:211
+#: views\globalKeyConfig.py:31 views\main.py:212
 msgid "ショートカットキーの設定"
 msgstr "Shortcut Key Configuration"
 
@@ -835,7 +859,7 @@ msgstr "shortcut 4"
 msgid "ショートカット5"
 msgstr "shortcut 5"
 
-#: views\globalKeyConfig.py:75 views\main.py:74 views\settings.py:63
+#: views\globalKeyConfig.py:75 views\main.py:75 views\settings.py:63
 msgid "設定"
 msgstr "settings"
 
@@ -932,7 +956,7 @@ msgstr "File path"
 msgid "参照"
 msgstr "browse"
 
-#: views\indicatorSoundSettings.py:108 views\settings.py:285
+#: views\indicatorSoundSettings.py:108 views\settings.py:287
 msgid "効果音ファイルを選択"
 msgstr "select a sound file"
 
@@ -1005,59 +1029,59 @@ msgid ""
 msgstr ""
 "The key combination %(key)s, configured as %(command)s, is reserved.\\n\n"
 
-#: views\main.py:72
+#: views\main.py:73
 msgid "接続履歴を開く"
 msgstr "open connection history"
 
-#: views\main.py:73
+#: views\main.py:74
 msgid "お気に入り一覧を開く"
 msgstr "open favorites"
 
-#: views\main.py:75
+#: views\main.py:76
 msgid "アカウントマネージャを開く"
 msgstr "open account manager"
 
-#: views\main.py:76
+#: views\main.py:77
 msgid "ヘルプを表示"
 msgstr "view help"
 
-#: views\main.py:77
+#: views\main.py:78
 msgid "プログラムの終了"
 msgstr "exit"
 
-#: views\main.py:89
+#: views\main.py:90
 msgid "コメント一覧"
 msgstr "comment list"
 
-#: views\main.py:91
+#: views\main.py:92
 msgid "投稿"
 msgstr "message"
 
-#: views\main.py:92
+#: views\main.py:93
 msgid "時刻"
 msgstr "time"
 
-#: views\main.py:105
+#: views\main.py:106
 msgid "コメント投稿アカウント"
 msgstr "account"
 
-#: views\main.py:111
+#: views\main.py:112
 msgid "コメント内容"
 msgstr "comment"
 
-#: views\main.py:114
+#: views\main.py:115
 msgid "送信"
 msgstr "submit"
 
-#: views\main.py:117
+#: views\main.py:118
 msgid "ライブ情報"
 msgstr "live information"
 
-#: views\main.py:121
+#: views\main.py:122
 msgid "アイテム"
 msgstr "items"
 
-#: views\main.py:132
+#: views\main.py:133
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
@@ -1068,57 +1092,61 @@ msgstr ""
 "and key names.\n"
 "\n"
 
-#: views\main.py:179
+#: views\main.py:180
 msgid "ファイル(&F)"
 msgstr "&File"
 
-#: views\main.py:181
+#: views\main.py:182
 msgid "コメント(&C)"
 msgstr "&Comment"
 
-#: views\main.py:182
+#: views\main.py:183
 msgid "ライブ(&L)"
 msgstr "&Live"
 
-#: views\main.py:184
+#: views\main.py:185
 msgid "ヘルプ(&H)"
 msgstr "&Help"
 
-#: views\main.py:217
+#: views\main.py:218
 msgid "グローバルホットキーの設定"
 msgstr "Global Hot Keys Settings"
 
+<<<<<<< HEAD
 #: views\main.py:222
 msgid "バージョン情報"
 msgstr "version info"
 
 #: views\main.py:258 views\main.py:267 views\viewFavorites.py:46
+=======
+#: views\main.py:259 views\main.py:268 views\viewFavorites.py:46
+>>>>>>> master
 #: views\viewFavorites.py:54 views\viewHistory.py:44
 msgid "確認"
 msgstr "confirmation"
 
-#: views\main.py:258
+#: views\main.py:259
 msgid "選択中のコメントを削除しますか？"
 msgstr "Are you sure you want to delete the selected comment?"
 
-#: views\main.py:265
+#: views\main.py:266
 msgid "すでに登録されています。"
 msgstr "It is already registered."
 
-#: views\main.py:267
+#: views\main.py:268
 #, python-format
 msgid "%sのライブをお気に入りに追加しますか？"
 msgstr "Are you sure you want to add %s to your favorites?"
 
-#: views\main.py:383
+#: views\main.py:385
 msgid "接続履歴がありません。"
 msgstr "No items in your connection history."
 
-#: views\main.py:394
+#: views\main.py:396
 msgid "お気に入りライブが登録されていません。"
 msgstr "No items in your favorites."
 
-#: views\main.py:494
+#: views\main.py:496
 msgid "readme.txtが見つかりません。"
 msgstr "Readme.txt could not be found."
 
@@ -1354,10 +1382,6 @@ msgstr "only &Domain"
 msgid "URLを次の文字列に置き換える(&R)"
 msgstr "&Replace URLs to the following string"
 
-#: views\settings.py:143
-msgid "ネットワーク"
-msgstr "network"
-
 #: views\settings.py:144
 msgid "起動時に更新を確認(&U)"
 msgstr "Automatically Check for &Updates on startup"
@@ -1417,6 +1441,35 @@ msgstr "display name"
 #: views\userNamereplace.py:20
 msgid "表示名置換設定"
 msgstr "display name replace settings"
+
+#: views\versionDialog.py:18
+msgid "バージョン情報"
+msgstr "version information"
+
+#: views\versionDialog.py:27
+msgid "ソフトウェアバージョン"
+msgstr "software version"
+
+#: views\versionDialog.py:28
+msgid "アップデータバージョン"
+msgstr "updater version"
+
+#: views\versionDialog.py:30
+msgid "ライセンス"
+msgstr "license"
+
+#: views\versionDialog.py:31
+msgid "開発元"
+msgstr "developers"
+
+#: views\versionDialog.py:32
+msgid "ソフトウェア詳細情報"
+msgstr "software details"
+
+#: views\versionDialog.py:34
+msgid ""
+"ライセンス/著作権情報については、同梱の license.txt を参照してください。"
+msgstr "See the included license.txt for licensing / copyright information."
 
 #: views\viewBroadcaster.py:18
 msgid "配信者の情報"

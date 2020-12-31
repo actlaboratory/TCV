@@ -10,7 +10,12 @@ import globalVars
 
 def exchandler(type, exc, tb):
 	if type == requests.exceptions.ConnectionError:
+		for i in globalVars.app.Manager.timers:
+			i.Stop()
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
+		sys.exit(-1)
+	elif type == requests.exceptions.ProxyError:
+		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。"))
 		sys.exit(-1)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))

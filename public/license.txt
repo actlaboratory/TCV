@@ -1,26 +1,29 @@
 CopyLight (c)2019-2021 Kazto Kitabatake,ACT laboratory All lights reserved.
 
-–{ƒ\ƒtƒgƒEƒFƒA‚ÍAGPL v3(or later)‚Ü‚½‚ÍApache license v2‚ÌğŒ‚É]‚¢A©—R‚É—˜—p‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
-–{ƒ\ƒtƒgƒEƒFƒA‚Ìƒ\[ƒXƒR[ƒh‚ÍAreadme.txt‚É‹LÚ‚ÌURL‚æ‚èƒ_ƒEƒ“ƒ[ƒh‰Â”\‚Å‚·B
+æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã¯ã€GPL v3(or later)ã¾ãŸã¯Apache license v2ã®æ¡ä»¶ã«å¾“ã„ã€è‡ªç”±ã«åˆ©ç”¨ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
+æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã¯ã€readme.txtã«è¨˜è¼‰ã®URLã‚ˆã‚Šãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰å¯èƒ½ã§ã™ã€‚
 
-¦–{ƒ\ƒtƒgƒEƒFƒA‚É‚ÍAˆÈ‰º‚ÌŠeƒ‰ƒCƒZƒ“ƒX‚É]‚¢‘¼Ò‚Ì¬‰Ê•¨‚ğŠÜ‚İ‚Ü‚·B
+â€»æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã«ã¯ã€ä»¥ä¸‹ã®å„ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã«å¾“ã„ä»–è€…ã®æˆæœç‰©ã‚’å«ã¿ã¾ã™ã€‚
 
-EApacheƒ‰ƒCƒZƒ“ƒXv2‚ÉŠî‚Ã‚­ˆÈ‰º‚Ìƒ‰ƒCƒuƒ‰ƒŠ
-	requests@(https://github.com/psf/requests)
+ãƒ»Apacheãƒ©ã‚¤ã‚»ãƒ³ã‚¹v2ã«åŸºã¥ãä»¥ä¸‹ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+	requestsã€€(https://github.com/psf/requests)
 	pypac	(https://pypi.org/project/pypac/)
-	libloader@(https://github.com/bmarwell/libloader/)
+	libloaderã€€(https://github.com/bmarwell/libloader/)
 
 
-EBSDƒ‰ƒCƒZƒ“ƒX
+ãƒ»BSDãƒ©ã‚¤ã‚»ãƒ³ã‚¹
 	pyperclip	(https://pypi.org/project/pyperclip/)
-	pybass@(https://pypi.org/project/pybass/)
+	pybassã€€(https://pypi.org/project/pybass/)
 		Copyright(c) Maxim Kolosov 2009-2013 pyirrlicht@gmail.com
 
-EMITƒ‰ƒCƒZƒ“ƒX‚ÉŠî‚Ã‚­ˆÈ‰º‚Ìƒ‰ƒCƒuƒ‰ƒŠ
-	pytags@(https://pypi.org/project/pytags/)
-	AccessibleOutput2@(https://pypi.org/project/accessible-output2/)
+ãƒ»MITãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã«åŸºã¥ãä»¥ä¸‹ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+	pytagsã€€(https://pypi.org/project/pytags/)
+	AccessibleOutput2ã€€(https://pypi.org/project/accessible-output2/)
 
-‚»‚Ì‘¼AŒÂ•Ê‚Ìƒ‰ƒCƒZƒ“ƒX‚ÉŠî‚Ã‚­•¡”‚Ìƒ‰ƒCƒuƒ‰ƒŠ
+ãƒ»MS-PL
+	DotNetZip
 
-Šeƒ‰ƒCƒZƒ“ƒX‚ÍAlicensesƒfƒBƒŒƒNƒgƒŠ“à‚ÉŠi”[‚³‚ê‚Ä‚¢‚Ü‚·B
+ãã®ä»–ã€å€‹åˆ¥ã®ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã«åŸºã¥ãè¤‡æ•°ã®ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+
+å„ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã¯ã€licensesãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã«æ ¼ç´ã•ã‚Œã¦ã„ã¾ã™ã€‚
 
