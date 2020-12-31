@@ -87,7 +87,7 @@ class settingsDialog(BaseDialog):
 		creator.GetSizer().SetItemSpan(self.openlivewindow.GetParent(),2)
 
 		# view
-		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("表示"),style=wx.ALL,margin=20)
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("表示/言語"),style=wx.ALL,margin=20)
 		self.language, static = creator.combobox(_("言語(&L)"), list(self.languageSelection.values()))
 		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
 		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
