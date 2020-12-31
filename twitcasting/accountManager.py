@@ -43,7 +43,9 @@ class AccountManager:
 					import views.settings
 					d = views.settings.settingsDialog()
 					d.Initialize()
-					d.tab.ChangeSelection(6)
+					for i in range(d.tab.GetPageCount()):
+						if d.tab.GetPageText(i) == _("ネットワーク"):
+							d.tab.SetSelection(i)
 					d.Show()
 			if result == 1000:
 				rm.append(i)
