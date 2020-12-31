@@ -1225,7 +1225,7 @@ msgid "接続履歴の保持件数(&H)"
 msgstr "max count of &History"
 
 #: views\settings.py:84
-msgid "規定の接続先(&A)"
+msgid "規定の接続先ユーザー名/URL(&U)"
 msgstr "default &Account"
 
 #: views\settings.py:85

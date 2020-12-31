@@ -82,7 +82,7 @@ class settingsDialog(BaseDialog):
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
-		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先(&A)"),sizerFlag=wx.EXPAND)
+		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先ユーザー名/URL(&U)"),sizerFlag=wx.EXPAND)
 		self.openlivewindow = creator.checkbox(_("接続時にブラウザでライブを開く(&O)"))
 		creator.GetSizer().SetItemSpan(self.openlivewindow.GetParent(),2)
 
