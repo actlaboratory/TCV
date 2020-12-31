@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the TCV package.
+# This file is distributed under the same license as the SOC package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: TCV\n"
+"Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 10:49+0900\n"
+"POT-Creation-Date: 2020-12-31 02:49+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: app.py:40
+#: app.py:42
 msgid "アカウント登録"
 msgstr ""
 
-#: app.py:40 manager.py:76
+#: app.py:42 manager.py:76
 msgid ""
 "アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウン"
 "トマネージャからアカウントの登録を行ってください。"
 msgstr ""
 
-#: app.py:45
+#: app.py:47
 msgid ""
 "期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャか"
 "ら、再度アカウントの追加を行ってください。"
@@ -152,7 +152,7 @@ msgstr ""
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
-#: views\main.py:458 views\settings.py:50 views\settings.py:55
+#: views\main.py:456 views\settings.py:50 views\settings.py:55
 msgid "なし"
 msgstr ""
 
@@ -334,7 +334,7 @@ msgid ""
 "い。"
 msgstr ""
 
-#: manager.py:716 twitcasting\accountManager.py:55
+#: manager.py:716 twitcasting\accountManager.py:39
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 
@@ -363,7 +363,7 @@ msgstr ""
 msgid "終了(&X)"
 msgstr ""
 
-#: menuItemsDic.py:20 views\main.py:181
+#: menuItemsDic.py:20 views\main.py:180
 msgid "再生(&P)"
 msgstr ""
 
@@ -423,7 +423,7 @@ msgstr ""
 msgid "お気に入りに追加(&A)"
 msgstr ""
 
-#: menuItemsDic.py:38 views\main.py:184
+#: menuItemsDic.py:38 views\main.py:183
 msgid "設定(&S)"
 msgstr ""
 
@@ -475,12 +475,8 @@ msgstr ""
 msgid "読み上げの中断"
 msgstr ""
 
-#: TCV.py:15
+#: TCV.py:13
 msgid "通信に失敗しました。インターネット接続を確認してください。"
-msgstr ""
-
-#: TCV.py:18
-msgid "通信に失敗しました。プロキシサーバーの設定を確認してください。"
 msgstr ""
 
 #: update.py:47 update.py:56 update.py:70 update.py:76 update.py:87
@@ -533,58 +529,42 @@ msgid ""
 "ソフトウェア終了時に、自動でアップデートされます。"
 msgstr ""
 
-#: twitcasting\accountManager.py:38
-msgid ""
-"通信に失敗しました。インターネット接続を確認してください。\n"
-"プロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要がありま"
-"す。\n"
-"今すぐプロキシ設定を開きますか？"
-msgstr ""
-
-#: twitcasting\accountManager.py:38
-msgid "通信エラー"
-msgstr ""
-
-#: twitcasting\accountManager.py:47 views\settings.py:143
-msgid "ネットワーク"
-msgstr ""
-
-#: twitcasting\accountManager.py:58
+#: twitcasting\accountManager.py:42
 msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:62
+#: twitcasting\accountManager.py:46
 msgid ""
 "APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この"
 "情報を再度取得するには、数分待ってからTCVを再起動してください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:90
+#: twitcasting\accountManager.py:74
 msgid ""
 "認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってくださ"
 "い。"
 msgstr ""
 
-#: twitcasting\accountManager.py:91
+#: twitcasting\accountManager.py:75
 msgid "認証に失敗しました。もう一度お試しください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:92
+#: twitcasting\accountManager.py:76
 msgid ""
 "しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:105
+#: twitcasting\accountManager.py:89
 msgid "処理結果"
 msgstr ""
 
-#: twitcasting\accountManager.py:105
+#: twitcasting\accountManager.py:89
 msgid "キャンセルされました。"
 msgstr ""
 
-#: twitcasting\accountManager.py:130
+#: twitcasting\accountManager.py:114
 msgid "不明"
 msgstr ""
 
@@ -600,14 +580,14 @@ msgstr ""
 msgid "アカウント"
 msgstr ""
 
-#: views\accountManager.py:33 views\main.py:94 views\userNamereplace.py:13
+#: views\accountManager.py:33 views\main.py:93 views\userNamereplace.py:13
 #: views\userNamereplace.py:29 views\viewBroadcaster.py:29
 #: views\viewComment.py:31
 msgid "ユーザ名"
 msgstr ""
 
 #: views\accountManager.py:34 views\globalKeyConfig.py:20
-#: views\globalKeyConfig.py:74 views\main.py:91 views\viewBroadcaster.py:28
+#: views\globalKeyConfig.py:74 views\main.py:90 views\viewBroadcaster.py:28
 #: views\viewComment.py:30
 msgid "名前"
 msgstr ""
@@ -641,9 +621,8 @@ msgstr ""
 msgid "下へ(&D)"
 msgstr ""
 
-#: views\accountManager.py:55 views\versionDialog.py:46
-#: views\viewBroadcaster.py:37 views\viewComment.py:39
-#: views\viewFavorites.py:36 views\viewHistory.py:32
+#: views\accountManager.py:55 views\viewBroadcaster.py:37
+#: views\viewComment.py:39 views\viewFavorites.py:36 views\viewHistory.py:32
 msgid "閉じる"
 msgstr ""
 
@@ -670,7 +649,7 @@ msgstr ""
 #: views\accountManager.py:151 views\changeDevice.py:45
 #: views\changeSpeechOutput.py:43 views\connect.py:35
 #: views\KeyValueSettingDialogBase.py:81 views\KeyValueSettingDialogBase.py:259
-#: views\mkDialog.py:30 views\settings.py:152 views\updateDialog.py:44
+#: views\settings.py:152 views\updateDialog.py:44
 msgid "キャンセル"
 msgstr ""
 
@@ -689,7 +668,7 @@ msgstr ""
 #: views\base.py:119 views\fontManager.py:25 views\fontManager.py:50
 #: views\globalKeyConfig.py:61 views\globalKeyConfig.py:122
 #: views\KeyValueSettingDialogBase.py:279
-#: views\KeyValueSettingDialogBase.py:330 views\main.py:136
+#: views\KeyValueSettingDialogBase.py:330 views\main.py:135
 #: views\updateDialog.py:65
 msgid "エラー"
 msgstr ""
@@ -767,7 +746,7 @@ msgstr ""
 msgid "置換内容設定"
 msgstr ""
 
-#: views\connect.py:16 views\main.py:72 views\viewFavorites.py:35
+#: views\connect.py:16 views\main.py:71 views\viewFavorites.py:35
 #: views\viewHistory.py:31
 msgid "接続"
 msgstr ""
@@ -793,7 +772,7 @@ msgstr ""
 msgid "識別子"
 msgstr ""
 
-#: views\globalKeyConfig.py:31 views\main.py:212
+#: views\globalKeyConfig.py:31 views\main.py:211
 msgid "ショートカットキーの設定"
 msgstr ""
 
@@ -825,7 +804,7 @@ msgstr ""
 msgid "ショートカット5"
 msgstr ""
 
-#: views\globalKeyConfig.py:75 views\main.py:75 views\settings.py:63
+#: views\globalKeyConfig.py:75 views\main.py:74 views\settings.py:63
 msgid "設定"
 msgstr ""
 
@@ -922,7 +901,7 @@ msgstr ""
 msgid "参照"
 msgstr ""
 
-#: views\indicatorSoundSettings.py:108 views\settings.py:287
+#: views\indicatorSoundSettings.py:108 views\settings.py:285
 msgid "効果音ファイルを選択"
 msgstr ""
 
@@ -990,59 +969,59 @@ msgid ""
 "す。\n"
 msgstr ""
 
-#: views\main.py:73
+#: views\main.py:72
 msgid "接続履歴を開く"
 msgstr ""
 
-#: views\main.py:74
+#: views\main.py:73
 msgid "お気に入り一覧を開く"
 msgstr ""
 
-#: views\main.py:76
+#: views\main.py:75
 msgid "アカウントマネージャを開く"
 msgstr ""
 
-#: views\main.py:77
+#: views\main.py:76
 msgid "ヘルプを表示"
 msgstr ""
 
-#: views\main.py:78
+#: views\main.py:77
 msgid "プログラムの終了"
 msgstr ""
 
-#: views\main.py:90
+#: views\main.py:89
 msgid "コメント一覧"
 msgstr ""
 
-#: views\main.py:92
+#: views\main.py:91
 msgid "投稿"
 msgstr ""
 
-#: views\main.py:93
+#: views\main.py:92
 msgid "時刻"
 msgstr ""
 
-#: views\main.py:106
+#: views\main.py:105
 msgid "コメント投稿アカウント"
 msgstr ""
 
-#: views\main.py:112
+#: views\main.py:111
 msgid "コメント内容"
 msgstr ""
 
-#: views\main.py:115
+#: views\main.py:114
 msgid "送信"
 msgstr ""
 
-#: views\main.py:118
+#: views\main.py:117
 msgid "ライブ情報"
 msgstr ""
 
-#: views\main.py:122
+#: views\main.py:121
 msgid "アイテム"
 msgstr ""
 
-#: views\main.py:133
+#: views\main.py:132
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
@@ -1050,53 +1029,57 @@ msgid ""
 "\n"
 msgstr ""
 
-#: views\main.py:180
+#: views\main.py:179
 msgid "ファイル(&F)"
 msgstr ""
 
-#: views\main.py:182
+#: views\main.py:181
 msgid "コメント(&C)"
 msgstr ""
 
-#: views\main.py:183
+#: views\main.py:182
 msgid "ライブ(&L)"
 msgstr ""
 
-#: views\main.py:185
+#: views\main.py:184
 msgid "ヘルプ(&H)"
 msgstr ""
 
-#: views\main.py:218
+#: views\main.py:217
 msgid "グローバルホットキーの設定"
 msgstr ""
 
-#: views\main.py:259 views\main.py:268 views\viewFavorites.py:46
+#: views\main.py:222
+msgid "バージョン情報"
+msgstr ""
+
+#: views\main.py:258 views\main.py:267 views\viewFavorites.py:46
 #: views\viewFavorites.py:54 views\viewHistory.py:44
 msgid "確認"
 msgstr ""
 
-#: views\main.py:259
+#: views\main.py:258
 msgid "選択中のコメントを削除しますか？"
 msgstr ""
 
-#: views\main.py:266
+#: views\main.py:265
 msgid "すでに登録されています。"
 msgstr ""
 
-#: views\main.py:268
+#: views\main.py:267
 #, python-format
 msgid "%sのライブをお気に入りに追加しますか？"
 msgstr ""
 
-#: views\main.py:385
+#: views\main.py:383
 msgid "接続履歴がありません。"
 msgstr ""
 
-#: views\main.py:396
+#: views\main.py:394
 msgid "お気に入りライブが登録されていません。"
 msgstr ""
 
-#: views\main.py:496
+#: views\main.py:494
 msgid "readme.txtが見つかりません。"
 msgstr ""
 
@@ -1332,6 +1315,10 @@ msgstr ""
 msgid "URLを次の文字列に置き換える(&R)"
 msgstr ""
 
+#: views\settings.py:143
+msgid "ネットワーク"
+msgstr ""
+
 #: views\settings.py:144
 msgid "起動時に更新を確認(&U)"
 msgstr ""
@@ -1390,35 +1377,6 @@ msgstr ""
 
 #: views\userNamereplace.py:20
 msgid "表示名置換設定"
-msgstr ""
-
-#: views\versionDialog.py:18
-msgid "バージョン情報"
-msgstr ""
-
-#: views\versionDialog.py:27
-msgid "ソフトウェアバージョン"
-msgstr ""
-
-#: views\versionDialog.py:28
-msgid "アップデータバージョン"
-msgstr ""
-
-#: views\versionDialog.py:30
-msgid "ライセンス"
-msgstr ""
-
-#: views\versionDialog.py:31
-msgid "開発元"
-msgstr ""
-
-#: views\versionDialog.py:32
-msgid "ソフトウェア詳細情報"
-msgstr ""
-
-#: views\versionDialog.py:34
-msgid ""
-"ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr ""
 
 #: views\viewBroadcaster.py:18

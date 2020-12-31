@@ -49,7 +49,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		newKeys={}
 		for name,keys in self.values[0].items():
 			for key in keys.split("/"):
-				newKeys.setdefault(key, set()).add(name)
+				newKeys.setdefault(key.upper(), set()).add(name)
 		for key,names in newKeys.items():
 			if key==_("なし"):
 				continue
@@ -58,7 +58,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 				for name in names:
 					entries.append(keymap.makeEntry(self.values[1][name],key,None,self.log))
 				if not keymap.permitConfrict(entries,self.log):
-					dialog(_("エラー"),_("以下の項目において、重複するキー %s が設定されています。\n\n%s") % (key,names))
+					dialog(_("エラー"),_("以下の項目において、重複するキー %(key)s が設定されています。\n\n%(command)s") % {"key": key,"command": names})
 					return
 		event.Skip()
 
@@ -103,6 +103,8 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 				if ret[1]!="":
 					ret[1]+="/"
 				ret[1]+=self.edits[i].GetLineText(0)
+		if ret[1]=="":
+			ret[1]=_("なし")
 		ret[2]=self.edits[6].GetLineText(0)
 		return ret
 

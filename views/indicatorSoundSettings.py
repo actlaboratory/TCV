@@ -24,7 +24,8 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 			_("コメント投稿時"),
 			_("コメント入力中検知時"),
 			_("残り時間通知時"),
-			_("プログラムの起動時")
+			_("プログラムの起動時"),
+			_("その他の通知音")
 		]
 		play = {
 			self.types[0]: globalVars.app.config.getboolean("fx", "playcommentreceivedsound"),
@@ -34,7 +35,8 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 			self.types[4]: globalVars.app.config.getboolean("fx", "playcommentpostedsound"),
 			self.types[5]: globalVars.app.config.getboolean("fx", "playtypingsound"),
 			self.types[6]: globalVars.app.config.getboolean("fx", "playtimersound"),
-			self.types[7]: globalVars.app.config.getboolean("fx", "playstartupsound")
+			self.types[7]: globalVars.app.config.getboolean("fx", "playstartupsound"),
+			self.types[8]: globalVars.app.config.getboolean("fx", "playothersound")
 		}
 		files = {
 			self.types[0]: globalVars.app.config["fx"]["commentreceivedsound"],
@@ -44,7 +46,8 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 			self.types[4]: globalVars.app.config["fx"]["commentpostedsound"],
 			self.types[5]: globalVars.app.config["fx"]["typingsound"],
 			self.types[6]: globalVars.app.config["fx"]["timersound"],
-			self.types[7]: globalVars.app.config["fx"]["startupsound"]
+			self.types[7]: globalVars.app.config["fx"]["startupsound"],
+			self.types[8]: globalVars.app.config["fx"]["othersound"]
 		}
 		super().__init__("indicatorSoundSettingsDialog",SettingDialog,info,play,files)
 		self.SetCheckResultValueString(1, _("再生する"), _("再生しない"))

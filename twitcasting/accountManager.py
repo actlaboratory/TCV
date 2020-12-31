@@ -15,6 +15,7 @@ import base64
 import copy
 import views.accountManager
 import sys
+import globalVars
 
 class AccountManager:
 	def __init__(self):
@@ -29,7 +30,23 @@ class AccountManager:
 		rm = []
 		cl = []
 		for i in range(0, len(self.tokens)):
-			result = self.verifyCredentials(i)
+			while True:
+				try:
+					result = self.verifyCredentials(i)
+					break
+				except Exception as e:
+					d = wx.MessageDialog(None, _("通信に失敗しました。インターネット接続を確認してください。\nプロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要があります。\n今すぐプロキシ設定を開きますか？"), _("通信エラー"), style=wx.YES_NO|wx.NO_DEFAULT|wx.ICON_ERROR)
+					result = d.ShowModal()
+					if result == wx.ID_NO:
+						globalVars.app.hMainView.events.Exit()
+						return
+					import views.settings
+					d = views.settings.settingsDialog()
+					d.Initialize()
+					for j in range(d.tab.GetPageCount()):
+						if d.tab.GetPageText(j) == _("ネットワーク"):
+							d.tab.SetSelection(j)
+					d.Show()
 			if result == 1000:
 				rm.append(i)
 			elif result == 2000:
@@ -62,6 +79,18 @@ class AccountManager:
 
 	def add(self):
 		manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
+		l="ja"
+		try:
+			l=globalVars.app.config["general"]["language"].split("_")[0].lower()
+		except:
+			pass#end うまく読めなかったら ja を採用
+		#end except
+		manager.setMessage(
+			lang=l,
+			success=_("認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってください。"),
+			failed=_("認証に失敗しました。もう一度お試しください。"),
+			transfer=_("しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。")
+		)
 		webbrowser.open(manager.getUrl())
 		d = views.accountManager.waitingDialog()
 		d.Initialize()

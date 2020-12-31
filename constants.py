@@ -9,14 +9,15 @@ APP_NAME="TCV"
 APP_FULL_NAME = "Twitcasting Viewer"
 APP_VERSION="0.0.1"
 APP_ICON = None
-APP_COPYRIGHT_YEAR="2020"
-APP_DEVELOPERS="ACT Laboratory"
+APP_COPYRIGHT_YEAR="2019-2021"
+APP_LICENSE="GNU General Public License2.0 or later"
+APP_DEVELOPERS="Kazto Kitabatake, ACT Laboratory"
 APP_DEVELOPERS_URL="https://actlab.org/"
-APP_DETAILS_URL=""
+APP_DETAILS_URL="https://actlab.org/software/TCV"
 APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRIGHT_YEAR, APP_DEVELOPERS)
 
 #対応言語
-SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
+SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 #各種ファイル名
 SETTING_FILE_NAME="settings.ini"
@@ -49,3 +50,8 @@ UPDATER_URL = "https://github.com/actlaboratory/updater/releases/download/1.0.0/
 UPDATE_URL = "https://actlab.org/api/checkUpdate"
 UPDATER_VERSION = "1.0.0"
 UPDATER_WAKE_WORD = "hello"
+
+# タイトルバー
+TB_NONE = 0
+TB_TIME = 1
+TB_USER = 2

@@ -1,0 +1,29 @@
+CopyLight (c)2019-2021 Kazto Kitabatake,ACT laboratory All lights reserved.
+
+本ソフトウェアは、GPL v3(or later)またはApache license v2の条件に従い、自由に利用することができます。
+本ソフトウェアのソースコードは、readme.txtに記載のURLよりダウンロード可能です。
+
+※本ソフトウェアには、以下の各ライセンスに従い他者の成果物を含みます。
+
+・Apacheライセンスv2に基づく以下のライブラリ
+	requests　(https://github.com/psf/requests)
+	pypac	(https://pypi.org/project/pypac/)
+	libloader　(https://github.com/bmarwell/libloader/)
+
+
+・BSDライセンス
+	pyperclip	(https://pypi.org/project/pyperclip/)
+	pybass　(https://pypi.org/project/pybass/)
+		Copyright(c) Maxim Kolosov 2009-2013 pyirrlicht@gmail.com
+
+・MITライセンスに基づく以下のライブラリ
+	pytags　(https://pypi.org/project/pytags/)
+	AccessibleOutput2　(https://pypi.org/project/accessible-output2/)
+
+・MS-PL
+	DotNetZip
+
+その他、個別のライセンスに基づく複数のライブラリ
+
+各ライセンスは、licensesディレクトリ内に格納されています。
+
