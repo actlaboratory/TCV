@@ -151,7 +151,11 @@ class connection:
 	def getCategoryName(self, id):
 		if id == None:
 			return _("カテゴリなし")
-		categories = GetCategories()
+		if globalVars.app.config["general"]["language"] == "ja-JP":
+			lang = "ja"
+		else:
+			lang = "en"
+		categories = GetCategories(lang)
 		try:
 			categories = categories["categories"]
 		except KeyError:
