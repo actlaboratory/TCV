@@ -24,11 +24,12 @@ dic={
 	"RESET_VOLUME": _("音量を１００％に設定(&R)"),
 	"CHANGE_DEVICE": _("再生デバイスを変更(&C)") + "...",
 	#コメントメニュー
-	 "COPY_COMMENT":  _("選択中のコメントをコピー(&C)"),
+	"COPY_COMMENT":  _("選択中のコメントをコピー(&C)"),
 	"VIEW_COMMENT": _("コメントの詳細を表示(&V)") + "...",
 	"REPLY2SELECTED_COMMENT": _("選択中のコメントに返信(&R)"),
 	"DELETE_SELECTED_COMMENT": _("選択中のコメントを削除(&D)"),
 	"REPLY2BROADCASTER": _("配信者に返信(&B)"),
+	"SELECT_ALL_COMMENT": _("全てのコメントを選択(&A)"),
 	#ライブメニュー
 	"VIEW_BROADCASTER": _("配信者の情報を表示(&B)") + "...",
 	"OPEN_LIVE": _("このライブをブラウザで開く(&O)"),
@@ -37,11 +38,12 @@ dic={
 	"SETTING": _("設定(&S)") + "...",
 	"SET_KEYMAP": _("ショートカットキーの設定(&K)") + "...",
 	"SET_HOTKEY": _("グローバルホットキーの設定(&G)") + "...",
-	 "INDICATOR_SOUND_SETTING": _("効果音設定(&I)") + "...",
+	"INDICATOR_SOUND_SETTING": _("効果音設定(&I)") + "...",
 	"COMMENT_REPLACE": _("コメント文字列置換設定(&C)") + "...",
 	"USER_NAME_REPLACE": _("表示名置換設定(&N)") + "...",
 	"ACCOUNT_MANAGER": _("アカウントマネージャ(&M)") + "...",
 	"SAPI_SETTING": _("SAPI設定を開く(&A)") + "...",
+	"CHANGE_SPEECH_OUTPUT": _("読み上げ出力先の変更(&O)"),
 	#ヘルプメニュー
 	"HELP": _("ヘルプを開く(&H)"),
 	"VERSION_INFO": _("バージョン情報(&V)") + "...",

@@ -3,9 +3,9 @@
 
 
 import wx
-from views.viewObjectBase import viewObjectUtil, controlBase
+from views.viewObjectBase import viewObjectUtil, listCtrlBase
 
-class virtualListCtrl(controlBase.controlBase, wx.ListCtrl):
+class virtualListCtrl(listCtrlBase.listCtrl):
     # listの機能を組み込み
     def __init__(self, *pArg, **kArg):
         lPArg = list(pArg)

@@ -22,7 +22,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		"""
 		super().__init__(identifier)
 		if len(columnInfo)!=len(values)+1:
-			raise ValueError(_("パラメータの個数が不正です。"))
+			raise ValueError("Parameter count is invalid.")
 		self.settingDialog=settingDialog
 		self.columnInfo=columnInfo
 		self.values=values
@@ -224,7 +224,7 @@ class SettingDialogBase(BaseDialog):
 		"""
 		super().__init__("valueSettingDialog")
 		if len(valueNames)!=len(v):
-			raise ValueError(_("項目名と初期値の指定件数が一致しません。"))
+			raise ValueError("Specified initial values did not match value names.")
 		self.parent=parent
 		self.valueNames=valueNames
 		self.buttons=buttons
@@ -316,16 +316,16 @@ def KeySettingValidation(oldKeyConfig,newKeyConfig,logger,entries=None,AllowNewK
 			continue
 		if not AllowNewKeyDuplication:
 			if len(v)==2:
-				errors+=_("%sと%sに同じショートカットキー%sが設定されています。\n") % (v[0],v[1],k)
+				errors+=_("%(v1)sと%(v2)sに同じショートカットキー%(key)sが設定されています。\n") % {"v1": v[0],"v2": v[1],"key": k}
 				continue
 			elif len(v)>2:
-				errors+=_("%s、%sなど計%d箇所に同じショートカットキー%sが設定されています。\n") % (v[0],v[1],len(v),k)
+				errors+=_("%(v1)s、%(v2)sなど計%(count)d箇所に同じショートカットキー%(key)sが設定されています。\n") % {"v1": v[0],"v2": v[1],"count": len(v),"key": k}
 				continue
 		e=keymap.makeEntry("DUMMY",k,None,logger)
 		if e==None:
 			errors+=_("設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセージを作者へご連絡ください。\n") % k
 		elif e in entries and (k not in oldKeys):
-			errors+=_("%sに設定されたショートカットキー%sは、別の場所で利用されています。\n") % (v[0],k)
+			errors+=_("%(command)sに設定されたショートカットキー%(key)sは、別の場所で利用されています。\n") % {"command": v[0],"key": k}
 	if errors!="":
 		dialog(_("エラー"),errors)
 		return False
