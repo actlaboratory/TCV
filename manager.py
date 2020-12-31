@@ -642,6 +642,7 @@ class manager:
 				"VIEW_COMMENT": False,
 				"REPLY2SELECTED_COMMENT": False,
 				"DELETE_SELECTED_COMMENT": False,
+				"SELECT_ALL_COMMENT": False,
 				"REPLY2BROADCASTER": False,
 				"VIEW_BROADCASTER": False,
 				"OPEN_LIVE": False,
