@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 17:40+0900\n"
+"POT-Creation-Date: 2020-12-31 19:46+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -670,7 +670,7 @@ msgid "通信用アカウントが設定されていません。"
 msgstr ""
 
 #: views\accountManager.py:150
-msgid "ブラウザでの操作をを待っています..."
+msgid "ブラウザでの操作を待っています..."
 msgstr ""
 
 #: views\accountManager.py:151 views\changeDevice.py:45

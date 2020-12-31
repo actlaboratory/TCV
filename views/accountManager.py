@@ -147,7 +147,7 @@ class waitingDialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.staticText = self.creator.staticText(_("ブラウザでの操作をを待っています..."))
+		self.staticText = self.creator.staticText(_("ブラウザでの操作を待っています..."))
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"), self.onCancelBtn)
 
 	def onCancelBtn(self, event):
