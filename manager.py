@@ -677,7 +677,7 @@ class manager:
 		return current + count >= 35
 
 	def refreshReplaceSettings(self):
-		if hasattr(self, "connection") == False or self.MainView.commentList == None:
+		if hasattr(self, "connection") == False or hasattr(self.MainView, "commentList") == False or self.MainView.commentList == None:
 			return
 		tmplst = deepcopy(self.connection.comments)
 		if len(tmplst) > self.MainView.commentList.GetItemCount():
