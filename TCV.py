@@ -26,6 +26,9 @@ def exchandler(type, exc, tb):
 		winsound.Beep(1000, 1000)
 		globalVars.app.say(str(msg[-1]))
 	else:
+		if hasattr(globalVars.app, "Manager"):
+			for i in globalVars.app.Manager.timers:
+				i.Stop()
 		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance.")
 		sys.exit(-1)
 
