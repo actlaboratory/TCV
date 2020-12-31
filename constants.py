@@ -8,6 +8,7 @@ import wx
 APP_NAME="TCV"
 APP_FULL_NAME = "Twitcasting Viewer"
 APP_VERSION="0.0.1"
+APP_LAST_RELEASE_DATE = "2020-12-31"
 APP_ICON = None
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
