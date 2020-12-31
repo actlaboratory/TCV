@@ -85,7 +85,7 @@ msgstr "Connection failed."
 
 #: manager.py:107
 msgid "接続。現在配信中。"
-msgstr "Connected. Currently on the air."
+msgstr "Connected. Currently streaming."
 
 #: manager.py:110
 msgid "タイマー開始。"
@@ -106,7 +106,7 @@ msgstr "Connected. currently offline."
 
 #: manager.py:129
 msgid "完走に必用なコインが集まっています。"
-msgstr "There are a lot of coins that are required for completing the live."
+msgstr "There are enough coins for completing the live."
 
 #: manager.py:242
 #, python-format
@@ -135,7 +135,7 @@ msgstr "comments: %d items"
 
 #: manager.py:250
 msgid "現在配信中"
-msgstr "currently on the air"
+msgstr "currently streaming"
 
 #: manager.py:252
 msgid "オフライン"
@@ -164,7 +164,7 @@ msgstr "None"
 
 #: manager.py:295
 msgid "コメントが入力されていません。"
-msgstr "Comment is not typed."
+msgstr "Comment is blank."
 
 #: manager.py:298
 #, python-format
@@ -198,7 +198,7 @@ msgstr "You can continue this live by %d coins."
 
 #: manager.py:364
 msgid "30分が経過しました。"
-msgstr "30 minutes elapsed."
+msgstr "30 minutes have elapsed."
 
 #: manager.py:389
 #, python-format
@@ -238,41 +238,41 @@ msgstr "Category changed: %s"
 
 #: manager.py:442
 msgid "次のライブが開始されました。"
-msgstr "New broadcasting started."
+msgstr "New live started."
 
 #: manager.py:492
 #, python-format
 msgid "%sをもらいました。"
-msgstr "You took %s."
+msgstr "You got %s."
 
 #: manager.py:494
 #, python-format
 msgid "%(name)sを%(count)i個もらいました。"
-msgstr "You took %(count)i %(name)s."
+msgstr "You got %(count)i %(name)s."
 
 #: manager.py:502
 #, python-format
 msgid "%(user)sさんから%(item)sをもらいました。"
-msgstr "You took %(item)s from %(user)s."
+msgstr "You got %(item)s from %(user)s."
 
 #: manager.py:504
 #, python-format
 msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
-msgstr "You took %(count)i %(item)s from %(user)s."
+msgstr "You got %(count)i %(item)s from %(user)s."
 
 #: manager.py:507
 #, python-format
 msgid "%(user)sさんなどから%(item)sをもらいました。"
-msgstr "You took %(item)s from %(user)s and others."
+msgstr "You got %(item)s from %(user)s and others."
 
 #: manager.py:509
 #, python-format
 msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
-msgstr "You took %(count)i %(item)s from %(user)s and others."
+msgstr "You got %(count)i %(item)s from %(user)s and others."
 
 #: manager.py:517
 msgid "コイン消費"
-msgstr "Coin was used"
+msgstr "Coin used"
 
 #: manager.py:521
 #, python-format
@@ -281,7 +281,7 @@ msgstr "You got %d coins."
 
 #: manager.py:523
 msgid "完走に必要なコインが集まりました。"
-msgstr "The coins needed to finish the live have been collected."
+msgstr "Got enough coins to complete the live."
 
 #: manager.py:535
 #, python-format
@@ -329,8 +329,8 @@ msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
 msgstr ""
-"Access token is invalid. Add your account again from Account Manager on "
-"Settings menu."
+"Access token is invalid. Add your account again from Account Manager in "
+"the settings menu."
 
 #: manager.py:712
 msgid ""
@@ -349,13 +349,13 @@ msgstr ""
 #: manager.py:716 twitcasting\accountManager.py:39
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
-"Currently you cannot use TCV. Contact to the developer for further "
+"Currently you cannot use TCV. Please contact the developer for further "
 "assistance."
 
 #: manager.py:731
 #, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
-msgstr "An error has occured. Details: %s"
+msgstr "An error has occured during the communication between TwitCasting. Details: %s"
 
 #: menuItemsDic.py:14
 msgid "接続(&C)"
@@ -447,7 +447,7 @@ msgstr "Shortcut &Key Settings"
 
 #: menuItemsDic.py:40
 msgid "グローバルホットキーの設定(&G)"
-msgstr "&Global Hot Keys Settings"
+msgstr "&Global Hotkeys Settings"
 
 #: menuItemsDic.py:41
 msgid "効果音設定(&I)"
@@ -459,7 +459,7 @@ msgstr "&Comment replace settings"
 
 #: menuItemsDic.py:43
 msgid "表示名置換設定(&N)"
-msgstr "&Name replace settings"
+msgstr "&Display Name replace settings"
 
 #: menuItemsDic.py:44
 msgid "アカウントマネージャ(&M)"
@@ -483,7 +483,7 @@ msgstr "&Version Info"
 
 #: menuItemsDic.py:50
 msgid "更新を確認(&C)"
-msgstr "&Check for update"
+msgstr "&Check for updates"
 
 #: menuItemsDic.py:52
 msgid "読み上げの中断"
@@ -491,7 +491,7 @@ msgstr "stop speech"
 
 #: TCV.py:13
 msgid "通信に失敗しました。インターネット接続を確認してください。"
-msgstr "Connection failed. Check the internet connection."
+msgstr "Connection failed. Check your internet connection."
 
 #: update.py:47 update.py:56 update.py:70 update.py:76 update.py:87
 #: update.py:95 update.py:100 update.py:105 update.py:157
@@ -507,7 +507,7 @@ msgstr "You cannot use update with this version."
 msgid ""
 "アップデータが利用できません。お手数ですが、再度ソフトウェアをダウンロードし"
 "てください。"
-msgstr "Updater is not available. Download this software again."
+msgstr "Updater is not available. Please download this software again."
 
 #: update.py:70
 msgid "サーバーへの通信がタイムアウトしました。"
@@ -515,7 +515,7 @@ msgstr "Connection timed out."
 
 #: update.py:76
 msgid "サーバーへの接続に失敗しました。インターネット接続などをご確認ください"
-msgstr "Connection failed. Check the internet connection."
+msgstr "Connection failed. Please check your internet connection."
 
 #: update.py:82
 msgid "サーバーとの通信中に不明なエラーが発生しました。"
@@ -532,12 +532,12 @@ msgstr "This is the latest version."
 #: update.py:100
 msgid "リクエストパラメーターが不正です。開発者まで連絡してください"
 msgstr ""
-"Request parameter is invalid. Contact to the developer for further "
+"Request parameter is invalid. Please contact the developer for further "
 "assistance."
 
 #: update.py:105
 msgid "アップデーターが登録されていません。開発者に連絡してください。"
-msgstr "Updater is not registered. Contact to the developer."
+msgstr "Updater is not registered. Please contact the developer."
 
 #: update.py:157
 msgid ""
@@ -552,7 +552,7 @@ msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
 msgstr ""
-"Unavailable tokens were found. Add accounts again by using account manager "
+"Some acounts have automatically been deleted because of invalid token. Add accounts again by using account manager "
 "on settings menu."
 
 #: twitcasting\accountManager.py:46
@@ -662,7 +662,7 @@ msgstr "add account"
 
 #: views\accountManager.py:88
 msgid "ブラウザを開いてアカウントの認証作業を行います。よろしいですか？"
-msgstr "Open browser and start authentication. Are you sure?"
+msgstr "TCV will open your default browser for Authorization. Do you wish to continue?"
 
 #: views\accountManager.py:128
 msgid "通信用アカウントが設定されていません。"
@@ -670,7 +670,7 @@ msgstr "Connection account is not configured."
 
 #: views\accountManager.py:150
 msgid "ブラウザでの操作をを待っています..."
-msgstr "waiting..."
+msgstr "waiting for browser..."
 
 #: views\accountManager.py:151 views\changeDevice.py:45
 #: views\changeSpeechOutput.py:43 views\connect.py:35
@@ -740,7 +740,7 @@ msgstr "speech output"
 
 #: views\commentReplace.py:13 views\commentReplace.py:45
 msgid "置換元文字列"
-msgstr "base string"
+msgstr "string to match"
 
 #: views\commentReplace.py:14
 msgid "置換文字列"
@@ -760,11 +760,11 @@ msgstr "normal"
 
 #: views\commentReplace.py:29
 msgid "コメント文字列置換設定"
-msgstr "comment replace setting"
+msgstr "comment replace settings"
 
 #: views\commentReplace.py:45
 msgid "置換先文字列"
-msgstr "new string"
+msgstr "string to replace"
 
 #: views\commentReplace.py:45
 msgid "正規表現を使用"
@@ -781,7 +781,7 @@ msgstr "connect"
 
 #: views\connect.py:31
 msgid "接続先"
-msgstr "user"
+msgstr "user or URL to connect"
 
 #: views\fontManager.py:25
 msgid ""
@@ -890,7 +890,7 @@ msgstr "when comment posted"
 
 #: views\indicatorSoundSettings.py:25
 msgid "コメント入力中検知時"
-msgstr "when currently-typing user is recognized"
+msgstr "when someone is typing"
 
 #: views\indicatorSoundSettings.py:26
 msgid "残り時間通知時"
@@ -898,7 +898,7 @@ msgstr "when notifying remaining time"
 
 #: views\indicatorSoundSettings.py:27
 msgid "プログラムの起動時"
-msgstr "When program is launched"
+msgstr "When this program is launched"
 
 #: views\indicatorSoundSettings.py:28
 msgid "その他の通知音"
@@ -922,7 +922,7 @@ msgstr "Indicator sound settings"
 
 #: views\indicatorSoundSettings.py:88 views\indicatorSoundSettings.py:116
 msgid "効果音ファイルが見つかりません。設定内容を確認してください。"
-msgstr "File could not be found. Please check the settings."
+msgstr "Sound file could not be found. Please check the settings."
 
 #: views\indicatorSoundSettings.py:98
 msgid "ファイルパス"
@@ -934,7 +934,7 @@ msgstr "browse"
 
 #: views\indicatorSoundSettings.py:108 views\settings.py:285
 msgid "効果音ファイルを選択"
-msgstr "select indicator sound file"
+msgstr "select a sound file"
 
 #: views\keyConfig.py:31
 msgid "キー設定"
@@ -979,7 +979,7 @@ msgstr "%s cannot include space and equals sign."
 #: views\KeyValueSettingDialogBase.py:319
 #, python-format
 msgid "%(v1)sと%(v2)sに同じショートカットキー%(key)sが設定されています。\n"
-msgstr "%(v1)s and %(v2)s has same shortcut key %(key)s.\n"
+msgstr "%(v1)s and %(v2)s have same shortcut key %(key)s.\n"
 
 #: views\KeyValueSettingDialogBase.py:322
 #, python-format
@@ -994,7 +994,7 @@ msgid ""
 "設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセー"
 "ジを作者へご連絡ください。\n"
 msgstr ""
-"Configured shortcut %s cannot be recognized. Contact to the developer for "
+"Configured shortcut %s cannot be recognized. Please contact the developer for "
 "further assistance.\n"
 
 #: views\KeyValueSettingDialogBase.py:328
@@ -1007,7 +1007,7 @@ msgstr ""
 
 #: views\main.py:72
 msgid "接続履歴を開く"
-msgstr "open history"
+msgstr "open connection history"
 
 #: views\main.py:73
 msgid "お気に入り一覧を開く"
@@ -1043,7 +1043,7 @@ msgstr "account"
 
 #: views\main.py:111
 msgid "コメント内容"
-msgstr "message"
+msgstr "comment"
 
 #: views\main.py:114
 msgid "送信"
@@ -1064,7 +1064,7 @@ msgid ""
 "ご確認ください。\n"
 "\n"
 msgstr ""
-"hot key is invalid. Please check for conflicting / unusable key combinations "
+"hotkey is invalid. Please check for conflicting / unusable key combinations "
 "and key names.\n"
 "\n"
 
@@ -1090,7 +1090,7 @@ msgstr "Global Hot Keys Settings"
 
 #: views\main.py:222
 msgid "バージョン情報"
-msgstr "version information"
+msgstr "version info"
 
 #: views\main.py:258 views\main.py:267 views\viewFavorites.py:46
 #: views\viewFavorites.py:54 views\viewHistory.py:44
@@ -1099,7 +1099,7 @@ msgstr "confirmation"
 
 #: views\main.py:258
 msgid "選択中のコメントを削除しますか？"
-msgstr "Are you sure to delete selected comment?"
+msgstr "Are you sure you want to delete the selected comment?"
 
 #: views\main.py:265
 msgid "すでに登録されています。"
@@ -1108,15 +1108,15 @@ msgstr "It is already registered."
 #: views\main.py:267
 #, python-format
 msgid "%sのライブをお気に入りに追加しますか？"
-msgstr "Are you sure to add %s to favorites?"
+msgstr "Are you sure you want to add %s to your favorites?"
 
 #: views\main.py:383
 msgid "接続履歴がありません。"
-msgstr "No items."
+msgstr "No items in your connection history."
 
 #: views\main.py:394
 msgid "お気に入りライブが登録されていません。"
-msgstr "No items."
+msgstr "No items in your favorites."
 
 #: views\main.py:494
 msgid "readme.txtが見つかりません。"
@@ -1132,11 +1132,11 @@ msgstr "do not post"
 
 #: views\settings.py:31
 msgid "配信者へ返信する形式で投稿"
-msgstr "post as reply to broadcaster"
+msgstr "post as reply to the broadcaster"
 
 #: views\settings.py:32
 msgid "通常の投稿"
-msgstr "post as normally"
+msgstr "post normally"
 
 #: views\settings.py:35
 msgid "常に30分を計測"
@@ -1160,7 +1160,7 @@ msgstr "read all"
 
 #: views\settings.py:42
 msgid "自分宛の返信のみ読み上げる"
-msgstr "read only when mentioned to me"
+msgstr "read only when mentioned to you"
 
 #: views\settings.py:46
 msgid "ユーザ名を読み上げる"
@@ -1172,7 +1172,7 @@ msgstr "read display name"
 
 #: views\settings.py:51 views\viewHistory.py:24
 msgid "接続履歴"
-msgstr "history"
+msgstr "connection history"
 
 #: views\settings.py:52 views\viewFavorites.py:17 views\viewFavorites.py:24
 msgid "お気に入り"
@@ -1184,7 +1184,7 @@ msgstr "remaining time"
 
 #: views\settings.py:57
 msgid "接続先ユーザ名"
-msgstr "connected user name"
+msgstr "currently connected to"
 
 #: views\settings.py:73
 msgid "カテゴリ選択"
@@ -1216,11 +1216,11 @@ msgstr "&Timer type"
 
 #: views\settings.py:84
 msgid "接続履歴の保持件数(&H)"
-msgstr "max count of &History"
+msgstr "max count of connection &History"
 
 #: views\settings.py:85
 msgid "規定の接続先(&A)"
-msgstr "default &Account"
+msgstr "default &User / URL to connect on startup"
 
 #: views\settings.py:86
 msgid "接続時にブラウザでライブを開く(&O)"
@@ -1268,11 +1268,11 @@ msgstr "read my comment"
 
 #: views\settings.py:105
 msgid "自分のライブ"
-msgstr "my live"
+msgstr "your live"
 
 #: views\settings.py:106
 msgid "自分以外のライブ"
-msgstr "other live"
+msgstr "someone else's live"
 
 #: views\settings.py:110
 msgid "読み上げ-2"
@@ -1304,7 +1304,7 @@ msgstr "read received it&ems"
 
 #: views\settings.py:117
 msgid "アイテム投稿者の読み方"
-msgstr "read item posted user"
+msgstr "read the user who sent an item"
 
 #: views\settings.py:120
 msgid "ライブ再生"
@@ -1352,7 +1352,7 @@ msgstr "only &Domain"
 
 #: views\settings.py:140
 msgid "URLを次の文字列に置き換える(&R)"
-msgstr "&Replace URLs to following string"
+msgstr "&Replace URLs to the following string"
 
 #: views\settings.py:143
 msgid "ネットワーク"
@@ -1360,7 +1360,7 @@ msgstr "network"
 
 #: views\settings.py:144
 msgid "起動時に更新を確認(&U)"
-msgstr "Automatically Check for &Update"
+msgstr "Automatically Check for &Updates on startup"
 
 #: views\settings.py:145
 msgid "プロキシサーバーの情報を手動で設定する(&M)"
@@ -1372,7 +1372,7 @@ msgstr "server URL"
 
 #: views\settings.py:147
 msgid "ポート番号"
-msgstr "port"
+msgstr "port number"
 
 #: views\updateDialog.py:22
 #, python-format
@@ -1399,7 +1399,7 @@ msgstr "There is an important information."
 
 #: views\updateDialog.py:43
 msgid "お知らせページへ"
-msgstr "Go to information page"
+msgstr "Go to the information page"
 
 #: views\updateDialog.py:58
 msgid "アップデートをダウンロード中..."
@@ -1416,7 +1416,7 @@ msgstr "display name"
 
 #: views\userNamereplace.py:20
 msgid "表示名置換設定"
-msgstr "name replace settings"
+msgstr "display name replace settings"
 
 #: views\viewBroadcaster.py:18
 msgid "配信者の情報"
@@ -1432,7 +1432,7 @@ msgstr "bio"
 
 #: views\viewBroadcaster.py:35
 msgid "配信者のTwitterを開く"
-msgstr "Open Twitter of broadcaster"
+msgstr "Open the broadcaster's Twitter"
 
 #: views\viewComment.py:18
 msgid "コメントの詳細"
@@ -1444,7 +1444,7 @@ msgstr "comment body"
 
 #: views\viewComment.py:37
 msgid "投稿者のTwitterを開く"
-msgstr "open twitter of posted user"
+msgstr "open the poster's Twitter"
 
 #: views\viewFavorites.py:32
 msgid "全て削除(&C)"
@@ -1453,11 +1453,11 @@ msgstr "&Clear all"
 #: views\viewFavorites.py:46
 #, python-format
 msgid "%sのライブをお気に入りから削除してもよろしいですか？"
-msgstr "Are you sure to delete %s from favorites?"
+msgstr "Are you sure you want to delete %s from your favorites?"
 
 #: views\viewFavorites.py:54
 msgid "お気に入りの内容を全て消去します。よろしいですか？"
-msgstr "All favorites will be deleted. Are you sure?"
+msgstr "All items in your favorites will be deleted. Are you sure you want to continue?"
 
 #: views\viewHistory.py:17
 msgid "履歴"
@@ -1469,7 +1469,7 @@ msgstr "&Clear history"
 
 #: views\viewHistory.py:44
 msgid "接続履歴を全て消去します。よろしいですか？"
-msgstr "History will be cleared. Are you sure?"
+msgstr "Your connection history will be cleared. Are you sure you want to continue?"
 
 #~ msgid "プロキシ設定"
 #~ msgstr "proxy settings"
