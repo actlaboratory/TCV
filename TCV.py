@@ -19,15 +19,15 @@ def exchandler(type, exc, tb):
 		sys.exit(-1)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))
+	f=open("errorLog.txt", "a")
+	f.writelines(msg)
+	f.close()
 	if hasattr(sys, "frozen") == False:
 		winsound.Beep(1000, 1000)
 		globalVars.app.say(str(msg[-1]))
 	else:
 		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance.")
 		sys.exit(-1)
-	f=open("errorLog.txt", "a")
-	f.writelines(msg)
-	f.close()
 
 #global schope
 sys.excepthook=exchandler
