@@ -20,6 +20,9 @@ CopyLight (c)2019-2021 Kazto Kitabatake,ACT laboratory All lights reserved.
 	pytags　(https://pypi.org/project/pytags/)
 	AccessibleOutput2　(https://pypi.org/project/accessible-output2/)
 
+・MS-PL
+	DotNetZip
+
 その他、個別のライセンスに基づく複数のライブラリ
 
 各ライセンスは、licensesディレクトリ内に格納されています。
