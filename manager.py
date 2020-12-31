@@ -241,7 +241,7 @@ class manager:
 		result = [
 			_("タイトル：%s") %(self.connection.movieInfo["movie"]["title"]),
 			_("テロップ：%s") %(self.connection.movieInfo["movie"]["subtitle"]),
-			_("閲覧者数：現在%d人、合計%d人") %(self.connection.movieInfo["movie"]["current_view_count"], self.connection.movieInfo["movie"]["total_view_count"]),
+			_("閲覧者数：現在%(current)d人、合計%(total)d人") %{"current": self.connection.movieInfo["movie"]["current_view_count"], "total": self.connection.movieInfo["movie"]["total_view_count"]},
 			_("カテゴリ：%s") %(self.connection.categoryName),
 			_("コメント：%d件") %(self.connection.movieInfo["movie"]["comment_count"]),
 			self.connection.movieInfo["broadcaster"]["screen_id"]
@@ -390,7 +390,7 @@ class manager:
 		elif remainingTime.second == 0:
 			string = _("残り%s分です。") %(str(remainingTime.minute))
 		else:
-			string = _("残り%s分%s秒です。") %(str(remainingTime.minute), str(remainingTime.second))
+			string = _("残り%(minutes)s分%(seconds)s秒です。") %{"minutes": str(remainingTime.minute), "seconds": str(remainingTime.second)}
 		globalVars.app.say(string)
 
 	def timer(self, event):
@@ -491,7 +491,7 @@ class manager:
 						if count == 1:
 							globalVars.app.say(_("%sをもらいました。") %name)
 						else:
-							globalVars.app.say(_("%sを%i個もらいました。") %(name, count))
+							globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
 					else:
 						if readItemPostedUser == 1:
 							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
@@ -499,14 +499,14 @@ class manager:
 							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
 						if multiUser == False:
 							if count == 1:
-								globalVars.app.say(_("%sさんから%sをもらいました。") %(users[0], name))
+								globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
 							else:
-								globalVars.app.say(_("%sさんから%sを%i個もらいました。") %(users[0], name, count))
+								globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
 						else:
 							if count == 1:
-								globalVars.app.say(_("%sさんなどから%sをもらいました。") %(users[0], name))
+								globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
 							else:
-								globalVars.app.say(_("%sさんなどから%sを%i個もらいました。") %(users[0], name, count))
+								globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
 			if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
 				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 			self.oldItem = self.newItem
