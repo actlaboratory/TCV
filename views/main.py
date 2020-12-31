@@ -103,7 +103,7 @@ class MainView(BaseView):
 
 		self.events.commentSelected(None)
 
-		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None)
+		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None, sizerFlag=wx.LEFT,margin=20)
 		for i in globalVars.app.accountManager.tokens:
 			self.selectAccount.Append("%s(%s)" %(i["user"]["screen_id"], i["user"]["name"]))
 		self.selectAccount.SetSelection(0)
