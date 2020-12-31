@@ -69,6 +69,9 @@ class Main(AppBase.MainBase):
 		if self.Manager.livePlayer != None:
 			self.Manager.livePlayer.exit()
 
+		# アップデート
+		globalVars.update.runUpdate()
+
 		#戻り値は無視される
 		return 0
 
