@@ -26,6 +26,7 @@ from logging import getLogger
 import simpleDialog
 from .base import *
 
+import views.versionDialog
 import views.connect
 import views.viewComment
 import views.viewBroadcaster
@@ -219,7 +220,7 @@ class Events(BaseEvents):
 				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
 				self.parent.applyHotKey()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
-			simpleDialog.dialog(_("バージョン情報"), "%s(%s) Version %s.\nCopyright (C) %s %s" %(constants.APP_NAME, constants.APP_FULL_NAME,constants.APP_VERSION, constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
+			views.versionDialog.versionDialog()
 		#接続
 		elif selected==menuItemsStore.getRef("CONNECT"):
 			self.connect()

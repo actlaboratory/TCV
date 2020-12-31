@@ -9,10 +9,11 @@ APP_NAME="TCV"
 APP_FULL_NAME = "Twitcasting Viewer"
 APP_VERSION="0.0.1"
 APP_ICON = None
-APP_COPYRIGHT_YEAR="2020"
-APP_DEVELOPERS="ACT Laboratory"
+APP_COPYRIGHT_YEAR="2019-2021"
+APP_LICENSE="GNU General Public License2.0 or later"
+APP_DEVELOPERS="Kazto Kitabatake, ACT Laboratory"
 APP_DEVELOPERS_URL="https://actlab.org/"
-APP_DETAILS_URL=""
+APP_DETAILS_URL="https://actlab.org/software/TCV"
 APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRIGHT_YEAR, APP_DEVELOPERS)
 
 #対応言語
