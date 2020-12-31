@@ -290,6 +290,9 @@ class manager:
 			self.MainView.itemList.SetSelection(cursor)
 
 	def postComment(self, commentBody, idx):
+		if self.connection.movieId == None:
+			simpleDialog.errorDialog(_("コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿できません。"))
+			return
 		commentBody = commentBody.strip()
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
