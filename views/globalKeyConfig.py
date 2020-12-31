@@ -49,7 +49,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		newKeys={}
 		for name,keys in self.values[0].items():
 			for key in keys.split("/"):
-				newKeys.setdefault(key, set()).add(name)
+				newKeys.setdefault(key.upper(), set()).add(name)
 		for key,names in newKeys.items():
 			if key==_("なし"):
 				continue
@@ -103,6 +103,8 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 				if ret[1]!="":
 					ret[1]+="/"
 				ret[1]+=self.edits[i].GetLineText(0)
+		if ret[1]=="":
+			ret[1]=_("なし")
 		ret[2]=self.edits[6].GetLineText(0)
 		return ret
 

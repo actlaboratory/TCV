@@ -6,6 +6,8 @@
 import logging
 import os
 import sys
+
+from wx.core import EnableTopLevelWindows
 import wx
 import re
 import ctypes
@@ -35,6 +37,7 @@ import views.settings
 import views.indicatorSoundSettings
 import views.commentReplace
 import views.userNamereplace
+import views.changeSpeechOutput
 import webbrowser
 import constants
 
@@ -94,6 +97,8 @@ class MainView(BaseView):
 		self.commentList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.events.commentSelected)
 		self.commentList.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.events.commentSelected)
 		self.commentList.Bind(wx.EVT_CONTEXT_MENU, self.events.commentContextMenu)
+		self.commentList.Bind(wx.EVT_SET_FOCUS, self.events.commentSelected)
+		self.commentList.Bind(wx.EVT_KILL_FOCUS, self.events.commentSelected)
 
 		self.events.commentSelected(None)
 
@@ -161,22 +166,22 @@ class Menu(BaseMenu):
 			["PLAY", "STOP", "VOLUME_UP", "VOLUME_DOWN", "RESET_VOLUME", "CHANGE_DEVICE"])
 		#コメントメニュー
 		self.RegisterMenuCommand(self.hCommentMenu,
-			["COPY_COMMENT", "VIEW_COMMENT", "REPLY2SELECTED_COMMENT", "DELETE_SELECTED_COMMENT", "REPLY2BROADCASTER"])
+			["COPY_COMMENT", "VIEW_COMMENT", "REPLY2SELECTED_COMMENT", "DELETE_SELECTED_COMMENT", "SELECT_ALL_COMMENT", "REPLY2BROADCASTER"])
 		#ライブメニュー
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING"])
+			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
 		#メニューバーの生成
-		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + "(&F)")
-		self.hMenuBar.Append(self.hPlayMenu,_("再生") + "(&P)")
-		self.hMenuBar.Append(self.hCommentMenu,_("コメント") + "(&C)")
-		self.hMenuBar.Append(self.hLiveMenu,_("ライブ") + "(&L)")
-		self.hMenuBar.Append(self.hSettingsMenu,_("設定") + "(&S)")
-		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ") + "(&H)")
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.hPlayMenu,_("再生(&P)"))
+		self.hMenuBar.Append(self.hCommentMenu,_("コメント(&C)"))
+		self.hMenuBar.Append(self.hLiveMenu,_("ライブ(&L)"))
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定(&S)"))
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
 class Events(BaseEvents):
@@ -240,6 +245,9 @@ class Events(BaseEvents):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.comments[self.parent.commentList.GetFocusedItem()]["from_user"]["screen_id"] + " ")
 			self.parent.commentBodyEdit.SetInsertionPointEnd()
 			self.parent.commentBodyEdit.SetFocus()
+		#全てのコメントを選択
+		elif selected == menuItemsStore.getRef("SELECT_ALL_COMMENT"):
+			self.selectAllComment()
 		#配信者に返信
 		elif selected==menuItemsStore.getRef("REPLY2BROADCASTER"):
 			self.parent.commentBodyEdit.SetValue("@" + globalVars.app.Manager.connection.movieInfo["broadcaster"]["screen_id"] + " ")
@@ -289,8 +297,13 @@ class Events(BaseEvents):
 			if os.path.exists(file) == False:
 				file = file.replace("syswow64", "system32")
 			os.system(file)
+		#読み上げ出力先の変更
+		elif selected == menuItemsStore.getRef("CHANGE_SPEECH_OUTPUT"):
+			d = views.changeSpeechOutput.Dialog()
+			d.Initialize()
+			d.Show()
 		#コメント送信（ホットキー）
-		elif selected==menuItemsStore.getRef("POIST_COMMENT"):
+		elif selected==menuItemsStore.getRef("POST_COMMENT"):
 			self.postComment(None)
 		#再生
 		elif selected==menuItemsStore.getRef("PLAY"):
@@ -481,14 +494,12 @@ class Events(BaseEvents):
 			simpleDialog.errorDialog(_("readme.txtが見つかりません。"))
 
 	def commentSelected(self, event):
-		if event == None:
-			enable = False
-		else:
-			enable = True
+		enable = self.parent.commentList.HasFocus() == True and self.parent.commentList.GetFirstSelected() >= 0
 		self.parent.menu.EnableMenu("COPY_COMMENT", enable)
 		self.parent.menu.EnableMenu("VIEW_COMMENT", enable)
 		self.parent.menu.EnableMenu("REPLY2SELECTED_COMMENT", enable)
 		self.parent.menu.EnableMenu("DELETE_SELECTED_COMMENT", enable)
+		self.parent.menu.EnableMenu("SELECT_ALL_COMMENT", self.parent.commentList.HasFocus() == True)
 
 	#コメント一覧でのコンテキストメニュー
 	#Shift+F10の場合はメニューイベント経由の為event=Noneとなる
@@ -512,3 +523,16 @@ class Events(BaseEvents):
 		self.parent.menu.RegisterMenuCommand(contextMenu,
 			["REPLY2BROADCASTER", "VIEW_BROADCASTER", "ADD_FAVORITES"])
 		self.parent.liveInfo.PopupMenu(contextMenu,event)
+
+	def selectAllComment(self):
+		for i in range(self.parent.commentList.GetItemCount()):
+			self.parent.commentList.Select(i)
+
+	def  focusChanged(self, event):
+		import winsound
+		winsound.Beep(440, 100)
+		enable = self.parent.commentList.HasFocus()
+		self.parent.menu.EnableMenu("COPY_COMMENT", enable)
+		self.parent.menu.EnableMenu("VIEW_COMMENT", enable)
+		self.parent.menu.EnableMenu("REPLY2SELECTED_COMMENT", enable)
+		self.parent.menu.EnableMenu("DELETE_SELECTED_COMMENT", enable)

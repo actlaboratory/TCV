@@ -138,7 +138,9 @@ class manager:
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
 		self.typingTimer.Start(typingTimerInterval)
-		self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
+		titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+		if titlebar == constants.TB_USER:
+			self.MainView.hFrame.SetTitle("%s - %s" %(self.connection.userId, constants.APP_NAME))
 		if globalVars.app.config.getboolean("livePlay", "autoPlay", False) == True and self.connection.movieInfo["movie"]["hls_url"] != None:
 			self.play()
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
@@ -322,8 +324,12 @@ class manager:
 			self.MainView.commentList.DeleteItem(selected)
 
 	def copyComment(self):
-		selected = self.MainView.commentList.GetFocusedItem()
-		pyperclip.copy(self.readComment(self.getCommentdata(self.connection.comments[selected]), False))
+		selections = self.MainView.commentList.getItemSelections()
+		tmplst = deepcopy(self.connection.comments)
+		if len(tmplst) > self.MainView.commentList.GetItemCount():
+			tmplst = tmplst[-1 * self.MainView.commentList.GetItemCount():]
+		items = [self.readComment(self.getCommentdata(tmplst[i]), False) for i in selections]
+		pyperclip.copy("\n\n".join(items))
 
 	def resetTimer(self, speech = False):
 		if speech == True:
@@ -399,6 +405,9 @@ class manager:
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
 				self.countDownTimer.Stop()
+				titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+				if titlebar == constants.TB_TIME:
+					self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
 				self.resetTimer()
 				self.commentTimer.Stop()
 				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
@@ -418,10 +427,14 @@ class manager:
 				else:
 					globalVars.app.say(_("テロップ変更。"))
 					globalVars.app.say(self.newSubtitle)
+				if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["othersound"])
 			self.oldSubtitle = self.newSubtitle
 			self.newCategory = self.connection.categoryName
 			if self.newCategory != self.oldCategory and self.connection.isLive == True:
 				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
+				if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["othersound"])
 			self.oldCategory = self.newCategory
 			self.newMovieId = self.connection.movieId
 			if self.newMovieId != self.oldMovieId:
@@ -514,6 +527,17 @@ class manager:
 			try:
 				self.MainView.liveInfo.SetString(1, _("経過時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S")))
 				self.MainView.liveInfo.SetString(2, _("残り時間：%s") %(self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
+				titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+				if titlebar == constants.TB_TIME:
+					t = self.formatTime(self.remainingTime)
+					map = {"hour": t.hour, "minute": t.minute, "second": t.second}
+					if t.hour > 0:
+						disp = _("残り%(hour)d時間%(minute)d分%(second)d秒") %map
+					elif t.minute > 0:
+						disp = _("残り%(minute)d分%(second)d秒") %map
+					else:
+						disp = _("残り%(second)d秒") %map
+				self.MainView.hFrame.SetTitle(disp)
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
@@ -614,6 +638,7 @@ class manager:
 				"VOLUME_UP": False,
 				"VOLUME_DOWN": False,
 				"RESET_VOLUME": False,
+				"COPY_COMMENT": False,
 				"VIEW_COMMENT": False,
 				"REPLY2SELECTED_COMMENT": False,
 				"DELETE_SELECTED_COMMENT": False,
