@@ -552,7 +552,7 @@ msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
 msgstr ""
-"Some acounts have automatically been deleted because of invalid token. Add accounts again by using account manager "
+"Some accounts have automatically been deleted because of invalid token. Add accounts again by using account manager "
 "on settings menu."
 
 #: twitcasting\accountManager.py:46
