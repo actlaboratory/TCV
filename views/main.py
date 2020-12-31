@@ -349,7 +349,7 @@ class Events(BaseEvents):
 			obj = event.GetEventObject()
 			webbrowser.open(obj.GetLabel(selected))
 		#ユーザー情報のコンテキストメニューを開く
-		elif selected==menuItemsStore.getRef("POPUP_USER_INFO"):
+		elif selected==menuItemsStore.getRef("POPUP_OPEN_USER_INFO"):
 			return self.userInfoContextMenu()
 
 
