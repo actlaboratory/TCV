@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 19:46+0900\n"
-"PO-Revision-Date: 2020-12-31 22:29+0900\n"
+"PO-Revision-Date: 2020-12-31 23:35+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -934,11 +934,11 @@ msgstr "when notifying remaining time"
 
 #: views\indicatorSoundSettings.py:27
 msgid "プログラムの起動時"
-msgstr "When this program is launched"
+msgstr "when this program is launched"
 
 #: views\indicatorSoundSettings.py:28
 msgid "その他の通知音"
-msgstr "Other notification sounds"
+msgstr "other notification sounds"
 
 #: views\indicatorSoundSettings.py:53 views\indicatorSoundSettings.py:98
 msgid "再生する"

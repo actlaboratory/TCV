@@ -3,6 +3,7 @@
 #Copyright (C) 2020 yamahubuki <itiro.ishino@gmail.com>
 #Note: All comments except these top lines will be written in Japanese. 
 
+import pprint
 import views.KeyValueSettingDialogBase
 import wx
 import globalVars
