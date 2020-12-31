@@ -55,3 +55,7 @@ UPDATER_WAKE_WORD = "hello"
 TB_NONE = 0
 TB_TIME = 1
 TB_USER = 2
+# TwitCasting
+TC_CID = "1266762249164619776.c2ee817dafca62d74bbf3af6a7db1ad1c3cce334bef6e3af82c146d670f3cefe"
+TC_URL = "https://apiv2.twitcasting.tv/oauth2/authorize"
+TC_PORT = 9338
