@@ -435,7 +435,7 @@ class Events(BaseEvents):
 			if refName in keys:
 				keyData[title]=keys[refName]
 			else:
-				keyData[title]="なし"
+				keyData[title]=_("なし")
 			menuData[title]=refName
 
 		entries=[]

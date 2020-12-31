@@ -5,9 +5,14 @@ import requests
 from bs4 import BeautifulSoup
 import simpleDialog
 import re
+import globalVars
 
 def getItem(screenId):
-	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitems&u=" + screenId + "&hl=ja").text
+	if globalVars.app.config["general"]["language"] == "ja-JP":
+		lang = "ja"
+	else:
+		lang = "en"
+	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitems&u=" + screenId + "&hl=" + lang).text
 	soup = BeautifulSoup(req, "lxml")
 	itemName = []
 	itemCount = []
@@ -42,7 +47,11 @@ def getItem(screenId):
 def getItemPostedUser(screenId, itemId):
 	if itemId == "MP":
 		return
-	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=ja").text
+	if globalVars.app.config["general"]["language"] == "ja-JP":
+		lang = "ja"
+	else:
+		lang = "en"
+	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=" + lang).text
 	soup = BeautifulSoup(req, "lxml")
 	tmp = soup.find_all("span", class_ = "tw-user-name-screen-name")
 	result = []

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 19:46+0900\n"
-"PO-Revision-Date: 2020-12-31 19:47+0900\n"
+"PO-Revision-Date: 2020-12-31 22:29+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -1236,7 +1236,9 @@ msgstr "Items displayed in the c&onnect dialog"
 
 #: views\settings.py:81
 msgid "接続時に読み込むコメント数(&C)"
-msgstr "number of &Comments which will be loaded initially"
+msgstr ""
+"number of &Comments\n"
+"which will be loaded initially"
 
 #: views\settings.py:82
 msgid "コメントのSNS投稿(&S)"
