@@ -258,13 +258,15 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["commentReplaceSpecial"]["deleteprotcolname"] = self.deleteprotcolname.GetValue()
 		globalVars.app.config["commentReplaceSpecial"]["onlydomain"] = self.onlydomain.GetValue()
 		globalVars.app.config["commentReplaceSpecial"]["url"] = self.url.GetValue()
-		globalVars.app.Manager.refreshReplaceSettings()
+		if hasattr(globalVars.app, "Manager"):
+			globalVars.app.Manager.refreshReplaceSettings()
 
 		# network
 		globalVars.app.config["general"]["update"] = self.update.GetValue()
 		globalVars.app.config["proxy"]["usemanualsetting"] = self.usemanualsetting.GetValue()
 		globalVars.app.config["proxy"]["server"] = self.server.GetValue()
 		globalVars.app.config["proxy"]["port"] = self.port.GetValue()
+		globalVars.app.setProxyEnviron()
 
 	def browse(self, event):
 		obj = event.GetEventObject()

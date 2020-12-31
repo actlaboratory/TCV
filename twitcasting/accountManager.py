@@ -30,7 +30,23 @@ class AccountManager:
 		rm = []
 		cl = []
 		for i in range(0, len(self.tokens)):
-			result = self.verifyCredentials(i)
+			while True:
+				try:
+					result = self.verifyCredentials(i)
+					break
+				except:
+					d = wx.MessageDialog(None, _("通信に失敗しました。インターネット接続を確認してください。\nプロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要があります。\n今すぐプロキシ設定を開きますか？"), _("通信エラー"), style=wx.YES_NO|wx.NO_DEFAULT|wx.ICON_ERROR)
+					result = d.ShowModal()
+					if result == wx.ID_NO:
+						globalVars.app.hMainView.events.Exit()
+						return
+					import views.settings
+					d = views.settings.settingsDialog()
+					d.Initialize()
+					for i in range(d.tab.GetPageCount()):
+						if d.tab.GetPageText(i) == _("ネットワーク"):
+							d.tab.SetSelection(i)
+					d.Show()
 			if result == 1000:
 				rm.append(i)
 			elif result == 2000:
