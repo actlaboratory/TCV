@@ -21,13 +21,13 @@ APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRI
 SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 #各種ファイル名
-SETTING_FILE_NAME="settings.ini"
-KEYMAP_FILE_NAME="keymap.ini"
+SETTING_FILE_NAME="data\\settings.ini"
+KEYMAP_FILE_NAME="data\\keymap.ini"
 LOG_PREFIX="TCV"
 LOG_FILE_NAME="TCV.log"
-HISTORY_FILE_NAME="history.dat"
-FAVORITES_FILE_NAME="favorites.dat"
-TOKEN_FILE_NAME="accounts.dat"
+HISTORY_FILE_NAME="data\\history.dat"
+FAVORITES_FILE_NAME="data\\favorites.dat"
+TOKEN_FILE_NAME="data\\accounts.dat"
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5
@@ -41,7 +41,7 @@ FULL_CHECKED=wx.CHK_CHECKED
 #メニュー
 MENU_URL_FIRST=10000
 #build関連定数
-BASE_PACKAGE_URL = "https://github.com/actlaboratory/TCV/releases/download/0.5.0/TCV-0.5.0.zip"#差分元のpackageのファイル名またはURL
+BASE_PACKAGE_URL = None
 PACKAGE_CONTAIN_ITEMS = ("fx",)#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "tcv.py"#起動用ファイルを指定
