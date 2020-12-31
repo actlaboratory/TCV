@@ -537,7 +537,7 @@ class manager:
 						disp = _("残り%(minute)d分%(second)d秒") %map
 					else:
 						disp = _("残り%(second)d秒") %map
-				self.MainView.hFrame.SetTitle(disp)
+					self.MainView.hFrame.SetTitle(disp)
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
