@@ -1197,7 +1197,7 @@ msgid "接続履歴の保持件数(&H)"
 msgstr ""
 
 #: views\settings.py:85
-msgid "規定の接続先(&A)"
+msgid "規定の接続先ユーザー名/URL(&U)"
 msgstr ""
 
 #: views\settings.py:86
