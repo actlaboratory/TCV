@@ -1112,15 +1112,8 @@ msgstr "&Help"
 msgid "グローバルホットキーの設定"
 msgstr "Global Hot Keys Settings"
 
-<<<<<<< HEAD
-#: views\main.py:222
-msgid "バージョン情報"
-msgstr "version info"
-
 #: views\main.py:258 views\main.py:267 views\viewFavorites.py:46
-=======
 #: views\main.py:259 views\main.py:268 views\viewFavorites.py:46
->>>>>>> master
 #: views\viewFavorites.py:54 views\viewHistory.py:44
 msgid "確認"
 msgstr "confirmation"
