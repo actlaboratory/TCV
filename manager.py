@@ -319,13 +319,24 @@ class manager:
 		return time
 
 	def deleteComment(self):
-		selected = self.MainView.commentList.GetFocusedItem()
-		result = self.connection.deleteComment(self.connection.comments[selected])
-		if result == False:
-			simpleDialog.errorDialog(_("コメントの削除に失敗しました。このコメントを削除する権限がありません。"))
-		else:
-			del self.connection.comments[selected]
-			self.MainView.commentList.DeleteItem(selected)
+		tmp = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
+		selected = self.MainView.commentList.getItemSelections()
+		selected.reverse()
+		success = 0
+		fail = 0
+		for i in selected:
+			lstidx = i + tmp
+			result = self.connection.deleteComment(self.connection.comments[lstidx])
+			if result == False:
+				fail += 1
+			else:
+				success += 1
+				del self.connection.comments[lstidx]
+				self.MainView.commentList.DeleteItem(i)
+		if success == 0:
+			simpleDialog.errorDialog(_("コメントの削除に失敗しました。これらのコメントを削除する権限がありません。"))
+		elif success > 0 and fail > 0:
+			simpleDialog.errorDialog(_("%d個のコメントを削除できませんでした。これらのコメントを削除する権限がありません。") %fail)
 
 	def copyComment(self):
 		selections = self.MainView.commentList.getItemSelections()
