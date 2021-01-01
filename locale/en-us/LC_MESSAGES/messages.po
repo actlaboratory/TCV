@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-01 15:35+0900\n"
-"PO-Revision-Date: 2021-01-01 15:37+0900\n"
+"POT-Creation-Date: 2021-01-01 17:24+0900\n"
+"PO-Revision-Date: 2021-01-01 17:26+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -17,11 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: app.py:40
+#: app.py:22
+msgid "閲覧者が$viewers人に増えました。"
+msgstr "Viewers count increased to $viewers."
+
+#: app.py:24
+msgid "閲覧者が$viewers人に減りました。"
+msgstr "Viewers count decreased to $viewers."
+
+#: app.py:44
 msgid "アカウント登録"
 msgstr "account registration"
 
-#: app.py:40 manager.py:76
+#: app.py:44 manager.py:76
 msgid ""
 "アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウン"
 "トマネージャからアカウントの登録を行ってください。"
@@ -29,7 +37,7 @@ msgstr ""
 "No accounts are registered. Add at least one account from account manager on "
 "settings menu."
 
-#: app.py:45
+#: app.py:49
 msgid ""
 "期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャか"
 "ら、再度アカウントの追加を行ってください。"

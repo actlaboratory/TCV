@@ -42,9 +42,9 @@ class DefaultSettings:
 			"readMentions_myLive": 1,
 			"readMentions_otherLive": 1,
 			"readViewersIncreased": True,
-			"viewersIncreasedAnnouncement": "閲覧者が$viewers人に増えました。",
+			"viewersIncreasedAnnouncement": "@@@viewers_increased@@@",
 			"readViewersDecreased": True,
-			"viewersDecreasedAnnouncement": "閲覧者が$viewers人に減りました。",
+			"viewersDecreasedAnnouncement": "@@@viewers_decreased@@@",
 			"readTypingUser": False,
 			"readReceivedItems": True,
 			"readItemPostedUser": 0
