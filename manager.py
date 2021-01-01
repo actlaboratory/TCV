@@ -594,11 +594,11 @@ class manager:
 
 	def volumeUp(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
-		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL))
+		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL), True)
 
 	def volumeDown(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) - 10)
-		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL))
+		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL), True)
 
 	def resetVolume(self):
 		self.livePlayer.setAmp(100)
