@@ -31,8 +31,13 @@ class Dialog(BaseDialog):
 		self.iText,self.static=self.creator.comboEdit(_("接続先"), items)
 		self.iText.SetValue(globalVars.app.config["general"]["defaultConnectAccount"])
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
-		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
+		self.bOk=self.creator.okbutton(_("ＯＫ"), self.onOkBtn)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
 	def GetData(self):
 		return self.iText.GetValue()
+
+	def onOkBtn(self, event):
+		if len(self.iText.GetValue().strip()) == 0:
+			return
+		event.Skip()
