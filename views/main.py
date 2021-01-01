@@ -387,10 +387,13 @@ class Events(BaseEvents):
 		if len(globalVars.app.Manager.history) == 0:
 			simpleDialog.errorDialog(_("接続履歴がありません。"))
 			return
+		self.parent.Clear()
 		viewHistoryDialog = views.viewHistory.Dialog()
 		viewHistoryDialog.Initialize()
 		ret = viewHistoryDialog.Show()
-		if ret==wx.ID_CANCEL: return
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
 		globalVars.app.Manager.connect(globalVars.app.Manager.history[viewHistoryDialog.GetValue()])
 		return
 
@@ -398,10 +401,13 @@ class Events(BaseEvents):
 		if len(globalVars.app.Manager.favorites) == 0:
 			simpleDialog.errorDialog(_("お気に入りライブが登録されていません。"))
 			return
+		self.parent.Clear()
 		viewFavoritesDialog = views.viewFavorites.Dialog()
 		viewFavoritesDialog.Initialize()
 		ret = viewFavoritesDialog.Show()
-		if ret==wx.ID_CANCEL: return
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
 		globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
 		return
 
