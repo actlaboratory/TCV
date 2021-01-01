@@ -372,10 +372,13 @@ class Events(BaseEvents):
 			self.parent.hFrame.Close()
 
 	def connect(self, event=None):
+		self.parent.Clear()
 		connectDialog = views.connect.Dialog()
 		connectDialog.Initialize()
 		ret = connectDialog.Show()
-		if ret==wx.ID_CANCEL: return
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
 		user = str(connectDialog.GetValue())
 		globalVars.app.Manager.connect(user)
 		return

@@ -76,6 +76,7 @@ class manager:
 				simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			else:
 				simpleDialog.errorDialog(_("通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのアカウントマネージャから通信用アカウントの設定を行ってください。"))
+			self.MainView.createStartScreen()
 			return
 		self.connection = twitcasting.connection.connection(userId)
 		self.errorCheckTimer = wx.Timer(self.evtHandler, evtError)
@@ -83,8 +84,8 @@ class manager:
 		self.errorCheckTimer.Start(errorCheckTimerInterval)
 		if self.connection.connected == False:
 			simpleDialog.errorDialog(_("接続に失敗しました。"))
+			self.MainView.createStartScreen()
 			return
-		self.MainView.Clear()
 		self.MainView.createMainView()
 		self.changeMenuState(True)
 		globalVars.app.say(userId)
