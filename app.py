@@ -50,6 +50,7 @@ class Main(AppBase.MainBase):
 				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 				self.hasAccountIssue = True
 		if len(sys.argv) == 2:
+			self.hMainView.Clear()
 			self.Manager.connect(sys.argv[1])
 			return True
 		if self.hasAccountIssue == False and self.config.getboolean("general", "autoconnect", True) == True:
