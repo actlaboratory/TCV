@@ -35,7 +35,7 @@ class dialog(baseDialog.BaseDialog):
         textList.append("")
         textList.append(constants.APP_COPYRIGHT_MESSAGE)
 
-        self.info, dummy = versionCreator.inputbox("", defaultValue="\r\n".join(textList), style=wx.TE_MULTILINE|wx.TE_READONLY | wx.TE_NO_VSCROLL, sizerFlag=wx.EXPAND, x=750, textLayout=None)
+        self.info, dummy = versionCreator.inputbox("", defaultValue="\r\n".join(textList), style=wx.TE_MULTILINE|wx.TE_READONLY | wx.TE_NO_VSCROLL | wx.BORDER_RAISED, sizerFlag=wx.EXPAND, x=750, textLayout=None)
         f = self.info.GetFont()
         f.SetPointSize(f.GetPointSize() * (2/3))
         self.info.SetFont(f)
