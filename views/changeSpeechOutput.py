@@ -30,7 +30,7 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL,margin=20)
 		self.reader, self.static = self.creator.listCtrl(_("出力先"), None, wx.LC_REPORT|wx.LC_SINGLE_SEL,sizerFlag=wx.EXPAND)
-		self.reader.InsertColumn(0, _("出力先"))
+		self.reader.InsertColumn(0, _("出力先"),width=450)
 		self.reader.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onOkBtn)
 		reader = list(self.readerSelection.values())
 		for i in reader:
