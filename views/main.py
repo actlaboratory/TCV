@@ -493,8 +493,8 @@ class Events(BaseEvents):
 		globalVars.app.Manager.refreshReplaceSettings()
 
 	def help(self, event=None):
-		if os.path.isfile("readme.txt"):
-			os.startfile("readme.txt")
+		if os.path.isfile(constants.README_FILE_NAME):
+			os.startfile(constants.README_FILE_NAME)
 		else:
 			simpleDialog.errorDialog(_("readme.txtが見つかりません。"))
 
