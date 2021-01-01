@@ -11,13 +11,9 @@ dist/
 *.exp
 *.lib
 *.spec
-AccessToken.txt
 result.txt
 exec.bat
 /.vs
 /twitcasting/memo.txt
-/history.dat
-/favorites.dat
-/twitcasting/client.txt
+*.dat
 .vscode/launch.json
-accounts.dat

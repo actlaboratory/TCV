@@ -87,11 +87,11 @@ class MainView(BaseView):
 
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=2)
 		self.c1=creator.GetSizer()
-		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
-		self.commentList.InsertColumn(0, _("名前"))
-		self.commentList.InsertColumn(1, _("投稿"))
-		self.commentList.InsertColumn(2, _("時刻"))
-		self.commentList.InsertColumn(3, _("ユーザ名"))
+		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT | wx.BORDER_RAISED, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
+		self.commentList.InsertColumn(0, _("名前"),width=200)
+		self.commentList.InsertColumn(1, _("投稿"),width=370)
+		self.commentList.InsertColumn(2, _("時刻"),width=150)
+		self.commentList.InsertColumn(3, _("ユーザ名"),width=200	)
 		self.commentList.loadColumnInfo(self.identifier,"commentList")
 
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
@@ -103,7 +103,7 @@ class MainView(BaseView):
 
 		self.events.commentSelected(None)
 
-		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None)
+		self.selectAccount, self.selectAccountstatic = self.creator.combobox(_("コメント投稿アカウント"), [], textLayout=None, sizerFlag=wx.LEFT,margin=20)
 		for i in globalVars.app.accountManager.tokens:
 			self.selectAccount.Append("%s(%s)" %(i["user"]["screen_id"], i["user"]["name"]))
 		self.selectAccount.SetSelection(0)
@@ -349,7 +349,7 @@ class Events(BaseEvents):
 			obj = event.GetEventObject()
 			webbrowser.open(obj.GetLabel(selected))
 		#ユーザー情報のコンテキストメニューを開く
-		elif selected==menuItemsStore.getRef("POPUP_USER_INFO"):
+		elif selected==menuItemsStore.getRef("POPUP_OPEN_USER_INFO"):
 			return self.userInfoContextMenu()
 
 
@@ -372,10 +372,13 @@ class Events(BaseEvents):
 			self.parent.hFrame.Close()
 
 	def connect(self, event=None):
+		self.parent.Clear()
 		connectDialog = views.connect.Dialog()
 		connectDialog.Initialize()
 		ret = connectDialog.Show()
-		if ret==wx.ID_CANCEL: return
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
 		user = str(connectDialog.GetValue())
 		globalVars.app.Manager.connect(user)
 		return
@@ -384,10 +387,13 @@ class Events(BaseEvents):
 		if len(globalVars.app.Manager.history) == 0:
 			simpleDialog.errorDialog(_("接続履歴がありません。"))
 			return
+		self.parent.Clear()
 		viewHistoryDialog = views.viewHistory.Dialog()
 		viewHistoryDialog.Initialize()
 		ret = viewHistoryDialog.Show()
-		if ret==wx.ID_CANCEL: return
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
 		globalVars.app.Manager.connect(globalVars.app.Manager.history[viewHistoryDialog.GetValue()])
 		return
 
@@ -395,10 +401,13 @@ class Events(BaseEvents):
 		if len(globalVars.app.Manager.favorites) == 0:
 			simpleDialog.errorDialog(_("お気に入りライブが登録されていません。"))
 			return
+		self.parent.Clear()
 		viewFavoritesDialog = views.viewFavorites.Dialog()
 		viewFavoritesDialog.Initialize()
 		ret = viewFavoritesDialog.Show()
-		if ret==wx.ID_CANCEL: return
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
 		globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
 		return
 
@@ -435,7 +444,7 @@ class Events(BaseEvents):
 			if refName in keys:
 				keyData[title]=keys[refName]
 			else:
-				keyData[title]="なし"
+				keyData[title]=_("なし")
 			menuData[title]=refName
 
 		entries=[]
@@ -490,8 +499,8 @@ class Events(BaseEvents):
 		globalVars.app.Manager.refreshReplaceSettings()
 
 	def help(self, event=None):
-		if os.path.isfile("readme.txt"):
-			os.startfile("readme.txt")
+		if os.path.isfile(constants.README_FILE_NAME):
+			os.startfile(constants.README_FILE_NAME)
 		else:
 			simpleDialog.errorDialog(_("readme.txtが見つかりません。"))
 

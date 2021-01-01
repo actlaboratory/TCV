@@ -76,6 +76,7 @@ class manager:
 				simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			else:
 				simpleDialog.errorDialog(_("通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのアカウントマネージャから通信用アカウントの設定を行ってください。"))
+			self.MainView.createStartScreen()
 			return
 		self.connection = twitcasting.connection.connection(userId)
 		self.errorCheckTimer = wx.Timer(self.evtHandler, evtError)
@@ -83,8 +84,8 @@ class manager:
 		self.errorCheckTimer.Start(errorCheckTimerInterval)
 		if self.connection.connected == False:
 			simpleDialog.errorDialog(_("接続に失敗しました。"))
+			self.MainView.createStartScreen()
 			return
-		self.MainView.Clear()
 		self.MainView.createMainView()
 		self.changeMenuState(True)
 		globalVars.app.say(userId)
@@ -290,6 +291,9 @@ class manager:
 			self.MainView.itemList.SetSelection(cursor)
 
 	def postComment(self, commentBody, idx):
+		if self.connection.movieId == None:
+			simpleDialog.errorDialog(_("コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿できません。"))
+			return
 		commentBody = commentBody.strip()
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
@@ -315,13 +319,24 @@ class manager:
 		return time
 
 	def deleteComment(self):
-		selected = self.MainView.commentList.GetFocusedItem()
-		result = self.connection.deleteComment(self.connection.comments[selected])
-		if result == False:
-			simpleDialog.errorDialog(_("コメントの削除に失敗しました。このコメントを削除する権限がありません。"))
-		else:
-			del self.connection.comments[selected]
-			self.MainView.commentList.DeleteItem(selected)
+		tmp = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
+		selected = self.MainView.commentList.getItemSelections()
+		selected.reverse()
+		success = 0
+		fail = 0
+		for i in selected:
+			lstidx = i + tmp
+			result = self.connection.deleteComment(self.connection.comments[lstidx])
+			if result == False:
+				fail += 1
+			else:
+				success += 1
+				del self.connection.comments[lstidx]
+				self.MainView.commentList.DeleteItem(i)
+		if success == 0:
+			simpleDialog.errorDialog(_("コメントの削除に失敗しました。これらのコメントを削除する権限がありません。"))
+		elif success > 0 and fail > 0:
+			simpleDialog.errorDialog(_("%d個のコメントを削除できませんでした。これらのコメントを削除する権限がありません。") %fail)
 
 	def copyComment(self):
 		selections = self.MainView.commentList.getItemSelections()
@@ -537,7 +552,7 @@ class manager:
 						disp = _("残り%(minute)d分%(second)d秒") %map
 					else:
 						disp = _("残り%(second)d秒") %map
-				self.MainView.hFrame.SetTitle(disp)
+					self.MainView.hFrame.SetTitle(disp)
 			except:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
@@ -591,11 +606,11 @@ class manager:
 
 	def volumeUp(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) + 10)
-		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL))
+		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL), True)
 
 	def volumeDown(self):
 		self.livePlayer.setAmp(self.livePlayer.getConfig(PLAYER_CONFIG_AMP) - 10)
-		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL))
+		globalVars.app.say(_("音量%d") %self.livePlayer.getConfig(PLAYER_CONFIG_AMPVOL), True)
 
 	def resetVolume(self):
 		self.livePlayer.setAmp(100)
@@ -674,7 +689,7 @@ class manager:
 		return current + count >= 35
 
 	def refreshReplaceSettings(self):
-		if hasattr(self, "connection") == False or self.MainView.commentList == None:
+		if hasattr(self, "connection") == False or hasattr(self.MainView, "commentList") == False or self.MainView.commentList == None:
 			return
 		tmplst = deepcopy(self.connection.comments)
 		if len(tmplst) > self.MainView.commentList.GetItemCount():

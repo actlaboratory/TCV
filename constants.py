@@ -7,7 +7,8 @@ import wx
 #アプリケーション基本情報
 APP_NAME="TCV"
 APP_FULL_NAME = "Twitcasting Viewer"
-APP_VERSION="0.0.1"
+APP_VERSION="3.0.0"
+APP_LAST_RELEASE_DATE = "2021-01-01"
 APP_ICON = None
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
@@ -20,13 +21,14 @@ APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRI
 SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 #各種ファイル名
-SETTING_FILE_NAME="settings.ini"
-KEYMAP_FILE_NAME="keymap.ini"
+SETTING_FILE_NAME="data\\settings.ini"
+KEYMAP_FILE_NAME="data\\keymap.ini"
 LOG_PREFIX="TCV"
 LOG_FILE_NAME="TCV.log"
-HISTORY_FILE_NAME="history.dat"
-FAVORITES_FILE_NAME="favorites.dat"
-TOKEN_FILE_NAME="accounts.dat"
+HISTORY_FILE_NAME="data\\history.dat"
+FAVORITES_FILE_NAME="data\\favorites.dat"
+TOKEN_FILE_NAME="data\\accounts.dat"
+README_FILE_NAME = "readme.txt"
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5
@@ -40,7 +42,7 @@ FULL_CHECKED=wx.CHK_CHECKED
 #メニュー
 MENU_URL_FIRST=10000
 #build関連定数
-BASE_PACKAGE_URL = "https://github.com/actlaboratory/TCV/releases/download/0.5.0/TCV-0.5.0.zip"#差分元のpackageのファイル名またはURL
+BASE_PACKAGE_URL = "https://github.com/actlaboratory/TCV/releases/download/TCV-latestcommit/TCV-snapshot.zip"
 PACKAGE_CONTAIN_ITEMS = ("fx",)#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "tcv.py"#起動用ファイルを指定
@@ -55,3 +57,7 @@ UPDATER_WAKE_WORD = "hello"
 TB_NONE = 0
 TB_TIME = 1
 TB_USER = 2
+# TwitCasting
+TC_CID = "1266762249164619776.c2ee817dafca62d74bbf3af6a7db1ad1c3cce334bef6e3af82c146d670f3cefe"
+TC_URL = "https://apiv2.twitcasting.tv/oauth2/authorize"
+TC_PORT = 9338

@@ -78,7 +78,7 @@ class AccountManager:
 			pickle.dump(tmplst, f)
 
 	def add(self):
-		manager = implicitGrantManager.ImplicitGrantManager("ckitabatake1013.48f1b75c1355aad8230bf1f36eb0c29b1ef04cf8047c41c1a03a566b545342fd","https://apiv2.twitcasting.tv/oauth2/authorize",9338)
+		manager = implicitGrantManager.ImplicitGrantManager(constants.TC_CID, constants.TC_URL, constants.TC_PORT)
 		l="ja"
 		try:
 			l=globalVars.app.config["general"]["language"].split("_")[0].lower()

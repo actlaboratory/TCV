@@ -18,6 +18,10 @@ def _import():
 class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
+		if self.config["autoReadingOptions"]["viewersIncreasedAnnouncement"] == "@@@viewers_increased@@@":
+			self.config["autoReadingOptions"]["viewersIncreasedAnnouncement"] = _("閲覧者が$viewers人に増えました。")
+		if self.config["autoReadingOptions"]["viewersDecreasedAnnouncement"] == "@@@viewers_decreased@@@":
+			self.config["autoReadingOptions"]["viewersDecreasedAnnouncement"] = _("閲覧者が$viewers人に減りました。")
 
 	def initialize(self):
 		_import()
@@ -46,6 +50,7 @@ class Main(AppBase.MainBase):
 				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 				self.hasAccountIssue = True
 		if len(sys.argv) == 2:
+			self.hMainView.Clear()
 			self.Manager.connect(sys.argv[1])
 			return True
 		if self.hasAccountIssue == False and self.config.getboolean("general", "autoconnect", True) == True:
