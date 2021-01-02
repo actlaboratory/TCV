@@ -29,7 +29,7 @@ def exchandler(type, exc, tb):
 		if hasattr(globalVars.app, "Manager"):
 			for i in globalVars.app.Manager.timers:
 				i.Stop()
-		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance.")
+		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
 		sys.exit(-1)
 
 #global schope
