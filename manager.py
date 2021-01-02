@@ -17,6 +17,9 @@ import pyperclip
 import webbrowser
 import sys
 from copy import deepcopy
+import os
+import traceback
+from logging import getLogger
 
 evtComment = 0
 evtLiveInfo = 1
@@ -40,6 +43,7 @@ favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
 
 class manager:
 	def __init__(self, MainView):
+		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "manager"))
 		self.MainView = MainView
 		self.evtHandler = wx.EvtHandler()
 		self.evtHandler.Bind(wx.EVT_TIMER, self.timer)
@@ -97,7 +101,12 @@ class manager:
 		historyMax = globalVars.app.config.getint("general", "historyMax", 10)
 		if historyMax >= 0 and len(self.history) > historyMax:
 			del self.history[historyMax:]
-		historyData.write_text("\n".join(self.history))
+		try:
+			historyData.write_text("\n".join(self.history))
+		except Exception as e:
+			simpleDialog.errorDialog(_("履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.HISTORY_FILE_NAME))
+			traceback.print_exc()
+			self.log.warning("Failed to write history data. detail:" + traceback.format_exc())
 		try:
 			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 		except:
@@ -378,21 +387,41 @@ class manager:
 
 	def clearHistory(self):
 		self.history.clear()
-		historyData.write_text("\n".join(self.history))
+		try:
+			historyData.write_text("\n".join(self.history))
+		except Exception as e:
+			simpleDialog.errorDialog(_("履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.HISTORY_FILE_NAME))
+			traceback.print_exc()
+			self.log.warning("Failed to write history data. detail:" + traceback.format_exc())
 
 	def addFavorites(self):
 		self.favorites.insert(0, self.connection.userId.lower())
 		self.favorites.sort()
-		favoritesData.write_text("\n".join(self.favorites))
+		try:
+			favoritesData.write_text("\n".join(self.favorites))
+		except Exception as e:
+			simpleDialog.errorDialog(_("お気に入りデータの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.FAVORITES_FILE_NAME))
+			traceback.print_exc()
+			self.log.warning("Failed to write favorites data. detail:" + traceback.format_exc())
 
 	def deleteFavorites(self, index):
 		del self.favorites[index]
 		self.favorites.sort()
-		favoritesData.write_text("\n".join(self.favorites))
+		try:
+			favoritesData.write_text("\n".join(self.favorites))
+		except Exception as e:
+			simpleDialog.errorDialog(_("お気に入りデータの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.FAVORITES_FILE_NAME))
+			traceback.print_exc()
+			self.log.warning("Failed to write favorites data. detail:" + traceback.format_exc())
 
 	def clearFavorites(self):
 		self.favorites.clear()
-		favoritesData.write_text("\n".join(self.favorites))
+		try:
+			favoritesData.write_text("\n".join(self.favorites))
+		except Exception as e:
+			simpleDialog.errorDialog(_("お気に入りデータの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.FAVORITES_FILE_NAME))
+			traceback.print_exc()
+			self.log.warning("Failed to write favorites data. detail:" + traceback.format_exc())
 
 	def sayRemainingTime(self):
 		if globalVars.app.config.getboolean("fx", "playTimersound") == True:

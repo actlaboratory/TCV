@@ -16,9 +16,13 @@ import copy
 import views.accountManager
 import sys
 import globalVars
+from logging import getLogger
+import os
+import traceback
 
 class AccountManager:
 	def __init__(self):
+		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.accountManager"))
 		self.tokens = []
 		f = pathlib.Path(constants.TOKEN_FILE_NAME)
 		if f.exists() == False:
@@ -74,8 +78,13 @@ class AccountManager:
 		tmplst = copy.deepcopy(self.tokens)
 		for i in tmplst:
 			i["access_token"] = base64.b64encode(i["access_token"].encode()).decode()
-		with open(constants.TOKEN_FILE_NAME, "wb") as f:
-			pickle.dump(tmplst, f)
+		try:
+			with open(constants.TOKEN_FILE_NAME, "wb") as f:
+				pickle.dump(tmplst, f)
+		except Exception as e:
+			simpleDialog.errorDialog(_("アカウント情報の書き込みに失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.TOKEN_FILE_NAME))
+			traceback.print_exc()
+			self.log.warning("Failed to save account information. detail: %s" %traceback.format_exc())
 
 	def add(self):
 		manager = implicitGrantManager.ImplicitGrantManager(constants.TC_CID, constants.TC_URL, constants.TC_PORT)

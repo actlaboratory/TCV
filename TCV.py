@@ -19,9 +19,12 @@ def exchandler(type, exc, tb):
 		sys.exit(-1)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))
-	f=open("errorLog.txt", "a")
-	f.writelines(msg)
-	f.close()
+	try:
+		f=open("errorLog.txt", "a")
+		f.writelines(msg)
+		f.close()
+	except:
+		pass
 	if hasattr(sys, "frozen") == False:
 		winsound.Beep(1000, 1000)
 		globalVars.app.say(str(msg[-1]))
@@ -58,7 +61,11 @@ import constants
 import pathlib
 
 def main():
-	if os.path.exists("errorLog.txt"): os.remove("errorLog.txt")
+	if os.path.exists("errorLog.txt"):
+		try:
+			os.remove("errorLog.txt")
+		except:
+			pass
 	app=application.Main()
 	globalVars.app=app
 	app.initialize()
