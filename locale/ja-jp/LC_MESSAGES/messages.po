@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-01 17:24+0900\n"
+"POT-Creation-Date: 2021-01-02 20:48+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "アカウント登録"
 msgstr ""
 
-#: app.py:44 manager.py:76
+#: app.py:44 manager.py:80
 msgid ""
 "アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウン"
 "トマネージャからアカウントの登録を行ってください。"
@@ -39,6 +39,12 @@ msgstr ""
 msgid ""
 "期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャか"
 "ら、再度アカウントの追加を行ってください。"
+msgstr ""
+
+#: AppBase.py:45
+msgid ""
+"ログ機能の初期化に失敗しました。下記のファイルへのアクセスが可能であることを"
+"確認してください。"
 msgstr ""
 
 #: keymapHandlerBase.py:689 keymapHandlerBase.py:719
@@ -75,88 +81,94 @@ msgstr ""
 msgid "この組み合わせは別の用途で予約されているため、利用できません。"
 msgstr ""
 
-#: manager.py:78
+#: manager.py:82
 msgid ""
 "通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのア"
 "カウントマネージャから通信用アカウントの設定を行ってください。"
 msgstr ""
 
-#: manager.py:86
+#: manager.py:90
 msgid "接続に失敗しました。"
 msgstr ""
 
-#: manager.py:108
+#: manager.py:107 manager.py:393
+msgid ""
+"履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを"
+"確認してください。"
+msgstr ""
+
+#: manager.py:117
 msgid "接続。現在配信中。"
 msgstr ""
 
-#: manager.py:111
+#: manager.py:120
 msgid "タイマー開始。"
 msgstr ""
 
-#: manager.py:113 manager.py:256 manager.py:544
+#: manager.py:122 manager.py:263 manager.py:571
 #, python-format
 msgid "残り時間：%s"
 msgstr ""
 
-#: manager.py:115 manager.py:258 manager.py:259 manager.py:557 manager.py:558
+#: manager.py:124 manager.py:265 manager.py:266 manager.py:584 manager.py:585
 msgid "配信時間が４時間を超えているため、タイマーを使用できません。"
 msgstr ""
 
-#: manager.py:118
+#: manager.py:127
 msgid "接続。現在オフライン。"
 msgstr ""
 
-#: manager.py:130
+#: manager.py:139
 msgid "完走に必用なコインが集まっています。"
 msgstr ""
 
-#: manager.py:243
+#: manager.py:250
 #, python-format
 msgid "タイトル：%s"
 msgstr ""
 
-#: manager.py:244
+#: manager.py:251
 #, python-format
 msgid "テロップ：%s"
 msgstr ""
 
-#: manager.py:245
+#: manager.py:252
 #, python-format
 msgid "閲覧者数：現在%(current)d人、合計%(total)d人"
 msgstr ""
 
-#: manager.py:246
+#: manager.py:253
 #, python-format
 msgid "カテゴリ：%s"
 msgstr ""
 
-#: manager.py:247
+#: manager.py:254
 #, python-format
 msgid "コメント：%d件"
 msgstr ""
 
-#: manager.py:251
+#: manager.py:258
 msgid "現在配信中"
 msgstr ""
 
-#: manager.py:253
+#: manager.py:260
 msgid "オフライン"
 msgstr ""
 
-#: manager.py:255 manager.py:543
+#: manager.py:262 manager.py:570
 #, python-format
 msgid "経過時間：%s"
 msgstr ""
 
-#: manager.py:261
+#: manager.py:268
 msgid "コラボ可能"
 msgstr ""
 
-#: manager.py:263
+#: manager.py:270
 msgid "コラボ不可"
 msgstr ""
 
-#: manager.py:265 views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
+#: manager.py:272 views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
@@ -165,203 +177,209 @@ msgstr ""
 msgid "なし"
 msgstr ""
 
-#: manager.py:295
+#: manager.py:302
 msgid ""
 "コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿"
 "できません。"
 msgstr ""
 
-#: manager.py:299
+#: manager.py:306
 msgid "コメントが入力されていません。"
 msgstr ""
 
-#: manager.py:302
+#: manager.py:309
 #, python-format
 msgid ""
 "１４０字を超えるコメントは投稿できません。現在%s文字のコメントが入力されてい"
 "ます。"
 msgstr ""
 
-#: manager.py:307
+#: manager.py:314
 msgid "コメント文字数が１４０字を超えているため、コメントを投稿できません。"
 msgstr ""
 
-#: manager.py:310
+#: manager.py:317
 #, python-format
 msgid "エラーが発生しました。詳細：%s"
 msgstr ""
 
-#: manager.py:337
+#: manager.py:344
 msgid ""
 "コメントの削除に失敗しました。これらのコメントを削除する権限がありません。"
 msgstr ""
 
-#: manager.py:339
+#: manager.py:346
 #, python-format
 msgid ""
 "%d個のコメントを削除できませんでした。これらのコメントを削除する権限がありま"
 "せん。"
 msgstr ""
 
-#: manager.py:351
+#: manager.py:358
 msgid "タイマーリセット。"
 msgstr ""
 
-#: manager.py:370 manager.py:377
+#: manager.py:377 manager.py:384
 #, python-format
 msgid "コインが%d枚あるので延長可能です。"
 msgstr ""
 
-#: manager.py:379
+#: manager.py:386
 msgid "30分が経過しました。"
 msgstr ""
 
-#: manager.py:404
+#: manager.py:403 manager.py:413 manager.py:422
+msgid ""
+"お気に入りデータの保存に失敗しました。以下のファイルへのアクセスが可能である"
+"ことを確認してください。"
+msgstr ""
+
+#: manager.py:431
 #, python-format
 msgid "残り%s秒です。"
 msgstr ""
 
-#: manager.py:406
+#: manager.py:433
 #, python-format
 msgid "残り%s分です。"
 msgstr ""
 
-#: manager.py:408
+#: manager.py:435
 #, python-format
 msgid "残り%(minutes)s分%(seconds)s秒です。"
 msgstr ""
 
-#: manager.py:421
+#: manager.py:448
 msgid "ライブ終了。"
 msgstr ""
 
-#: manager.py:432
+#: manager.py:459
 msgid "ライブ開始。"
 msgstr ""
 
-#: manager.py:441
+#: manager.py:468
 msgid "テロップ削除"
 msgstr ""
 
-#: manager.py:443
+#: manager.py:470
 msgid "テロップ変更。"
 msgstr ""
 
-#: manager.py:450
+#: manager.py:477
 #, python-format
 msgid "カテゴリ変更：%s"
 msgstr ""
 
-#: manager.py:457
+#: manager.py:484
 msgid "次のライブが開始されました。"
 msgstr ""
 
-#: manager.py:507
+#: manager.py:534
 #, python-format
 msgid "%sをもらいました。"
 msgstr ""
 
-#: manager.py:509
+#: manager.py:536
 #, python-format
 msgid "%(name)sを%(count)i個もらいました。"
 msgstr ""
 
-#: manager.py:517
+#: manager.py:544
 #, python-format
 msgid "%(user)sさんから%(item)sをもらいました。"
 msgstr ""
 
-#: manager.py:519
+#: manager.py:546
 #, python-format
 msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
 msgstr ""
 
-#: manager.py:522
+#: manager.py:549
 #, python-format
 msgid "%(user)sさんなどから%(item)sをもらいました。"
 msgstr ""
 
-#: manager.py:524
+#: manager.py:551
 #, python-format
 msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
 msgstr ""
 
-#: manager.py:532
+#: manager.py:559
 msgid "コイン消費"
-msgstr ""
-
-#: manager.py:536
-#, python-format
-msgid "コインが%d枚集まりました。"
-msgstr ""
-
-#: manager.py:538
-msgid "完走に必要なコインが集まりました。"
-msgstr ""
-
-#: manager.py:550
-#, python-format
-msgid "残り%(hour)d時間%(minute)d分%(second)d秒"
-msgstr ""
-
-#: manager.py:552
-#, python-format
-msgid "残り%(minute)d分%(second)d秒"
-msgstr ""
-
-#: manager.py:554
-#, python-format
-msgid "残り%(second)d秒"
 msgstr ""
 
 #: manager.py:563
 #, python-format
+msgid "コインが%d枚集まりました。"
+msgstr ""
+
+#: manager.py:565
+msgid "完走に必要なコインが集まりました。"
+msgstr ""
+
+#: manager.py:577
+#, python-format
+msgid "残り%(hour)d時間%(minute)d分%(second)d秒"
+msgstr ""
+
+#: manager.py:579
+#, python-format
+msgid "残り%(minute)d分%(second)d秒"
+msgstr ""
+
+#: manager.py:581
+#, python-format
+msgid "残り%(second)d秒"
+msgstr ""
+
+#: manager.py:590
+#, python-format
 msgid "%sさんが入力中"
 msgstr ""
 
-#: manager.py:580
+#: manager.py:607
 msgid "再生URLを取得できません。"
 msgstr ""
 
-#: manager.py:584
+#: manager.py:611
 msgid "再生に失敗しました。"
 msgstr ""
 
-#: manager.py:587 views\indicatorSoundSettings.py:17
+#: manager.py:614 views\indicatorSoundSettings.py:17
 msgid "再生"
 msgstr ""
 
-#: manager.py:600
+#: manager.py:627
 msgid "停止"
 msgstr ""
 
-#: manager.py:609 manager.py:613
+#: manager.py:636 manager.py:640
 #, python-format
 msgid "音量%d"
 msgstr ""
 
-#: manager.py:726
+#: manager.py:753
 msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
 msgstr ""
 
-#: manager.py:728
+#: manager.py:755
 msgid ""
 "APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"
 msgstr ""
 
-#: manager.py:730
+#: manager.py:757
 msgid ""
 "ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してくださ"
 "い。"
 msgstr ""
 
-#: manager.py:732 twitcasting\accountManager.py:55
+#: manager.py:759 twitcasting\accountManager.py:59
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 
-#: manager.py:747
+#: manager.py:774
 #, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
 msgstr ""
@@ -556,7 +574,7 @@ msgid ""
 "ソフトウェア終了時に、自動でアップデートされます。"
 msgstr ""
 
-#: twitcasting\accountManager.py:38
+#: twitcasting\accountManager.py:42
 msgid ""
 "通信に失敗しました。インターネット接続を確認してください。\n"
 "プロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要がありま"
@@ -564,54 +582,60 @@ msgid ""
 "今すぐプロキシ設定を開きますか？"
 msgstr ""
 
-#: twitcasting\accountManager.py:38
+#: twitcasting\accountManager.py:42
 msgid "通信エラー"
 msgstr ""
 
-#: twitcasting\accountManager.py:47 views\settings.py:143
+#: twitcasting\accountManager.py:51 views\settings.py:143
 msgid "ネットワーク"
 msgstr ""
 
-#: twitcasting\accountManager.py:58
+#: twitcasting\accountManager.py:62
 msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:62
+#: twitcasting\accountManager.py:66
 msgid ""
 "APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この"
 "情報を再度取得するには、数分待ってからTCVを再起動してください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:90
+#: twitcasting\accountManager.py:85
+msgid ""
+"アカウント情報の書き込みに失敗しました。以下のファイルへのアクセスが可能であ"
+"ることを確認してください。"
+msgstr ""
+
+#: twitcasting\accountManager.py:99
 msgid ""
 "認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってくださ"
 "い。"
 msgstr ""
 
-#: twitcasting\accountManager.py:91
+#: twitcasting\accountManager.py:100
 msgid "認証に失敗しました。もう一度お試しください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:92
+#: twitcasting\accountManager.py:101
 msgid ""
 "しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。"
 msgstr ""
 
-#: twitcasting\accountManager.py:105
+#: twitcasting\accountManager.py:114
 msgid "処理結果"
 msgstr ""
 
-#: twitcasting\accountManager.py:105
+#: twitcasting\accountManager.py:114
 msgid "キャンセルされました。"
 msgstr ""
 
-#: twitcasting\accountManager.py:130
+#: twitcasting\accountManager.py:139
 msgid "不明"
 msgstr ""
 
-#: twitcasting\connection.py:153
+#: twitcasting\connection.py:171
 msgid "カテゴリなし"
 msgstr ""
 
