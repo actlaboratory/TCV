@@ -63,7 +63,6 @@ class manager:
 		self.timers = []
 		self.livePlayer = None
 		self.fxPlayer = None
-		self.played = False
 		self.changeMenuState(False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
@@ -452,9 +451,6 @@ class manager:
 					self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
 				self.resetTimer()
 				self.commentTimer.Stop()
-				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
-					self.played = True
-					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
 				if globalVars.app.config.getboolean("livePlay", "autoplay", True) == True:
