@@ -120,6 +120,22 @@ class connection:
 		if self.movieId == None:
 			self.hasMovieId = False
 			self.movieInfo = {}
+			self.movieInfo["movie"] = {
+				"id": "",
+				"user_id": self.userId,
+				"title": "",
+				"subtitle": None,
+				"category": None,
+				"is_live": False,
+				"is_collabo": False,
+				"comment_count": 0,
+				"duration": 0,
+				"max_view_count": 0,
+				"current_view_count": 0,
+				"total_view_count": 0,
+				"hls_url": None,
+				"user_id": self.userId,
+			}
 			self.movieInfo["broadcaster"] = userInfo["user"]
 		else:
 			self.hasMovieId = True

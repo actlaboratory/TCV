@@ -237,8 +237,6 @@ class manager:
 		globalVars.app.say(announceText)
 
 	def createLiveInfoList(self, mode):
-		if self.connection.hasMovieId == False:
-			return
 		result = [
 			_("タイトル：%s") %(self.connection.movieInfo["movie"]["title"]),
 			_("テロップ：%s") %(self.connection.movieInfo["movie"]["subtitle"]),
