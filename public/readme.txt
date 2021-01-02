@@ -581,4 +581,4 @@ TCVのバージョン番号を確認できます。
 このソフトウェアを利用しての感想やご要望、不具合のご報告などは、以下のメールアドレスまたは掲示板へご連絡ください。
 
 ACT Laboratory サポート：support@actlab.org
-ACT Laboratory 掲示板：https://actlab.org/bbs/
+ACT Laboratory 掲示板：https://actlab.org/bbs/light.cgi
