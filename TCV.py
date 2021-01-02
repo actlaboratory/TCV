@@ -29,6 +29,8 @@ def exchandler(type, exc, tb):
 		if hasattr(globalVars.app, "Manager"):
 			for i in globalVars.app.Manager.timers:
 				i.Stop()
+			if globalVars.app.Manager.livePlayer != None:
+				globalVars.app.Manager.livePlayer.exit()
 		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
 		sys.exit(-1)
 
