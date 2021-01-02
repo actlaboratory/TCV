@@ -457,7 +457,7 @@ class manager:
 					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
-				if self.played == True:
+				if globalVars.app.config.getboolean("livePlay", "autoplay", True) == True:
 					self.play()
 				self.countDownTimer.Start(countDownTimerInterval)
 				self.commentTimer.Start(commentTimerInterval)
@@ -483,9 +483,6 @@ class manager:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
 					self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-					if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
-						self.stop()
-						self.play()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			if self.newViewers != self.oldViewers and self.connection.isLive == True:
