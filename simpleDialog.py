@@ -25,7 +25,8 @@ def errorDialog(message):
 
 def debugDialog(message):
 	if hasattr(sys, "frozen") == False:
-		dialog = wx.MessageDialog(None,str(message),"debug",wx.OK)
+		import pprint
+		dialog = wx.MessageDialog(None,pprint.pformat(message),"debug",wx.OK)
 		dialog.ShowModal()
 		dialog.Destroy()
 		return

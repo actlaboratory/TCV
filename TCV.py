@@ -9,28 +9,32 @@ import traceback
 import globalVars
 
 def exchandler(type, exc, tb):
-	if type == requests.exceptions.ConnectionError:
+	try:
 		for i in globalVars.app.Manager.timers:
 			i.Stop()
+		globalVars.app.Manager.livePlayer.exit()
+	except:
+		pass
+	if type == requests.exceptions.ConnectionError:
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
-		sys.exit(-1)
+		sys.exit(1)
 	elif type == requests.exceptions.ProxyError:
 		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。"))
-		sys.exit(-1)
+		sys.exit(1)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))
-	f=open("errorLog.txt", "a")
-	f.writelines(msg)
-	f.close()
-	if hasattr(sys, "frozen") == False:
+	try:
+		f=open("errorLog.txt", "a")
+		f.writelines(msg)
+		f.close()
+	except:
+		pass
+	if not hasattr(sys, "frozen"):
 		winsound.Beep(1000, 1000)
 		globalVars.app.say(str(msg[-1]))
 	else:
-		if hasattr(globalVars.app, "Manager"):
-			for i in globalVars.app.Manager.timers:
-				i.Stop()
-		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance.")
-		sys.exit(-1)
+		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
+	sys.exit(1)
 
 #global schope
 sys.excepthook=exchandler
@@ -56,7 +60,11 @@ import constants
 import pathlib
 
 def main():
-	if os.path.exists("errorLog.txt"): os.remove("errorLog.txt")
+	if os.path.exists("errorLog.txt"):
+		try:
+			os.remove("errorLog.txt")
+		except:
+			pass
 	app=application.Main()
 	globalVars.app=app
 	app.initialize()

@@ -1,4 +1,4 @@
-CopyLight (c)2019-2021 Kazto Kitabatake,ACT laboratory All lights reserved.
+Copyright (c)2019-2021 Kazto Kitabatake,ACT laboratory All rights reserved.
 
 本ソフトウェアは、GPL v3(or later)またはApache license v2の条件に従い、自由に利用することができます。
 本ソフトウェアのソースコードは、readme.txtに記載のURLよりダウンロード可能です。
