@@ -6,9 +6,9 @@ import wx
 
 #アプリケーション基本情報
 APP_NAME="TCV"
-APP_FULL_NAME = "Twitcasting Viewer"
-APP_VERSION="3.0.0"
-APP_LAST_RELEASE_DATE = "2021-01-01"
+APP_FULL_NAME = "TwitCasting Viewer"
+APP_VERSION="3.0.1"
+APP_LAST_RELEASE_DATE = "2021-01-02"
 APP_ICON = None
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
