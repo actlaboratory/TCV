@@ -68,6 +68,7 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
+		self.goNext = False
 
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
@@ -479,6 +480,8 @@ class manager:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
 					self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+				if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+					self.goNext = True
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			if self.newViewers != self.oldViewers and self.connection.isLive == True:
@@ -584,6 +587,10 @@ class manager:
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
 		elif id == evtPlaystatus:
+			if self.livePlayer.getStatus() == PLAYER_STATUS_END and self.goNext == True:
+				self.livePlayer.stop()
+				self.livePlayer.play()
+				self.goNext = False
 			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING and self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
 		elif id == evtError:
