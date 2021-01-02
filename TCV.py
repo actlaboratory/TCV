@@ -9,9 +9,13 @@ import traceback
 import globalVars
 
 def exchandler(type, exc, tb):
-	if type == requests.exceptions.ConnectionError:
+	try:
 		for i in globalVars.app.Manager.timers:
 			i.Stop()
+		globalVars.app.Manager.livePlayer.exit()
+	except:
+		pass
+	if type == requests.exceptions.ConnectionError:
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
 		sys.exit(-1)
 	elif type == requests.exceptions.ProxyError:
@@ -25,17 +29,12 @@ def exchandler(type, exc, tb):
 		f.close()
 	except:
 		pass
-	if hasattr(sys, "frozen") == False:
+	if not hasattr(sys, "frozen"):
 		winsound.Beep(1000, 1000)
 		globalVars.app.say(str(msg[-1]))
 	else:
-		if hasattr(globalVars.app, "Manager"):
-			for i in globalVars.app.Manager.timers:
-				i.Stop()
-			if globalVars.app.Manager.livePlayer != None:
-				globalVars.app.Manager.livePlayer.exit()
 		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
-		sys.exit(-1)
+	sys.exit(-1)
 
 #global schope
 sys.excepthook=exchandler
