@@ -34,7 +34,6 @@ class Dialog(BaseDialog):
 		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=250)
 		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=180)
 		self.hListCtrl.InsertColumn(3,_("通信用"),format=wx.LIST_FORMAT_LEFT,width=110)
-		self.refreshList()
 
 		#処理ボタン
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
@@ -53,6 +52,7 @@ class Dialog(BaseDialog):
 		self.moveDownButton = g2.button(_("下へ(&D)"), self.move)
 		self.moveDownButton.Enable(False)
 		self.bClose=self.creator.okbutton(_("閉じる"),self.close)
+		self.refreshList()
 
 	def refreshList(self):
 		cursor = self.hListCtrl.GetFocusedItem()
@@ -70,9 +70,12 @@ class Dialog(BaseDialog):
 			])
 		if cursor >= 0:
 			try:
-				self.hListCtrl.GetItem(cursor).SetFocus()
+				self.hListCtrl.Focus(cursor)
+				self.hListCtrl.Select(cursor)
 			except:
 				pass
+		else:
+			self.ItemSelected(None)
 
 	def ItemSelected(self,event):
 		self.deleteButton.Enable(self.hListCtrl.GetFocusedItem()>=0)
