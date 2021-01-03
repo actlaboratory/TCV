@@ -7,8 +7,8 @@ import wx
 #アプリケーション基本情報
 APP_NAME="TCV"
 APP_FULL_NAME = "TwitCasting Viewer"
-APP_VERSION="3.0.1"
-APP_LAST_RELEASE_DATE = "2021-01-02"
+APP_VERSION="3.0.2"
+APP_LAST_RELEASE_DATE = "2021-01-03"
 APP_ICON = None
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
@@ -42,7 +42,7 @@ FULL_CHECKED=wx.CHK_CHECKED
 #メニュー
 MENU_URL_FIRST=10000
 #build関連定数
-BASE_PACKAGE_URL = "https://github.com/actlaboratory/TCV/releases/download/TCV-latestcommit/TCV-snapshot.zip"
+BASE_PACKAGE_URL = "https://github.com/actlaboratory/TCV/releases/download/3.0.0/TCV-3.0.0.zip"
 PACKAGE_CONTAIN_ITEMS = ("fx",)#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "tcv.py"#起動用ファイルを指定
