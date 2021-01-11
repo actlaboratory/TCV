@@ -3,7 +3,6 @@
 
 import twitcasting.connection
 import datetime
-import time
 import wx
 import globalVars
 import simpleDialog
@@ -64,12 +63,12 @@ class manager:
 		self.timers = []
 		self.livePlayer = None
 		self.fxPlayer = None
+		self.played = False
 		self.changeMenuState(False)
 		if globalVars.app.config.getboolean("fx", "playStartupSound", False) == True:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
-		self.goNext = False
 
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
@@ -453,12 +452,16 @@ class manager:
 					self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
 				self.resetTimer()
 				self.commentTimer.Stop()
+				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+					self.played = True
+					self.stop()
 			elif self.oldIsLive == False and self.newIsLive == True:
 				globalVars.app.say(_("ライブ開始。"))
-				if globalVars.app.config.getboolean("livePlay", "autoplay", True) == True:
+				if self.played == True:
 					self.play()
 				self.countDownTimer.Start(countDownTimerInterval)
 				self.commentTimer.Start(commentTimerInterval)
+			self.oldIsLive = self.newIsLive
 			self.newSubtitle = self.connection.subtitle
 			if self.newSubtitle != self.oldSubtitle and self.connection.isLive == True:
 				if self.newSubtitle == None:
@@ -480,9 +483,9 @@ class manager:
 				if self.connection.isLive == True:
 					globalVars.app.say(_("次のライブが開始されました。"))
 					self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-				if self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING and self.oldIsLive == True and self.newIsLive == True:
-					self.goNext = True
-			self.oldIsLive = self.newIsLive
+					if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+						self.stop()
+						self.play()
 			self.oldMovieId = self.newMovieId
 			self.newViewers = self.connection.viewers
 			if self.newViewers != self.oldViewers and self.connection.isLive == True:
@@ -588,13 +591,7 @@ class manager:
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
 					self.playFx(globalVars.app.config["fx"]["typingSound"])
 		elif id == evtPlaystatus:
-			status = self.livePlayer.getStatus()
-			if status == PLAYER_STATUS_END and self.goNext == True:
-				self.livePlayer.stop()
-				time.sleep(1)
-				self.livePlayer.play()
-				self.goNext = False
-			if status != PLAYER_STATUS_PLAYING and status != PLAYER_STATUS_LOADING:
+			if self.livePlayer.getStatus() != PLAYER_STATUS_PLAYING and self.livePlayer.getStatus() != PLAYER_STATUS_LOADING:
 				self.stop()
 		elif id == evtError:
 			self.checkError()
