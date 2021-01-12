@@ -300,7 +300,7 @@ class manager:
 	def postComment(self, commentBody, idx):
 		if self.connection.movieId == None:
 			simpleDialog.errorDialog(_("コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿できません。"))
-			return
+			return False
 		commentBody = commentBody.strip()
 		if len(commentBody) == 0:
 			simpleDialog.errorDialog(_("コメントが入力されていません。"))
@@ -312,6 +312,9 @@ class manager:
 		if "error" in result:
 			if result["error"]["code"] == 1001 and "comment" in result["error"]["details"] and "length" in result["error"]["details"]["comment"] :
 				simpleDialog.errorDialog(_("コメント文字数が１４０字を超えているため、コメントを投稿できません。"))
+				return False
+			elif result["error"]["code"] == 404:
+				simpleDialog.errorDialog(_("コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿できません。"))
 				return False
 			else:
 				simpleDialog.errorDialog(_("エラーが発生しました。詳細：%s") %(str(result)))
