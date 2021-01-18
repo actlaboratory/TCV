@@ -155,8 +155,10 @@ class manager:
 			self.play()
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
 			self.openLiveWindow()
+		self.connection.initialize()
 
 	def disconnect(self):
+		self.connection.running = False
 		if self.livePlayer != None:
 			self.stop()
 			self.livePlayer.exit()

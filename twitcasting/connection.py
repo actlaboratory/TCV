@@ -8,13 +8,20 @@ from twitcasting.getTypingUser import *
 import views.main
 import datetime
 import globalVars
+import threading
+import time
 
-class connection:
+class connection(threading.Thread):
 	def __init__(self, userId):
+		super().__init__()
 		self.userId = userId
 		self.update()
 		self.comments = []
 		self.errorFlag = 0
+
+	def initialize(self):
+		self.running = True
+		self.start()
 
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
@@ -188,3 +195,8 @@ class connection:
 			"user_id": self.userId,
 		}
 		self.movieInfo["broadcaster"] = userInfo["user"]
+
+	def run(self):
+		while self.running:
+			self.update()
+			time.sleep(5)
