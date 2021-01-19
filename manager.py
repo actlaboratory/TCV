@@ -447,7 +447,6 @@ class manager:
 			newComments = self.connection.getComment()
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
-			self.connection.update()
 			self.newIsLive = self.connection.isLive
 			if self.oldIsLive == True and self.newIsLive == False:
 				globalVars.app.say(_("ライブ終了。"))
