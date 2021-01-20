@@ -199,5 +199,5 @@ class connection(threading.Thread):
 
 	def run(self):
 		while self.running:
-			self.update()
 			time.sleep(5)
+			self.update()
