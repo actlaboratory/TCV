@@ -15,9 +15,10 @@ class connection(threading.Thread):
 	def __init__(self, userId):
 		super().__init__()
 		self.userId = userId
-		self.update()
+		self.update(0)
 		self.comments = []
 		self.errorFlag = 0
+		self.typingUser = ""
 
 	def initialize(self):
 		self.running = True
@@ -66,7 +67,7 @@ class connection(threading.Thread):
 
 	def getComment(self):
 		if self.hasMovieId == False:
-			return []
+			return
 		ret = []
 		result = GetComments(self.movieId, slice_id=self.lastCommentId)
 		try:
@@ -76,15 +77,13 @@ class connection(threading.Thread):
 				self.errorFlag = result["error"]["code"]
 			result = []
 		if len(result) == 0:
-			return []
+			return 
 		self.lastCommentId = result[0]["id"]
 		ret = result
 		for i in ret:
 			i["movieId"] = self.movieId
 			i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
 		self.comments = ret + self.comments
-		ret.reverse()
-		return ret
 
 	def postComment(self, body, idx):
 		commentToSns = globalVars.app.config.getint("general", "commentToSns", 0)
@@ -111,10 +110,9 @@ class connection(threading.Thread):
 		return users[0:count]
 
 	def getTypingUser(self):
-		result = getTypingUser(self.userId, self.userId)
-		return result
+		self.typingUser = getTypingUser(self.userId, self.userId)
 
-	def update(self):
+	def update(self, mode=1):
 		userInfo = GetUserInfo(self.userId)
 		if "error" in userInfo:
 			self.connected = False
@@ -156,6 +154,9 @@ class connection(threading.Thread):
 		for i in self.item:
 			if i["name"] == "コンティニューコイン":
 				self.coins = i["count"]
+		if mode == 1:
+			self.getComment()
+			self.getTypingUser()
 
 	def getCategoryName(self, id):
 		if id == None:

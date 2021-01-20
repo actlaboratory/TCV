@@ -171,6 +171,10 @@ class manager:
 		self.changeMenuState(False)
 		self.connection.connected = False
 
+	def getNewComments(self):
+		limit = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
+		return self.connection.comments[:limit]
+
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
 			commentData = self.getCommentdata(commentObject)
@@ -444,7 +448,8 @@ class manager:
 		timer = event.GetTimer()
 		id = timer.GetId()
 		if id == evtComment:
-			newComments = self.connection.getComment()
+			newComments = self.getNewComments()
+			newComments.reverse()
 			self.addComments(newComments, update)
 		elif id == evtLiveInfo:
 			self.newIsLive = self.connection.isLive
@@ -588,8 +593,7 @@ class manager:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		elif id == evtTyping:
-			typingUser = self.connection.getTypingUser()
-			if typingUser != "":
+			if self.connection.typingUser != "":
 				if globalVars.app.config.getboolean("autoReadingOptions", "readTypingUser", False) == True:
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
