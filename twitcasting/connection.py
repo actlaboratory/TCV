@@ -20,10 +20,6 @@ class connection(threading.Thread):
 		self.errorFlag = 0
 		self.typingUser = ""
 
-	def initialize(self):
-		self.running = True
-		self.start()
-
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
 			return []
@@ -198,6 +194,7 @@ class connection(threading.Thread):
 		self.movieInfo["broadcaster"] = userInfo["user"]
 
 	def run(self):
+		self.running = True
 		while self.running:
 			time.sleep(5)
 			self.update()
