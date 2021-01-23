@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # manager
 
+import threading
+import time
 import twitcasting.connection
 import datetime
 import wx
@@ -69,6 +71,7 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
+		self.itemOperation = ItemOperation(self)
 
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
@@ -156,9 +159,11 @@ class manager:
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
 			self.openLiveWindow()
 		self.connection.start()
+		self.itemOperation.start()
 
 	def disconnect(self):
 		self.connection.running = False
+		self.itemOperation.running = False
 		if self.livePlayer != None:
 			self.stop()
 			self.livePlayer.exit()
@@ -456,7 +461,6 @@ class manager:
 			self.checkMovieId()
 			self.checkViewers()
 			self.createLiveInfoList(update)
-			self.checkItem()
 			self.createItemList(update)
 			self.checkCoins()
 		elif id == evtCountDown:
@@ -564,55 +568,6 @@ class manager:
 					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
 					globalVars.app.say(viewersInfo)
 		self.oldViewers = self.newViewers
-
-	def checkItem(self):
-		self.newItem = self.connection.item
-		receivedItem = []
-		for new in self.newItem:
-			if new["name"] not in [i["name"] for i in self.oldItem]:
-				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
-			for old in self.oldItem:
-				if new["name"] == old["name"] and new["count"] > old["count"]:
-					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
-		for i in receivedItem:
-			if i["name"] == "MP":
-				continue
-			id = i["id"]
-			name = i["name"]
-			count = i["count"]
-			users = self.connection.getItemPostedUser(id, count)
-			readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
-			multiUser = False
-			if len(users) > 1:
-				for k in range(1, len(users) - 1):
-					if users[0] != users[k]:
-						multiUser = True
-						break
-			readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
-			if readReceivedItems == True:
-				if readItemPostedUser == 0:
-					if count == 1:
-						globalVars.app.say(_("%sをもらいました。") %name)
-					else:
-						globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
-				else:
-					if readItemPostedUser == 1:
-						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
-					elif readItemPostedUser == 2:
-						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
-					if multiUser == False:
-						if count == 1:
-							globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
-						else:
-							globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-					else:
-						if count == 1:
-							globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
-						else:
-							globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
-			self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
-		self.oldItem = self.newItem
 
 	def checkCoins(self):
 		self.newCoins = self.connection.coins
@@ -804,3 +759,64 @@ class manager:
 				}
 				simpleDialog.errorDialog(_("ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s") %(detail[code]))
 			self.disconnect()
+
+class ItemOperation(threading.Thread):
+	def __init__(self, manager):
+		super().__init__()
+		self.manager = manager
+		self.running = False
+
+	def checkItem(self):
+		self.manager.newItem = self.manager.connection.item
+		receivedItem = []
+		for new in self.manager.newItem:
+			if new["name"] not in [i["name"] for i in self.manager.oldItem]:
+				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+			for old in self.manager.oldItem:
+				if new["name"] == old["name"] and new["count"] > old["count"]:
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
+		for i in receivedItem:
+			if i["name"] == "MP":
+				continue
+			id = i["id"]
+			name = i["name"]
+			count = i["count"]
+			users = self.manager.connection.getItemPostedUser(id, count)
+			readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
+			multiUser = False
+			if len(users) > 1:
+				for k in range(1, len(users) - 1):
+					if users[0] != users[k]:
+						multiUser = True
+						break
+			readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
+			if readReceivedItems == True:
+				if readItemPostedUser == 0:
+					if count == 1:
+						globalVars.app.say(_("%sをもらいました。") %name)
+					else:
+						globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
+				else:
+					if readItemPostedUser == 1:
+						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
+					elif readItemPostedUser == 2:
+						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
+					if multiUser == False:
+						if count == 1:
+							globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
+						else:
+							globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
+					else:
+						if count == 1:
+							globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
+						else:
+							globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
+		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
+			self.manager.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
+		self.manager.oldItem = self.manager.newItem
+
+	def run(self):
+		self.running = True
+		while self.running:
+			time.sleep(5)
+			self.checkItem()

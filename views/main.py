@@ -367,6 +367,7 @@ class Events(BaseEvents):
 				if i.IsRunning() == True:
 					i.Stop()
 			globalVars.app.Manager.connection.running = False
+			globalVars.app.Manager.itemOperation.running = False
 		except:
 			pass
 		if event and isinstance(event,wx.CloseEvent):
