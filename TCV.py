@@ -17,10 +17,10 @@ def exchandler(type, exc, tb):
 		pass
 	if type == requests.exceptions.ConnectionError:
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
-		sys.exit(1)
+		os._exit(1)
 	elif type == requests.exceptions.ProxyError:
 		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。"))
-		sys.exit(1)
+		os._exit(1)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))
 	try:
@@ -34,7 +34,7 @@ def exchandler(type, exc, tb):
 		globalVars.app.say(str(msg[-1]))
 	else:
 		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
-	sys.exit(1)
+	os._exit(1)
 
 #global schope
 sys.excepthook=exchandler

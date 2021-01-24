@@ -71,8 +71,7 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
-		self.itemOperation = ItemOperation(self)
-
+	
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
 		userId = userId.replace("https://twitcasting.tv/", "")
@@ -159,6 +158,7 @@ class manager:
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
 			self.openLiveWindow()
 		self.connection.start()
+		self.itemOperation = ItemOperation(self)
 		self.itemOperation.start()
 
 	def disconnect(self):
