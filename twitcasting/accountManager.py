@@ -42,7 +42,7 @@ class AccountManager:
 					d = wx.MessageDialog(None, _("通信に失敗しました。インターネット接続を確認してください。\nプロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要があります。\n今すぐプロキシ設定を開きますか？"), _("通信エラー"), style=wx.YES_NO|wx.NO_DEFAULT|wx.ICON_ERROR)
 					result = d.ShowModal()
 					if result == wx.ID_NO:
-						globalVars.app.hMainView.events.Exit()
+						sys.exit(1)
 						return
 					import views.settings
 					d = views.settings.settingsDialog()
@@ -109,10 +109,12 @@ class AccountManager:
 			wx.YieldIfNeeded()
 			if manager.getToken():
 				self.tokens.append(manager.getToken())
+				d.Destroy()
 				break
 			if d.canceled == 1 or manager.getToken() == "":
 				simpleDialog.dialog(_("処理結果"), _("キャンセルされました。"))
 				manager.shutdown()
+				d.Destroy()
 				return
 		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
 		self.tokens[-1]["default"] = False
