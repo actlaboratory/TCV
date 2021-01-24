@@ -8,6 +8,7 @@ import datetime
 import proxyUtil
 import globalVars
 import update
+import threading
 
 def _import():
 	global main, manager, twitcasting
@@ -30,6 +31,7 @@ class Main(AppBase.MainBase):
 
 		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
 		self.setProxyEnviron()
+		self.installThreadExcepthook()
 		# update関係を準備
 		if self.config.getboolean("general", "update"):
 			globalVars.update.update(True)
@@ -62,6 +64,22 @@ class Main(AppBase.MainBase):
 			self.proxyEnviron.set_environ(self.config["proxy"]["server"], self.config.getint("proxy", "port", 8080, 0, 65535))
 		else:
 			self.proxyEnviron.set_environ()
+
+	def installThreadExcepthook(self):
+		_init = threading.Thread.__init__
+
+		def init(self, *args, **kwargs):
+			_init(self, *args, **kwargs)
+			_run = self.run
+
+			def run(*args, **kwargs):
+				try:
+					_run(*args, **kwargs)
+				except:
+					sys.excepthook(*sys.exc_info())
+			self.run = run
+
+		threading.Thread.__init__ = init
 
 	def setGlobalVars(self):
 		globalVars.update = update.update()
