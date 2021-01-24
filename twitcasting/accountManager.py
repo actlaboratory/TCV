@@ -109,10 +109,12 @@ class AccountManager:
 			wx.YieldIfNeeded()
 			if manager.getToken():
 				self.tokens.append(manager.getToken())
+				d.Destroy()
 				break
 			if d.canceled == 1 or manager.getToken() == "":
 				simpleDialog.dialog(_("処理結果"), _("キャンセルされました。"))
 				manager.shutdown()
+				d.Destroy()
 				return
 		self.tokens[-1]["created"] = datetime.datetime.now().timestamp()
 		self.tokens[-1]["default"] = False
