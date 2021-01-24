@@ -42,7 +42,7 @@ class AccountManager:
 					d = wx.MessageDialog(None, _("通信に失敗しました。インターネット接続を確認してください。\nプロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要があります。\n今すぐプロキシ設定を開きますか？"), _("通信エラー"), style=wx.YES_NO|wx.NO_DEFAULT|wx.ICON_ERROR)
 					result = d.ShowModal()
 					if result == wx.ID_NO:
-						globalVars.app.hMainView.events.Exit()
+						sys.exit(1)
 						return
 					import views.settings
 					d = views.settings.settingsDialog()
