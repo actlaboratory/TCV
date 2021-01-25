@@ -16,10 +16,10 @@ def exchandler(type, exc, tb):
 	except:
 		pass
 	if type == requests.exceptions.ConnectionError:
-		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。"))
+		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。プログラムを終了します。"))
 		os._exit(1)
 	elif type == requests.exceptions.ProxyError:
-		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。"))
+		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。プログラムを終了します。"))
 		os._exit(1)
 	msg=traceback.format_exception(type, exc, tb)
 	print("".join(msg))
