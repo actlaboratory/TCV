@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # manager
 
+import threading
+import time
 import twitcasting.connection
 import datetime
 import wx
@@ -69,7 +71,7 @@ class manager:
 			self.playFx(globalVars.app.config["fx"]["startupSound"])
 		self.playStatusTimer = wx.Timer(self.evtHandler, evtPlaystatus)
 		self.timers.append(self.playStatusTimer)
-
+	
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
 		userId = userId.replace("https://twitcasting.tv/", "")
@@ -155,8 +157,13 @@ class manager:
 			self.play()
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
 			self.openLiveWindow()
+		self.connection.start()
+		self.itemOperation = ItemOperation(self)
+		self.itemOperation.start()
 
 	def disconnect(self):
+		self.connection.running = False
+		self.itemOperation.running = False
 		if self.livePlayer != None:
 			self.stop()
 			self.livePlayer.exit()
@@ -168,6 +175,10 @@ class manager:
 		self.MainView.createStartScreen()
 		self.changeMenuState(False)
 		self.connection.connected = False
+
+	def getNewComments(self):
+		limit = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
+		return self.connection.comments[:limit]
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
@@ -442,131 +453,16 @@ class manager:
 		timer = event.GetTimer()
 		id = timer.GetId()
 		if id == evtComment:
-			newComments = self.connection.getComment()
-			self.addComments(newComments, update)
+			self.checkComment()
 		elif id == evtLiveInfo:
-			self.connection.update()
-			self.newIsLive = self.connection.isLive
-			if self.oldIsLive == True and self.newIsLive == False:
-				globalVars.app.say(_("ライブ終了。"))
-				self.countDownTimer.Stop()
-				titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
-				if titlebar == constants.TB_TIME:
-					self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
-				self.resetTimer()
-				self.commentTimer.Stop()
-				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
-					self.played = True
-					self.stop()
-			elif self.oldIsLive == False and self.newIsLive == True:
-				globalVars.app.say(_("ライブ開始。"))
-				if self.played == True:
-					self.play()
-				self.countDownTimer.Start(countDownTimerInterval)
-				self.commentTimer.Start(commentTimerInterval)
-			self.oldIsLive = self.newIsLive
-			self.newSubtitle = self.connection.subtitle
-			if self.newSubtitle != self.oldSubtitle and self.connection.isLive == True:
-				if self.newSubtitle == None:
-					globalVars.app.say(_("テロップ削除"))
-				else:
-					globalVars.app.say(_("テロップ変更。"))
-					globalVars.app.say(self.newSubtitle)
-				if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
-					self.playFx(globalVars.app.config["fx"]["othersound"])
-			self.oldSubtitle = self.newSubtitle
-			self.newCategory = self.connection.categoryName
-			if self.newCategory != self.oldCategory and self.connection.isLive == True:
-				globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
-				if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
-					self.playFx(globalVars.app.config["fx"]["othersound"])
-			self.oldCategory = self.newCategory
-			self.newMovieId = self.connection.movieId
-			if self.newMovieId != self.oldMovieId:
-				if self.connection.isLive == True:
-					globalVars.app.say(_("次のライブが開始されました。"))
-					self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
-					if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
-						self.stop()
-						self.play()
-			self.oldMovieId = self.newMovieId
-			self.newViewers = self.connection.viewers
-			if self.newViewers != self.oldViewers and self.connection.isLive == True:
-				if self.newViewers > self.oldViewers:
-					if globalVars.app.config.getboolean("fx", "playviewersincreasedsound", True) == True:
-						self.playFx(globalVars.app.config["fx"]["viewersincreasedSound"])
-					if globalVars.app.config.getboolean("autoReadingOptions", "readviewersincreased", True) == True:
-						viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersincreasedAnnouncement"]
-						viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
-						globalVars.app.say(viewersInfo)
-				elif self.newViewers < self.oldViewers:
-					if globalVars.app.config.getboolean("fx", "playviewersdecreasedsound", True) == True:
-						self.playFx(globalVars.app.config["fx"]["viewersdecreasedSound"])
-					if globalVars.app.config.getboolean("autoReadingOptions", "readviewersdecreased", True) == True:
-						viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
-						viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
-						globalVars.app.say(viewersInfo)
-			self.oldViewers = self.newViewers
+			self.checkIsLive()
+			self.checkSubtitle()
+			self.checkCategory()
+			self.checkMovieId()
+			self.checkViewers()
 			self.createLiveInfoList(update)
-			self.newItem = self.connection.item
-			receivedItem = []
-			for new in self.newItem:
-				if new["name"] not in [i["name"] for i in self.oldItem]:
-					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
-				for old in self.oldItem:
-					if new["name"] == old["name"] and new["count"] > old["count"]:
-						receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
-			for i in receivedItem:
-				if i["name"] == "MP":
-					continue
-				id = i["id"]
-				name = i["name"]
-				count = i["count"]
-				users = self.connection.getItemPostedUser(id, count)
-				readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
-				multiUser = False
-				if len(users) > 1:
-					for k in range(1, len(users) - 1):
-						if users[0] != users[k]:
-							multiUser = True
-							break
-				readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
-				if readReceivedItems == True:
-					if readItemPostedUser == 0:
-						if count == 1:
-							globalVars.app.say(_("%sをもらいました。") %name)
-						else:
-							globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
-					else:
-						if readItemPostedUser == 1:
-							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
-						elif readItemPostedUser == 2:
-							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
-						if multiUser == False:
-							if count == 1:
-								globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
-							else:
-								globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-						else:
-							if count == 1:
-								globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
-							else:
-								globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-			if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
-				self.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
-			self.oldItem = self.newItem
 			self.createItemList(update)
-			self.newCoins = self.connection.coins
-			if self.newCoins != self.oldCoins:
-				if self.newCoins < self.oldCoins:
-					globalVars.app.say(_("コイン消費"))
-				elif self.newCoins > self.oldCoins:
-					c = [i for i in range(self.oldCoins + 1, self.newCoins + 1) if i % 5 == 0]
-					if len(c) > 0:
-						globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
-						if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(c[-1]) == True:
-							globalVars.app.say(_("完走に必要なコインが集まりました。"))
-			self.oldCoins = self.newCoins
+			self.checkCoins()
 		elif id == evtCountDown:
 			self.resetTimer()
 			try:
@@ -587,8 +483,7 @@ class manager:
 				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
 		elif id == evtTyping:
-			typingUser = self.connection.getTypingUser()
-			if typingUser != "":
+			if self.connection.typingUser != "":
 				if globalVars.app.config.getboolean("autoReadingOptions", "readTypingUser", False) == True:
 					globalVars.app.say(_("%sさんが入力中") %(typingUser))
 				if globalVars.app.config.getboolean("fx", "playTypingSound", True) == True:
@@ -598,6 +493,94 @@ class manager:
 				self.stop()
 		elif id == evtError:
 			self.checkError()
+
+	def checkComment(self):
+		newComments = self.getNewComments()
+		self.addComments(newComments, update)
+
+	def checkIsLive(self):
+		self.newIsLive = self.connection.isLive
+		if self.oldIsLive == True and self.newIsLive == False:
+			globalVars.app.say(_("ライブ終了。"))
+			self.countDownTimer.Stop()
+			titlebar = globalVars.app.config.getint("general", "titlebar", 1, 0, 2)
+			if titlebar == constants.TB_TIME:
+				self.MainView.hFrame.SetTitle("%s" %constants.APP_NAME)
+			self.resetTimer()
+			self.commentTimer.Stop()
+			if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+				self.played = True
+				self.stop()
+		elif self.oldIsLive == False and self.newIsLive == True:
+			globalVars.app.say(_("ライブ開始。"))
+			if self.played == True:
+				self.play()
+			self.countDownTimer.Start(countDownTimerInterval)
+			self.commentTimer.Start(commentTimerInterval)
+		self.oldIsLive = self.newIsLive
+
+	def checkSubtitle(self):
+		self.newSubtitle = self.connection.subtitle
+		if self.newSubtitle != self.oldSubtitle and self.connection.isLive == True:
+			if self.newSubtitle == None:
+				globalVars.app.say(_("テロップ削除"))
+			else:
+				globalVars.app.say(_("テロップ変更。"))
+				globalVars.app.say(self.newSubtitle)
+			if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
+				self.playFx(globalVars.app.config["fx"]["othersound"])
+		self.oldSubtitle = self.newSubtitle
+
+	def checkCategory(self):
+		self.newCategory = self.connection.categoryName
+		if self.newCategory != self.oldCategory and self.connection.isLive == True:
+			globalVars.app.say(_("カテゴリ変更：%s") %self.newCategory)
+			if globalVars.app.config.getboolean("fx", "playothersound", True) == True:
+				self.playFx(globalVars.app.config["fx"]["othersound"])
+		self.oldCategory = self.newCategory
+
+	def checkMovieId(self):
+		self.newMovieId = self.connection.movieId
+		if self.newMovieId != self.oldMovieId:
+			if self.connection.isLive == True:
+				globalVars.app.say(_("次のライブが開始されました。"))
+				self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
+				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
+					self.stop()
+					self.play()
+		self.oldMovieId = self.newMovieId
+
+	def checkViewers(self):
+		self.newViewers = self.connection.viewers
+		if self.newViewers != self.oldViewers and self.connection.isLive == True:
+			if self.newViewers > self.oldViewers:
+				if globalVars.app.config.getboolean("fx", "playviewersincreasedsound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["viewersincreasedSound"])
+				if globalVars.app.config.getboolean("autoReadingOptions", "readviewersincreased", True) == True:
+					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersincreasedAnnouncement"]
+					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+					globalVars.app.say(viewersInfo)
+			elif self.newViewers < self.oldViewers:
+				if globalVars.app.config.getboolean("fx", "playviewersdecreasedsound", True) == True:
+					self.playFx(globalVars.app.config["fx"]["viewersdecreasedSound"])
+				if globalVars.app.config.getboolean("autoReadingOptions", "readviewersdecreased", True) == True:
+					viewersInfo = globalVars.app.config["autoReadingOptions"]["viewersDecreasedAnnouncement"]
+					viewersInfo = viewersInfo.replace("$viewers", str(self.newViewers))
+					globalVars.app.say(viewersInfo)
+		self.oldViewers = self.newViewers
+
+	def checkCoins(self):
+		self.newCoins = self.connection.coins
+		if self.newCoins != self.oldCoins:
+			if self.newCoins < self.oldCoins:
+				globalVars.app.say(_("コイン消費"))
+			elif self.newCoins > self.oldCoins:
+				c = [i for i in range(self.oldCoins + 1, self.newCoins + 1) if i % 5 == 0]
+				if len(c) > 0:
+					globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
+					if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(c[-1]) == True:
+						globalVars.app.say(_("完走に必要なコインが集まりました。"))
+		self.oldCoins = self.newCoins
 
 	def play(self):
 		if self.livePlayer == None:
@@ -776,3 +759,64 @@ class manager:
 				}
 				simpleDialog.errorDialog(_("ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s") %(detail[code]))
 			self.disconnect()
+
+class ItemOperation(threading.Thread):
+	def __init__(self, manager):
+		super().__init__()
+		self.manager = manager
+		self.running = False
+
+	def checkItem(self):
+		self.manager.newItem = self.manager.connection.item
+		receivedItem = []
+		for new in self.manager.newItem:
+			if new["name"] not in [i["name"] for i in self.manager.oldItem]:
+				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+			for old in self.manager.oldItem:
+				if new["name"] == old["name"] and new["count"] > old["count"]:
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
+		for i in receivedItem:
+			if i["name"] == "MP":
+				continue
+			id = i["id"]
+			name = i["name"]
+			count = i["count"]
+			users = self.manager.connection.getItemPostedUser(id, count)
+			readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
+			multiUser = False
+			if len(users) > 1:
+				for k in range(1, len(users) - 1):
+					if users[0] != users[k]:
+						multiUser = True
+						break
+			readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
+			if readReceivedItems == True:
+				if readItemPostedUser == 0:
+					if count == 1:
+						globalVars.app.say(_("%sをもらいました。") %name)
+					else:
+						globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
+				else:
+					if readItemPostedUser == 1:
+						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
+					elif readItemPostedUser == 2:
+						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
+					if multiUser == False:
+						if count == 1:
+							globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
+						else:
+							globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
+					else:
+						if count == 1:
+							globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
+						else:
+							globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
+		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
+			self.manager.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
+		self.manager.oldItem = self.manager.newItem
+
+	def run(self):
+		self.running = True
+		while self.running:
+			time.sleep(5)
+			self.checkItem()

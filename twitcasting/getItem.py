@@ -6,13 +6,28 @@ from bs4 import BeautifulSoup
 import simpleDialog
 import re
 import globalVars
+import constants
+from logging import getLogger
+import traceback
+import sys
+
+log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.getItem"))
 
 def getItem(screenId):
 	if globalVars.app.config["general"]["language"] == "ja-JP":
 		lang = "ja"
 	else:
 		lang = "en"
-	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitems&u=" + screenId + "&hl=" + lang).text
+	try:
+		req = requests.get("http://twitcasting.tv/gearajax.php?c=showitems&u=" + screenId + "&hl=" + lang).text
+	except:
+		log.error("Connection failed(getItem).")
+		log.error(traceback.format_exc)
+		if not hasattr(sys, "frozen"):
+			import winsound
+			winsound.Beep(1000, 1000)
+			traceback.print_exc()
+		return []
 	soup = BeautifulSoup(req, "lxml")
 	itemName = []
 	itemCount = []
@@ -51,7 +66,16 @@ def getItemPostedUser(screenId, itemId):
 		lang = "ja"
 	else:
 		lang = "en"
-	req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=" + lang).text
+	try:
+		req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=" + lang).text
+	except:
+		log.error("Connection failed(getItemPostedUser).")
+		log.error(traceback.format_exc)
+		if not hasattr(sys, "frozen"):
+			import winsound
+			winsound.Beep(1000, 1000)
+			traceback.print_exc()
+		return []
 	soup = BeautifulSoup(req, "lxml")
 	tmp = soup.find_all("span", class_ = "tw-user-name-screen-name")
 	result = []
