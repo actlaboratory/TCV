@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-25 13:37+0900\n"
-"PO-Revision-Date: 2021-01-25 13:39+0900\n"
+"POT-Creation-Date: 2021-01-26 21:55+0900\n"
+"PO-Revision-Date: 2021-01-26 21:57+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -99,7 +99,7 @@ msgstr ""
 msgid "接続に失敗しました。"
 msgstr "Connection failed."
 
-#: manager.py:109 manager.py:407
+#: manager.py:109 manager.py:408
 msgid ""
 "履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを"
 "確認してください。"
@@ -115,12 +115,12 @@ msgstr "Connected. Currently streaming."
 msgid "タイマー開始。"
 msgstr "Timer started."
 
-#: manager.py:124 manager.py:274 manager.py:470
+#: manager.py:124 manager.py:275 manager.py:471
 #, python-format
 msgid "残り時間：%s"
 msgstr "remaining time: %s"
 
-#: manager.py:126 manager.py:276 manager.py:277 manager.py:483 manager.py:484
+#: manager.py:126 manager.py:277 manager.py:278 manager.py:484 manager.py:485
 msgid "配信時間が４時間を超えているため、タイマーを使用できません。"
 msgstr "Timer is not usable because more than 4 hours elapsed."
 
@@ -132,62 +132,62 @@ msgstr "Connected. currently offline."
 msgid "完走に必用なコインが集まっています。"
 msgstr "There are enough coins for completing the live."
 
-#: manager.py:261
+#: manager.py:262
 #, python-format
 msgid "タイトル：%s"
 msgstr "title:%s"
 
-#: manager.py:262
+#: manager.py:263
 #, python-format
 msgid "テロップ：%s"
 msgstr "subtitle: %s"
 
-#: manager.py:263
+#: manager.py:264
 #, python-format
 msgid "閲覧者数：現在%(current)d人、合計%(total)d人"
 msgstr "viewers: currently %(current)d, %(total)d in total"
 
-#: manager.py:264
+#: manager.py:265
 #, python-format
 msgid "カテゴリ：%s"
 msgstr "category: %s"
 
-#: manager.py:265
+#: manager.py:266
 #, python-format
 msgid "コメント：%d件"
 msgstr "comments: %d items"
 
-#: manager.py:269
+#: manager.py:270
 msgid "現在配信中"
 msgstr "currently streaming"
 
-#: manager.py:271
+#: manager.py:272
 msgid "オフライン"
 msgstr "offline"
 
-#: manager.py:273 manager.py:469
+#: manager.py:274 manager.py:470
 #, python-format
 msgid "経過時間：%s"
 msgstr "elapsed time: %s"
 
-#: manager.py:279
+#: manager.py:280
 msgid "コラボ可能"
 msgstr "collabo is available"
 
-#: manager.py:281
+#: manager.py:282
 msgid "コラボ不可"
 msgstr "collabo is unavailable"
 
-#: manager.py:283 views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
+#: manager.py:284 views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
-#: views\main.py:451 views\main.py:471 views\settings.py:50
+#: views\main.py:459 views\main.py:479 views\settings.py:50
 #: views\settings.py:55
 msgid "なし"
 msgstr "None"
 
-#: manager.py:313 manager.py:328
+#: manager.py:314 manager.py:329
 msgid ""
 "コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿"
 "できません。"
@@ -195,11 +195,11 @@ msgstr ""
 "Failed to post comment. You cannot post comments to this live until this "
 "user start live next time."
 
-#: manager.py:317
+#: manager.py:318
 msgid "コメントが入力されていません。"
 msgstr "Comment is blank."
 
-#: manager.py:320
+#: manager.py:321
 #, python-format
 msgid ""
 "１４０字を超えるコメントは投稿できません。現在%s文字のコメントが入力されてい"
@@ -207,41 +207,41 @@ msgid ""
 msgstr ""
 "Comment must be less than 140 characters. Currently %s characters are typed."
 
-#: manager.py:325
+#: manager.py:326
 msgid "コメント文字数が１４０字を超えているため、コメントを投稿できません。"
 msgstr "This comment is too long."
 
-#: manager.py:331
+#: manager.py:332
 #, python-format
 msgid "エラーが発生しました。詳細：%s"
 msgstr "Error. Details: %s"
 
-#: manager.py:358
+#: manager.py:359
 msgid ""
 "コメントの削除に失敗しました。これらのコメントを削除する権限がありません。"
 msgstr "Failed to delete this comment. You don't have permission to do so."
 
-#: manager.py:360
+#: manager.py:361
 #, python-format
 msgid ""
 "%d個のコメントを削除できませんでした。これらのコメントを削除する権限がありま"
 "せん。"
 msgstr "Failed to delete %d comments. You don't have permission to do so."
 
-#: manager.py:372
+#: manager.py:373
 msgid "タイマーリセット。"
 msgstr "Timer reset."
 
-#: manager.py:391 manager.py:398
+#: manager.py:392 manager.py:399
 #, python-format
 msgid "コインが%d枚あるので延長可能です。"
 msgstr "You can continue this live by %d coins."
 
-#: manager.py:400
+#: manager.py:401
 msgid "30分が経過しました。"
 msgstr "30 minutes have elapsed."
 
-#: manager.py:417 manager.py:427 manager.py:436
+#: manager.py:418 manager.py:428 manager.py:437
 msgid ""
 "お気に入りデータの保存に失敗しました。以下のファイルへのアクセスが可能である"
 "ことを確認してください。"
@@ -249,101 +249,101 @@ msgstr ""
 "Failed to save your favorites in the file. Make sure you have permission to "
 "access to the following file:"
 
-#: manager.py:445
+#: manager.py:446
 #, python-format
 msgid "残り%s秒です。"
 msgstr "%s seconds remaining."
 
-#: manager.py:447
+#: manager.py:448
 #, python-format
 msgid "残り%s分です。"
 msgstr "%s minutes remaining."
 
-#: manager.py:449
+#: manager.py:450
 #, python-format
 msgid "残り%(minutes)s分%(seconds)s秒です。"
 msgstr "%(minutes)s minutes and %(seconds)s seconds remaining."
 
-#: manager.py:476
+#: manager.py:477
 #, python-format
 msgid "残り%(hour)d時間%(minute)d分%(second)d秒"
 msgstr "%(hour)d hours %(minute)d minutes and %(second)d seconds remaining"
 
-#: manager.py:478
+#: manager.py:479
 #, python-format
 msgid "残り%(minute)d分%(second)d秒"
 msgstr "%(minute)d minutes and %(second)d seconds remaining"
 
-#: manager.py:480
+#: manager.py:481
 #, python-format
 msgid "残り%(second)d秒"
 msgstr "%(second)d seconds remaining"
 
-#: manager.py:488
+#: manager.py:489
 #, python-format
 msgid "%sさんが入力中"
 msgstr "%s is typing"
 
-#: manager.py:504
+#: manager.py:505
 msgid "ライブ終了。"
 msgstr "Live ended."
 
-#: manager.py:515
+#: manager.py:516
 msgid "ライブ開始。"
 msgstr "Live started."
 
-#: manager.py:526
+#: manager.py:527
 msgid "テロップ削除"
 msgstr "Subtitle was removed."
 
-#: manager.py:528
+#: manager.py:529
 msgid "テロップ変更。"
 msgstr "Subtitle changed."
 
-#: manager.py:537
+#: manager.py:538
 #, python-format
 msgid "カテゴリ変更：%s"
 msgstr "Category changed: %s"
 
-#: manager.py:546
+#: manager.py:547
 msgid "次のライブが開始されました。"
 msgstr "New live started."
 
-#: manager.py:576
+#: manager.py:577
 msgid "コイン消費"
 msgstr "Coin used"
 
-#: manager.py:580
+#: manager.py:581
 #, python-format
 msgid "コインが%d枚集まりました。"
 msgstr "You got %d coins."
 
-#: manager.py:582
+#: manager.py:583
 msgid "完走に必要なコインが集まりました。"
 msgstr "Got enough coins to complete the live."
 
-#: manager.py:593
+#: manager.py:594
 msgid "再生URLを取得できません。"
 msgstr "Faild to get playback URL."
 
-#: manager.py:597
+#: manager.py:598
 msgid "再生に失敗しました。"
 msgstr "Failed to start playback."
 
-#: manager.py:600 views\indicatorSoundSettings.py:17
+#: manager.py:601 views\indicatorSoundSettings.py:17
 msgid "再生"
 msgstr "play"
 
-#: manager.py:613
+#: manager.py:614
 msgid "停止"
 msgstr "stop"
 
-#: manager.py:622 manager.py:626
+#: manager.py:623 manager.py:627
 #, python-format
 msgid "音量%d"
 msgstr "volume %d"
 
-#: manager.py:739
+#: manager.py:740
 msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
@@ -351,59 +351,59 @@ msgstr ""
 "Access token is invalid. Add your account again from Account Manager in the "
 "settings menu."
 
-#: manager.py:741
+#: manager.py:742
 msgid ""
 "APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"
 msgstr ""
 "The API has reached its maximum number of runs. Please try again after a "
 "while."
 
-#: manager.py:743
+#: manager.py:744
 msgid ""
 "ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してくださ"
 "い。"
 msgstr ""
 "TwitCasting API returned a 500 error. Wait a while and try to connect again."
 
-#: manager.py:745 twitcasting\accountManager.py:59
+#: manager.py:746 twitcasting\accountManager.py:59
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 "Currently you cannot use TCV. Please contact the developer for further "
 "assistance."
 
-#: manager.py:760
+#: manager.py:761
 #, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
 msgstr ""
 "An error has occured during the communication between TwitCasting. Details: "
 "%s"
 
-#: manager.py:796
+#: manager.py:804
 #, python-format
 msgid "%sをもらいました。"
 msgstr "You got %s."
 
-#: manager.py:798
+#: manager.py:806
 #, python-format
 msgid "%(name)sを%(count)i個もらいました。"
 msgstr "You got %(count)i %(name)s."
 
-#: manager.py:806
+#: manager.py:814
 #, python-format
 msgid "%(user)sさんから%(item)sをもらいました。"
 msgstr "You got %(item)s from %(user)s."
 
-#: manager.py:808
+#: manager.py:816
 #, python-format
 msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
 msgstr "You got %(count)i %(item)s from %(user)s."
 
-#: manager.py:811
+#: manager.py:819
 #, python-format
 msgid "%(user)sさんなどから%(item)sをもらいました。"
 msgstr "You got %(item)s from %(user)s and others."
 
-#: manager.py:813
+#: manager.py:821
 #, python-format
 msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
 msgstr "You got %(count)i %(item)s from %(user)s and others."
@@ -428,7 +428,7 @@ msgstr "&Disconnect"
 msgid "終了(&X)"
 msgstr "E&xit"
 
-#: menuItemsDic.py:20 views\main.py:181
+#: menuItemsDic.py:20 views\main.py:184
 msgid "再生(&P)"
 msgstr "&Play"
 
@@ -488,7 +488,7 @@ msgstr "&Open this live in browser"
 msgid "お気に入りに追加(&A)"
 msgstr "&Add to favorites"
 
-#: menuItemsDic.py:38 views\main.py:184
+#: menuItemsDic.py:38 views\main.py:187
 msgid "設定(&S)"
 msgstr "&Settings"
 
@@ -683,7 +683,11 @@ msgstr "Canceled."
 msgid "不明"
 msgstr "unknown"
 
-#: twitcasting\connection.py:159
+#: twitcasting\connection.py:107
+msgid "不明なユーザー"
+msgstr "Unknown User"
+
+#: twitcasting\connection.py:161
 msgid "カテゴリなし"
 msgstr "no category"
 
@@ -695,14 +699,14 @@ msgstr "account manager"
 msgid "アカウント"
 msgstr "account"
 
-#: views\accountManager.py:33 views\main.py:94 views\userNamereplace.py:13
+#: views\accountManager.py:33 views\main.py:96 views\userNamereplace.py:13
 #: views\userNamereplace.py:29 views\viewBroadcaster.py:29
 #: views\viewComment.py:31
 msgid "ユーザ名"
 msgstr "user name"
 
 #: views\accountManager.py:34 views\globalKeyConfig.py:20
-#: views\globalKeyConfig.py:74 views\main.py:91 views\viewBroadcaster.py:28
+#: views\globalKeyConfig.py:74 views\main.py:93 views\viewBroadcaster.py:28
 #: views\viewComment.py:30
 msgid "名前"
 msgstr "name"
@@ -736,7 +740,7 @@ msgstr "move &Up"
 msgid "下へ(&D)"
 msgstr "move &Down"
 
-#: views\accountManager.py:54 views\versionDialog.py:46
+#: views\accountManager.py:54 views\itemHistory.py:29 views\versionDialog.py:46
 #: views\viewBroadcaster.py:37 views\viewComment.py:39
 #: views\viewFavorites.py:36 views\viewHistory.py:32
 msgid "閉じる"
@@ -788,7 +792,7 @@ msgstr ""
 #: views\base.py:119 views\fontManager.py:25 views\fontManager.py:50
 #: views\globalKeyConfig.py:61 views\globalKeyConfig.py:122
 #: views\KeyValueSettingDialogBase.py:279
-#: views\KeyValueSettingDialogBase.py:330 views\main.py:136
+#: views\KeyValueSettingDialogBase.py:330 views\main.py:139
 #: views\updateDialog.py:65
 msgid "エラー"
 msgstr "error"
@@ -866,7 +870,7 @@ msgstr "use regular expression"
 msgid "置換内容設定"
 msgstr "replace setting"
 
-#: views\connect.py:16 views\main.py:72 views\viewFavorites.py:35
+#: views\connect.py:16 views\main.py:73 views\viewFavorites.py:35
 #: views\viewHistory.py:31
 msgid "接続"
 msgstr "connect"
@@ -892,7 +896,7 @@ msgstr "shortcut"
 msgid "識別子"
 msgstr "identifier"
 
-#: views\globalKeyConfig.py:31 views\main.py:212
+#: views\globalKeyConfig.py:31 views\main.py:215
 msgid "ショートカットキーの設定"
 msgstr "Shortcut Key Configuration"
 
@@ -927,7 +931,7 @@ msgstr "shortcut 4"
 msgid "ショートカット5"
 msgstr "shortcut 5"
 
-#: views\globalKeyConfig.py:75 views\main.py:75 views\settings.py:63
+#: views\globalKeyConfig.py:75 views\main.py:76 views\settings.py:63
 msgid "設定"
 msgstr "settings"
 
@@ -1028,6 +1032,18 @@ msgstr "browse"
 msgid "効果音ファイルを選択"
 msgstr "select a sound file"
 
+#: views\itemHistory.py:16 views\itemHistory.py:23
+msgid "アイテム履歴"
+msgstr "items history"
+
+#: views\itemHistory.py:24
+msgid "ユーザ"
+msgstr "user"
+
+#: views\itemHistory.py:25 views\main.py:124
+msgid "アイテム"
+msgstr "items"
+
 #: views\keyConfig.py:31
 msgid "キー設定"
 msgstr "Key Configuration"
@@ -1097,59 +1113,55 @@ msgid ""
 msgstr ""
 "The key combination %(key)s, configured as %(command)s, is reserved.\\n\n"
 
-#: views\main.py:73
+#: views\main.py:74
 msgid "接続履歴を開く"
 msgstr "open connection history"
 
-#: views\main.py:74
+#: views\main.py:75
 msgid "お気に入り一覧を開く"
 msgstr "open favorites"
 
-#: views\main.py:76
+#: views\main.py:77
 msgid "アカウントマネージャを開く"
 msgstr "open account manager"
 
-#: views\main.py:77
+#: views\main.py:78
 msgid "ヘルプを表示"
 msgstr "view help"
 
-#: views\main.py:78
+#: views\main.py:79
 msgid "プログラムの終了"
 msgstr "exit"
 
-#: views\main.py:90
+#: views\main.py:92
 msgid "コメント一覧"
 msgstr "comment list"
 
-#: views\main.py:92
+#: views\main.py:94
 msgid "投稿"
 msgstr "message"
 
-#: views\main.py:93
+#: views\main.py:95
 msgid "時刻"
 msgstr "time"
 
-#: views\main.py:106
+#: views\main.py:108
 msgid "コメント投稿アカウント"
 msgstr "account"
 
-#: views\main.py:112
+#: views\main.py:114
 msgid "コメント内容"
 msgstr "comment"
 
-#: views\main.py:115
+#: views\main.py:117
 msgid "送信"
 msgstr "submit"
 
-#: views\main.py:118
+#: views\main.py:120
 msgid "ライブ情報"
 msgstr "live information"
 
-#: views\main.py:122
-msgid "アイテム"
-msgstr "items"
-
-#: views\main.py:133
+#: views\main.py:136
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
@@ -1160,53 +1172,53 @@ msgstr ""
 "and key names.\n"
 "\n"
 
-#: views\main.py:180
+#: views\main.py:183
 msgid "ファイル(&F)"
 msgstr "&File"
 
-#: views\main.py:182
+#: views\main.py:185
 msgid "コメント(&C)"
 msgstr "&Comment"
 
-#: views\main.py:183
+#: views\main.py:186
 msgid "ライブ(&L)"
 msgstr "&Live"
 
-#: views\main.py:185
+#: views\main.py:188
 msgid "ヘルプ(&H)"
 msgstr "&Help"
 
-#: views\main.py:218
+#: views\main.py:221
 msgid "グローバルホットキーの設定"
 msgstr "Global Hot Keys Settings"
 
-#: views\main.py:259 views\main.py:268 views\viewFavorites.py:46
+#: views\main.py:262 views\main.py:271 views\viewFavorites.py:46
 #: views\viewFavorites.py:54 views\viewHistory.py:44
 msgid "確認"
 msgstr "confirmation"
 
-#: views\main.py:259
+#: views\main.py:262
 msgid "選択中のコメントを削除しますか？"
 msgstr "Are you sure you want to delete the selected comment?"
 
-#: views\main.py:266
+#: views\main.py:269
 msgid "すでに登録されています。"
 msgstr "It is already registered."
 
-#: views\main.py:268
+#: views\main.py:271
 #, python-format
 msgid "%sのライブをお気に入りに追加しますか？"
 msgstr "Are you sure you want to add %s to your favorites?"
 
-#: views\main.py:392
+#: views\main.py:400
 msgid "接続履歴がありません。"
 msgstr "No items in your connection history."
 
-#: views\main.py:406
+#: views\main.py:414
 msgid "お気に入りライブが登録されていません。"
 msgstr "No items in your favorites."
 
-#: views\main.py:509
+#: views\main.py:517
 msgid "readme.txtが見つかりません。"
 msgstr "Readme.txt could not be found."
 
