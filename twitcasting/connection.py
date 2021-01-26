@@ -103,6 +103,8 @@ class connection(threading.Thread):
 		if itemId == "MP":
 			return
 		users = getItemPostedUser(self.userId, itemId)
+		if count > len(users):
+			users[len(users):count] = [_("不明なユーザー")] * (count - len(users))
 		return users[0:count]
 
 	def getTypingUser(self):

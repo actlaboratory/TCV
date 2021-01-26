@@ -160,6 +160,7 @@ class manager:
 		self.connection.start()
 		self.itemOperation = ItemOperation(self)
 		self.itemOperation.start()
+		self.items = []
 
 	def disconnect(self):
 		self.connection.running = False
@@ -782,6 +783,13 @@ class ItemOperation(threading.Thread):
 			name = i["name"]
 			count = i["count"]
 			users = self.manager.connection.getItemPostedUser(id, count)
+			items = []
+			for i in range(count):
+				items.append({
+					"user": users[i],
+					"item": name,
+				})
+			self.manager.items = items + self.manager.items
 			readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
 			multiUser = False
 			if len(users) > 1:
