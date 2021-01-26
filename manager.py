@@ -179,7 +179,9 @@ class manager:
 
 	def getNewComments(self):
 		limit = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
-		return self.connection.comments[:limit]
+		result = self.connection.comments[:limit]
+		result.reverse()
+		return result
 
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
