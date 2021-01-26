@@ -39,6 +39,7 @@ import views.indicatorSoundSettings
 import views.commentReplace
 import views.userNamereplace
 import views.changeSpeechOutput
+import views.itemHistory
 import webbrowser
 import constants
 
@@ -84,6 +85,7 @@ class MainView(BaseView):
 		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
 		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
+		self.itemListAcceleratorTable=self.keymap.GetTable("itemList")
 
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=2)
 		self.c1=creator.GetSizer()
@@ -120,6 +122,7 @@ class MainView(BaseView):
 		self.liveInfo.Bind(wx.EVT_CONTEXT_MENU, self.events.userInfoContextMenu)
 		self.liveInfo.Bind(wx.EVT_RIGHT_DOWN,self.liveInfo.setCursorOnMouse)
 		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+		self.itemList.SetAcceleratorTable(self.itemListAcceleratorTable)
 
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
@@ -351,6 +354,11 @@ class Events(BaseEvents):
 		#ユーザー情報のコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("POPUP_OPEN_USER_INFO"):
 			return self.userInfoContextMenu()
+		# アイテム履歴
+		elif menuItemsStore.getRef("ITEM_HISTORY"):
+			d = views.itemHistory.Dialog()
+			d.Initialize()
+			d.Show(False)
 
 
 	def postComment(self, event):

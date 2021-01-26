@@ -51,6 +51,10 @@ defaultKeymap["userInfo"]= {
 	"POPUP_OPEN_USER_INFO": "APPLICATIONS/SHIFT+F10"
 }
 
+defaultKeymap["itemList"] = {
+	"ITEM_HISTORY": "RETURN",
+}
+
 defaultKeymap["HOTKEY"]= {
 	"DISCONNECT": "",
 	"PLAY": "",

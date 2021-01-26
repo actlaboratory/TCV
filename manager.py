@@ -783,6 +783,13 @@ class ItemOperation(threading.Thread):
 			name = i["name"]
 			count = i["count"]
 			users = self.manager.connection.getItemPostedUser(id, count)
+			items = []
+			for i in range(count):
+				items.append({
+					"user": users[i],
+					"item": name,
+				})
+			self.manager.items = items + self.manager.items
 			readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
 			multiUser = False
 			if len(users) > 1:
@@ -812,13 +819,6 @@ class ItemOperation(threading.Thread):
 							globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
 						else:
 							globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-			items = []
-			for i in range(count):
-				items.append({
-					"user": users[i],
-					"item": name,
-				})
-			self.manager.items = items + self.manager.items
 		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
 			self.manager.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
 		self.manager.oldItem = self.manager.newItem
