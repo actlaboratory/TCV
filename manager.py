@@ -765,7 +765,7 @@ class manager:
 
 class ItemOperation(threading.Thread):
 	def __init__(self, manager):
-		super().__init__()
+		super().__init__(daemon=True)
 		self.manager = manager
 		self.running = False
 

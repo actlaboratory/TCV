@@ -355,7 +355,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("POPUP_OPEN_USER_INFO"):
 			return self.userInfoContextMenu()
 		# アイテム履歴
-		elif menuItemsStore.getRef("ITEM_HISTORY"):
+		elif selected == menuItemsStore.getRef("ITEM_HISTORY"):
 			d = views.itemHistory.Dialog()
 			d.Initialize()
 			d.Show(False)
