@@ -40,6 +40,7 @@ import views.commentReplace
 import views.userNamereplace
 import views.changeSpeechOutput
 import views.itemHistory
+import views.commentListConfiguration
 import webbrowser
 import constants
 
@@ -283,6 +284,11 @@ class Events(BaseEvents):
 		#設定
 		elif selected==menuItemsStore.getRef("SETTING"):
 			self.settings()
+		# コメントリスト表示設定
+		elif selected == menuItemsStore.getRef("COMMENT_LIST_CONFIGURATION"):
+			d = views.commentListConfiguration.Dialog()
+			d.Initialize()
+			d.Show()
 		#効果音設定
 		elif selected == menuItemsStore.getRef("INDICATOR_SOUND_SETTING"):
 			self.indicatorSoundSettings()
