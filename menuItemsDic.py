@@ -43,7 +43,7 @@ dic={
 	"USER_NAME_REPLACE": _("表示名置換設定(&N)") + "...",
 	"ACCOUNT_MANAGER": _("アカウントマネージャ(&M)") + "...",
 	"SAPI_SETTING": _("SAPI設定を開く(&A)") + "...",
-	"CHANGE_SPEECH_OUTPUT": _("読み上げ出力先の変更(&O)"),
+	"CHANGE_SPEECH_OUTPUT": _("読み上げ出力先の変更(&O)") + "...",
 	#ヘルプメニュー
 	"HELP": _("ヘルプを開く(&H)"),
 	"VERSION_INFO": _("バージョン情報(&V)") + "...",
