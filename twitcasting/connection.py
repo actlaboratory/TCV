@@ -13,7 +13,7 @@ import time
 
 class connection(threading.Thread):
 	def __init__(self, userId):
-		super().__init__()
+		super().__init__(daemon=True)
 		self.userId = userId
 		self.update(0)
 		self.comments = []
