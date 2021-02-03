@@ -32,7 +32,7 @@ class Dialog(BaseDialog):
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onOkBtn)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemSelected)
-		for i in json.loads(globalVars.app.config["mainView"]["commentlist_columns_order"]):
+		for i in globalVars.app.hMainView.commentList.GetColumnsOrder():
 			self.hListCtrl.Append([self.values[i]])
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
@@ -51,7 +51,7 @@ class Dialog(BaseDialog):
 			text = self.hListCtrl.GetItemText(i)
 			key = [k for k, v in self.values.items() if v == text][0]
 			ret.append(key)
-			globalVars.app.config["mainView"]["commentlist_columns_order"] = json.dumps(ret)
+		globalVars.app.hMainView.commentList.SetColumnsOrder(ret)
 
 	def  onOkBtn(self, event):
 		self.save()
