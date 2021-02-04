@@ -36,6 +36,7 @@ dic={
 	"ADD_FAVORITES": _("お気に入りに追加(&A)") + "...",
 	#設定メニュー
 	"SETTING": _("設定(&S)") + "...",
+	"COMMENT_LIST_CONFIGURATION": _("コメントリスト表示設定(&L)") + "...",
 	"SET_KEYMAP": _("ショートカットキーの設定(&K)") + "...",
 	"SET_HOTKEY": _("グローバルホットキーの設定(&G)") + "...",
 	"INDICATOR_SOUND_SETTING": _("効果音設定(&I)") + "...",

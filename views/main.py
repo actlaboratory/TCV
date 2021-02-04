@@ -40,6 +40,7 @@ import views.commentReplace
 import views.userNamereplace
 import views.changeSpeechOutput
 import views.itemHistory
+import views.commentListConfiguration
 import webbrowser
 import constants
 
@@ -175,7 +176,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
+			["SETTING", "COMMENT_LIST_CONFIGURATION", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
@@ -283,6 +284,11 @@ class Events(BaseEvents):
 		#設定
 		elif selected==menuItemsStore.getRef("SETTING"):
 			self.settings()
+		# コメントリスト表示設定
+		elif selected == menuItemsStore.getRef("COMMENT_LIST_CONFIGURATION"):
+			d = views.commentListConfiguration.Dialog()
+			d.Initialize()
+			d.Show()
 		#効果音設定
 		elif selected == menuItemsStore.getRef("INDICATOR_SOUND_SETTING"):
 			self.indicatorSoundSettings()
