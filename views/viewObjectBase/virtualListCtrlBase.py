@@ -51,13 +51,13 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.RefreshItem(index)
         return True
 
-	#
-	# 独自拡張機能
-	#
+    #
+    # 独自拡張機能
+    #
 
-	#columnを非表示/再表示する
-	def hideColumn(column,flag=True):
-		pass
+    #columnを非表示/再表示する
+    def hideColumn(column,flag=True):
+        pass
 
     #
     # ビュー部分
