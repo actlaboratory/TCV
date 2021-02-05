@@ -112,7 +112,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
 
     def pop(self, index):
         l = self.GetSelectedItems()
-        self.DeleteItem(index)
+        super().DeleteItem(index)
         ret = self.lst.pop(index)
         self.RefreshItems(index, len(self.lst)-1)
         return ret
@@ -121,7 +121,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         index = self.lst.index(value)
         l = self.GetSelectedItems()
         self.lst.remove(value)
-        self.DeleteItem(index)
+        super().DeleteItem(index)
         self.RefreshItems(index, len(self.lst)-1)
         self.__setSelectionFromList(l)
 
@@ -194,7 +194,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
             self.Show()
             self.SetFocus()
         elif type(key) == int:
-            self.DeleteItem(key)
+            super().DeleteItem(key)
             self.lst.pop(key)
             self.RefreshItems(0, len(self.lst)-1)
         else:
@@ -207,7 +207,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
             self.Focus(0)
             for o in reversed(self.lst[key]):
                 i = self.lst.index(o)
-                self.DeleteItem(i)
+                super().DeleteItem(i)
                 self.lst.pop(i)
             self.RefreshItems(0, len(self.lst)-1)
             self.__setFocus(f, fId, top, l, previousL)
