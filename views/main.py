@@ -90,7 +90,7 @@ class MainView(BaseView):
 
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=2)
 		self.c1=creator.GetSizer()
-		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT | wx.BORDER_RAISED, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
+		self.commentList, self.commentListStatic = creator.virtualListCtrl(_("コメント一覧"), None, wx.LC_REPORT | wx.BORDER_RAISED, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
 		self.commentList.InsertColumn(0, _("名前"),width=200)
 		self.commentList.InsertColumn(1, _("投稿"),width=370)
 		self.commentList.InsertColumn(2, _("時刻"),width=150)

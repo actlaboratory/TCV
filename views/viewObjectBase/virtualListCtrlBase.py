@@ -29,6 +29,35 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         super().SetItemCount(lstLen)
         if lstLen > 0: self.RefreshItems(0, lstLen)
 
+    #
+    #    listCtrl互換
+    #
+    #    既存リストからの移行用途であり、新規実装時はリスト互換の方を利用すること
+    #
+    def InsertItem(self,index,label=None):
+        if label==None or type(label)!=str:
+            raise NotImplementedError
+        return self.insert(index,[label])
+
+    def SetItem(self,index,column=0,label=None,imageId=-1):
+        if type(index)!=int or label==None or type(label)!=str or imageId!=-1:
+            raise NotImplementedError
+        if column<0:
+            raise ValueError
+        obj=self.lst[index]
+        while(len(obj)<=column):
+            obj.append("")
+        obj[column]=label
+        self.RefreshItem(index)
+        return True
+
+	#
+	# 独自拡張機能
+	#
+
+	#columnを非表示/再表示する
+	def hideColumn(column,flag=True):
+		pass
 
     #
     # ビュー部分
@@ -246,17 +275,17 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.Focus(newFocus)
 
 if __name__ == "__main__":
-	app = wx.App()
-	frame = wx.Frame()
-	obj = virtualListCtrl(frame)
-	l = []
-	for i in range(100000):
-		l.append(i)
-	print("ok")
-	print(obj)
-	obj += l
-	print(obj)
-	print("ok")
-	obj.RefreshItems(0, 100000)
-	print("ok")	
-	print(len(obj))
+    app = wx.App()
+    frame = wx.Frame()
+    obj = virtualListCtrl(frame)
+    l = []
+    for i in range(100000):
+        l.append(i)
+    print("ok")
+    print(obj)
+    obj += l
+    print(obj)
+    print("ok")
+    obj.RefreshItems(0, 100000)
+    print("ok")    
+    print(len(obj))
