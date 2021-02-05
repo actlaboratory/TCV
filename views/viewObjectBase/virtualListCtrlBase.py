@@ -64,7 +64,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     # 
     def OnGetItemText(self, item, column):
         obj = self.lst[item]
-        if hasattr(obj, '__iter__'): return str(obj[column]) # イテレーション可能なオブジェクト
+        if hasattr(obj, '__iter__'):
+            if len(obj)<=column:
+                return ""
+            return str(obj[column]) # イテレーション可能なオブジェクト
         else: return obj.getListTuple()[column] # getListTupleを実装するオブジェクト
 
 
