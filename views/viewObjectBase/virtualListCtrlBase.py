@@ -52,7 +52,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return True
 
     def DeleteItem(self,index):
-        self.lst.pop(index)
+        self.pop(index)
         return True
 
     #
