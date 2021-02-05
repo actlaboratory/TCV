@@ -26,7 +26,7 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL,margin=20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,0,style=wx.EXPAND|wx.ALL,margin=20)
 		self.hListCtrl, self.hStatic = self.creator.listCtrl(_("カラム"), None, wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.BORDER_RAISED,sizerFlag=wx.EXPAND)
 		self.hListCtrl.InsertColumn(0, _("カラム"),width=450)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onOkBtn)
@@ -39,8 +39,9 @@ class Dialog(BaseDialog):
 		for i in data:
 			self.hListCtrl.Append([self.values[i]])
 
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.EXPAND|wx.LEFT|wx.RIGHT,margin=20)
 		self.moveLeftButton = self.creator.button(_("左へ(&L)"), self.move)
+		self.creator.AddSpace(-1)
 		self.moveRightButton = self.creator.button(_("右へ(&R)"), self.move)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
