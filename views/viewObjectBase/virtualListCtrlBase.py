@@ -51,6 +51,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.RefreshItem(index)
         return True
 
+    def DeleteItem(self,index):
+        self.lst.pop(index)
+        return True
+
     #
     # 独自拡張機能
     #
