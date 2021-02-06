@@ -48,9 +48,13 @@ class connection(threading.Thread):
 					if "error" in result2:
 						self.errorFlag = result2["error"]["code"]
 					result2 = []
-				for i in result2:
-					if i in result:
-						result2.remove(i)
+				rm = []
+				for i in range(len(result2)):
+					if result2[i] in result:
+						rm.append(i)
+				rm.reverse()
+				for i in rm:
+					del result2[i]
 				result = result + result2
 				if len(result2) == 0 or len(result) == number:
 					break
