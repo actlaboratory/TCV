@@ -28,7 +28,7 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,0,style=wx.EXPAND|wx.ALL,margin=20)
 		self.hListCtrl, self.hStatic = self.creator.listCtrl(_("カラム"), None, wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.BORDER_RAISED,sizerFlag=wx.EXPAND)
-		self.hListCtrl.InsertColumn(0, _("カラム"),width=450)
+		self.hListCtrl.AppendColumn(_("カラム"),width=450)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onOkBtn)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemSelected)
