@@ -25,7 +25,10 @@ class BaseView(object):
 		self.identifier=identifier
 		self.log=getLogger("%s.%s" % (constants.LOG_PREFIX,self.identifier))
 		self.shortcutEnable=True
-		self.viewMode=globalVars.app.config.getstring("view","colorMode","white",("white","dark"))
+		self.viewMode=views.ViewCreator.ViewCreator.config2modeValue(
+			globalVars.app.config.getstring("view","colorMode","white",("white","dark")),
+			globalVars.app.config.getstring("view","textWrapping","off",("on","off"))
+		)
 		self.app=globalVars.app
 
 	def Initialize(self, ttl, x, y,px,py,style=wx.DEFAULT_FRAME_STYLE,space=0):
