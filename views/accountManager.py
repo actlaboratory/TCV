@@ -30,10 +30,10 @@ class Dialog(BaseDialog):
 		self.hListCtrl,self.hListStatic=self.creator.listCtrl(_("アカウント"),None,wx.LC_REPORT | wx.BORDER_RAISED,(800,300),wx.ALL|wx.ALIGN_CENTER_HORIZONTAL)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
-		self.hListCtrl.InsertColumn(0,_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
-		self.hListCtrl.InsertColumn(1,_("名前"),format=wx.LIST_FORMAT_LEFT,width=250)
-		self.hListCtrl.InsertColumn(2,_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=180)
-		self.hListCtrl.InsertColumn(3,_("通信用"),format=wx.LIST_FORMAT_LEFT,width=110)
+		self.hListCtrl.AppendColumn(_("ユーザ名"),format=wx.LIST_FORMAT_LEFT,width=250)
+		self.hListCtrl.AppendColumn(_("名前"),format=wx.LIST_FORMAT_LEFT,width=250)
+		self.hListCtrl.AppendColumn(_("有効期限"),format=wx.LIST_FORMAT_LEFT,width=180)
+		self.hListCtrl.AppendColumn(_("通信用"),format=wx.LIST_FORMAT_LEFT,width=110)
 
 		#処理ボタン
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)

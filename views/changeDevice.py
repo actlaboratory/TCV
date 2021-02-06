@@ -22,7 +22,7 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.EXPAND|wx.ALL,margin=20)
 		self.deviceList, self.static = self.creator.listCtrl(_("再生デバイス"), None, wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.BORDER_RAISED,sizerFlag=wx.EXPAND)
-		self.deviceList.InsertColumn(0, _("再生デバイス"),width=450)
+		self.deviceList.AppendColumn(_("再生デバイス"),width=450)
 		self.deviceList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
 		self.deviceList.InsertItem(0, _("規定のデバイス"))
 		deviceList = list(getDeviceList())
