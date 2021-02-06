@@ -112,7 +112,6 @@ class MainView(BaseView):
 		self.selectAccount.SetSelection(0)
 
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.LEFT | wx.RIGHT | wx.EXPAND)
-		print(self.viewMode)
 		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE | wx.TE_NOHIDESEL, sizerFlag=wx.EXPAND, proportion=1, textLayout=None)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentBodyEdit.hideScrollBar(wx.VERTICAL | wx.HORIZONTAL)
