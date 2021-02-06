@@ -14,6 +14,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         else: kArg["style"] = wx.LC_REPORT | wx.LC_VIRTUAL
         self.lst = []
         self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True)
+        self.columns = []
         return super().__init__(*lPArg, **kArg)
 
     def RefreshItems(self, first, end):
@@ -40,6 +41,9 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return self.insert(index,[label])
 
     def SetItem(self,index,column=0,label=None,imageId=-1):
+        tmp = self.getCol(column)
+        if tmp.wx_col < 0: return
+        column = tmp.wx_col
         if type(index)!=int or label==None or type(label)!=str or imageId!=-1:
             raise NotImplementedError
         if column<0:
@@ -67,6 +71,9 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     # ビュー部分
     # 
     def OnGetItemText(self, item, column):
+        tmp = self.getCol(column)
+        if tmp.wx_col < 0: return ""
+        column = tmp.wx_col
         obj = self.lst[item]
         if hasattr(obj, '__iter__'):
             if len(obj)<=column:
@@ -281,6 +288,45 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         else: self.Focus(newTop)
         self.Focus(newFocus)
 
+    # カラムの操作
+    def getCol(self, col):
+        tmp = [i for i in self.columns if i.col == col]
+        return tmp[0]
+
+    def AppendColumn(self, heading, format=wx.LIST_FORMAT_LEFT, width=-1):
+        result = super().AppendColumn(heading, format, width)
+        self.columns.append(Column(len(self.columns), result, super().GetColumnOrder(result), format, width, heading))
+        return result
+
+    def GetItemText(self, item, col=0):
+        tmp = self.getCol(col)
+        if tmp.wx_col < 0: return ""
+        return super().GetItemText(item, tmp.wx_col)
+
+    def InsertColumn(self, col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE):
+        result = super().InsertColumn(col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE)
+        self.columns.append(Column(col, result, super().GetColumnOrder(result), format, width, heading))
+        return result
+
+    def SetColumnsOrder(self, orders):
+        self.DeleteAllColumns()
+        tmp = list(range(len(self.columns)))
+        counter = 0
+        for i in orders:
+            data = self.getCol(i)
+            self.AppendColumn(data.heading, data.format, data.width)
+            data.wx_col = counter
+            data.disp_col = counter
+            data.display = True
+            counter += 1
+            tmp.remove(i)
+        for i in tmp:
+            data = self.getCol(i)
+            data.wx_col = -1
+            data.disp_col = -1
+            data.display = False
+        self.RefreshItems(0, self.GetItemCount())
+
 if __name__ == "__main__":
     app = wx.App()
     frame = wx.Frame()
@@ -296,3 +342,24 @@ if __name__ == "__main__":
     obj.RefreshItems(0, 100000)
     print("ok")    
     print(len(obj))
+
+
+class Column:
+    def __init__(self, col, wx_col, disp_col, format, width, heading):
+        self.col = col
+        self.wx_col = wx_col
+        self.disp_col = disp_col
+        self.format = format
+        self.width = width
+        self.heading = heading
+        self.display = disp_col >= 0
+
+    def __repr__(self):
+        """デバッグ用"""
+        ret = {
+            "col": self.col,
+            "wx_col": self.wx_col,
+            "disp_col": self.disp_col,
+            "width": self.width,
+        }
+        return str(ret)
