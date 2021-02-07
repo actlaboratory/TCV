@@ -71,9 +71,6 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     # ビュー部分
     # 
     def OnGetItemText(self, item, column):
-        tmp = self.getCol(column)
-        if tmp.wx_col < 0: return ""
-        column = tmp.wx_col
         obj = self.lst[item]
         if hasattr(obj, '__iter__'):
             if len(obj)<=column:
