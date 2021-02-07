@@ -17,6 +17,7 @@ class Dialog(BaseDialog):
 			2: _("時刻"),
 			3: _("ユーザ名")
 		}
+		self.displayStatus = {}
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -32,14 +33,21 @@ class Dialog(BaseDialog):
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onOkBtn)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemSelected)
+		tmp = list(range(4))
 		try:
 			data = globalVars.app.hMainView.commentList.GetColumnsOrder()
 		except AttributeError:
 			data = json.loads(globalVars.app.config["mainView"]["commentlist_columns_order"])
 		for i in data:
 			self.hListCtrl.Append([self.values[i]])
+			tmp.remove(i)
+			self.displayStatus[i] = True
+		for i in tmp:
+			self.hListCtrl.Append([self.values[i]])
+			self.displayStatus[i] = False
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.EXPAND|wx.LEFT|wx.RIGHT,margin=20)
+		self.hCheckBox = self.creator.checkbox(_("表示(&D)"), self.onCheckBoxStatusChanged)
 		self.moveLeftButton = self.creator.button(_("左へ(&L)"), self.move)
 		self.creator.AddSpace(-1)
 		self.moveRightButton = self.creator.button(_("右へ(&R)"), self.move)
@@ -55,7 +63,8 @@ class Dialog(BaseDialog):
 		for i in range(self.hListCtrl.GetItemCount()):
 			text = self.hListCtrl.GetItemText(i)
 			key = [k for k, v in self.values.items() if v == text][0]
-			ret.append(key)
+			if self.displayStatus[key]:
+				ret.append(key)
 		try:
 			globalVars.app.hMainView.commentList.SetColumnsOrder(ret)
 		except AttributeError:
@@ -79,5 +88,13 @@ class Dialog(BaseDialog):
 		self.hListCtrl.Select(target)
 
 	def onItemSelected(self, event=None):
-		self.moveLeftButton.Enable(self.hListCtrl.GetFocusedItem() >= 1)
-		self.moveRightButton.Enable(self.hListCtrl.GetFocusedItem() >= 0 and self.hListCtrl.GetFocusedItem() < self.hListCtrl.GetItemCount() - 1)
+		selected = self.hListCtrl.GetFocusedItem()
+		self.hCheckBox.Enable(selected >= 0)
+		if selected >= 0:
+			self.hCheckBox.SetValue(self.displayStatus[selected])
+		self.moveLeftButton.Enable(selected >= 1)
+		self.moveRightButton.Enable(selected >= 0 and selected < self.hListCtrl.GetItemCount() - 1)
+
+	def onCheckBoxStatusChanged(self, event):
+		selected = self.hListCtrl.GetFocusedItem()
+		self.displayStatus[selected] = self.hCheckBox.GetValue()
