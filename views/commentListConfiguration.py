@@ -41,10 +41,8 @@ class Dialog(BaseDialog):
 		for i in data:
 			self.hListCtrl.Append([self.values[i]])
 			tmp.remove(i)
-			self.displayStatus[i] = True
 		for i in tmp:
 			self.hListCtrl.Append([self.values[i]])
-			self.displayStatus[i] = False
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.EXPAND|wx.LEFT|wx.RIGHT,margin=20)
 		self.hCheckBox = self.creator.checkbox(_("表示(&D)"), self.onCheckBoxStatusChanged)
@@ -56,13 +54,22 @@ class Dialog(BaseDialog):
 		self.bOk=self.creator.okbutton(_("ＯＫ"), self.onOkBtn)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
+		self.loadDisplayStatus(data)
 		self.onItemSelected()
+
+	def loadDisplayStatus(self, data):
+		for i in range(self.hListCtrl.GetItemCount()):
+			index = self.getIndexFromText(self.hListCtrl.GetItemText(i))
+			self.displayStatus[index] = (index in data)
+
+	def getIndexFromText(self, text):
+		return [k for k, v in self.values.items() if v == text][0]
 
 	def save(self):
 		ret = []
-		for i in range(self.hListCtrl.GetItemCount()):
+		for i in range(len(self.values)):
 			text = self.hListCtrl.GetItemText(i)
-			key = [k for k, v in self.values.items() if v == text][0]
+			key = self.getIndexFromText(text)
 			if self.displayStatus[key]:
 				ret.append(key)
 		try:
@@ -91,10 +98,10 @@ class Dialog(BaseDialog):
 		selected = self.hListCtrl.GetFocusedItem()
 		self.hCheckBox.Enable(selected >= 0)
 		if selected >= 0:
-			self.hCheckBox.SetValue(self.displayStatus[selected])
+			self.hCheckBox.SetValue(self.displayStatus[self.getIndexFromText(self.hListCtrl.GetItemText(selected))])
 		self.moveLeftButton.Enable(selected >= 1)
 		self.moveRightButton.Enable(selected >= 0 and selected < self.hListCtrl.GetItemCount() - 1)
 
 	def onCheckBoxStatusChanged(self, event):
 		selected = self.hListCtrl.GetFocusedItem()
-		self.displayStatus[selected] = self.hCheckBox.GetValue()
+		self.displayStatus[self.getIndexFromText(self.hListCtrl.GetItemText(selected))] = self.hCheckBox.GetValue()
