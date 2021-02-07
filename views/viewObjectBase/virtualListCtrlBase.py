@@ -293,6 +293,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         tmp = [i for i in self.columns if i.col == col]
         return tmp[0]
 
+    def getColFromWx(self, wx_col):
+        tmp = [i for i in self.columns if i.wx_col == wx_col]
+        return tmp[0]
+
     def AppendColumn(self, heading, format=wx.LIST_FORMAT_LEFT, width=-1):
         result = super().AppendColumn(heading, format, width)
         self.columns.append(Column(len(self.columns), result, super().GetColumnOrder(result), format, width, heading))
@@ -314,8 +318,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         counter = 0
         for i in orders:
             data = self.getCol(i)
-            self.AppendColumn(data.heading, data.format, data.width)
-            data.wx_col = counter
+            data.wx_col = super().AppendColumn(data.heading, data.format, data.width)
             data.disp_col = counter
             data.display = True
             counter += 1
@@ -326,6 +329,14 @@ class virtualListCtrl(listCtrlBase.listCtrl):
             data.disp_col = -1
             data.display = False
         self.RefreshItems(0, self.GetItemCount())
+
+    def GetColumnsOrder(self):
+        ret = []
+        tmp = super().GetColumnsOrder()
+        for i in tmp:
+            data = self.getColFromWx(i)
+            ret.append(data.col)
+        return ret
 
 if __name__ == "__main__":
     app = wx.App()
@@ -356,10 +367,4 @@ class Column:
 
     def __repr__(self):
         """デバッグ用"""
-        ret = {
-            "col": self.col,
-            "wx_col": self.wx_col,
-            "disp_col": self.disp_col,
-            "width": self.width,
-        }
-        return str(ret)
+        return str(self.__dict__)
