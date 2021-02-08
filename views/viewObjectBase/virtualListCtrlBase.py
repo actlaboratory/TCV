@@ -41,9 +41,6 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return self.insert(index,[label])
 
     def SetItem(self,index,column=0,label=None,imageId=-1):
-        tmp = self.getCol(column)
-        if tmp.wx_col < 0: return
-        column = tmp.wx_col
         if type(index)!=int or label==None or type(label)!=str or imageId!=-1:
             raise NotImplementedError
         if column<0:
@@ -71,6 +68,8 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     # ビュー部分
     # 
     def OnGetItemText(self, item, column):
+        tmp = self.getColFromWx(column)
+        column = tmp.col
         obj = self.lst[item]
         if hasattr(obj, '__iter__'):
             if len(obj)<=column:
