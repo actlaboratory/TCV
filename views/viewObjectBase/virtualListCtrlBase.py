@@ -298,11 +298,6 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.columns.append(Column(len(self.columns), result, super().GetColumnOrder(result), format, width, heading))
         return result
 
-    def GetItemText(self, item, col=0):
-        tmp = self.getCol(col)
-        if tmp.wx_col < 0: return ""
-        return super().GetItemText(item, tmp.wx_col)
-
     def InsertColumn(self, col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE):
         result = super().InsertColumn(col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE)
         self.columns.append(Column(col, result, super().GetColumnOrder(result), format, width, heading))
