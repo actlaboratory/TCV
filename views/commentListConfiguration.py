@@ -7,6 +7,7 @@ import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
 import json
+import simpleDialog
 
 class Dialog(BaseDialog):
 	def __init__(self):
@@ -78,6 +79,9 @@ class Dialog(BaseDialog):
 			globalVars.app.config["mainView"]["commentlist_columns_order"] = json.dumps(ret)
 
 	def  onOkBtn(self, event):
+		if len([i for i in self.displayStatus.values() if i == True]) == 0:
+			simpleDialog.errorDialog(_("全ての列を非表示にすることはできません。"))
+			return
 		self.save()
 		self.Destroy()
 
