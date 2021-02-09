@@ -362,6 +362,9 @@ class virtualListCtrl(listCtrlBase.listCtrl):
             raise NotImplementedError
         return super().Bind(event, handler, source=source, id=id, id2=id2)
 
+    def GetItemText(self, item, col):
+        return self.lst[item][col]
+
 if __name__ == "__main__":
     app = wx.App()
     frame = wx.Frame()
