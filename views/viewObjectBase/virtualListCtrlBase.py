@@ -357,6 +357,11 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         if tmp.wx_col < 0: return
         return super().SetColumnWidth(col, width)
 
+    def Bind(self, event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
+        if event in (wx.EVT_LIST_COL_CLICK, wx.EVT_LIST_COL_RIGHT_CLICK, wx.EVT_LIST_COL_BEGIN_DRAG, wx.EVT_LIST_COL_DRAGGING, wx.EVT_LIST_COL_END_DRAG):
+            raise NotImplementedError
+        return super().Bind(event, handler, source=source, id=id, id2=id2)
+
 if __name__ == "__main__":
     app = wx.App()
     frame = wx.Frame()
