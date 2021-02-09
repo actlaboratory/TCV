@@ -311,6 +311,16 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.columns.append(Column(col, result, super().GetColumnOrder(result), format, width, heading))
         return result
 
+    def DeleteColumn(self, col):
+        removedColumn = self.getCol(col)
+        for i in range(self.GetColumnCount() - 1, col, -1):
+            tmp = self.getCol(i)
+            tmp.col -= 1
+            tmp.wx_col -= 1
+            tmp.disp_col -= 1
+        self.columns.remove(removedColumn)
+        return super().DeleteColumn(col)
+
     def SetColumnsOrder(self, orders):
         self.DeleteAllColumns()
         tmp = list(range(len(self.columns)))
