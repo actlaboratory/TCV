@@ -288,10 +288,12 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     # カラムの操作
     def getCol(self, col):
         tmp = [i for i in self.columns if i.col == col]
+        if len(tmp) == 0: return
         return tmp[0]
 
     def getColFromWx(self, wx_col):
         tmp = [i for i in self.columns if i.wx_col == wx_col]
+        if len(tmp) == 0: return
         return tmp[0]
 
     def AppendColumn(self, heading, format=wx.LIST_FORMAT_LEFT, width=-1):
@@ -300,6 +302,11 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return result
 
     def InsertColumn(self, col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE):
+        for i in range(self.GetColumnCount() - 1, col - 1, -1):
+            tmp = self.getCol(i)
+            tmp.col += 1
+            tmp.wx_col += 1
+            tmp.disp_col += 1
         result = super().InsertColumn(col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE)
         self.columns.append(Column(col, result, super().GetColumnOrder(result), format, width, heading))
         return result
