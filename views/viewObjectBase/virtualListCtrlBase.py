@@ -329,6 +329,16 @@ class virtualListCtrl(listCtrlBase.listCtrl):
             ret.append(data.col)
         return ret
 
+    def GetColumnWidth(self, col):
+        tmp = self.getCol(col)
+        return tmp.width
+
+    def SetColumnWidth(self, col, width):
+        tmp = self.getCol(col)
+        tmp.width = width
+        if tmp.wx_col < 0: return
+        return super().SetColumnWidth(col, width)
+
 if __name__ == "__main__":
     app = wx.App()
     frame = wx.Frame()
