@@ -112,6 +112,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.lst.insert(index, object)
         super().SetItemCount(len(self.lst))
         self.RefreshItems(index, len(self.lst)-1)
+        return index
 
     def pop(self, index):
         l = self.GetSelectedItems()
