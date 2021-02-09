@@ -313,13 +313,14 @@ class virtualListCtrl(listCtrlBase.listCtrl):
 
     def DeleteColumn(self, col):
         removedColumn = self.getCol(col)
-        for i in range(self.GetColumnCount() - 1, col, -1):
+        for i in range(col + 1, self.GetColumnCount()):
             tmp = self.getCol(i)
             tmp.col -= 1
-            tmp.wx_col -= 1
-            tmp.disp_col -= 1
+        for i in [j for j in self.columns if j.wx_col > removedColumn.wx_col]: i.wx_col -= 1
+        for i in [j for j in self.columns if j.disp_col > removedColumn.disp_col]: i.disp_col -= 1
+        result = super().DeleteColumn(removedColumn.wx_col)
         self.columns.remove(removedColumn)
-        return super().DeleteColumn(col)
+        return result
 
     def SetColumnsOrder(self, orders):
         self.DeleteAllColumns()
@@ -355,7 +356,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         tmp = self.getCol(col)
         tmp.width = width
         if tmp.wx_col < 0: return
-        return super().SetColumnWidth(col, width)
+        return super().SetColumnWidth(tmp.wx_col, width)
 
     def Bind(self, event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
         if event in (wx.EVT_LIST_COL_CLICK, wx.EVT_LIST_COL_RIGHT_CLICK, wx.EVT_LIST_COL_BEGIN_DRAG, wx.EVT_LIST_COL_DRAGGING, wx.EVT_LIST_COL_END_DRAG):
