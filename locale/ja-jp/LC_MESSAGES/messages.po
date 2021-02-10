@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-10 11:48+0900\n"
+"POT-Creation-Date: 2021-02-10 20:07+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -700,7 +700,7 @@ msgstr ""
 msgid "下へ(&D)"
 msgstr ""
 
-#: views\accountManager.py:54 views\itemHistory.py:28 views\versionDialog.py:46
+#: views\accountManager.py:54 views\itemHistory.py:34 views\versionDialog.py:46
 #: views\viewBroadcaster.py:37 views\viewComment.py:39
 #: views\viewFavorites.py:36 views\viewHistory.py:32
 msgid "閉じる"
@@ -1011,16 +1011,28 @@ msgstr ""
 msgid "効果音ファイルを選択"
 msgstr ""
 
-#: views\itemHistory.py:15 views\itemHistory.py:22
+#: views\itemHistory.py:18 views\itemHistory.py:25
 msgid "アイテム履歴"
 msgstr ""
 
-#: views\itemHistory.py:23
+#: views\itemHistory.py:28
 msgid "ユーザ"
 msgstr ""
 
-#: views\itemHistory.py:24 views\main.py:125
+#: views\itemHistory.py:29 views\main.py:125
 msgid "アイテム"
+msgstr ""
+
+#: views\itemHistory.py:33
+msgid "プロフィールを表示"
+msgstr ""
+
+#: views\itemHistory.py:42
+msgid "プロフィールの取得に失敗しました。"
+msgstr ""
+
+#: views\itemHistory.py:45
+msgid "プロフィール"
 msgstr ""
 
 #: views\keyConfig.py:31
@@ -1506,7 +1518,7 @@ msgid ""
 "ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr ""
 
-#: views\viewBroadcaster.py:18
+#: views\viewBroadcaster.py:16
 msgid "配信者の情報"
 msgstr ""
 

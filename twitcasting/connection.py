@@ -204,3 +204,13 @@ class connection(threading.Thread):
 		while self.running:
 			time.sleep(5)
 			self.update()
+
+	def getUserObject(self, user):
+		result = GetUserInfo(user)
+		try:
+			return result["user"]
+		except KeyError:
+			if "error" in result:
+				if result["error"]["code"] != 404:
+					self.errorFlag = result["error"]["code"]
+			return {}

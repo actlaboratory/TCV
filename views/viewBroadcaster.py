@@ -10,12 +10,12 @@ import webbrowser
 
 class Dialog(BaseDialog):
 	def __init__(self, broadcaster):
-		super().__init__("viewBroadcasterDialog")
+		super().__init__("viewProfileDialog")
 		self.broadcaster = broadcaster
 
-	def Initialize(self):
+	def Initialize(self, title=_("配信者の情報")):
 		self.log.debug("created")
-		super().Initialize(self.app.hMainView.hFrame,_("配信者の情報"))
+		super().Initialize(self.app.hMainView.hFrame,title)
 		self.InstallControls()
 		return True
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-10 11:48+0900\n"
-"PO-Revision-Date: 2021-02-10 11:50+0900\n"
+"POT-Creation-Date: 2021-02-10 20:07+0900\n"
+"PO-Revision-Date: 2021-02-10 20:08+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -744,7 +744,7 @@ msgstr "move &Up"
 msgid "下へ(&D)"
 msgstr "move &Down"
 
-#: views\accountManager.py:54 views\itemHistory.py:28 views\versionDialog.py:46
+#: views\accountManager.py:54 views\itemHistory.py:34 views\versionDialog.py:46
 #: views\viewBroadcaster.py:37 views\viewComment.py:39
 #: views\viewFavorites.py:36 views\viewHistory.py:32
 msgid "閉じる"
@@ -1062,17 +1062,29 @@ msgstr "browse"
 msgid "効果音ファイルを選択"
 msgstr "select a sound file"
 
-#: views\itemHistory.py:15 views\itemHistory.py:22
+#: views\itemHistory.py:18 views\itemHistory.py:25
 msgid "アイテム履歴"
 msgstr "items history"
 
-#: views\itemHistory.py:23
+#: views\itemHistory.py:28
 msgid "ユーザ"
 msgstr "user"
 
-#: views\itemHistory.py:24 views\main.py:125
+#: views\itemHistory.py:29 views\main.py:125
 msgid "アイテム"
 msgstr "items"
+
+#: views\itemHistory.py:33
+msgid "プロフィールを表示"
+msgstr "View Profile"
+
+#: views\itemHistory.py:42
+msgid "プロフィールの取得に失敗しました。"
+msgstr "Failed to get profile."
+
+#: views\itemHistory.py:45
+msgid "プロフィール"
+msgstr "Profile"
 
 #: views\keyConfig.py:31
 msgid "キー設定"
@@ -1567,7 +1579,7 @@ msgid ""
 "ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr "See the included license.txt for licensing / copyright information."
 
-#: views\viewBroadcaster.py:18
+#: views\viewBroadcaster.py:16
 msgid "配信者の情報"
 msgstr "broadcaster details"
 
