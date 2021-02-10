@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-10 11:48+0900\n"
+"POT-Creation-Date: 2021-02-10 16:56+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -659,13 +659,13 @@ msgstr ""
 msgid "アカウント"
 msgstr ""
 
-#: views\accountManager.py:33 views\commentListConfiguration.py:18
+#: views\accountManager.py:33 views\commentListConfiguration.py:19
 #: views\main.py:97 views\userNamereplace.py:13 views\userNamereplace.py:29
 #: views\viewBroadcaster.py:29 views\viewComment.py:31
 msgid "ユーザ名"
 msgstr ""
 
-#: views\accountManager.py:34 views\commentListConfiguration.py:15
+#: views\accountManager.py:34 views\commentListConfiguration.py:16
 #: views\globalKeyConfig.py:20 views\globalKeyConfig.py:74 views\main.py:94
 #: views\viewBroadcaster.py:28 views\viewComment.py:30
 msgid "名前"
@@ -727,7 +727,7 @@ msgid "ブラウザでの操作を待っています..."
 msgstr ""
 
 #: views\accountManager.py:154 views\changeDevice.py:45
-#: views\changeSpeechOutput.py:44 views\commentListConfiguration.py:49
+#: views\changeSpeechOutput.py:44 views\commentListConfiguration.py:56
 #: views\connect.py:35 views\KeyValueSettingDialogBase.py:81
 #: views\KeyValueSettingDialogBase.py:259 views\mkDialog.py:30
 #: views\settings.py:152 views\updateDialog.py:44
@@ -767,7 +767,7 @@ msgid "規定のデバイス"
 msgstr ""
 
 #: views\changeDevice.py:44 views\changeSpeechOutput.py:43
-#: views\commentListConfiguration.py:48 views\connect.py:34
+#: views\commentListConfiguration.py:55 views\connect.py:34
 #: views\KeyValueSettingDialogBase.py:80 views\KeyValueSettingDialogBase.py:258
 msgid "ＯＫ"
 msgstr ""
@@ -792,28 +792,36 @@ msgstr ""
 msgid "出力先"
 msgstr ""
 
-#: views\commentListConfiguration.py:16 views\main.py:95
+#: views\commentListConfiguration.py:17 views\main.py:95
 msgid "投稿"
 msgstr ""
 
-#: views\commentListConfiguration.py:17 views\main.py:96
+#: views\commentListConfiguration.py:18 views\main.py:96
 msgid "時刻"
 msgstr ""
 
-#: views\commentListConfiguration.py:23
+#: views\commentListConfiguration.py:25
 msgid "コメントリスト表示設定"
 msgstr ""
 
-#: views\commentListConfiguration.py:30 views\commentListConfiguration.py:31
+#: views\commentListConfiguration.py:32 views\commentListConfiguration.py:33
 msgid "カラム"
 msgstr ""
 
-#: views\commentListConfiguration.py:43
+#: views\commentListConfiguration.py:49
+msgid "表示(&D)"
+msgstr ""
+
+#: views\commentListConfiguration.py:50
 msgid "左へ(&L)"
 msgstr ""
 
-#: views\commentListConfiguration.py:45
+#: views\commentListConfiguration.py:52
 msgid "右へ(&R)"
+msgstr ""
+
+#: views\commentListConfiguration.py:83
+msgid "全ての列を非表示にすることはできません。"
 msgstr ""
 
 #: views\commentReplace.py:13 views\commentReplace.py:45
