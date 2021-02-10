@@ -26,7 +26,8 @@ class DefaultSettings:
 
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
-			"colorMode":"normal"
+			"colorMode":"normal",
+			"textWrapping":"off"
 		}
 		config["mainView"]={
 			"sizeX": "800",
