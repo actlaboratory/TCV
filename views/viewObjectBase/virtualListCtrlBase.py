@@ -313,11 +313,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
 
     def DeleteColumn(self, col):
         removedColumn = self.getCol(col)
-        for i in range(col + 1, self.GetColumnCount()):
-            tmp = self.getCol(i)
-            tmp.col -= 1
+        for i in [j for j in self.columns if j.col > removedColumn.col]: i.col -= 1
         for i in [j for j in self.columns if j.wx_col > removedColumn.wx_col]: i.wx_col -= 1
         for i in [j for j in self.columns if j.disp_col > removedColumn.disp_col]: i.disp_col -= 1
+        for i in self.lst: del i[col]
         result = super().DeleteColumn(removedColumn.wx_col)
         self.columns.remove(removedColumn)
         return result
