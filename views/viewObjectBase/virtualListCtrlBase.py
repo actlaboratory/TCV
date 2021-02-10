@@ -302,13 +302,20 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return result
 
     def InsertColumn(self, col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE):
-        for i in range(self.GetColumnCount() - 1, col - 1, -1):
-            tmp = self.getCol(i)
-            tmp.col += 1
-            tmp.wx_col += 1
-            tmp.disp_col += 1
-        result = super().InsertColumn(col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE)
-        self.columns.append(Column(col, result, super().GetColumnOrder(result), format, width, heading))
+        if col == 0:
+            next = self.getCol(col > 1)
+            insertedColumn = Column(col, next.wx_col - 1, next.disp_col - 1, format, width, heading)
+        elif col <= self.GetColumnCount():
+            prev = self.getCol(col - 1)
+            insertedColumn = Column(col, prev.wx_col + 1, prev.disp_col + 1, format, width, heading)
+        else:
+            raise ValueError
+        for i in [j for j in self.columns if j.col >= insertedColumn.col]: i.col += 1
+        for i in [j for j in self.columns if j.wx_col >= insertedColumn.wx_col]: i.wx_col += 1
+        for i in [j for j in self.columns if j.disp_col >= insertedColumn.disp_col]: i.disp_col += 1
+        result = super().InsertColumn(insertedColumn.wx_col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE)
+        self.columns.append(insertedColumn)
+        for i in self.lst: i.insert(insertedColumn.col, "")
         return result
 
     def DeleteColumn(self, col):
