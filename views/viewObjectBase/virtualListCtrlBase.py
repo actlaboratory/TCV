@@ -306,10 +306,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         for i in [j for j in self.columns if j.col >= insertedColumn.col]: i.col += 1
         for i in [j for j in self.columns if j.wx_col >= insertedColumn.wx_col]: i.wx_col += 1
         for i in [j for j in self.columns if j.disp_col >= insertedColumn.disp_col]: i.disp_col += 1
-        result = super().InsertColumn(insertedColumn.wx_col, heading, format, width)
+        super().InsertColumn(insertedColumn.wx_col, heading, format, width)
         self.columns.append(insertedColumn)
         for i in self.lst: i.insert(insertedColumn.col, "")
-        return result
+        return insertedColumn.col
 
     def DeleteColumn(self, col):
         removedColumn = self.getCol(col)
