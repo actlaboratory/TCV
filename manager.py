@@ -115,6 +115,16 @@ class manager:
 			self.elapsedTime = 0
 		self.countDownTimer = wx.Timer(self.evtHandler, evtCountDown)
 		self.timers.append(self.countDownTimer)
+		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
+		self.initialComments = self.connection.getInitialComment(initialCommentCount)
+		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
+		self.timers.append(self.commentTimer)
+		self.commentTimer.Start(commentTimerInterval)
+		self.addComments(self.initialComments, first)
+		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
+		self.timers.append(self.liveInfoTimer)
+		self.liveInfoTimer.Start(liveInfoTimerInterval)
+		self.createLiveInfoList(first)
 		if self.connection.isLive == True:
 			globalVars.app.say(_("接続。現在配信中。"))
 			self.resetTimer()
@@ -127,16 +137,6 @@ class manager:
 		else:
 			self.resetTimer()
 			globalVars.app.say(_("接続。現在オフライン。"))
-		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
-		self.initialComments = self.connection.getInitialComment(initialCommentCount)
-		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
-		self.timers.append(self.commentTimer)
-		self.commentTimer.Start(commentTimerInterval)
-		self.addComments(self.initialComments, first)
-		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
-		self.timers.append(self.liveInfoTimer)
-		self.liveInfoTimer.Start(liveInfoTimerInterval)
-		self.createLiveInfoList(first)
 		if self.hasEnoughCoins(self.connection.coins) == True:
 			globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		self.oldCoins = self.connection.coins
@@ -773,10 +773,10 @@ class ItemOperation(threading.Thread):
 		self.manager.newItem = self.manager.connection.item
 		receivedItem = []
 		for new in self.manager.newItem:
-			if new["name"] not in [i["name"] for i in self.manager.oldItem]:
+			if new["id"] not in [i["id"] for i in self.manager.oldItem]:
 				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
 			for old in self.manager.oldItem:
-				if new["name"] == old["name"] and new["count"] > old["count"]:
+				if new["id"] == old["id"] and new["count"] > old["count"]:
 					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
 		for i in receivedItem:
 			if i["name"] == "MP":
