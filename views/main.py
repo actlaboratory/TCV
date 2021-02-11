@@ -568,4 +568,4 @@ class Events(BaseEvents):
 	def itemHistory(self, event=None):
 		d = views.itemHistory.Dialog()
 		d.Initialize()
-		d.Show(False)
+		d.Show()
