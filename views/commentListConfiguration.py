@@ -7,6 +7,7 @@ import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
 import json
+import simpleDialog
 
 class Dialog(BaseDialog):
 	def __init__(self):
@@ -17,6 +18,7 @@ class Dialog(BaseDialog):
 			2: _("時刻"),
 			3: _("ユーザ名")
 		}
+		self.displayStatus = {}
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -32,14 +34,19 @@ class Dialog(BaseDialog):
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onOkBtn)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.onItemSelected)
+		tmp = list(range(4))
 		try:
 			data = globalVars.app.hMainView.commentList.GetColumnsOrder()
 		except AttributeError:
 			data = json.loads(globalVars.app.config["mainView"]["commentlist_columns_order"])
 		for i in data:
 			self.hListCtrl.Append([self.values[i]])
+			tmp.remove(i)
+		for i in tmp:
+			self.hListCtrl.Append([self.values[i]])
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.EXPAND|wx.LEFT|wx.RIGHT,margin=20)
+		self.hCheckBox = self.creator.checkbox(_("表示(&D)"), self.onCheckBoxStatusChanged)
 		self.moveLeftButton = self.creator.button(_("左へ(&L)"), self.move)
 		self.creator.AddSpace(-1)
 		self.moveRightButton = self.creator.button(_("右へ(&R)"), self.move)
@@ -48,20 +55,33 @@ class Dialog(BaseDialog):
 		self.bOk=self.creator.okbutton(_("ＯＫ"), self.onOkBtn)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
+		self.loadDisplayStatus(data)
 		self.onItemSelected()
+
+	def loadDisplayStatus(self, data):
+		for i in range(self.hListCtrl.GetItemCount()):
+			index = self.getIndexFromText(self.hListCtrl.GetItemText(i))
+			self.displayStatus[index] = (index in data)
+
+	def getIndexFromText(self, text):
+		return [k for k, v in self.values.items() if v == text][0]
 
 	def save(self):
 		ret = []
-		for i in range(self.hListCtrl.GetItemCount()):
+		for i in range(len(self.values)):
 			text = self.hListCtrl.GetItemText(i)
-			key = [k for k, v in self.values.items() if v == text][0]
-			ret.append(key)
+			key = self.getIndexFromText(text)
+			if self.displayStatus[key]:
+				ret.append(key)
 		try:
 			globalVars.app.hMainView.commentList.SetColumnsOrder(ret)
 		except AttributeError:
 			globalVars.app.config["mainView"]["commentlist_columns_order"] = json.dumps(ret)
 
 	def  onOkBtn(self, event):
+		if len([i for i in self.displayStatus.values() if i == True]) == 0:
+			simpleDialog.errorDialog(_("全ての列を非表示にすることはできません。"))
+			return
 		self.save()
 		self.Destroy()
 
@@ -79,5 +99,13 @@ class Dialog(BaseDialog):
 		self.hListCtrl.Select(target)
 
 	def onItemSelected(self, event=None):
-		self.moveLeftButton.Enable(self.hListCtrl.GetFocusedItem() >= 1)
-		self.moveRightButton.Enable(self.hListCtrl.GetFocusedItem() >= 0 and self.hListCtrl.GetFocusedItem() < self.hListCtrl.GetItemCount() - 1)
+		selected = self.hListCtrl.GetFocusedItem()
+		self.hCheckBox.Enable(selected >= 0)
+		if selected >= 0:
+			self.hCheckBox.SetValue(self.displayStatus[self.getIndexFromText(self.hListCtrl.GetItemText(selected))])
+		self.moveLeftButton.Enable(selected >= 1)
+		self.moveRightButton.Enable(selected >= 0 and selected < self.hListCtrl.GetItemCount() - 1)
+
+	def onCheckBoxStatusChanged(self, event):
+		selected = self.hListCtrl.GetFocusedItem()
+		self.displayStatus[self.getIndexFromText(self.hListCtrl.GetItemText(selected))] = self.hCheckBox.GetValue()
