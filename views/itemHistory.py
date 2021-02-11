@@ -31,6 +31,7 @@ class Dialog(BaseDialog):
 			self.historyList.Append([i["user"], i["item"]])
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.RIGHT|wx.BOTTOM,margin=10)
 		self.viewProfileButton = self.creator.button(_("プロフィールを表示"), self.viewProfile)
+		self.creator.AddSpace(-1)
 		self.bOk=self.creator.okbutton(_("閉じる"),None)
 
 		self.itemSelected()
