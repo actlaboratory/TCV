@@ -100,7 +100,7 @@ class Dialog(BaseDialog):
 
 	def onItemSelected(self, event=None):
 		selected = self.hListCtrl.GetFocusedItem()
-		self.hCheckBox.Enable(selected >= 0)
+		self.hCheckBox.GetParent().Enable(selected >= 0)
 		if selected >= 0:
 			self.hCheckBox.SetValue(self.displayStatus[self.getIndexFromText(self.hListCtrl.GetItemText(selected))])
 		self.moveLeftButton.Enable(selected >= 1)
