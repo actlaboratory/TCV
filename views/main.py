@@ -124,6 +124,7 @@ class MainView(BaseView):
 		self.liveInfo.Bind(wx.EVT_RIGHT_DOWN,self.liveInfo.setCursorOnMouse)
 		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
 		self.itemList.SetAcceleratorTable(self.itemListAcceleratorTable)
+		self.itemList.Bind(wx.EVT_LEFT_DCLICK, self.events.itemHistory)
 
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
@@ -362,9 +363,7 @@ class Events(BaseEvents):
 			return self.userInfoContextMenu()
 		# アイテム履歴
 		elif selected == menuItemsStore.getRef("ITEM_HISTORY"):
-			d = views.itemHistory.Dialog()
-			d.Initialize()
-			d.Show(False)
+			self.itemHistory()
 
 
 	def postComment(self, event):
@@ -565,3 +564,8 @@ class Events(BaseEvents):
 		self.parent.menu.EnableMenu("VIEW_COMMENT", enable)
 		self.parent.menu.EnableMenu("REPLY2SELECTED_COMMENT", enable)
 		self.parent.menu.EnableMenu("DELETE_SELECTED_COMMENT", enable)
+
+	def itemHistory(self, event=None):
+		d = views.itemHistory.Dialog()
+		d.Initialize()
+		d.Show(False)
