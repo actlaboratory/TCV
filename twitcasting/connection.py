@@ -13,7 +13,7 @@ import time
 
 class connection(threading.Thread):
 	def __init__(self, userId):
-		super().__init__()
+		super().__init__(daemon=True)
 		self.userId = userId
 		self.update(0)
 		self.comments = []
@@ -48,9 +48,13 @@ class connection(threading.Thread):
 					if "error" in result2:
 						self.errorFlag = result2["error"]["code"]
 					result2 = []
-				for i in result2:
-					if i in result:
-						result2.remove(i)
+				rm = []
+				for i in range(len(result2)):
+					if result2[i] in result:
+						rm.append(i)
+				rm.reverse()
+				for i in rm:
+					del result2[i]
 				result = result + result2
 				if len(result2) == 0 or len(result) == number:
 					break
@@ -103,6 +107,8 @@ class connection(threading.Thread):
 		if itemId == "MP":
 			return
 		users = getItemPostedUser(self.userId, itemId)
+		if count > len(users):
+			users[len(users):count] = [_("不明なユーザー")] * (count - len(users))
 		return users[0:count]
 
 	def getTypingUser(self):
@@ -198,3 +204,13 @@ class connection(threading.Thread):
 		while self.running:
 			time.sleep(5)
 			self.update()
+
+	def getUserObject(self, user):
+		result = GetUserInfo(user)
+		try:
+			return result["user"]
+		except KeyError:
+			if "error" in result:
+				if result["error"]["code"] != 404:
+					self.errorFlag = result["error"]["code"]
+			return {}

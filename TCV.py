@@ -9,6 +9,7 @@ import traceback
 import globalVars
 
 def exchandler(type, exc, tb):
+	msg=traceback.format_exception(type, exc, tb)
 	try:
 		for i in globalVars.app.Manager.timers:
 			i.Stop()
@@ -17,23 +18,24 @@ def exchandler(type, exc, tb):
 		pass
 	if type == requests.exceptions.ConnectionError:
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。プログラムを終了します。"))
-		os._exit(1)
 	elif type == requests.exceptions.ProxyError:
 		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。プログラムを終了します。"))
-		os._exit(1)
-	msg=traceback.format_exception(type, exc, tb)
-	print("".join(msg))
+	else:
+		if not hasattr(sys, "frozen"):
+			print("".join(msg))
+			winsound.Beep(1000, 1000)
+			try:
+				globalVars.app.say(str(msg[-1]))
+			except:
+				pass
+		else:
+			simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
 	try:
 		f=open("errorLog.txt", "a")
 		f.writelines(msg)
 		f.close()
 	except:
 		pass
-	if not hasattr(sys, "frozen"):
-		winsound.Beep(1000, 1000)
-		globalVars.app.say(str(msg[-1]))
-	else:
-		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
 	os._exit(1)
 
 #global schope

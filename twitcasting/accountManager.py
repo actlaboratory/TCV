@@ -58,6 +58,7 @@ class AccountManager:
 			elif result == 2001:
 				simpleDialog.errorDialog(_("現在TCVは使用できません。開発者に連絡してください。"))
 				sys.exit(-1)
+		rm.reverse()
 		if len(rm) > 0:
 			simpleDialog.errorDialog(_("無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
 			for i in rm:
@@ -123,6 +124,7 @@ class AccountManager:
 		for i in range(len(self.tokens) - 1):
 			if self.tokens[i]["user"]["id"] == self.tokens[-1]["user"]["id"]:
 				rm.append(i)
+		rm.reverse()
 		for i in rm:
 			del self.tokens[i]
 		self.saveAsFile()

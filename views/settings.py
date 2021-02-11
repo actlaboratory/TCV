@@ -26,6 +26,10 @@ class settingsDialog(BaseDialog):
 			"white": _("標準"),
 			"dark": _("反転表示")
 		}
+		self.textWrappingSelection = {
+			"on":_("画面幅で折り返し"),
+			"off":_("折り返さない")
+		}
 		self.commenttosnsSelection = {
 			"0": _("投稿しない"),
 			"1": _("配信者へ返信する形式で投稿"),
@@ -90,6 +94,7 @@ class settingsDialog(BaseDialog):
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("表示/言語"),style=wx.ALL,margin=20)
 		self.language, static = creator.combobox(_("言語(&L)"), list(self.languageSelection.values()))
 		self.colormode, static = creator.combobox(_("画面表示モード(&D)"), list(self.colorModeSelection.values()))
+		self.textwrapping, static = creator.combobox(_("テキストの折り返し(&W)"), list(self.textWrappingSelection.values()))
 		self.titlebar, static = creator.combobox(_("タイトルバー(&B)"), list(self.titlebarSelection.values()))
 
 		# reading-1
@@ -165,6 +170,7 @@ class settingsDialog(BaseDialog):
 		# view
 		self.language.SetValue(self.languageSelection[globalVars.app.config["general"]["language"]])
 		self.colormode.SetValue(self.colorModeSelection[globalVars.app.config["view"]["colormode"]])
+		self.textwrapping.SetValue(self.textWrappingSelection[globalVars.app.config["view"]["textwrapping"]])
 		self.titlebar.SetValue(self.titlebarSelection[globalVars.app.config["general"]["titlebar"]])
 
 		# read
@@ -219,6 +225,7 @@ class settingsDialog(BaseDialog):
 		# view
 		globalVars.app.config["general"]["language"] = list(self.languageSelection.keys())[self.language.GetSelection()]
 		globalVars.app.config["view"]["colormode"] = list(self.colorModeSelection.keys())[self.colormode.GetSelection()]
+		globalVars.app.config["view"]["textwrapping"] = list(self.textWrappingSelection.keys())[self.textwrapping.GetSelection()]
 		globalVars.app.config["general"]["titlebar"] = list(self.titlebarSelection.keys())[self.titlebar.GetSelection()]
 		globalVars.app.hMainView.hFrame.SetTitle(constants.APP_NAME)
 		if globalVars.app.config.getint("general", "titlebar", 1, 0, 2) == constants.TB_USER:

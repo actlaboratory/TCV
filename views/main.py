@@ -39,6 +39,8 @@ import views.indicatorSoundSettings
 import views.commentReplace
 import views.userNamereplace
 import views.changeSpeechOutput
+import views.itemHistory
+import views.commentListConfiguration
 import webbrowser
 import constants
 
@@ -84,14 +86,15 @@ class MainView(BaseView):
 		self.commentListAcceleratorTable=self.keymap.GetTable("commentList")
 		self.commentBodyAcceleratorTable=self.keymap.GetTable("commentBody")
 		self.userInfoAcceleratorTable=self.keymap.GetTable("userInfo")
+		self.itemListAcceleratorTable=self.keymap.GetTable("itemList")
 
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.VERTICAL, style=wx.EXPAND | wx.ALL, proportion=2)
 		self.c1=creator.GetSizer()
-		self.commentList, self.commentListStatic = creator.listCtrl(_("コメント一覧"), None, wx.LC_REPORT | wx.BORDER_RAISED, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
-		self.commentList.InsertColumn(0, _("名前"),width=200)
-		self.commentList.InsertColumn(1, _("投稿"),width=370)
-		self.commentList.InsertColumn(2, _("時刻"),width=150)
-		self.commentList.InsertColumn(3, _("ユーザ名"),width=200	)
+		self.commentList, self.commentListStatic = creator.virtualListCtrl(_("コメント一覧"), None, wx.LC_REPORT | wx.BORDER_RAISED, size=(-1,100), sizerFlag=wx.EXPAND, proportion=1)
+		self.commentList.AppendColumn(_("名前"),width=200)
+		self.commentList.AppendColumn(_("投稿"),width=370)
+		self.commentList.AppendColumn(_("時刻"),width=150)
+		self.commentList.AppendColumn(_("ユーザ名"),width=200	)
 		self.commentList.loadColumnInfo(self.identifier,"commentList")
 
 		self.commentList.SetAcceleratorTable(self.commentListAcceleratorTable)
@@ -109,7 +112,7 @@ class MainView(BaseView):
 		self.selectAccount.SetSelection(0)
 
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,self.creator.GetSizer(), wx.HORIZONTAL, style=wx.LEFT | wx.RIGHT | wx.EXPAND)
-		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE|wx.TE_DONTWRAP | wx.TE_NOHIDESEL , sizerFlag=wx.EXPAND, proportion=1, textLayout=None)
+		self.commentBodyEdit, self.commentBodyStatic = creator.inputbox(_("コメント内容"), None, "", wx.TE_MULTILINE | wx.TE_NOHIDESEL, sizerFlag=wx.EXPAND, proportion=1, textLayout=None)
 		self.commentBodyEdit.SetAcceleratorTable(self.commentBodyAcceleratorTable)
 		self.commentBodyEdit.hideScrollBar(wx.VERTICAL | wx.HORIZONTAL)
 		self.commentSend = creator.button(_("送信"), self.events.postComment, sizerFlag=wx.ALIGN_BOTTOM | wx.ALL)
@@ -120,6 +123,8 @@ class MainView(BaseView):
 		self.liveInfo.Bind(wx.EVT_CONTEXT_MENU, self.events.userInfoContextMenu)
 		self.liveInfo.Bind(wx.EVT_RIGHT_DOWN,self.liveInfo.setCursorOnMouse)
 		self.itemList, self.itemListStatic = creator.listbox(_("アイテム"), proportion=1, size=(100,100), sizerFlag=wx.EXPAND, textLayout=wx.VERTICAL)
+		self.itemList.SetAcceleratorTable(self.itemListAcceleratorTable)
+		self.itemList.Bind(wx.EVT_LEFT_DCLICK, self.events.itemHistory)
 
 		self.hPanel.Layout()
 		self.commentList.SetFocus()
@@ -172,7 +177,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
+			["SETTING", "COMMENT_LIST_CONFIGURATION", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
@@ -280,6 +285,11 @@ class Events(BaseEvents):
 		#設定
 		elif selected==menuItemsStore.getRef("SETTING"):
 			self.settings()
+		# コメントリスト表示設定
+		elif selected == menuItemsStore.getRef("COMMENT_LIST_CONFIGURATION"):
+			d = views.commentListConfiguration.Dialog()
+			d.Initialize()
+			d.Show()
 		#効果音設定
 		elif selected == menuItemsStore.getRef("INDICATOR_SOUND_SETTING"):
 			self.indicatorSoundSettings()
@@ -351,6 +361,9 @@ class Events(BaseEvents):
 		#ユーザー情報のコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("POPUP_OPEN_USER_INFO"):
 			return self.userInfoContextMenu()
+		# アイテム履歴
+		elif selected == menuItemsStore.getRef("ITEM_HISTORY"):
+			self.itemHistory()
 
 
 	def postComment(self, event):
@@ -551,3 +564,8 @@ class Events(BaseEvents):
 		self.parent.menu.EnableMenu("VIEW_COMMENT", enable)
 		self.parent.menu.EnableMenu("REPLY2SELECTED_COMMENT", enable)
 		self.parent.menu.EnableMenu("DELETE_SELECTED_COMMENT", enable)
+
+	def itemHistory(self, event=None):
+		d = views.itemHistory.Dialog()
+		d.Initialize()
+		d.Show()
