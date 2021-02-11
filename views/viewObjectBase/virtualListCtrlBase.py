@@ -57,14 +57,6 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return True
 
     #
-    # 独自拡張機能
-    #
-
-    #columnを非表示/再表示する
-    def hideColumn(column,flag=True):
-        pass
-
-    #
     # ビュー部分
     # 
     def OnGetItemText(self, item, column):
@@ -298,12 +290,13 @@ class virtualListCtrl(listCtrlBase.listCtrl):
 
     def AppendColumn(self, heading, format=wx.LIST_FORMAT_LEFT, width=-1):
         result = super().AppendColumn(heading, format, width)
-        self.columns.append(Column(len(self.columns), result, super().GetColumnOrder(result), format, width, heading))
-        return result
+        ret = Column(len(self.columns), result, super().GetColumnOrder(result), format, width, heading)
+        self.columns.append(ret)
+        return ret.col
 
     def InsertColumn(self, col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE):
         if col == 0:
-            next = self.getCol(col > 1)
+            next = self.getCol(col)
             insertedColumn = Column(col, next.wx_col - 1, next.disp_col - 1, format, width, heading)
         elif col <= self.GetColumnCount():
             prev = self.getCol(col - 1)
@@ -313,7 +306,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         for i in [j for j in self.columns if j.col >= insertedColumn.col]: i.col += 1
         for i in [j for j in self.columns if j.wx_col >= insertedColumn.wx_col]: i.wx_col += 1
         for i in [j for j in self.columns if j.disp_col >= insertedColumn.disp_col]: i.disp_col += 1
-        result = super().InsertColumn(insertedColumn.wx_col, heading, format=wx.LIST_FORMAT_LEFT, width=wx.LIST_AUTOSIZE)
+        result = super().InsertColumn(insertedColumn.wx_col, heading, format, width)
         self.columns.append(insertedColumn)
         for i in self.lst: i.insert(insertedColumn.col, "")
         return result
