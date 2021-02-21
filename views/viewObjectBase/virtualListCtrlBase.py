@@ -84,17 +84,15 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     def onLabelEditEnd(self,event):
         if wx.wxEVT_LIST_END_LABEL_EDIT in self.bindFunctions:
             self.bindFunctions[wx.wxEVT_LIST_END_LABEL_EDIT](event)
-        if not event.IsEditCancelled() and event.IsAllowed():
+        if (not event.IsEditCancelled()) and event.IsAllowed():
             self.lst[self.GetFocusedItem()][self.getColFromWx(0).col]=self.GetEditControl().GetLineText(0)
 
     def onColumnDragEnd(self,event):
         event.SetColumn(self.getColFromWx(event.GetColumn()).col)
         if wx.wxEVT_LIST_COL_END_DRAG in self.bindFunctions:
             self.bindFunctions[wx.wxEVT_LIST_COL_END_DRAG](event)
-        if event.IsAllowed:
+        if event.IsAllowed():
             self.getCol(event.GetColumn()).width=super().GetColumnWidth(self.getCol(event.GetColumn()).wx_col)
-            print(self.getCol(event.GetColumn()).col)
-            print(super().GetColumnWidth(self.getCol(event.GetColumn()).wx_col))
 
     #
     # リスト部分
@@ -319,7 +317,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         return len(self.columns)
 
     #画面に表示されているカラムの数を返す
-    def GetShowingColumnCOunt(self):
+    def GetShowingColumnCount(self):
         ret = 0
         for col in self.columns:
             if col.display:
@@ -348,7 +346,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
             prev = self.getCol(col - 1)
             insertedColumn = Column(col, prev.wx_col + 1, prev.disp_col + 1, format, width, heading)
         else:
-            insertedColumn = Column(self.GetColumnCount(), GetShowingColumnCOunt(), GetShowingColumnCOunt(), format, width, heading)
+            insertedColumn = Column(self.GetColumnCount(), GetShowingColumnCount(), GetShowingColumnCount(), format, width, heading)
         for i in [j for j in self.columns if j.col >= insertedColumn.col]: i.col += 1
         for i in [j for j in self.columns if j.wx_col >= insertedColumn.wx_col]: i.wx_col += 1
         for i in [j for j in self.columns if j.disp_col >= insertedColumn.disp_col]: i.disp_col += 1
