@@ -1,6 +1,6 @@
 #virtualListCtrlBase for ViewCreator
 #Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
-
+#Copyright (C) 2020-2021 yamahubuki <itiro.ishino@gmail.com>
 
 import wx
 from views.viewObjectBase import viewObjectUtil, listCtrlBase
@@ -23,10 +23,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     def RefreshItems(self, first, end):
         super().RefreshItems(first, end)
         wx.YieldIfNeeded()
-    
+
     def getList(self):
         return self.copy()
-    
+
     def setList(self, lst):
         lstLen = len(lst)
         self.lst = lst
@@ -36,8 +36,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
     #
     #    listCtrl互換
     #
-    #    既存リストからの移行用途であり、新規実装時はリスト互換の方を利用すること
-    #
+    def Append(self,object):
+        self.append(object)
+        return self.GetItemCount()-1
+
     def InsertItem(self,index,label=None):
         if label==None or type(label)!=str:
             raise NotImplementedError
@@ -63,6 +65,16 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.pop(index)
         return True
 
+    def GetItemBackgroundColour(self,index,colour):
+        raise NotImplementedError
+
+    def SetItemBackgroundColour(self,index,colour):
+        raise NotImplementedError
+
+    def SetItemImage(self,item,image, selImage=-1):
+        raise NotImplementedError
+
+
     #
     # ビュー部分
     # 
@@ -70,22 +82,35 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         tmp = self.getColFromWx(column)
         column = tmp.col
         obj = self.lst[item]
-        if hasattr(obj, '__iter__'):
-            if len(obj)<=column:
-                return ""
-            return str(obj[column]) # イテレーション可能なオブジェクト
-        else: return obj.getListTuple()[column] # getListTupleを実装するオブジェクト
+        if len(obj)<=column:
+            return ""
+        return str(obj[column]) # イテレーション可能なオブジェクト
 
     def OnGetItemAttr(self,item):
-        self.tmp = wx.ItemAttr()
-        self.tmp.SetBackgroundColour(super().GetItemBackgroundColour(item))
-        return self.tmp
+        return None
+
+    def OnGetItemImage(self,item):
+        return -1
 
     def onLabelEditEnd(self,event):
         if wx.wxEVT_LIST_END_LABEL_EDIT in self.bindFunctions:
             self.bindFunctions[wx.wxEVT_LIST_END_LABEL_EDIT](event)
         if (not event.IsEditCancelled()) and event.IsAllowed():
             self.lst[self.GetFocusedItem()][self.getColFromWx(0).col]=self.GetEditControl().GetLineText(0)
+
+    def onColumnDragEnd(self,event):
+        event.SetColumn(self.getColFromWx(event.GetColumn()).col)
+        if wx.wxEVT_LIST_COL_END_DRAG in self.bindFunctions:
+            self.bindFunctions[wx.wxEVT_LIST_COL_END_DRAG](event)
+        if event.IsAllowed():
+            self.getCol(event.GetColumn()).width=super().GetColumnWidth(self.getCol(event.GetColumn()).wx_col)
+
+    #
+    # 非対応関数
+    #
+    def SortItems(self,fnSortCallBack):
+        raise NotImplementedError
+
 
     def onColumnDragEnd(self,event):
         event.SetColumn(self.getColFromWx(event.GetColumn()).col)
@@ -151,8 +176,10 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         self.lst.sort()
         self.RefreshItems(0, len(self.lst)-1)
 
-    
+
+    #
     # 拡張比較
+    #
     def __lt__(self, other):
         return self.lst.__lt__(other)
 
@@ -410,7 +437,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         if event in (wx.EVT_LIST_END_LABEL_EDIT,wx.EVT_LIST_COL_END_DRAG):
             self.bindFunctions[event.typeId]=handler
             #別途self内の関数をBind済み
-            return
+            return			#wx標準でも戻り値はNoneである
         return super().Bind(event, handler, source=source, id=id, id2=id2)
 
     def columnEvent(self,event):
