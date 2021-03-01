@@ -112,6 +112,13 @@ class virtualListCtrl(listCtrlBase.listCtrl):
         raise NotImplementedError
 
 
+    def onColumnDragEnd(self,event):
+        event.SetColumn(self.getColFromWx(event.GetColumn()).col)
+        if wx.wxEVT_LIST_COL_END_DRAG in self.bindFunctions:
+            self.bindFunctions[wx.wxEVT_LIST_COL_END_DRAG](event)
+        if event.IsAllowed():
+            self.getCol(event.GetColumn()).width=super().GetColumnWidth(self.getCol(event.GetColumn()).wx_col)
+
     #
     # リスト部分
     #
