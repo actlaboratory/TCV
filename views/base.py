@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #views base class
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-#Copyright (C) 2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2020-2021 yamahubuki <itiro.ishino@gmail.com>
 
 import _winxptheme
 import wx
@@ -51,13 +51,8 @@ class BaseView(object):
 
 	def Show(self):
 		self.creator.GetPanel().Layout()
-		#self.hFrame.Freeze()
-		#self.hFrame.Show(False)
-		self.hFrame.ShowWithoutActivating()
-		#self.hFrame.Iconize()
-		#self.hFrame.Thaw()
-
-		#self.app.SetTopWindow(self.hFrame)
+		self.hFrame.Show()
+		self.app.SetTopWindow(self.hFrame)
 		return True
 
 	def InstallMenuEvent(self,menu,event):
