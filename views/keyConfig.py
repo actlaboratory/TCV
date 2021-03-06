@@ -94,21 +94,20 @@ class Dialog(BaseDialog):
 			self.panel.Layout()
 		else:									#キーが放されたら前の入力を検証する
 			self.bCancel.Enable()
-			if self.result!="":
+			if self.result!="" and self.result!="SPACE":
 				if self.filter.Check(self.result):
 					self.wnd.EndModal(wx.ID_OK)		#正しい入力なのでダイアログを閉じる
 					return
 				else:
 					self.errorText.SetLabel(self.filter.GetLastError())
 					self.panel.Layout()
-					simpleDialog.errorDialog(self.filter.GetLastError())
-
+					simpleDialog.errorDialog(self.filter.GetLastError(),self.wnd)
 				self.key=""
 				self.result=""
 		self.timer.Start(TIMER_INTERVAL)
 		return
 
 	def cancelButton(self,event):
+		self.bCancel.Disable()
 		self.timer.Stop()
-		event.Skip()
-
+		self.wnd.EndModal(wx.ID_CANCEL)
