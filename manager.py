@@ -276,8 +276,7 @@ class manager:
 			result.insert(1, _("経過時間：%s") %(self.formatTime(self.elapsedTime).strftime("%H:%M:%S")))
 			result.insert(2, _("残り時間：%s") %(self.formatTime(self.remainingTime).strftime("%H:%M:%S")))
 		except:
-			result.insert(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
-			result.insert(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
+			result.insert(2, _("残り時間：無制限"))
 		if self.connection.movieInfo["movie"]["is_collabo"] == True:
 			result.insert(-1, _("コラボ可能"))
 		else:
@@ -339,6 +338,8 @@ class manager:
 			return True
 
 	def formatTime(self, second):
+		if second<0:
+			raise ValueError("second must be larger than 0.")
 		time = datetime.time(hour = int(second / 3600), minute = int(second % 3600 / 60), second = int(second % 3600 % 60))
 		return time
 
@@ -399,7 +400,7 @@ class manager:
 				self.sayRemainingTime()
 				if self.remainingTime >= 1800 and timerType != 0:
 					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
-		if self.remainingTime % 1800 == 0:
+		if self.remainingTime > 0 and self.remainingTime % 1800 == 0:
 			globalVars.app.say(_("30分が経過しました。"))
 
 	def clearHistory(self):
@@ -483,8 +484,7 @@ class manager:
 						disp = _("残り%(second)d秒") %map
 					self.MainView.hFrame.SetTitle(disp + " - " + constants.APP_NAME)
 			except:
-				self.MainView.liveInfo.SetString(1, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
-				self.MainView.liveInfo.SetString(2, _("配信時間が４時間を超えているため、タイマーを使用できません。"))
+				self.MainView.liveInfo.SetString(2, _("残り時間：無制限"))
 		elif id == evtTyping:
 			if self.connection.typingUser != "":
 				if globalVars.app.config.getboolean("autoReadingOptions", "readTypingUser", False) == True:
