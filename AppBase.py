@@ -91,7 +91,7 @@ class MaiｎBase(wx.App):
 			traceback.print_exc()
 		self.log=getLogger(constants.LOG_PREFIX+".Main")
 		r="executable" if self.frozen else "interpreter"
-		self.log.info("Starting"+constants.APP_NAME+" as %s!" % r)
+		self.log.info("Starting"+constants.APP_NAME+" "+constants.APP_VERSION+" as %s!" % r)
 
 	def LoadSettings(self):
 		"""設定ファイルを読み込む。なければデフォルト設定を適用し、設定ファイルを書く。"""
@@ -100,6 +100,7 @@ class MaiｎBase(wx.App):
 			#初回起動
 			self.config.read_dict(DefaultSettings.initialValues)
 			self.config.write()
+		self.hLogHandler.setLevel(self.config.getint("general","log_level",20,0,50))
 
 	def InitTranslation(self):
 		"""翻訳を初期化する。"""
@@ -132,3 +133,13 @@ class MaiｎBase(wx.App):
 		hours=bias//60
 		minutes=bias%60
 		self.timezone=datetime.timezone(datetime.timedelta(hours=hours,minutes=minutes))
+
+	def getAppPath(self):
+		"""アプリの絶対パスを返す
+		"""
+		if self.frozen:
+			# exeファイルで実行されている
+			return sys.executable
+		else:
+			# pyファイルで実行されている
+			return os.path.join(os.path.dirname(__file__), os.path.basename(sys.argv[0]))
