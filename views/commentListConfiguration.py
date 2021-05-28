@@ -4,7 +4,6 @@
 import wx
 import globalVars
 import views.ViewCreator
-from logging import getLogger
 from views.baseDialog import *
 import json
 import simpleDialog
@@ -37,8 +36,10 @@ class Dialog(BaseDialog):
 		tmp = list(range(4))
 		try:
 			data = globalVars.app.hMainView.commentList.GetColumnsOrder()
+			isPrintColumn = globalVars.app.hMainView.commentList.isPrintColumn()
 		except AttributeError:
 			data = json.loads(globalVars.app.config["mainView"]["commentlist_columns_order"])
+			isPrintColumn = globalVars.app.config.getboolean("mainView","commentlist"+"_print_column_name",True)
 		for i in data:
 			self.hListCtrl.Append([self.values[i]])
 			tmp.remove(i)
@@ -50,6 +51,9 @@ class Dialog(BaseDialog):
 		self.moveLeftButton = self.creator.button(_("左へ(&L)"), self.move)
 		self.creator.AddSpace(-1)
 		self.moveRightButton = self.creator.button(_("右へ(&R)"), self.move)
+
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.EXPAND|wx.LEFT|wx.RIGHT,margin=20)
+		self.hideHeaderSetting = self.creator.checkbox(_("ヘッダを画面上で非表示にする(&H)"), None, not isPrintColumn)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"), self.onOkBtn)
@@ -74,9 +78,11 @@ class Dialog(BaseDialog):
 			if self.displayStatus[key]:
 				ret.append(key)
 		try:
+			globalVars.app.hMainView.commentList.setPrintColumn(not self.hideHeaderSetting.GetValue())
 			globalVars.app.hMainView.commentList.SetColumnsOrder(ret)
 		except AttributeError:
 			globalVars.app.config["mainView"]["commentlist_columns_order"] = json.dumps(ret)
+			globalVars.app.config["mainView"]["commentlist_print_column_name"] = not self.hideHeaderSetting.GetValue()
 
 	def  onOkBtn(self, event):
 		if len([i for i in self.displayStatus.values() if i == True]) == 0:
