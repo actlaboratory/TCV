@@ -379,6 +379,7 @@ class Events(BaseEvents):
 			for i in globalVars.app.Manager.timers:
 				if i.IsRunning() == True:
 					i.Stop()
+				i.Destroy()
 			globalVars.app.Manager.connection.running = False
 			globalVars.app.Manager.itemOperation.running = False
 		except:
