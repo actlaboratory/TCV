@@ -43,6 +43,7 @@ import views.itemHistory
 import views.commentListConfiguration
 import webbrowser
 import constants
+import time
 
 class MainView(BaseView):
 	def __init__(self):
@@ -380,6 +381,10 @@ class Events(BaseEvents):
 				if i.IsRunning() == True:
 					i.Stop()
 				i.Destroy()
+			while not globalVars.app.Manager.canExit():
+				time.sleep(1)
+				print(not globalVars.app.Manager.canExit())
+				wx.YieldIfNeeded()
 			globalVars.app.Manager.connection.running = False
 			globalVars.app.Manager.itemOperation.running = False
 		except:
