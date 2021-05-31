@@ -43,6 +43,17 @@ errorCheckTimerInterval = 1000
 historyData = pathlib.Path(constants.HISTORY_FILE_NAME)
 favoritesData = pathlib.Path(constants.FAVORITES_FILE_NAME)
 
+# mainViewAccess
+block = 0
+def mainViewAccess(func):
+	def wrapper(*args, **kwargs):
+		global block
+		block += 1
+		ret = func(*args, **kwargs)
+		block -= 1
+		return ret
+	return wrapper
+
 class manager:
 	def __init__(self, MainView):
 		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "manager"))
@@ -117,10 +128,10 @@ class manager:
 		self.timers.append(self.countDownTimer)
 		initialCommentCount = globalVars.app.config.getint("general", "initialCommentCount", 50)
 		self.initialComments = self.connection.getInitialComment(initialCommentCount)
+		self.addComments(self.initialComments, first)
 		self.commentTimer = wx.Timer(self.evtHandler, evtComment)
 		self.timers.append(self.commentTimer)
 		self.commentTimer.Start(commentTimerInterval)
-		self.addComments(self.initialComments, first)
 		self.liveInfoTimer = wx.Timer(self.evtHandler, evtLiveInfo)
 		self.timers.append(self.liveInfoTimer)
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
@@ -177,12 +188,14 @@ class manager:
 		self.changeMenuState(False)
 		self.connection.connected = False
 
+	@mainViewAccess
 	def getNewComments(self):
 		limit = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
 		result = self.connection.comments[:limit]
 		result.reverse()
 		return result
 
+	@mainViewAccess
 	def addComments(self, commentList, mode):
 		for commentObject in commentList:
 			commentData = self.getCommentdata(commentObject)
@@ -259,6 +272,7 @@ class manager:
 			return announceText
 		globalVars.app.say(announceText)
 
+	@mainViewAccess
 	def createLiveInfoList(self, mode):
 		result = [
 			_("タイトル：%s") %(self.connection.movieInfo["movie"]["title"]),
@@ -292,6 +306,7 @@ class manager:
 				if bool == False:
 					self.MainView.liveInfo.SetString(i, result[i])
 
+	@mainViewAccess
 	def createItemList(self, mode):
 		result = []
 		for i in self.connection.item:
@@ -343,6 +358,7 @@ class manager:
 		time = datetime.time(hour = int(second / 3600), minute = int(second % 3600 / 60), second = int(second % 3600 % 60))
 		return time
 
+	@mainViewAccess
 	def deleteComment(self):
 		tmp = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
 		selected = self.MainView.commentList.getItemSelections()
@@ -363,6 +379,7 @@ class manager:
 		elif success > 0 and fail > 0:
 			simpleDialog.errorDialog(_("%d個のコメントを削除できませんでした。これらのコメントを削除する権限がありません。") %fail)
 
+	@mainViewAccess
 	def copyComment(self):
 		selections = self.MainView.commentList.getItemSelections()
 		tmplst = deepcopy(self.connection.comments)
@@ -762,6 +779,9 @@ class manager:
 				}
 				simpleDialog.errorDialog(_("ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s") %(detail[code]))
 			self.disconnect()
+
+	def canExit(self):
+		return block == 0
 
 class ItemOperation(threading.Thread):
 	def __init__(self, manager):
