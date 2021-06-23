@@ -42,7 +42,9 @@ def getItem(screenId):
 	tmp = soup.find_all("a")
 	for i in tmp:
 		href = i.get("href")
-		if re.match("javascript:showItemDialog.*", href):
+		if re.match("javascript:((giftItem)|(showItemDialog)).*", href):
+			if "," not in href or "'" not in href:
+				continue
 			start = href.index(",") + 3
 			end = href.index("'", start)
 			itemId.append(href[start: end])
