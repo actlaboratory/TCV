@@ -3,16 +3,19 @@
 
 import wx
 import constants, update
-from views import baseDialog, ViewCreator, mkDialog
+from views import baseDialog, ViewCreator
 
 
 def versionDialog():
-    d = dialog("versionInfoDialog")
+    d = dialog()
     d.Initialize()
     d.Show()
 
 
 class dialog(baseDialog.BaseDialog):
+    def __init__(self):
+        super().__init__("versionInfoDialog")
+
     def Initialize(self):
         self.log.debug("created")
         super().Initialize(self.app.hMainView.hFrame,_("バージョン情報"))

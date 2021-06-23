@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #views base class
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-#Copyright (C) 2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2020-2021 yamahubuki <itiro.ishino@gmail.com>
 
 import _winxptheme
 import wx
@@ -37,7 +37,7 @@ class BaseView(object):
 		_winxptheme.SetWindowTheme(self.hFrame.GetHandle(),"","")
 		self.hFrame.Bind(wx.EVT_MOVE_END,self.events.WindowMove)
 		self.hFrame.Bind(wx.EVT_SIZE,self.events.WindowResize)
-		self.hFrame.Bind(wx.EVT_CLOSE,self.events.Exit)
+		self.hFrame.Bind(wx.EVT_CLOSE,self.events.OnExit)
 		self.MakePanel(space)
 
 	def MakePanel(self,space=0):
@@ -51,13 +51,8 @@ class BaseView(object):
 
 	def Show(self):
 		self.creator.GetPanel().Layout()
-		#self.hFrame.Freeze()
-		#self.hFrame.Show(False)
-		self.hFrame.ShowWithoutActivating()
-		#self.hFrame.Iconize()
-		#self.hFrame.Thaw()
-
-		#self.app.SetTopWindow(self.hFrame)
+		self.hFrame.Show()
+		self.app.SetTopWindow(self.hFrame)
 		return True
 
 	def InstallMenuEvent(self,menu,event):
@@ -182,9 +177,11 @@ class BaseMenu(object):
 		if type(ref_id)==dict:
 			for k,v in ref_id.items():
 				self._RegisterMenuCommand(menu_handle,k,v,None,index)
+				if index>=0:index+=1
 		elif type(ref_id)!=str and hasattr(ref_id,"__iter__"):
 			for k in ref_id:
 				self._RegisterMenuCommand(menu_handle,k,menuItemsDic.dic[k],None,index)
+				if index>=0:index+=1
 		else:
 			if not title:
 				title=menuItemsDic.dic[ref_id]
@@ -211,11 +208,23 @@ class BaseMenu(object):
 				menu_handle.Append(menuItemsStore.getRef(ref_id),s,subMenu)
 		self.blockCount[menuItemsStore.getRef(ref_id)]=0
 
-	def RegisterCheckMenuCommand(self,menu_handle,ref_id,title=None,index=-1):
+	def RegisterCheckMenuCommand(self,menu_handle,ref_id,title="",index=-1):
+		if type(ref_id)==dict:
+			for k,v in ref_id.items():
+				self._RegisterCheckMenuCommand(menu_handle,k,v,index)
+				if index>=0:index+=1
+		elif type(ref_id)!=str and hasattr(ref_id,"__iter__"):
+			for k in ref_id:
+				self._RegisterCheckMenuCommand(menu_handle,k,menuItemsDic.dic[k],index)
+				if index>=0:index+=1
+		else:
+			if not title:
+				title=menuItemsDic.dic[ref_id]
+			return self._RegisterCheckMenuCommand(menu_handle,ref_id,title,index)
+
+	def _RegisterCheckMenuCommand(self,menu_handle,ref_id,title,index=-1):
 		"""チェックメニューアイテム生成補助関数"""
 		shortcut=self.keymap.GetKeyString(self.keymap_identifier,ref_id)
-		if not title:
-			title=menuItemsDic.dic[ref_id]
 		s=title if shortcut is None else "%s\t%s" % (title,shortcut)
 		if index>=0:
 			menu_handle.InsertCheckItem(index,menuItemsStore.getRef(ref_id),s)
@@ -242,10 +251,17 @@ class BaseMenu(object):
 		s=label if shortcut is None else "%s\t%s" % (label,shortcut)
 		self.hMenuBar.SetLabel(menuItemsStore.getRef(ref_id), s)
 
-	def CheckMenu(ref_id,state=True):
-		return self.menu.Check(menuItemsStore.getRef(ref_id),state)
+	def CheckMenu(self,ref_id,state=True):
+		return self.hMenuBar.Check(menuItemsStore.getRef(ref_id),state)
 
 	def EnableMenu(self,ref_id,enable=True):
+		if type(ref_id)!=str and hasattr(ref_id,"__iter__"):
+			for i in ref_id:
+				self._EnableMenu(i,enable)
+		else:
+			self._EnableMenu(ref_id,enable)
+
+	def _EnableMenu(self,ref_id,enable):
 		if type(ref_id)==int:
 			return self.Enable(ref_id,enable)
 		else:
@@ -280,8 +296,9 @@ class BaseEvents(object):
 	def __init__(self,parent,identifier):
 		self.parent=parent
 		self.identifier=identifier
+		self.log = getLogger("%s.%s" % (constants.LOG_PREFIX,self.identifier))
 
-	def Exit(self,event=None):
+	def OnExit(self,event):
 		event.Skip()
 
 	# wx.EVT_MOVE_END→wx.MoveEvent

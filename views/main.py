@@ -43,6 +43,7 @@ import views.itemHistory
 import views.commentListConfiguration
 import webbrowser
 import constants
+import time
 
 class MainView(BaseView):
 	def __init__(self):
@@ -77,7 +78,7 @@ class MainView(BaseView):
 		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), self.events.help, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.Exit, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.exitButton = self.creator.button(_("プログラムの終了"), self.events.OnExit, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.hPanel.Layout()
 		self.connectButton.SetFocus()
 
@@ -372,19 +373,24 @@ class Events(BaseEvents):
 		if result == True:
 			self.parent.commentBodyEdit.Clear()
 
-	def Exit(self, event=None):
+	def OnExit(self, event=None):
 		if hasattr(self.parent,"commentList") and self.parent.commentList:
 			self.parent.commentList.saveColumnInfo()
 		try:
 			for i in globalVars.app.Manager.timers:
 				if i.IsRunning() == True:
 					i.Stop()
+				i.Destroy()
+			while not globalVars.app.Manager.canExit():
+				time.sleep(1)
+				print(not globalVars.app.Manager.canExit())
+				wx.YieldIfNeeded()
 			globalVars.app.Manager.connection.running = False
 			globalVars.app.Manager.itemOperation.running = False
 		except:
 			pass
 		if event and isinstance(event,wx.CloseEvent):
-			super().Exit(event)
+			super().OnExit(event)
 		else:
 			self.parent.hFrame.Close()
 

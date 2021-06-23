@@ -7,8 +7,8 @@ skip_branch_with_pr: true
 skip_tags: true
 
 environment:
-  gitHubPassword:
-    secure: s4pKVblYXP+c03qM8gH8tQ==
+  githubToken:
+      secure: iNSx8v6c+0TP9IyckinrvNWuX+hc7SKruOqRDl9GxdX59sZ2yqB8+UDAtqdPzKIg
   SCRIPT_PASSWORD:
     secure: 9RvVUKVQ8MsoG5LOZ86VyFQF19JXXS33tDzomLH/jZM=
   matrix:
@@ -46,9 +46,9 @@ after_test:
   - cmd: exit
   - cmd: curl "https://actlab.org/git-release.php?repo_name=%APPVEYOR_REPO_NAME%&tag_name=TCV-latestcommit&password=%SCRIPT_PASSWORD%"
   - cmd: git tag -d TCV-latestcommit
-  - cmd: git push -d https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/TCV.git TCV-latestcommit
+  - cmd: git push -d https://actlab-auto:%githubToken%@github.com/actlaboratory/TCV.git TCV-latestcommit
   - cmd: git tag TCV-latestcommit
-  - cmd: git push https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/TCV.git TCV-latestcommit
+  - cmd: git push https://actlab-auto:%githubToken%@github.com/actlaboratory/TCV.git TCV-latestcommit
 
 artifacts:
   - path: TCV-*.zip
@@ -60,7 +60,7 @@ deploy:
     Force update: true
     description: 'automatic build from master branch'
     auth_token:
-      secure: UcoHc3nVwi+4feNv3QuMZy2qgZmTVElAD9iMr9UxcEUTA0PP2beWDMuiNhBoNYeA
+      secure: iNSx8v6c+0TP9IyckinrvNWuX+hc7SKruOqRDl9GxdX59sZ2yqB8+UDAtqdPzKIg
     artifact: TCV-snapshot.zip                # upload all NuGet packages to release assets
     draft: false
     prerelease: false

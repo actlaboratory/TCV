@@ -1,3 +1,6 @@
+# updater
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import requests
 import wx
 import constants
