@@ -318,11 +318,13 @@ class manager:
 		for i in self.connection.item:
 			result.append(i["name"] + ":" + str(i["count"]))
 		result.sort()
+		mp = None
 		for i in range(len(result)):
 			if result[i][0:2] == "MP":
 				mp = i
 				break
-		result[mp], result[-1] = result[-1], result[mp]
+		if type(mp) == int:
+			result[mp], result[-1] = result[-1], result[mp]
 		if mode == update:
 			cursor = self.MainView.itemList.GetSelection()
 			self.MainView.itemList.Clear()
