@@ -7,6 +7,7 @@ import requests.exceptions
 import simpleDialog
 import traceback
 import globalVars
+from twitcasting.twitcasting import DataIsNotJsonException
 
 def exchandler(type, exc, tb):
 	msg=traceback.format_exception(type, exc, tb)
@@ -20,6 +21,8 @@ def exchandler(type, exc, tb):
 		simpleDialog.errorDialog(_("通信に失敗しました。インターネット接続を確認してください。プログラムを終了します。"))
 	elif type == requests.exceptions.ProxyError:
 		simpleDialog.errorDialog(_("通信に失敗しました。プロキシサーバーの設定を確認してください。プログラムを終了します。"))
+	elif type == DataIsNotJsonException:
+		simpleDialog.errorDialog(_("ツイキャスから不正な応答がありました。しばらくたってから再度お試しください。24時間以上たっても解決しない場合には開発者までお問い合わせください。"))
 	else:
 		if not hasattr(sys, "frozen"):
 			print("".join(msg))
