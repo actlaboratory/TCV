@@ -43,6 +43,7 @@ dic={
 	"COMMENT_REPLACE": _("コメント文字列置換設定(&C)") + "...",
 	"USER_NAME_REPLACE": _("表示名置換設定(&N)") + "...",
 	"ACCOUNT_MANAGER": _("アカウントマネージャ(&M)") + "...",
+	"ADVANSED_ACCOUNT_MANAGER": _("拡張機能用アカウントの設定(&A)") + "...",
 	"SAPI_SETTING": _("SAPI設定を開く(&A)") + "...",
 	"CHANGE_SPEECH_OUTPUT": _("読み上げ出力先の変更(&O)") + "...",
 	#ヘルプメニュー

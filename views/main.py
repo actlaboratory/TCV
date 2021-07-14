@@ -26,6 +26,7 @@ from logging import getLogger
 import simpleDialog
 from .base import *
 
+import views.advansedAccountManager
 import views.versionDialog
 import views.connect
 import views.viewComment
@@ -178,7 +179,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
 		#設定メニュー
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "COMMENT_LIST_CONFIGURATION", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
+			["SETTING", "COMMENT_LIST_CONFIGURATION", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "ADVANSED_ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
 
@@ -303,6 +304,8 @@ class Events(BaseEvents):
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("ACCOUNT_MANAGER"):
 			self.accountManager()
+		elif selected==menuItemsStore.getRef("ADVANSED_ACCOUNT_MANAGER"):
+			self.advansedAccountManager()
 		#SAPI設定を開く
 		elif selected == menuItemsStore.getRef("SAPI_SETTING"):
 			file = os.path.join(os.getenv("windir"), "SysWOW64", "Speech", "SpeechUX", "sapi.cpl")
@@ -438,6 +441,18 @@ class Events(BaseEvents):
 		accountManager = views.accountManager.Dialog()
 		accountManager.Initialize()
 		accountManager.Show()
+
+	def advansedAccountManager(self, event=None):
+		d = views.advansedAccountManager.Dialog()
+		d.Initialize()
+		if d.Show() == wx.ID_CANCEL:
+			return
+		globalVars.app.config.remove_section("advansed_ids")
+		globalVars.app.config.remove_section("advansed_passwords")
+		ids,pws = d.GetValue()
+		for k,v in ids.items():
+			globalVars.app.config["advansed_ids"][k] = v
+			globalVars.app.config["advansed_passwords"][k] = pws[k]
 
 	def settings(self, event=None):
 		settings = views.settings.settingsDialog()
