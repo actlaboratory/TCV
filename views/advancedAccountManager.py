@@ -16,11 +16,11 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		]
 		v1 = {}
 		v2 = {}
-		for i in globalVars.app.config.items("advansed_ids"):
+		for i in globalVars.app.config.items("advanced_ids"):
 			v1[i[0]] = i[1]
-		for i in globalVars.app.config.items("advansed_passwords"):
+		for i in globalVars.app.config.items("advanced_passwords"):
 			v2[i[0]] = i[1]
-		super().__init__("advansedAccountManager",SettingDialog,info,v1,v2)
+		super().__init__("advancedAccountManager",SettingDialog,info,v1,v2)
 
 	def Initialize(self):
 		super().Initialize(self.app.hMainView.hFrame,_("拡張機能用アカウントの設定"))
