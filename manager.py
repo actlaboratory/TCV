@@ -605,9 +605,11 @@ class manager:
 			elif self.newCoins > self.oldCoins:
 				c = [i for i in range(self.oldCoins + 1, self.newCoins + 1) if i % 5 == 0]
 				if len(c) > 0:
-					globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
 					if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(c[-1]) == True:
-						globalVars.app.say(_("完走に必要なコインが集まりました。"))
+						globalVars.app.say(_("完走に必要なコイン%d枚が集まりました。") %(c[-1]))
+					else:
+						globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
+
 		self.oldCoins = self.newCoins
 
 	def play(self):
