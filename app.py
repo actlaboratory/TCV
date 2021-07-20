@@ -43,6 +43,7 @@ class Main(AppBase.MainBase):
 		self.accountManager = twitcasting.accountManager.AccountManager()
 		self.hasAccountIssue = False
 		self.Manager = manager.manager(self.hMainView)
+		self.postItem = twitcasting.postItem.PostItem()
 		if len(self.accountManager.tokens) == 0:
 			simpleDialog.dialog(_("アカウント登録"), _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			self.hasAccountIssue = True
@@ -59,7 +60,6 @@ class Main(AppBase.MainBase):
 		if self.hasAccountIssue == False and self.config.getboolean("general", "autoconnect", True) == True:
 			self.hMainView.events.connect()
 			return True
-		self.postItem = twitcasting.postItem.PostItem()
 
 	def setProxyEnviron(self):
 		if self.config.getboolean("proxy", "usemanualsetting", False) == True:
