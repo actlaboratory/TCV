@@ -34,6 +34,7 @@ dic={
 	"VIEW_BROADCASTER": _("配信者の情報を表示(&B)") + "...",
 	"OPEN_LIVE": _("このライブをブラウザで開く(&O)"),
 	"ADD_FAVORITES": _("お気に入りに追加(&A)") + "...",
+	"POST_ITEM": _("アイテム投下(&I)"),
 	#設定メニュー
 	"SETTING": _("設定(&S)") + "...",
 	"COMMENT_LIST_CONFIGURATION": _("コメントリスト表示設定(&L)") + "...",

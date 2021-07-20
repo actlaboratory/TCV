@@ -703,6 +703,7 @@ class manager:
 				"VIEW_BROADCASTER": False,
 				"OPEN_LIVE": False,
 				"ADD_FAVORITES": False,
+				"POST_ITEM": False,
 				"ACCOUNT_MANAGER": True,
 			}
 		elif connectionState == True:
@@ -716,6 +717,7 @@ class manager:
 				"VIEW_BROADCASTER": True,
 				"OPEN_LIVE": True,
 				"ADD_FAVORITES": True,
+				"POST_ITEM": True,
 				"ACCOUNT_MANAGER": False,
 			}
 		for key, value in menuItems.items():

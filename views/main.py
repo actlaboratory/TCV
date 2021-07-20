@@ -27,6 +27,7 @@ import simpleDialog
 from .base import *
 
 import views.advancedAccountManager
+import views.postItem
 import views.versionDialog
 import views.connect
 import views.viewComment
@@ -167,21 +168,58 @@ class Menu(BaseMenu):
 
 		#メニューの中身
 		#ファイルメニュー
-		self.RegisterMenuCommand(self.hFileMenu,
-			["CONNECT", "VIEW_HISTORY", "VIEW_FAVORITES", "DISCONNECT", "EXIT"])
+		self.RegisterMenuCommand(self.hFileMenu, [
+			"CONNECT",
+			"VIEW_HISTORY",
+			"VIEW_FAVORITES",
+			"DISCONNECT",
+			"EXIT"
+		])
 		#再生メニュー
-		self.RegisterMenuCommand(self.hPlayMenu,
-			["PLAY", "STOP", "VOLUME_UP", "VOLUME_DOWN", "RESET_VOLUME", "CHANGE_DEVICE"])
+		self.RegisterMenuCommand(self.hPlayMenu, [
+			"PLAY",
+			"STOP",
+			"VOLUME_UP",
+			"VOLUME_DOWN",
+			"RESET_VOLUME",
+			"CHANGE_DEVICE"
+		])
 		#コメントメニュー
-		self.RegisterMenuCommand(self.hCommentMenu,
-			["COPY_COMMENT", "VIEW_COMMENT", "REPLY2SELECTED_COMMENT", "DELETE_SELECTED_COMMENT", "SELECT_ALL_COMMENT", "REPLY2BROADCASTER"])
+		self.RegisterMenuCommand(self.hCommentMenu, [
+			"COPY_COMMENT",
+			"VIEW_COMMENT",
+			"REPLY2SELECTED_COMMENT",
+			"DELETE_SELECTED_COMMENT",
+			"SELECT_ALL_COMMENT",
+			"REPLY2BROADCASTER"
+		])
 		#ライブメニュー
-		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
+		self.RegisterMenuCommand(self.hLiveMenu, [
+			"VIEW_BROADCASTER",
+			"OPEN_LIVE",
+			"ADD_FAVORITES",
+			"POST_ITEM"
+		])
 		#設定メニュー
-		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "COMMENT_LIST_CONFIGURATION", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "advanced_ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
+		self.RegisterMenuCommand(self.hSettingsMenu, [
+			"SETTING",
+			"COMMENT_LIST_CONFIGURATION",
+			"SET_KEYMAP",
+			"SET_HOTKEY",
+			"INDICATOR_SOUND_SETTING",
+			"COMMENT_REPLACE",
+			"USER_NAME_REPLACE",
+			"ACCOUNT_MANAGER",
+			"advanced_ACCOUNT_MANAGER",
+			"SAPI_SETTING",
+			"CHANGE_SPEECH_OUTPUT"
+		])
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
+		self.RegisterMenuCommand(self.hHelpMenu, [
+			"HELP",
+			"VERSION_INFO",
+			"CHECK4UPDATE"
+		])
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
@@ -284,6 +322,16 @@ class Events(BaseEvents):
 		#ブラウザで開く
 		elif selected==menuItemsStore.getRef("OPEN_LIVE"):
 			globalVars.app.Manager.openLiveWindow()
+		# アイテム投下
+		elif selected == menuItemsStore.getRef("POST_ITEM"):
+			if len(globalVars.app.config["advanced_ids"]) == 0:
+				simpleDialog.errorDialog(_("この機能を使用する前に、設定メニューの拡張機能用アカウントの管理から、使用するアカウントを登録してください。"))
+				return
+			if not globalVars.app.postItem.login(globalVars.app.postItem.getDefaultAccount()):
+				return
+			d = views.postItem.Dialog()
+			d.Initialize()
+			d.Show() 
 		#設定
 		elif selected==menuItemsStore.getRef("SETTING"):
 			self.settings()

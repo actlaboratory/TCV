@@ -15,6 +15,7 @@ def _import():
 	from views import main
 	import manager
 	import twitcasting.accountManager
+	import twitcasting.postItem
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -58,6 +59,7 @@ class Main(AppBase.MainBase):
 		if self.hasAccountIssue == False and self.config.getboolean("general", "autoconnect", True) == True:
 			self.hMainView.events.connect()
 			return True
+		self.postItem = twitcasting.postItem.PostItem()
 
 	def setProxyEnviron(self):
 		if self.config.getboolean("proxy", "usemanualsetting", False) == True:
