@@ -142,7 +142,7 @@ class PostItem:
 		for i in range(count):
 			if self._postItem(account, item):
 				counter += 1
-		simpleDialog.dialog(_("完了"), _("%sを%d個投下しました。") % (item.name, counter))
+		simpleDialog.dialog(_("完了"), _("%(name)sを%(count)d個投下しました。") % {"name": item.name, "count": counter})
 
 class Item:
 	def __init__(self, id, name, point):
