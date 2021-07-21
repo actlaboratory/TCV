@@ -325,7 +325,7 @@ class Events(BaseEvents):
 		# アイテム投下
 		elif selected == menuItemsStore.getRef("POST_ITEM"):
 			if len(globalVars.app.config["advanced_ids"]) == 0:
-				simpleDialog.errorDialog(_("この機能を使用する前に、設定メニューの拡張機能用アカウントの管理から、使用するアカウントを登録してください。"))
+				simpleDialog.errorDialog(_("この機能を使用する前に、設定メニューの拡張機能用アカウントの設定から、使用するアカウントを登録してください。"))
 				return
 			if not globalVars.app.postItem.login(globalVars.app.postItem.getDefaultAccount()):
 				return
