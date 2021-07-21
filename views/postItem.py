@@ -38,6 +38,7 @@ class Dialog(BaseDialog):
 			simpleDialog.errorDialog(_("アカウント「%s」の所有ポイント数が不足しているため、アイテムを投下できません。") % account)
 			return
 		globalVars.app.postItem.postItem(account, item, self.count.GetValue())
+		self.account.SetFocus()
 
 	def itemSelected(self, event):
 		self.bOk.Enable()
