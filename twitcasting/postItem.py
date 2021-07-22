@@ -43,7 +43,11 @@ class PostItem:
 
 	def getItemList(self):
 		session = self.sessions[self.getDefaultAccount()]
-		req = session.get("https://twitcasting.tv/gearajax.php", params={"c": "sendgift", "tuser": globalVars.app.Manager.connection.userId})
+		if globalVars.app.config["general"]["language"] == "ja-JP":
+			lang = "ja"
+		else:
+			lang = "en"
+		req = session.get("https://twitcasting.tv/gearajax.php", params={"c": "sendgift", "tuser": globalVars.app.Manager.connection.userId, "hl": lang})
 		if req.status_code != 200:
 			self.log.error("Item list page not found.")
 			return []
