@@ -19,8 +19,6 @@ class PostItem:
 		self.log = getLogger("%s.%s" % (constants.LOG_PREFIX, "twitcasting.postItem"))
 
 	def login(self, account):
-		if account in self.sessions.keys():
-			return True
 		id = globalVars.app.config["advanced_ids"][account]
 		pw = globalVars.app.config["advanced_passwords"][account]
 		if id[1] != ":":
