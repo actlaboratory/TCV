@@ -11,14 +11,22 @@ from logging import getLogger
 import constants
 import re
 import errorCodes
+import pickle
 
 class PostItem:
 	def __init__(self):
 		self.sessions = {}
 		self.items = []
 		self.log = getLogger("%s.%s" % (constants.LOG_PREFIX, "twitcasting.postItem"))
+		try:
+			with open(constants.SESSION_FILE_NAME, "rb") as f:
+				self.sessions = pickle.load(f)
+		except Exception as e:
+			self.log.error("Session data load error:" + str(e))
 
 	def login(self, account):
+		if account in self.sessions.keys():
+			return True
 		id = globalVars.app.config["advanced_ids"][account]
 		pw = globalVars.app.config["advanced_passwords"][account]
 		if id[1] != ":":
@@ -37,17 +45,16 @@ class PostItem:
 			simpleDialog.errorDialog(messages[result])
 			return False
 		self.sessions[account] = result
+		try:
+			with open(constants.SESSION_FILE_NAME, "wb") as f:
+				pickle.dump(self.sessions, f)
+		except Exception as e:
+			self.log.error("Session data save error:" + str(e))
 		return True
 
 	def getItemList(self):
-		session = self.sessions[self.getDefaultAccount()]
-		if globalVars.app.config["general"]["language"] == "ja-JP":
-			lang = "ja"
-		else:
-			lang = "en"
-		req = session.get("https://twitcasting.tv/gearajax.php", params={"c": "sendgift", "tuser": globalVars.app.Manager.connection.userId, "hl": lang})
-		if req.status_code != 200:
-			self.log.error("Item list page not found.")
+		req = self.getItemListPage(self.getDefaultAccount())
+		if not req:
 			return []
 		soup = bs4.BeautifulSoup(req.text, "lxml")
 		itemList = soup.find("div", class_="tw-item-list")
@@ -72,14 +79,34 @@ class PostItem:
 			self.items.append(Item(itemIds[i], itemNames[i], itemPoints[i]))
 		return itemNames
 
+	def getItemListPage(self, account):
+		result = self._getItemListPage(account)
+		if type(result) == requests.models.Response and result.text.replace("\n", "") in ("User does not exists.", "指定されたユーザーは存在しません。"):
+			self.log.error("Session error.")
+			del self.sessions[account]
+			if not self.login(account):
+				return
+			result = self._getItemListPage(account)
+		return result
+
+	def _getItemListPage(self, account):
+		session = self.sessions[account]
+		if globalVars.app.config["general"]["language"] == "ja-JP":
+			lang = "ja"
+		else:
+			lang = "en"
+		req = session.get("https://twitcasting.tv/gearajax.php", params={"c": "sendgift", "tuser": globalVars.app.Manager.connection.userId, "hl": lang})
+		if req.status_code != 200:
+			self.log.error("Item list page not found.")
+			return
+		return req
+
 	def getDefaultAccount(self):
 		return list(globalVars.app.config["advanced_ids"].keys())[0]
 
 	def getPoint(self, account):
-		session = self.sessions[account]
-		req = session.get("https://twitcasting.tv/gearajax.php", params={"c": "sendgift", "tuser": globalVars.app.Manager.connection.userId})
-		if req.status_code != 200:
-			self.log.error("Item list page not found.")
+		req = self.getItemListPage(account)
+		if not req:
 			return 0
 		soup = bs4.BeautifulSoup(req.text, "lxml")
 		tmp = soup.find("span", class_="tw-point-bar-amount")

@@ -28,6 +28,7 @@ LOG_FILE_NAME="TCV.log"
 HISTORY_FILE_NAME="data\\history.dat"
 FAVORITES_FILE_NAME="data\\favorites.dat"
 TOKEN_FILE_NAME="data\\accounts.dat"
+SESSION_FILE_NAME = "data\\sessions.dat"
 README_FILE_NAME = "readme.txt"
 
 #フォントの設定可能サイズ範囲
