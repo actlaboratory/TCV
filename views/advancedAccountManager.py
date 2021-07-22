@@ -30,12 +30,24 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 	"""設定内容を入力するダイアログ"""
 
 	def __init__(self,parent,name="",account="",pw=""):
+		if "c:" in account or len(account) == 0:
+			accountType = _("ツイキャスアカウント")
+		else:
+			accountType = _("Twitterアカウント")
+		account = account.replace("c:", "")
 		super().__init__(
 				parent,
-				((_("識別名"),True),(_("アカウントIDまたはEmail"),True),(_("パスワード"), True)),
-				(None,None,None),
-				name,account,pw
+				((_("識別名"),True),(_("アカウント種別"),(_("ツイキャスアカウント"),_("Twitterアカウント"))),(_("アカウントIDまたはEmail"),True),(_("パスワード"), True)),
+				(None,None,None, None),
+				name,accountType,account,pw
 				)
 
 	def Initialize(self):
 		return super().Initialize(_("拡張機能用アカウント設定"))
+
+	def GetData(self):
+		ret = super().GetData()
+		accountType = ret.pop(1)
+		if accountType == _("ツイキャスアカウント") and "c:" not in ret[1]:
+			ret[1] = "c:" + ret[1]
+		return ret

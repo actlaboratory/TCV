@@ -29,10 +29,10 @@ class PostItem:
 			return True
 		id = globalVars.app.config["advanced_ids"][account]
 		pw = globalVars.app.config["advanced_passwords"][account]
-		if id[1] != ":":
+		if "c:" not in id:
 			result = twitterLogin.login(id, pw)
-		elif id[0:2].lower() == "c:":
-			result = twitcastingLogin.login(id[2:], pw)
+		elif "c:" in id:
+			result = twitcastingLogin.login(id.replace("c:", ""), pw)
 		if type(result) == int:
 			messages = {
 				errorCodes.LOGIN_TWITCASTING_ERROR: _("ログイン中にエラーが発生しました。"),
