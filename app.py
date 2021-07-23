@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
 
+import os
 import AppBase
 import sys
 import simpleDialog
@@ -9,6 +10,7 @@ import proxyUtil
 import globalVars
 import update
 import threading
+import constants
 
 def _import():
 	global main, manager, twitcasting
@@ -40,6 +42,15 @@ class Main(AppBase.MainBase):
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
 		self.hMainView.Show()
+		# sessions.dat対応
+		if self.config.getint("general", "fileVersion", 100) == 100:
+			if os.path.exists(constants.SESSION_FILE_NAME):
+				try:
+					os.remove(constants.SESSION_FILE_NAME)
+					self.log.debug("File %s deleted." % constants.SESSION_FILE_NAME)
+				except Exception as e:
+					self.log.error("Failed to delete file %s: e" % constants.SESSION_FILE_NAME)
+			self.config["general"]["fileVersion"] = 101
 		self.accountManager = twitcasting.accountManager.AccountManager()
 		self.hasAccountIssue = False
 		self.Manager = manager.manager(self.hMainView)

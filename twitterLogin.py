@@ -61,7 +61,6 @@ def login(id, password):
 
 	#STEP6: 戻り先URLへアクセス
 	ret = session.get(url)
-	print(ret.url)
 	if not ret.url.startswith("https://twitcasting.tv/") or len(ret.history)!=1:
 		return errorCodes.LOGIN_TWITCASTING_ERROR
 	return session

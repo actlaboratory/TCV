@@ -18,11 +18,7 @@ class PostItem:
 		self.sessions = {}
 		self.items = []
 		self.log = getLogger("%s.%s" % (constants.LOG_PREFIX, "twitcasting.postItem"))
-		try:
-			with open(constants.SESSION_FILE_NAME, "rb") as f:
-				self.sessions = pickle.load(f)
-		except Exception as e:
-			self.log.error("Session data load error:" + str(e))
+		self.loadSessionData()
 		self.defaultAccountIndex = 0
 
 	def login(self, account):
@@ -46,11 +42,7 @@ class PostItem:
 			simpleDialog.errorDialog(messages[result])
 			return False
 		self.sessions[account] = result
-		try:
-			with open(constants.SESSION_FILE_NAME, "wb") as f:
-				pickle.dump(self.sessions, f)
-		except Exception as e:
-			self.log.error("Session data save error:" + str(e))
+		self.saveSessionData()
 		return True
 
 	def getItemList(self):
@@ -198,6 +190,35 @@ class PostItem:
 			simpleDialog.errorDialog(_("アイテムの投下に失敗しました。"))
 			return
 		simpleDialog.dialog(_("完了"), _("%(name)sを%(count)d個投下しました。") % {"name": item.name, "count": counter})
+
+	def loadSessionData(self):
+		try:
+			with open(constants.SESSION_FILE_NAME, "rb") as f:
+				data = pickle.load(f)
+		except Exception as e:
+			self.log.error("Session data load error:" + str(e))
+			return
+		for i in data:
+			if i in globalVars.app.config["advanced_ids"].values():
+				key = [k for k, v in globalVars.app.config["advanced_ids"].items() if v == i][0]
+				self.sessions[key] = data[i]
+
+	def saveSessionData(self):
+		data = {}
+		for i in globalVars.app.config["advanced_ids"]:
+			if i in self.sessions.keys():
+				data[globalVars.app.config["advanced_ids"][i]] = self.sessions[i]
+		try:
+			with open(constants.SESSION_FILE_NAME, "wb") as f:
+				pickle.dump(data, f)
+		except Exception as e:
+			self.log.error("Session data save error:" + str(e))
+
+	def deleteSessions(self):
+		for i in self.sessions:
+			if i not in globalVars.app.config["advanced_ids"].keys():
+				del self.sessions[i]
+		self.saveSessionData()
 
 class Item:
 	def __init__(self, id, name, point):
