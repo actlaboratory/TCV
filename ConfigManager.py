@@ -92,14 +92,14 @@ class ConfigManager(configparser.ConfigParser):
 				return ""
 			else:
 				self.log.debug("add default value.  at section "+section+", key "+key)
-				self[section][key]=default
-				ret=default
+				self[section][key]=str(default)
+				ret=str(default)
 				if selection==None:return ret
 
 		if selection!=None and ret not in selection:
-			self.log.debug("value "+ret+" not in selection.  at section "+section+", key "+key)
-			self[section][key]=default
-			ret=default
+			self.log.debug("value "+str(ret)+" not in selection.  at section "+section+", key "+key)
+			self[section][key]=str(default)
+			ret=str(default)
 		return ret
 
 	def add_section(self,name):

@@ -190,7 +190,28 @@ class ViewCreatorBase():
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
 		self.AddSpace()
+		self._setCloseable(hButton)
 		return hButton
+
+	def closebutton(self,text,event=None,style=wx.BORDER_RAISED,size=(-1,-1), sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=1,margin=5):
+		hButton=self.winObject["button"](self.parent, wx.ID_OK,label=text, name=text,style=style, size=size)
+		hButton.Bind(wx.EVT_BUTTON,event)
+		self._setFace(hButton,mode=BUTTON_COLOUR)
+		Add(self.sizer,hButton,proportion,sizerFlag,margin)
+		hButton.SetDefault()
+		self.AddSpace()
+		self._setCloseable(hButton)
+		return hButton
+
+	def _setCloseable(self,btn):
+		gp = self.parent
+		while(gp != None):
+			gp = gp.GetParent()
+			if isinstance(gp, wx._core.Dialog):
+				gp.EnableCloseButton(True)
+				gp.SetWindowStyle(gp.GetWindowStyle()|wx.CLOSE_BOX)
+				gp.SetEscapeId(btn.GetId())
+				return
 
 	def staticText(self, text, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5):
 		hStatic=self.winObject["staticText"](self.parent,wx.ID_ANY,label=text,name=text,size=(x,-1),style=style)
