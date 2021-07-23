@@ -318,11 +318,13 @@ class manager:
 		for i in self.connection.item:
 			result.append(i["name"] + ":" + str(i["count"]))
 		result.sort()
+		mp = None
 		for i in range(len(result)):
 			if result[i][0:2] == "MP":
 				mp = i
 				break
-		result[mp], result[-1] = result[-1], result[mp]
+		if type(mp) == int:
+			result[mp], result[-1] = result[-1], result[mp]
 		if mode == update:
 			cursor = self.MainView.itemList.GetSelection()
 			self.MainView.itemList.Clear()
@@ -603,9 +605,11 @@ class manager:
 			elif self.newCoins > self.oldCoins:
 				c = [i for i in range(self.oldCoins + 1, self.newCoins + 1) if i % 5 == 0]
 				if len(c) > 0:
-					globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
 					if self.hasEnoughCoins(self.oldCoins) == False and self.hasEnoughCoins(c[-1]) == True:
-						globalVars.app.say(_("完走に必要なコインが集まりました。"))
+						globalVars.app.say(_("完走に必要なコイン%d枚が集まりました。") %(c[-1]))
+					else:
+						globalVars.app.say(_("コインが%d枚集まりました。") %(c[-1]))
+
 		self.oldCoins = self.newCoins
 
 	def play(self):
@@ -701,6 +705,7 @@ class manager:
 				"VIEW_BROADCASTER": False,
 				"OPEN_LIVE": False,
 				"ADD_FAVORITES": False,
+				"POST_ITEM": False,
 				"ACCOUNT_MANAGER": True,
 			}
 		elif connectionState == True:
@@ -714,6 +719,7 @@ class manager:
 				"VIEW_BROADCASTER": True,
 				"OPEN_LIVE": True,
 				"ADD_FAVORITES": True,
+				"POST_ITEM": True,
 				"ACCOUNT_MANAGER": False,
 			}
 		for key, value in menuItems.items():

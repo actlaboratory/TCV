@@ -26,6 +26,8 @@ from logging import getLogger
 import simpleDialog
 from .base import *
 
+import views.advancedAccountManager
+import views.postItem
 import views.versionDialog
 import views.connect
 import views.viewComment
@@ -166,21 +168,58 @@ class Menu(BaseMenu):
 
 		#メニューの中身
 		#ファイルメニュー
-		self.RegisterMenuCommand(self.hFileMenu,
-			["CONNECT", "VIEW_HISTORY", "VIEW_FAVORITES", "DISCONNECT", "EXIT"])
+		self.RegisterMenuCommand(self.hFileMenu, [
+			"CONNECT",
+			"VIEW_HISTORY",
+			"VIEW_FAVORITES",
+			"DISCONNECT",
+			"EXIT"
+		])
 		#再生メニュー
-		self.RegisterMenuCommand(self.hPlayMenu,
-			["PLAY", "STOP", "VOLUME_UP", "VOLUME_DOWN", "RESET_VOLUME", "CHANGE_DEVICE"])
+		self.RegisterMenuCommand(self.hPlayMenu, [
+			"PLAY",
+			"STOP",
+			"VOLUME_UP",
+			"VOLUME_DOWN",
+			"RESET_VOLUME",
+			"CHANGE_DEVICE"
+		])
 		#コメントメニュー
-		self.RegisterMenuCommand(self.hCommentMenu,
-			["COPY_COMMENT", "VIEW_COMMENT", "REPLY2SELECTED_COMMENT", "DELETE_SELECTED_COMMENT", "SELECT_ALL_COMMENT", "REPLY2BROADCASTER"])
+		self.RegisterMenuCommand(self.hCommentMenu, [
+			"COPY_COMMENT",
+			"VIEW_COMMENT",
+			"REPLY2SELECTED_COMMENT",
+			"DELETE_SELECTED_COMMENT",
+			"SELECT_ALL_COMMENT",
+			"REPLY2BROADCASTER"
+		])
 		#ライブメニュー
-		self.RegisterMenuCommand(self.hLiveMenu, ["VIEW_BROADCASTER", "OPEN_LIVE", "ADD_FAVORITES"])
+		self.RegisterMenuCommand(self.hLiveMenu, [
+			"VIEW_BROADCASTER",
+			"OPEN_LIVE",
+			"ADD_FAVORITES",
+			"POST_ITEM"
+		])
 		#設定メニュー
-		self.RegisterMenuCommand(self.hSettingsMenu,
-			["SETTING", "COMMENT_LIST_CONFIGURATION", "SET_KEYMAP", "SET_HOTKEY", "INDICATOR_SOUND_SETTING", "COMMENT_REPLACE", "USER_NAME_REPLACE", "ACCOUNT_MANAGER", "SAPI_SETTING", "CHANGE_SPEECH_OUTPUT"])
+		self.RegisterMenuCommand(self.hSettingsMenu, [
+			"SETTING",
+			"COMMENT_LIST_CONFIGURATION",
+			"SET_KEYMAP",
+			"SET_HOTKEY",
+			"INDICATOR_SOUND_SETTING",
+			"COMMENT_REPLACE",
+			"USER_NAME_REPLACE",
+			"ACCOUNT_MANAGER",
+			"advanced_ACCOUNT_MANAGER",
+			"SAPI_SETTING",
+			"CHANGE_SPEECH_OUTPUT"
+		])
 		#ヘルプメニュー
-		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "VERSION_INFO", "CHECK4UPDATE"])
+		self.RegisterMenuCommand(self.hHelpMenu, [
+			"HELP",
+			"VERSION_INFO",
+			"CHECK4UPDATE"
+		])
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
@@ -283,6 +322,34 @@ class Events(BaseEvents):
 		#ブラウザで開く
 		elif selected==menuItemsStore.getRef("OPEN_LIVE"):
 			globalVars.app.Manager.openLiveWindow()
+		# アイテム投下
+		elif selected == menuItemsStore.getRef("POST_ITEM"):
+			accounts = list(globalVars.app.config["advanced_ids"].keys())
+			if len(accounts) == 0:
+				simpleDialog.errorDialog(_("この機能を使用する前に、設定メニューの拡張機能用アカウントの設定から、使用するアカウントを登録してください。"))
+				return
+			if not globalVars.app.postItem.login(globalVars.app.postItem.getDefaultAccount()):
+				return
+			items = globalVars.app.postItem.getItemList()
+			if len(items) == 0:
+				if len(accounts) == 1 and globalVars.app.postItem.getUserId(globalVars.app.postItem.getDefaultAccount()) == globalVars.app.Manager.connection.userId:
+					simpleDialog.errorDialog(_("自分のライブにアイテムを投下することはできません。"))
+					return
+				for i in range(1, len(accounts)):
+					globalVars.app.postItem.setDefaultAccountIndex(i)
+					if not globalVars.app.postItem.login(globalVars.app.postItem.getDefaultAccount()):
+						return
+					items = globalVars.app.postItem.getItemList()
+					if len(items) > 0:
+						d = views.postItem.Dialog(accounts, items)
+						d.Initialize()
+						d.Show() 
+						return
+				simpleDialog.errorDialog(_("アイテム情報の取得に失敗しました。"))
+				return
+			d = views.postItem.Dialog(accounts, items)
+			d.Initialize()
+			d.Show() 
 		#設定
 		elif selected==menuItemsStore.getRef("SETTING"):
 			self.settings()
@@ -303,6 +370,8 @@ class Events(BaseEvents):
 		#アカウントマネージャ
 		elif selected==menuItemsStore.getRef("ACCOUNT_MANAGER"):
 			self.accountManager()
+		elif selected==menuItemsStore.getRef("advanced_ACCOUNT_MANAGER"):
+			self.advancedAccountManager()
 		#SAPI設定を開く
 		elif selected == menuItemsStore.getRef("SAPI_SETTING"):
 			file = os.path.join(os.getenv("windir"), "SysWOW64", "Speech", "SpeechUX", "sapi.cpl")
@@ -438,6 +507,18 @@ class Events(BaseEvents):
 		accountManager = views.accountManager.Dialog()
 		accountManager.Initialize()
 		accountManager.Show()
+
+	def advancedAccountManager(self, event=None):
+		d = views.advancedAccountManager.Dialog()
+		d.Initialize()
+		if d.Show() == wx.ID_CANCEL:
+			return
+		globalVars.app.config.remove_section("advanced_ids")
+		globalVars.app.config.remove_section("advanced_passwords")
+		ids,pws = d.GetValue()
+		for k,v in ids.items():
+			globalVars.app.config["advanced_ids"][k] = v
+			globalVars.app.config["advanced_passwords"][k] = pws[k]
 
 	def settings(self, event=None):
 		settings = views.settings.settingsDialog()

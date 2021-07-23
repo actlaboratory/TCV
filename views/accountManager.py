@@ -51,7 +51,7 @@ class Dialog(BaseDialog):
 		self.moveUpButton.Enable(False)
 		self.moveDownButton = g2.button(_("下へ(&D)"), self.move)
 		self.moveDownButton.Enable(False)
-		self.bClose=self.creator.okbutton(_("閉じる"),self.close)
+		self.bClose=self.creator.closebutton(_("閉じる"),self.close)
 		self.refreshList()
 
 	def refreshList(self):

@@ -7,8 +7,8 @@ import wx
 #アプリケーション基本情報
 APP_NAME="TCV"
 APP_FULL_NAME = "TwitCasting Viewer"
-APP_VERSION="3.0.6"
-APP_LAST_RELEASE_DATE = "2021-06-23"
+APP_VERSION="3.1.0"
+APP_LAST_RELEASE_DATE = "2021-07-23"
 APP_ICON = None
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
@@ -28,6 +28,7 @@ LOG_FILE_NAME="TCV.log"
 HISTORY_FILE_NAME="data\\history.dat"
 FAVORITES_FILE_NAME="data\\favorites.dat"
 TOKEN_FILE_NAME="data\\accounts.dat"
+SESSION_FILE_NAME = "data\\sessions.dat"
 README_FILE_NAME = "readme.txt"
 
 #フォントの設定可能サイズ範囲

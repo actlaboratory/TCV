@@ -15,6 +15,7 @@ def _import():
 	from views import main
 	import manager
 	import twitcasting.accountManager
+	import twitcasting.postItem
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -42,15 +43,17 @@ class Main(AppBase.MainBase):
 		self.accountManager = twitcasting.accountManager.AccountManager()
 		self.hasAccountIssue = False
 		self.Manager = manager.manager(self.hMainView)
+		self.postItem = twitcasting.postItem.PostItem()
 		if len(self.accountManager.tokens) == 0:
 			simpleDialog.dialog(_("アカウント登録"), _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			self.hasAccountIssue = True
 			return True
 		for i in self.accountManager.tokens:
 			if datetime.datetime.now().timestamp() > i["expires_at"]:
-				simpleDialog.dialog("", _("期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
+				simpleDialog.dialog(_("アカウントの再登録"), _("期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
 				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 				self.hasAccountIssue = True
+		self.accountManager.removeUnavailableTokens()
 		if len(sys.argv) == 2:
 			self.hMainView.Clear()
 			self.Manager.connect(sys.argv[1])

@@ -34,6 +34,7 @@ dic={
 	"VIEW_BROADCASTER": _("配信者の情報を表示(&B)") + "...",
 	"OPEN_LIVE": _("このライブをブラウザで開く(&O)"),
 	"ADD_FAVORITES": _("お気に入りに追加(&A)") + "...",
+	"POST_ITEM": _("アイテム投下(&I)"),
 	#設定メニュー
 	"SETTING": _("設定(&S)") + "...",
 	"COMMENT_LIST_CONFIGURATION": _("コメントリスト表示設定(&L)") + "...",
@@ -43,6 +44,7 @@ dic={
 	"COMMENT_REPLACE": _("コメント文字列置換設定(&C)") + "...",
 	"USER_NAME_REPLACE": _("表示名置換設定(&N)") + "...",
 	"ACCOUNT_MANAGER": _("アカウントマネージャ(&M)") + "...",
+	"advanced_ACCOUNT_MANAGER": _("拡張機能用アカウントの設定(&V)") + "...",
 	"SAPI_SETTING": _("SAPI設定を開く(&A)") + "...",
 	"CHANGE_SPEECH_OUTPUT": _("読み上げ出力先の変更(&O)") + "...",
 	#ヘルプメニュー

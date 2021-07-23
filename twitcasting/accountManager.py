@@ -19,6 +19,7 @@ import globalVars
 from logging import getLogger
 import os
 import traceback
+from twitcasting.twitcasting import checkData
 
 class AccountManager:
 	def __init__(self):
@@ -31,6 +32,8 @@ class AccountManager:
 			self.loadFromFile()
 		except:
 			pass
+
+	def removeUnavailableTokens(self):
 		rm = []
 		cl = []
 		for i in range(0, len(self.tokens)):
@@ -38,7 +41,7 @@ class AccountManager:
 				try:
 					result = self.verifyCredentials(i)
 					break
-				except Exception as e:
+				except requests.RequestException as e:
 					d = wx.MessageDialog(None, _("通信に失敗しました。インターネット接続を確認してください。\nプロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要があります。\n今すぐプロキシ設定を開きますか？"), _("通信エラー"), style=wx.YES_NO|wx.NO_DEFAULT|wx.ICON_ERROR)
 					result = d.ShowModal()
 					if result == wx.ID_NO:
@@ -134,7 +137,9 @@ class AccountManager:
 		result = requests.get("https://apiv2.twitcasting.tv/verify_credentials", headers = {
 			"X-Api-Version": "2.0",
 			"Authorization": "Bearer " + token
-		}).json()
+		})
+		checkData(result)
+		result = result.json()
 		if "error" in result:
 			if result["error"]["code"] == 2000:
 				self.tokens[idx]["user"] = {
