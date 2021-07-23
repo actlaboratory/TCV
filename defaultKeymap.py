@@ -25,6 +25,7 @@ defaultKeymap["MAINVIEW"]={
 	"VIEW_BROADCASTER": "CTRL+B",
 	"OPEN_LIVE": "",
 	"ADD_FAVORITES": "CTRL+D",
+	"POST_ITEM": "CTRL+SHIFT+I",
 	"SETTING": "",
 	"SET_KEYMAP": "",
 	"SET_HOTKEY": "",

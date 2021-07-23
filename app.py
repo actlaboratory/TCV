@@ -50,9 +50,10 @@ class Main(AppBase.MainBase):
 			return True
 		for i in self.accountManager.tokens:
 			if datetime.datetime.now().timestamp() > i["expires_at"]:
-				simpleDialog.dialog("", _("期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
+				simpleDialog.dialog(_("アカウントの再登録"), _("期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャから、再度アカウントの追加を行ってください。"))
 				self.accountManager.deleteAccount(self.accountManager.tokens.index(i))
 				self.hasAccountIssue = True
+		self.accountManager.removeUnavailableTokens()
 		if len(sys.argv) == 2:
 			self.hMainView.Clear()
 			self.Manager.connect(sys.argv[1])
