@@ -23,6 +23,7 @@ class PostItem:
 				self.sessions = pickle.load(f)
 		except Exception as e:
 			self.log.error("Session data load error:" + str(e))
+		self.defaultAccountIndex = 0
 
 	def login(self, account):
 		if account in self.sessions.keys():
@@ -102,7 +103,15 @@ class PostItem:
 		return req
 
 	def getDefaultAccount(self):
-		return list(globalVars.app.config["advanced_ids"].keys())[0]
+		return list(globalVars.app.config["advanced_ids"].keys())[self.defaultAccountIndex]
+
+	def setDefaultAccountIndex(self, idx):
+		if idx >= len(globalVars.app.config["advanced_ids"].keys()):
+			return
+		self.defaultAccountIndex = idx
+
+	def getDefaultAccountIndex(self):
+		return self.defaultAccountIndex
 
 	def getPoint(self, account):
 		req = self.getItemListPage(account)
@@ -120,6 +129,20 @@ class PostItem:
 			self.log.error("Point data is invalid: " + result)
 			return 0
 		return result
+
+	def getUserId(self, account):
+		user = globalVars.app.config["advanced_ids"][account]
+		if "@" not in user:
+			return user
+		session = self.sessions[account]
+		req = session.get("https://twitcasting.tv/")
+		if req.status_code != 200:
+			return ""
+		soup = bs4.BeautifulSoup(req.text, "lxml")
+		tmp = soup.find("a", class_="tw-global-header-login-user")
+		if tmp == None:
+			return ""
+		return str(tmp["href"]).replace("/", "")
 
 	def getItem(self, name):
 		for i in self.items:
@@ -171,6 +194,9 @@ class PostItem:
 		for i in range(count):
 			if self._postItem(account, item):
 				counter += 1
+		if counter == 0:
+			simpleDialog.errorDialog(_("アイテムの投下に失敗しました。"))
+			return
 		simpleDialog.dialog(_("完了"), _("%(name)sを%(count)d個投下しました。") % {"name": item.name, "count": counter})
 
 class Item:
