@@ -9,7 +9,7 @@ class DefaultSettings:
 		config = ConfigManager()
 		config["general"]={
 			"language": "ja-JP",
-			"fileVersion": "100",
+			"fileVersion": "101",
 			"locale": "ja-JP",
 			"initialCommentCount": 50,
 			"commentToSns": 0,

@@ -519,6 +519,7 @@ class Events(BaseEvents):
 		for k,v in ids.items():
 			globalVars.app.config["advanced_ids"][k] = v
 			globalVars.app.config["advanced_passwords"][k] = pws[k]
+		globalVars.app.postItem.deleteSessions()
 
 	def settings(self, event=None):
 		settings = views.settings.settingsDialog()

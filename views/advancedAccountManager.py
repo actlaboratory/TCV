@@ -3,6 +3,7 @@
 #Copyright (C) 2021 yamahubuki <itiro.ishino@gmail.com>
 #Note: All comments except these top lines will be written in Japanese. 
 
+import simpleDialog
 import views.KeyValueSettingDialogBase
 import wx
 import globalVars
@@ -26,10 +27,14 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		super().Initialize(self.app.hMainView.hFrame,_("拡張機能用アカウントの設定"))
 		return
 
+	def SettingDialogHook(self, dialog):
+		dialog.accounts = self.values[0].values()
+
 class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 	"""設定内容を入力するダイアログ"""
 
 	def __init__(self,parent,name="",account="",pw=""):
+		self.initialAccount = account
 		if "c:" in account or len(account) == 0:
 			accountType = _("ツイキャスアカウント")
 		else:
@@ -41,6 +46,7 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 				(None,None,None, None),
 				name,accountType,account,pw
 				)
+		self.accounts = []
 
 	def Initialize(self):
 		return super().Initialize(_("拡張機能用アカウント設定"))
@@ -51,3 +57,10 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 		if accountType == _("ツイキャスアカウント") and "c:" not in ret[1]:
 			ret[1] = "c:" + ret[1]
 		return ret
+
+	def Validation(self, event):
+		account = self.GetData()[1]
+		if account != self.initialAccount and account in self.accounts:
+			simpleDialog.errorDialog(_("このアカウントは既に登録されています。"))
+			return
+		event.Skip()
