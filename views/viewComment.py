@@ -36,7 +36,7 @@ class Dialog(BaseDialog):
 		introduction.Bind(wx.EVT_TEXT_ENTER,self.processEnter)
 		twitter = self.creator.button(_("投稿者のTwitterを開く"), self.twitter)
 		twitter.Enable(self.comment["from_user"]["screen_id"][1] != ":")
-		self.closeButton=self.creator.okbutton(_("閉じる"), None)
+		self.closeButton=self.creator.closebutton(_("閉じる"), None)
 
 	def processEnter(self,event):
 		self.wnd.EndModal(wx.OK)
