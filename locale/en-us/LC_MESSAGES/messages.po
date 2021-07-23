@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-21 20:36+0900\n"
-"PO-Revision-Date: 2021-07-21 20:55+0900\n"
+"POT-Creation-Date: 2021-07-23 17:19+0900\n"
+"PO-Revision-Date: 2021-07-23 17:21+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -36,6 +36,10 @@ msgid ""
 msgstr ""
 "No accounts are registered. Add at least one account from account manager on "
 "settings menu."
+
+#: app.py:53
+msgid "アカウントの再登録"
+msgstr "account registration"
 
 #: app.py:53
 msgid ""
@@ -187,7 +191,7 @@ msgstr "collabo is unavailable"
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\globalKeyConfig.py:138 views\globalKeyConfig.py:143
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:333
-#: views\main.py:533 views\main.py:553 views\settings.py:54
+#: views\main.py:551 views\main.py:571 views\settings.py:54
 #: views\settings.py:59
 msgid "なし"
 msgstr "None"
@@ -371,7 +375,7 @@ msgid ""
 msgstr ""
 "TwitCasting API returned a 500 error. Wait a while and try to connect again."
 
-#: manager.py:777 twitcasting\accountManager.py:60
+#: manager.py:777 twitcasting\accountManager.py:62
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 "Currently you cannot use TCV. Please contact the developer for further "
@@ -531,8 +535,8 @@ msgid "アカウントマネージャ(&M)"
 msgstr "account &Manager"
 
 #: menuItemsDic.py:47
-msgid "拡張機能用アカウントの設定(&A)"
-msgstr "account settings for &Advanced features"
+msgid "拡張機能用アカウントの設定(&V)"
+msgstr "account settings for Ad&vanced features"
 
 #: menuItemsDic.py:48
 msgid "SAPI設定を開く(&A)"
@@ -635,7 +639,7 @@ msgstr ""
 "Download has successfully finished.\n"
 "Update will be started when closing the application."
 
-#: twitcasting\accountManager.py:43
+#: twitcasting\accountManager.py:45
 msgid ""
 "通信に失敗しました。インターネット接続を確認してください。\n"
 "プロキシサーバーを使用する場合には、設定からプロキシの設定を行う必要がありま"
@@ -646,15 +650,15 @@ msgstr ""
 "If you use a proxy server, you must configure the proxy from the settings.\n"
 "Do you wish to open proxy settings now?"
 
-#: twitcasting\accountManager.py:43
+#: twitcasting\accountManager.py:45
 msgid "通信エラー"
 msgstr "Connection Error"
 
-#: twitcasting\accountManager.py:52 views\settings.py:148
+#: twitcasting\accountManager.py:54 views\settings.py:148
 msgid "ネットワーク"
 msgstr "network"
 
-#: twitcasting\accountManager.py:64
+#: twitcasting\accountManager.py:66
 msgid ""
 "無効なトークンが見つかったため、アカウントを削除しました。設定メニューのアカ"
 "ウントマネージャから、再度アカウントの追加を行ってください。"
@@ -662,7 +666,7 @@ msgstr ""
 "Some accounts have automatically been deleted because of invalid token. Add "
 "accounts again by using account manager on settings menu."
 
-#: twitcasting\accountManager.py:68
+#: twitcasting\accountManager.py:70
 msgid ""
 "APIの実行回数が上限に達したため、一部のユーザ情報を取得できませんでした。この"
 "情報を再度取得するには、数分待ってからTCVを再起動してください。"
@@ -671,7 +675,7 @@ msgstr ""
 "was reached. To get this information again, wait a few minutes and restart "
 "TCV."
 
-#: twitcasting\accountManager.py:87
+#: twitcasting\accountManager.py:89
 msgid ""
 "アカウント情報の書き込みに失敗しました。以下のファイルへのアクセスが可能であ"
 "ることを確認してください。"
@@ -679,33 +683,33 @@ msgstr ""
 "Failed to write account information. Make sure you have permission to access "
 "to the following file:"
 
-#: twitcasting\accountManager.py:101
+#: twitcasting\accountManager.py:103
 msgid ""
 "認証に成功しました。このウィンドウを閉じて、アプリケーションに戻ってくださ"
 "い。"
 msgstr ""
 "Authorization successful.  Close this window and go back to your application."
 
-#: twitcasting\accountManager.py:102
+#: twitcasting\accountManager.py:104
 msgid "認証に失敗しました。もう一度お試しください。"
 msgstr "Authorization failed.  Please try again."
 
-#: twitcasting\accountManager.py:103
+#: twitcasting\accountManager.py:105
 msgid ""
 "しばらくしても画面が切り替わらない場合は、別のブラウザでお試しください。"
 msgstr ""
 "If the screen does not change after a while, open this page in another "
 "browser."
 
-#: twitcasting\accountManager.py:117
+#: twitcasting\accountManager.py:119
 msgid "処理結果"
 msgstr "result"
 
-#: twitcasting\accountManager.py:117
+#: twitcasting\accountManager.py:119
 msgid "キャンセルされました。"
 msgstr "Canceled."
 
-#: twitcasting\accountManager.py:146
+#: twitcasting\accountManager.py:148
 msgid "不明"
 msgstr "unknown"
 
@@ -717,19 +721,19 @@ msgstr "Unknown User"
 msgid "カテゴリなし"
 msgstr "no category"
 
-#: twitcasting\postItem.py:32 twitcasting\postItem.py:36
+#: twitcasting\postItem.py:39 twitcasting\postItem.py:43
 msgid "ログイン中にエラーが発生しました。"
 msgstr "An error has occured during logging in."
 
-#: twitcasting\postItem.py:33
+#: twitcasting\postItem.py:40
 msgid "設定されたユーザ名またはパスワードが不正です。設定を確認してください。"
 msgstr "Configured ID or password is wrong."
 
-#: twitcasting\postItem.py:34
+#: twitcasting\postItem.py:41
 msgid "Twitterユーザ名またはパスワードが不正です。設定を確認してください。"
 msgstr "Twitter user name or password is wrong."
 
-#: twitcasting\postItem.py:35
+#: twitcasting\postItem.py:42
 msgid ""
 "reCAPTCHAによる認証が必要です。ブラウザからTwitterにログインし、認証を行って"
 "ください。"
@@ -737,16 +741,20 @@ msgstr ""
 "ReCAPTCHA authentication is required. From your browser, login to the "
 "twitter, and finish the authentication."
 
-#: twitcasting\postItem.py:37
+#: twitcasting\postItem.py:44
 msgid "認証が必要です。ブラウザで操作を完了してください。"
 msgstr ""
 "Authorization is required. Open the browser, and finish the authentication."
 
-#: twitcasting\postItem.py:145
+#: twitcasting\postItem.py:198
+msgid "アイテムの投下に失敗しました。"
+msgstr "Failed to post item."
+
+#: twitcasting\postItem.py:200
 msgid "完了"
 msgstr "done"
 
-#: twitcasting\postItem.py:145
+#: twitcasting\postItem.py:200
 #, python-format
 msgid "%(name)sを%(count)d個投下しました。"
 msgstr "You posted %(count)d %(name)s."
@@ -800,7 +808,7 @@ msgstr "move &Up"
 msgid "下へ(&D)"
 msgstr "move &Down"
 
-#: views\accountManager.py:54 views\itemHistory.py:35 views\postItem.py:30
+#: views\accountManager.py:54 views\itemHistory.py:35 views\postItem.py:32
 #: views\versionDialog.py:49 views\viewBroadcaster.py:37
 #: views\viewComment.py:39 views\viewFavorites.py:36 views\viewHistory.py:32
 msgid "閉じる"
@@ -836,15 +844,15 @@ msgstr "waiting for browser..."
 msgid "キャンセル"
 msgstr "cancel"
 
-#: views\advancedAccountManager.py:13 views\advancedAccountManager.py:35
+#: views\advancedAccountManager.py:13 views\advancedAccountManager.py:40
 msgid "識別名"
 msgstr "identifier"
 
-#: views\advancedAccountManager.py:14 views\advancedAccountManager.py:35
+#: views\advancedAccountManager.py:14 views\advancedAccountManager.py:40
 msgid "アカウントIDまたはEmail"
 msgstr "account ID or email"
 
-#: views\advancedAccountManager.py:15 views\advancedAccountManager.py:35
+#: views\advancedAccountManager.py:15 views\advancedAccountManager.py:40
 msgid "パスワード"
 msgstr "Password"
 
@@ -852,7 +860,20 @@ msgstr "Password"
 msgid "拡張機能用アカウントの設定"
 msgstr "account settings for Advanced features"
 
-#: views\advancedAccountManager.py:41
+#: views\advancedAccountManager.py:34 views\advancedAccountManager.py:40
+#: views\advancedAccountManager.py:51
+msgid "ツイキャスアカウント"
+msgstr "TwitCasting account"
+
+#: views\advancedAccountManager.py:36 views\advancedAccountManager.py:40
+msgid "Twitterアカウント"
+msgstr "Twitter account"
+
+#: views\advancedAccountManager.py:40
+msgid "アカウント種別"
+msgstr "account type"
+
+#: views\advancedAccountManager.py:46
 msgid "拡張機能用アカウント設定"
 msgstr "account settings for Advanced features"
 
@@ -1331,7 +1352,7 @@ msgstr "It is already registered."
 msgid "%sのライブをお気に入りに追加しますか？"
 msgstr "Are you sure you want to add %s to your favorites?"
 
-#: views\main.py:328
+#: views\main.py:329
 msgid ""
 "この機能を使用する前に、設定メニューの拡張機能用アカウントの設定から、使用す"
 "るアカウントを登録してください。"
@@ -1339,35 +1360,43 @@ msgstr ""
 "You must register account information by choosing \"account settings for "
 "Advanced features\" from settings menu."
 
-#: views\main.py:462
+#: views\main.py:336
+msgid "自分のライブにアイテムを投下することはできません。"
+msgstr "You cannot post items to your live."
+
+#: views\main.py:348
+msgid "アイテム情報の取得に失敗しました。"
+msgstr "Failed to get item information."
+
+#: views\main.py:480
 msgid "接続履歴がありません。"
 msgstr "No items in your connection history."
 
-#: views\main.py:476
+#: views\main.py:494
 msgid "お気に入りライブが登録されていません。"
 msgstr "No items in your favorites."
 
-#: views\main.py:591
+#: views\main.py:609
 msgid "readme.txtが見つかりません。"
 msgstr "Readme.txt could not be found."
 
-#: views\postItem.py:17 views\postItem.py:28
+#: views\postItem.py:19 views\postItem.py:30
 msgid "アイテム投下"
 msgstr "post item"
 
-#: views\postItem.py:24
+#: views\postItem.py:26
 msgid "使用するアカウント(&A)"
 msgstr "&Account"
 
-#: views\postItem.py:25
+#: views\postItem.py:27
 msgid "アイテム(&I)"
 msgstr "&Items"
 
-#: views\postItem.py:26
+#: views\postItem.py:28
 msgid "個数(&C)"
 msgstr "&Count"
 
-#: views\postItem.py:38
+#: views\postItem.py:40
 #, python-format
 msgid ""
 "アカウント「%s」の所有ポイント数が不足しているため、アイテムを投下できませ"
