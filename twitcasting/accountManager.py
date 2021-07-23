@@ -32,6 +32,8 @@ class AccountManager:
 			self.loadFromFile()
 		except:
 			pass
+
+	def removeUnavailableTokens(self):
 		rm = []
 		cl = []
 		for i in range(0, len(self.tokens)):
