@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-23 17:19+0900\n"
-"PO-Revision-Date: 2021-07-23 17:21+0900\n"
+"POT-Creation-Date: 2021-07-24 00:25+0900\n"
+"PO-Revision-Date: 2021-07-24 00:25+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
 
-#: app.py:24
+#: app.py:26
 msgid "閲覧者が$viewers人に増えました。"
 msgstr "Viewers count increased to $viewers."
 
-#: app.py:26
+#: app.py:28
 msgid "閲覧者が$viewers人に減りました。"
 msgstr "Viewers count decreased to $viewers."
 
-#: app.py:48
+#: app.py:59
 msgid "アカウント登録"
 msgstr "account registration"
 
-#: app.py:48 manager.py:93
+#: app.py:59 manager.py:93
 msgid ""
 "アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウン"
 "トマネージャからアカウントの登録を行ってください。"
@@ -37,11 +37,11 @@ msgstr ""
 "No accounts are registered. Add at least one account from account manager on "
 "settings menu."
 
-#: app.py:53
+#: app.py:64
 msgid "アカウントの再登録"
 msgstr "account registration"
 
-#: app.py:53
+#: app.py:64
 msgid ""
 "期限が切れたトークンが見つかりました。設定メニューのアカウントマネージャか"
 "ら、再度アカウントの追加を行ってください。"
@@ -191,7 +191,7 @@ msgstr "collabo is unavailable"
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\globalKeyConfig.py:138 views\globalKeyConfig.py:143
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:333
-#: views\main.py:551 views\main.py:571 views\settings.py:54
+#: views\main.py:552 views\main.py:572 views\settings.py:54
 #: views\settings.py:59
 msgid "なし"
 msgstr "None"
@@ -721,19 +721,19 @@ msgstr "Unknown User"
 msgid "カテゴリなし"
 msgstr "no category"
 
-#: twitcasting\postItem.py:39 twitcasting\postItem.py:43
+#: twitcasting\postItem.py:35 twitcasting\postItem.py:39
 msgid "ログイン中にエラーが発生しました。"
 msgstr "An error has occured during logging in."
 
-#: twitcasting\postItem.py:40
+#: twitcasting\postItem.py:36
 msgid "設定されたユーザ名またはパスワードが不正です。設定を確認してください。"
 msgstr "Configured ID or password is wrong."
 
-#: twitcasting\postItem.py:41
+#: twitcasting\postItem.py:37
 msgid "Twitterユーザ名またはパスワードが不正です。設定を確認してください。"
 msgstr "Twitter user name or password is wrong."
 
-#: twitcasting\postItem.py:42
+#: twitcasting\postItem.py:38
 msgid ""
 "reCAPTCHAによる認証が必要です。ブラウザからTwitterにログインし、認証を行って"
 "ください。"
@@ -741,20 +741,20 @@ msgstr ""
 "ReCAPTCHA authentication is required. From your browser, login to the "
 "twitter, and finish the authentication."
 
-#: twitcasting\postItem.py:44
+#: twitcasting\postItem.py:40
 msgid "認証が必要です。ブラウザで操作を完了してください。"
 msgstr ""
 "Authorization is required. Open the browser, and finish the authentication."
 
-#: twitcasting\postItem.py:198
+#: twitcasting\postItem.py:190
 msgid "アイテムの投下に失敗しました。"
 msgstr "Failed to post item."
 
-#: twitcasting\postItem.py:200
+#: twitcasting\postItem.py:192
 msgid "完了"
 msgstr "done"
 
-#: twitcasting\postItem.py:200
+#: twitcasting\postItem.py:192
 #, python-format
 msgid "%(name)sを%(count)d個投下しました。"
 msgstr "You posted %(count)d %(name)s."
@@ -844,38 +844,42 @@ msgstr "waiting for browser..."
 msgid "キャンセル"
 msgstr "cancel"
 
-#: views\advancedAccountManager.py:13 views\advancedAccountManager.py:40
+#: views\advancedAccountManager.py:14 views\advancedAccountManager.py:45
 msgid "識別名"
 msgstr "identifier"
 
-#: views\advancedAccountManager.py:14 views\advancedAccountManager.py:40
+#: views\advancedAccountManager.py:15 views\advancedAccountManager.py:45
 msgid "アカウントIDまたはEmail"
 msgstr "account ID or email"
 
-#: views\advancedAccountManager.py:15 views\advancedAccountManager.py:40
+#: views\advancedAccountManager.py:16 views\advancedAccountManager.py:45
 msgid "パスワード"
 msgstr "Password"
 
-#: views\advancedAccountManager.py:26
+#: views\advancedAccountManager.py:27
 msgid "拡張機能用アカウントの設定"
 msgstr "account settings for Advanced features"
 
-#: views\advancedAccountManager.py:34 views\advancedAccountManager.py:40
-#: views\advancedAccountManager.py:51
+#: views\advancedAccountManager.py:39 views\advancedAccountManager.py:45
+#: views\advancedAccountManager.py:57
 msgid "ツイキャスアカウント"
 msgstr "TwitCasting account"
 
-#: views\advancedAccountManager.py:36 views\advancedAccountManager.py:40
+#: views\advancedAccountManager.py:41 views\advancedAccountManager.py:45
 msgid "Twitterアカウント"
 msgstr "Twitter account"
 
-#: views\advancedAccountManager.py:40
+#: views\advancedAccountManager.py:45
 msgid "アカウント種別"
 msgstr "account type"
 
-#: views\advancedAccountManager.py:46
+#: views\advancedAccountManager.py:52
 msgid "拡張機能用アカウント設定"
 msgstr "account settings for Advanced features"
+
+#: views\advancedAccountManager.py:64
+msgid "このアカウントは既に登録されています。"
+msgstr "This account is already registered."
 
 #: views\base.py:67
 msgid "現在メニューは操作できません"
@@ -1376,7 +1380,7 @@ msgstr "No items in your connection history."
 msgid "お気に入りライブが登録されていません。"
 msgstr "No items in your favorites."
 
-#: views\main.py:609
+#: views\main.py:610
 msgid "readme.txtが見つかりません。"
 msgstr "Readme.txt could not be found."
 
