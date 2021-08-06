@@ -67,3 +67,5 @@ deploy:
     on:
       branch: master                 # release from master branch only
 
+after_deploy:
+  - cmd: curl "https://actlab.org/api/addAlphaVersion?repo_name=%APPVEYOR_REPO_NAME%&commit_hash=%APPVEYOR_REPO_COMMIT%&password=%SCRIPT_PASSWORD%"
