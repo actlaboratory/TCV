@@ -52,7 +52,7 @@ after_test:
 
 artifacts:
   - path: TCV-*.zip
-  - path: NPC-*.json
+  - path: TCV-*.json
 
 deploy:
   - provider: GitHub
