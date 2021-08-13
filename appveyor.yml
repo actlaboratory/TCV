@@ -68,4 +68,4 @@ deploy:
       branch: master                 # release from master branch only
 
 after_deploy:
-  - cmd: curl "https://actlab.org/api/addAlphaVersion?repo_name=%APPVEYOR_REPO_NAME%&commit_hash=%APPVEYOR_REPO_COMMIT%&password=%SCRIPT_PASSWORD%"
+  - cmd: echo import constants;print("https://actlab.org/api/addAlphaVersion?repo_name=%APPVEYOR_REPO_NAME%&commit_hash=%APPVEYOR_REPO_COMMIT%&version="+constants.APP_VERSION+"&password=%SCRIPT_PASSWORD%",end="") | C:\\Python38\python.exe | xargs -n1 curl
