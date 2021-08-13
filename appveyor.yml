@@ -52,6 +52,7 @@ after_test:
 
 artifacts:
   - path: TCV-*.zip
+  - path: NPC-*.json
 
 deploy:
   - provider: GitHub
@@ -61,7 +62,7 @@ deploy:
     description: 'automatic build from master branch'
     auth_token:
       secure: iNSx8v6c+0TP9IyckinrvNWuX+hc7SKruOqRDl9GxdX59sZ2yqB8+UDAtqdPzKIg
-    artifact: TCV-snapshot.zip                # upload all NuGet packages to release assets
+    artifact: /(TCV-.*\.zip)|(TCV-.*\.json)/                # upload all NuGet packages to release assets
     draft: false
     prerelease: false
     on:
