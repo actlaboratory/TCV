@@ -86,6 +86,7 @@ class manager:
 	def connect(self, userId):
 		userId = userId.replace("http://twitcasting.tv/", "")
 		userId = userId.replace("https://twitcasting.tv/", "")
+		userId = userId.replace("tcv://twitcasting.tv/", "")
 		if "/" in userId:
 			userId = userId[0:userId.find("/")]
 		if globalVars.app.accountManager.hasDefaultAccount() == False:
