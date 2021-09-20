@@ -20,15 +20,14 @@ def login(id,pw):
 	# STEP2: ログインページからCSRFトークンを取得
 	page = session.get("https://twitcasting.tv/indexcaslogin.php?redir=%2F")
 	if page.status_code!=200 or len(page.history)!=0:
-		print("1")
 		return errorCodes.LOGIN_TWITCASTING_ERROR
-	soup = BeautifulSoup(page.content, "lxml")
-	form = soup.find("form", {"id":"login-form"})
-	ret = form.find("input", {"name":"cs_session_id","type":"hidden"})
-	token =  ret["value"]
-	print(token)
-	#except:
-	#return errorCodes.LOGIN_TWITCASTING_ERROR
+	try:
+		soup = BeautifulSoup(page.content, "lxml")
+		form = soup.find("form", {"id":"login-form"})
+		ret = form.find("input", {"name":"cs_session_id","type":"hidden"})
+		token =  ret["value"]
+	except:
+		return errorCodes.LOGIN_TWITCASTING_ERROR
 
 	# STEP3: ログイン用のリクエスト
 	headers = {
