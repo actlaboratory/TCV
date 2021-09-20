@@ -4,6 +4,8 @@
 import requests
 import errorCodes
 
+from bs4 import BeautifulSoup
+
 #IDとpwを用いてログインし、セッションを返却
 #ID冒頭のc:は不要
 def login(id,pw):
@@ -15,7 +17,20 @@ def login(id,pw):
 	if ret.status_code!=200:
 		return errorCodes.LOGIN_TWITCASTING_ERROR
 
-	# STEP2: ログイン用のリクエスト
+	# STEP2: ログインページからCSRFトークンを取得
+	page = session.get("https://twitcasting.tv/indexcaslogin.php?redir=%2F")
+	if page.status_code!=200 or len(page.history)!=0:
+		print("1")
+		return errorCodes.LOGIN_TWITCASTING_ERROR
+	soup = BeautifulSoup(page.content, "lxml")
+	form = soup.find("form", {"id":"login-form"})
+	ret = form.find("input", {"name":"cs_session_id","type":"hidden"})
+	token =  ret["value"]
+	print(token)
+	#except:
+	#return errorCodes.LOGIN_TWITCASTING_ERROR
+
+	# STEP3: ログイン用のリクエスト
 	headers = {
 		"Content-Type":"application/x-www-form-urlencoded",
 		"Accept":"Accept: text/html, application/xhtml+xml, image/jxr, */*",
@@ -26,6 +41,7 @@ def login(id,pw):
 		"username":id,
 		"password":pw,
 		"action":"login",
+		"cs_session_id":token,
 	}
 	result = session.post("https://twitcasting.tv/indexcaslogin.php?redir=%2F"+"&keep=1", body, headers=headers, timeout=5)
 
