@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 # post item dialog
 
+import time
 import wx
 import globalVars
 import views.ViewCreator
@@ -36,9 +37,26 @@ class Dialog(BaseDialog):
 		item = globalVars.app.postItem.getItem(self.item.GetValue())
 		if not globalVars.app.postItem.login(account):
 			return
-		if self.count.GetValue() * item.point > globalVars.app.postItem.getPoint(account):
+		point = self.count.GetValue() * item.point
+		if point > globalVars.app.postItem.getPoint(account):
 			simpleDialog.errorDialog(_("アカウント「%s」の所有ポイント数が不足しているため、アイテムを投下できません。") % account)
 			return
+		last = globalVars.app.config.getint("item_posted_time", account, 0)
+		now = time.time()
+		if now - last > 86400:
+			# 24時間以上経過している
+			newPoint = point
+		else:
+			# 24時間経過していない
+			newPoint = globalVars.app.config.getint("item_point", account, 0) + point
+		if newPoint > 100:
+			d = simpleDialog.yesNoDialog(_("確認"), _("24時間以内に%dポイント使用しようとしています。自動的に回復するのは100ポイントのみです。処理を続行しますか？") % (newPoint))
+			if d == wx.ID_NO:
+				return
+		if now - last > 86400:
+			globalVars.app.config["item_posted_time"][account] = int(now)
+		globalVars.app.config["item_point"][account] = newPoint
+		return
 		globalVars.app.postItem.postItem(account, item, self.count.GetValue())
 		self.account.SetFocus()
 
