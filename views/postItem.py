@@ -50,7 +50,7 @@ class Dialog(BaseDialog):
 			# 24時間経過していない
 			newPoint = globalVars.app.config.getint("item_point", account, 0) + point
 		if newPoint > 100:
-			d = simpleDialog.yesNoDialog(_("確認"), _("24時間以内に%dポイント使用しようとしています。自動的に回復するのは100ポイントのみです。処理を続行しますか？") % (newPoint))
+			d = simpleDialog.yesNoDialog(_("確認"), _("24時間以内に%dポイント使用しようとしています。100ポイント以上使用した場合であっても、自動チャージされるのは100ポイントのみです。処理を続行しますか？") % (newPoint))
 			if d == wx.ID_NO:
 				return
 		if now - last > 86400:
