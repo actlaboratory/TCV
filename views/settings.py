@@ -81,6 +81,7 @@ class settingsDialog(BaseDialog):
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
 		self.checkpoint = creator.checkbox(_("ポイント管理機能を使用する(&P)"))
+		creator.GetSizer().SetItemSpan(self.checkpoint.GetParent(),2)
 
 		# startup
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("起動/接続"),style=wx.ALL,margin=20)
