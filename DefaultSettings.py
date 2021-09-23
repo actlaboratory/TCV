@@ -23,6 +23,7 @@ class DefaultSettings:
 			"autoconnect": True,
 			"titlebar": 1,
 			"log_level": "0",
+			"checkPoint": True,
 		}
 
 		config["view"]={

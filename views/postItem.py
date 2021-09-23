@@ -41,22 +41,22 @@ class Dialog(BaseDialog):
 		if point > globalVars.app.postItem.getPoint(account):
 			simpleDialog.errorDialog(_("アカウント「%s」の所有ポイント数が不足しているため、アイテムを投下できません。") % account)
 			return
-		last = globalVars.app.config.getint("item_posted_time", account, 0)
-		now = time.time()
-		if now - last > 86400:
-			# 24時間以上経過している
-			newPoint = point
-		else:
-			# 24時間経過していない
-			newPoint = globalVars.app.config.getint("item_point", account, 0) + point
-		if newPoint > 100:
-			d = simpleDialog.yesNoDialog(_("確認"), _("24時間以内に%dポイント使用しようとしています。100ポイント以上使用した場合であっても、自動チャージされるのは100ポイントのみです。処理を続行しますか？") % (newPoint))
-			if d == wx.ID_NO:
-				return
-		if now - last > 86400:
-			globalVars.app.config["item_posted_time"][account] = int(now)
-		globalVars.app.config["item_point"][account] = newPoint
-		return
+		if globalVars.app.config.getboolean("general", "checkPoint", True):
+			last = globalVars.app.config.getint("item_posted_time", account, 0)
+			now = time.time()
+			if now - last > 86400:
+				# 24時間以上経過している
+				newPoint = point
+			else:
+				# 24時間経過していない
+				newPoint = globalVars.app.config.getint("item_point", account, 0) + point
+			if newPoint > 100:
+				d = simpleDialog.yesNoDialog(_("確認"), _("24時間以内に%dポイント使用しようとしています。100ポイント以上使用した場合であっても、自動チャージされるのは100ポイントのみです。処理を続行しますか？") % (newPoint))
+				if d == wx.ID_NO:
+					return
+			if now - last > 86400:
+				globalVars.app.config["item_posted_time"][account] = int(now)
+			globalVars.app.config["item_point"][account] = newPoint
 		globalVars.app.postItem.postItem(account, item, self.count.GetValue())
 		self.account.SetFocus()
 

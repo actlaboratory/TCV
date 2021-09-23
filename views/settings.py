@@ -78,13 +78,16 @@ class settingsDialog(BaseDialog):
 
 		# general
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("一般"),style=wx.ALL,margin=20)
-		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
-		creator.GetSizer().SetItemSpan(self.autoconnect.GetParent(),2)
-
-		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログの表示項目(&O)"), list(self.displayonconnectdialogSelection.values()))
-		self.initialcommentcount, static = creator.spinCtrl(_("接続時に読み込むコメント数(&C)"), 1, 250)
 		self.commenttosns, static = creator.combobox(_("コメントのSNS投稿(&S)"), list(self.commenttosnsSelection.values()))
 		self.timertype, static = creator.combobox(_("タイマーの種類(&T)"), list(self.timertypeSelection.values()))
+		self.checkpoint = creator.checkbox(_("ポイント管理機能を使用する(&P)"))
+
+		# startup
+		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,label=_("起動/接続"),style=wx.ALL,margin=20)
+		self.autoconnect = creator.checkbox(_("起動時に接続ダイアログを開く(&L)"))
+		creator.GetSizer().SetItemSpan(self.autoconnect.GetParent(),2)
+		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログの表示項目(&O)"), list(self.displayonconnectdialogSelection.values()))
+		self.initialcommentcount, static = creator.spinCtrl(_("接続時に読み込むコメント数(&C)"), 1, 250)
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
 		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先ユーザー名/URL(&U)"),sizerFlag=wx.EXPAND)
 		self.openlivewindow = creator.checkbox(_("接続時にブラウザでライブを開く(&O)"))
@@ -158,11 +161,14 @@ class settingsDialog(BaseDialog):
 
 	def load(self):
 		# general
+		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
+		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
+		self.checkpoint.SetValue(globalVars.app.config.getboolean("general", "checkPoint"))
+
+		# startup
 		self.autoconnect.SetValue(globalVars.app.config.getboolean("general", "autoconnect"))
 		self.displayonconnectdialog.SetValue(self.displayonconnectdialogSelection[globalVars.app.config["general"]["displayonconnectdialog"]])
 		self.initialcommentcount.SetValue(globalVars.app.config["general"]["initialcommentcount"])
-		self.commenttosns.SetValue(self.commenttosnsSelection[globalVars.app.config["general"]["commenttosns"]])
-		self.timertype.SetValue(self.timertypeSelection[globalVars.app.config["general"]["timertype"]])
 		self.historymax.SetValue(globalVars.app.config["general"]["historymax"])
 		self.defaultconnectaccount.SetValue(globalVars.app.config["general"]["defaultconnectaccount"])
 		self.openlivewindow.SetValue(globalVars.app.config.getboolean("general", "openlivewindow"))
@@ -213,11 +219,14 @@ class settingsDialog(BaseDialog):
 
 	def save(self):
 		# general
-		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
-		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
 		globalVars.app.config["general"]["initialcommentcount"] = self.initialcommentcount.GetValue()
 		globalVars.app.config["general"]["commenttosns"] = list(self.commenttosnsSelection.keys())[self.commenttosns.GetSelection()]
 		globalVars.app.config["general"]["timertype"] = list(self.timertypeSelection.keys())[self.timertype.GetSelection()]
+		globalVars.app.config["general"]["checkPoint"] = self.checkpoint.GetValue()
+
+		# startup
+		globalVars.app.config["general"]["autoconnect"] = self.autoconnect.GetValue()
+		globalVars.app.config["general"]["displayonconnectdialog"] = list(self.displayonconnectdialogSelection.keys())[self.displayonconnectdialog.GetSelection()]
 		globalVars.app.config["general"]["historymax"] = self.historymax.GetValue()
 		globalVars.app.config["general"]["defaultconnectaccount"] = self.defaultconnectaccount.GetValue()
 		globalVars.app.config["general"]["openlivewindow"] = self.openlivewindow.GetValue()
