@@ -7,7 +7,7 @@ import wx
 #アプリケーション基本情報
 APP_NAME="TCV"
 APP_FULL_NAME = "TwitCasting Viewer"
-APP_VERSION="3.1.1"
+APP_VERSION="3.2.0"
 APP_LAST_RELEASE_DATE = "2021-07-24"
 APP_ICON = None
 APP_COPYRIGHT_YEAR="2019-2021"
@@ -62,3 +62,6 @@ TB_USER = 2
 TC_CID = "1266762249164619776.c2ee817dafca62d74bbf3af6a7db1ad1c3cce334bef6e3af82c146d670f3cefe"
 TC_URL = "https://apiv2.twitcasting.tv/oauth2/authorize"
 TC_PORT = 9338
+
+# URLスキーム
+SCHEME_NAME = "tcv"

@@ -43,7 +43,7 @@ after_test:
   # 64-bit Python 3.3/3.4. And you need to use %PYTHON% to get the correct
   # interpreter
   - "%PYTHON%\\python.exe tools\\build.py --appveyor"
-  - cmd: exit
+  - cmd: if defined APPVEYOR_PULL_REQUEST_NUMBER appveyor exit 0
   - cmd: curl "https://actlab.org/git-release.php?repo_name=%APPVEYOR_REPO_NAME%&tag_name=TCV-latestcommit&password=%SCRIPT_PASSWORD%"
   - cmd: git tag -d TCV-latestcommit
   - cmd: git push -d https://actlab-auto:%githubToken%@github.com/actlaboratory/TCV.git TCV-latestcommit
@@ -52,6 +52,7 @@ after_test:
 
 artifacts:
   - path: TCV-*.zip
+  - path: TCV-*.json
 
 deploy:
   - provider: GitHub
@@ -61,9 +62,11 @@ deploy:
     description: 'automatic build from master branch'
     auth_token:
       secure: iNSx8v6c+0TP9IyckinrvNWuX+hc7SKruOqRDl9GxdX59sZ2yqB8+UDAtqdPzKIg
-    artifact: TCV-snapshot.zip                # upload all NuGet packages to release assets
+    artifact: /(TCV-.*\.zip)|(TCV-.*\.json)/                # upload all NuGet packages to release assets
     draft: false
     prerelease: false
     on:
       branch: master                 # release from master branch only
 
+after_deploy:
+  - cmd: echo import constants;print("https://actlab.org/api/addAlphaVersion?repo_name=%APPVEYOR_REPO_NAME%&commit_hash=%APPVEYOR_REPO_COMMIT%&version="+constants.APP_VERSION+"&password=%SCRIPT_PASSWORD%",end="") | C:\\Python37\python.exe | xargs -n1 curl

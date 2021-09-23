@@ -47,6 +47,7 @@ dic={
 	"advanced_ACCOUNT_MANAGER": _("拡張機能用アカウントの設定(&V)") + "...",
 	"SAPI_SETTING": _("SAPI設定を開く(&A)") + "...",
 	"CHANGE_SPEECH_OUTPUT": _("読み上げ出力先の変更(&O)") + "...",
+	"CUSTOM_URL_SCHEME": _("カスタムURLスキームの登録"),
 	#ヘルプメニュー
 	"HELP": _("ヘルプを開く(&H)"),
 	"VERSION_INFO": _("バージョン情報(&V)") + "...",

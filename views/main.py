@@ -21,6 +21,7 @@ import constants
 import errorCodes
 import globalVars
 import menuItemsStore
+import customUrlScheme
 
 from logging import getLogger
 import simpleDialog
@@ -212,7 +213,8 @@ class Menu(BaseMenu):
 			"ACCOUNT_MANAGER",
 			"advanced_ACCOUNT_MANAGER",
 			"SAPI_SETTING",
-			"CHANGE_SPEECH_OUTPUT"
+			"CHANGE_SPEECH_OUTPUT",
+			"CUSTOM_URL_SCHEME",
 		])
 		#ヘルプメニュー
 		self.RegisterMenuCommand(self.hHelpMenu, [
@@ -415,6 +417,9 @@ class Events(BaseEvents):
 				globalVars.app.speech.silence()
 			except AttributeError:
 				pass
+		# URLスキームの設定
+		elif selected == menuItemsStore.getRef("CUSTOM_URL_SCHEME"):
+			self.toggleCustomUrlScheme()
 		#ヘルプを開く
 		elif selected == menuItemsStore.getRef("HELP"):
 			self.help()
@@ -602,6 +607,21 @@ class Events(BaseEvents):
 		for i in data:
 			globalVars.app.config["nameReplace"][i] = data[i]
 		globalVars.app.Manager.refreshReplaceSettings()
+
+	def toggleCustomUrlScheme(self):
+		if not customUrlScheme.isRegistered(constants.SCHEME_NAME):
+			if not hasattr(sys, "frozen"):
+				simpleDialog.errorDialog(_("この機能を使用するには、TCVをビルドして実行する必要があります。"))
+				return
+			if customUrlScheme.register(constants.SCHEME_NAME):
+				simpleDialog.dialog(_("成功"), _("カスタムURLスキームの登録が完了しました。"))
+			else:
+				simpleDialog.errorDialog(_("カスタムURLスキームの登録に失敗しました。"))
+		else:
+			d = simpleDialog.yesNoDialog(_("確認"), _("既に登録されています。登録を解除しますか？"))
+			if d == wx.ID_NO:
+				return
+			customUrlScheme.unregister(constants.SCHEME_NAME)
 
 	def help(self, event=None):
 		if os.path.isfile(constants.README_FILE_NAME):
