@@ -124,6 +124,7 @@ class settingsDialog(BaseDialog):
 		self.readtypinguser = creator.checkbox(_("入力中のユーザーを読み上げる(&T)"))
 		self.readreceiveditems = creator.checkbox(_("受信したアイテムを読み上げる(&E)"), self.checkBoxStatusChanged)
 		self.readitemposteduser, static = creator.combobox(_("アイテム投稿者の読み方"), list(self.readitemposteduserSelection.values()),textLayout=wx.HORIZONTAL)
+		self.readremainingtime = creator.checkbox(_("残り時間を読み上げる(&R)"), self.checkBoxStatusChanged)
 
 		# live play
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("ライブ再生"),style=wx.ALL,margin=20)
@@ -194,6 +195,7 @@ class settingsDialog(BaseDialog):
 		self.readtypinguser.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readtypinguser"))
 		self.readreceiveditems.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readreceiveditems"))
 		self.readitemposteduser.SetValue(self.readitemposteduserSelection[globalVars.app.config["autoReadingOptions"]["readitemposteduser"]])
+		self.readremainingtime.SetValue(globalVars.app.config.getboolean("autoReadingOptions", "readremainingtime", True))
 
 		# live play
 		self.autoplay.SetValue(globalVars.app.config.getboolean("livePlay", "autoplay"))
@@ -260,6 +262,7 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["autoReadingOptions"]["readtypinguser"] = self.readtypinguser.GetValue()
 		globalVars.app.config["autoReadingOptions"]["readreceiveditems"] = self.readreceiveditems.GetValue()
 		globalVars.app.config["autoReadingOptions"]["readitemposteduser"] = list(self.readitemposteduserSelection.keys())[self.readitemposteduser.GetSelection()]
+		globalVars.app.config["autoReadingOptions"]["readremainingtime"] = self.readremainingtime.GetValue()
 
 		# live play
 		globalVars.app.config["livePlay"]["autoplay"] = self.autoplay.GetValue()

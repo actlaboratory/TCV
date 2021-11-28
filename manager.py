@@ -477,7 +477,8 @@ class manager:
 			string = _("残り%s分です。") %(str(remainingTime.minute))
 		else:
 			string = _("残り%(minutes)s分%(seconds)s秒です。") %{"minutes": str(remainingTime.minute), "seconds": str(remainingTime.second)}
-		globalVars.app.say(string)
+		if globalVars.app.config.getboolean("autoReadingOptions", "readRemainingTime", True):
+			globalVars.app.say(string)
 
 	def timer(self, event):
 		timer = event.GetTimer()
