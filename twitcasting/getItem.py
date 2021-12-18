@@ -41,7 +41,7 @@ def getItem(screenId):
 	itemId.append("MP")
 	for name, count, id in zip(itemName, itemCount, itemId):
 		if count > 0 or name == "MP":
-			result.append({"name": name, "count": count, "id": id})
+			result.append({"name": name, "count": count, "id": id, "user": getItemPostedUser(screenId, id)})
 	return result
 
 def getItemPostedUser(screenId, itemId):
@@ -52,7 +52,7 @@ def getItemPostedUser(screenId, itemId):
 	else:
 		lang = "en"
 	try:
-		req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=" + lang).text
+		req = requests.get("http://twitcasting.tv/%s/gifts" % (screenId)).text
 	except:
 		log.error("Connection failed(getItemPostedUser).")
 		log.error(traceback.format_exc)
@@ -62,8 +62,29 @@ def getItemPostedUser(screenId, itemId):
 			traceback.print_exc()
 		return []
 	soup = BeautifulSoup(req, "lxml")
-	tmp = soup.find_all("span", class_ = "tw-user-name-screen-name")
+	tmp = soup.find("section", {"class": "tw-supporter-gift-history"})
+	if tmp is None:
+		return []
 	result = []
-	for i in tmp:
-		result.append(i.text[1:])
+	for i in tmp.find_all("div", {"class": "tw-supporter-gift"}):
+		try:
+			item = i.find("div", {"class": "tw-supporter-item"}).a["href"]
+			if re.match("javascript:((giftItem)|(showItemDialog)).*", item):
+				if "," not in item or "'" not in item:
+					continue
+				start = item.index(",") + 3
+				end = item.index("'", start)
+				item = item[start:end]
+		except Exception as e:
+			log.error("Failed to get item Id on getItemPostedUser.")
+			log.error(traceback.format_exc())
+			continue
+		if item == itemId:
+			try:
+				user = i.find("a", {"class": "tw-user-name-icon"})["data-user-id"]
+				result.append(user)
+			except Exception as e:
+				log.error("Failed to get user Id on getItemPostedUser.")
+				log.error(traceback.format_exc())
+				continue
 	return result

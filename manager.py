@@ -808,17 +808,17 @@ class ItemOperation(threading.Thread):
 		receivedItem = []
 		for new in self.manager.newItem:
 			if new["id"] not in [i["id"] for i in self.manager.oldItem]:
-				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"], "user": new["user"]})
 			for old in self.manager.oldItem:
 				if new["id"] == old["id"] and new["count"] > old["count"]:
-					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"], "user": new["user"]})
 		for i in receivedItem:
 			if i["name"] == "MP":
 				continue
 			id = i["id"]
 			name = i["name"]
 			count = i["count"]
-			users = self.manager.connection.getItemPostedUser(id, count)
+			users = i["user"][:count]
 			items = []
 			for i in range(count):
 				items.append({
