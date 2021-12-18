@@ -2,6 +2,7 @@
 #Application Initializer
 
 import accessible_output2.outputs
+from accessible_output2.outputs.base import OutputError
 import sys
 import gettext
 import logging
@@ -45,6 +46,16 @@ class MaiｎBase(wx.App):
 			simpleDialog.errorDialog(_("ログ機能の初期化に失敗しました。下記のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.LOG_FILE_NAME))
 
 	def InitSpeech(self):
+		# 音声読み上げの準備
+		try:
+			self._InitSpeech()
+		except OutputError as e:
+			self.log.error("Failed to initialize speech output.")
+			self.log.error(traceback.format_exc())
+			simpleDialog.winDialog(_("音声エンジンエラー"), _("音声読み上げ機能の初期化に失敗したため、読み上げ機能を使用できません。出力先の変更をお試しください。"))
+			self.speech = accessible_output2.outputs.nospeech.NoSpeech()
+
+	def _InitSpeech(self):
 		# 音声読み上げの準備
 		reader=self.config["speech"]["reader"]
 		if(reader=="PCTK"):

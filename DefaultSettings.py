@@ -50,7 +50,8 @@ class DefaultSettings:
 			"viewersDecreasedAnnouncement": "@@@viewers_decreased@@@",
 			"readTypingUser": False,
 			"readReceivedItems": True,
-			"readItemPostedUser": 0
+			"readItemPostedUser": 0,
+			"readRemainingTime": True,
 		}
 		config["commentReplaceBasic"]={
 		}

@@ -19,7 +19,7 @@ def getItem(screenId):
 	else:
 		lang = "en"
 	try:
-		req = requests.get("http://twitcasting.tv/gearajax.php?c=showitems&u=" + screenId + "&hl=" + lang).text
+		req = requests.get("https://frontendapi.twitcasting.tv/item_box/%s" % (screenId), {"hl": lang}).json()
 	except:
 		log.error("Connection failed(getItem).")
 		log.error(traceback.format_exc)
@@ -28,37 +28,20 @@ def getItem(screenId):
 			winsound.Beep(1000, 1000)
 			traceback.print_exc()
 		return []
-	soup = BeautifulSoup(req, "lxml")
 	itemName = []
 	itemCount = []
 	itemId = []
 	result = []
-	tmp = soup.find_all("img", class_ = "item")
-	for i in tmp:
-		itemName.append(i.get("title"))
-	tmp = soup.find_all("span", class_ = "tw-item-count-badge")
-	for i in tmp:
-		itemCount.append(int(i.text))
-	tmp = soup.find_all("a")
-	for i in tmp:
-		href = i.get("href")
-		if re.match("javascript:((giftItem)|(showItemDialog)).*", href):
-			if "," not in href or "'" not in href:
-				continue
-			start = href.index(",") + 3
-			end = href.index("'", start)
-			itemId.append(href[start: end])
-	mp = soup.find("span", class_ = "tw-item-mp")
-	if mp == None:
-		mp = ["0", "MP"]
-	else:
-		mp = mp.text.split()
-	itemName.append(mp[1])
-	itemCount.append(int(mp[0]))
-	itemId.append(mp[1])
+	for i in req["items"]:
+		itemName.append(i["name"])
+		itemCount.append(i["count"])
+		itemId.append(i["item_id"])
+	itemName.append("MP")
+	itemCount.append(req["status"]["mp"])
+	itemId.append("MP")
 	for name, count, id in zip(itemName, itemCount, itemId):
 		if count > 0 or name == "MP":
-			result.append({"name": name, "count": count, "id": id})
+			result.append({"name": name, "count": count, "id": id, "user": getItemPostedUser(screenId, id)})
 	return result
 
 def getItemPostedUser(screenId, itemId):
@@ -69,7 +52,7 @@ def getItemPostedUser(screenId, itemId):
 	else:
 		lang = "en"
 	try:
-		req = requests.get("http://twitcasting.tv/gearajax.php?c=showitem&itemid=" + itemId + "&u=" + screenId + "&hl=" + lang).text
+		req = requests.get("http://twitcasting.tv/%s/gifts" % (screenId)).text
 	except:
 		log.error("Connection failed(getItemPostedUser).")
 		log.error(traceback.format_exc)
@@ -79,8 +62,29 @@ def getItemPostedUser(screenId, itemId):
 			traceback.print_exc()
 		return []
 	soup = BeautifulSoup(req, "lxml")
-	tmp = soup.find_all("span", class_ = "tw-user-name-screen-name")
+	tmp = soup.find("section", {"class": "tw-supporter-gift-history"})
+	if tmp is None:
+		return []
 	result = []
-	for i in tmp:
-		result.append(i.text[1:])
+	for i in tmp.find_all("div", {"class": "tw-supporter-gift"}):
+		try:
+			item = i.find("div", {"class": "tw-supporter-item"}).a["href"]
+			if re.match("javascript:((giftItem)|(showItemDialog)).*", item):
+				if "," not in item or "'" not in item:
+					continue
+				start = item.index(",") + 3
+				end = item.index("'", start)
+				item = item[start:end]
+		except Exception as e:
+			log.error("Failed to get item Id on getItemPostedUser.")
+			log.error(traceback.format_exc())
+			continue
+		if item == itemId:
+			try:
+				user = i.find("a", {"class": "tw-user-name-icon"})["data-user-id"]
+				result.append(user)
+			except Exception as e:
+				log.error("Failed to get user Id on getItemPostedUser.")
+				log.error(traceback.format_exc())
+				continue
 	return result

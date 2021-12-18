@@ -477,7 +477,8 @@ class manager:
 			string = _("残り%s分です。") %(str(remainingTime.minute))
 		else:
 			string = _("残り%(minutes)s分%(seconds)s秒です。") %{"minutes": str(remainingTime.minute), "seconds": str(remainingTime.second)}
-		globalVars.app.say(string)
+		if globalVars.app.config.getboolean("autoReadingOptions", "readRemainingTime", True):
+			globalVars.app.say(string)
 
 	def timer(self, event):
 		timer = event.GetTimer()
@@ -807,17 +808,17 @@ class ItemOperation(threading.Thread):
 		receivedItem = []
 		for new in self.manager.newItem:
 			if new["id"] not in [i["id"] for i in self.manager.oldItem]:
-				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"]})
+				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"], "user": new["user"]})
 			for old in self.manager.oldItem:
 				if new["id"] == old["id"] and new["count"] > old["count"]:
-					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"]})
+					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"], "user": new["user"]})
 		for i in receivedItem:
 			if i["name"] == "MP":
 				continue
 			id = i["id"]
 			name = i["name"]
 			count = i["count"]
-			users = self.manager.connection.getItemPostedUser(id, count)
+			users = i["user"][:count]
 			items = []
 			for i in range(count):
 				items.append({
