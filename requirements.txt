@@ -1,7 +1,7 @@
 ﻿wxpython
 pywin32
 winpaths
-pyinstaller
+https://github.com/actlaboratory/pyinstaller/archive/refs/tags/v4.8_original.zip
 requests
 beautifulsoup4
 lxml
