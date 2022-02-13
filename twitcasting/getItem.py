@@ -14,6 +14,7 @@ import sys
 log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.getItem"))
 
 def getItem(screenId):
+	log.debug("Getting items...")
 	if globalVars.app.config["general"]["language"] == "ja-JP":
 		lang = "ja"
 	else:
@@ -28,6 +29,7 @@ def getItem(screenId):
 			winsound.Beep(1000, 1000)
 			traceback.print_exc()
 		return []
+	log.debug("response: %s" % req)
 	itemName = []
 	itemCount = []
 	itemId = []
