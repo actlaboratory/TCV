@@ -819,14 +819,12 @@ class ItemOperation(threading.Thread):
 			name = i["name"]
 			count = i["count"]
 			users = i["user"][:count]
+			for i in range(len(users), count):
+				users.append(_("不明なユーザ"))
 			items = []
 			for i in range(count):
-				if i >= len(users):
-					u = _("不明なユーザ")
-				else:
-					u = users[i]
 				items.append({
-					"user": u,
+					"user": users[i],
 					"item": name,
 				})
 			self.manager.items = items + self.manager.items
@@ -846,9 +844,11 @@ class ItemOperation(threading.Thread):
 						globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
 				else:
 					if readItemPostedUser == 1:
-						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
+						if users[0] != _("不明なユーザ"):
+							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
 					elif readItemPostedUser == 2:
-						users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
+						if users[0] != _("不明なユーザ"):
+							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
 					if multiUser == False:
 						if count == 1:
 							globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
