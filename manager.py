@@ -821,8 +821,12 @@ class ItemOperation(threading.Thread):
 			users = i["user"][:count]
 			items = []
 			for i in range(count):
+				if i >= len(users):
+					u = _("不明なユーザ")
+				else:
+					u = users[i]
 				items.append({
-					"user": users[i],
+					"user": u,
 					"item": name,
 				})
 			self.manager.items = items + self.manager.items
