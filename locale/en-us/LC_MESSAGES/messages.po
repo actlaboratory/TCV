@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 12:44+0900\n"
-"PO-Revision-Date: 2021-09-23 12:51+0900\n"
+"POT-Creation-Date: 2022-02-15 22:19+0900\n"
+"PO-Revision-Date: 2022-02-15 22:21+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: app.py:26
 msgid "閲覧者が$viewers人に増えました。"
@@ -49,13 +49,25 @@ msgstr ""
 "Expired tokens were found. Add accounts again by using account manager on "
 "settings menu."
 
-#: AppBase.py:45
+#: AppBase.py:46
 msgid ""
 "ログ機能の初期化に失敗しました。下記のファイルへのアクセスが可能であることを"
 "確認してください。"
 msgstr ""
 "Failed to initialize logger. Make sure you have permission to access to the "
 "following file:"
+
+#: AppBase.py:55
+msgid "音声エンジンエラー"
+msgstr "Speech Synthesizer Error"
+
+#: AppBase.py:55
+msgid ""
+"音声読み上げ機能の初期化に失敗したため、読み上げ機能を使用できません。出力先"
+"の変更をお試しください。"
+msgstr ""
+"Failed to initialize speech function. You cannot use speech. Please try to "
+"change speech output."
 
 #: keymapHandlerBase.py:696 keymapHandlerBase.py:726
 #, python-format
@@ -119,7 +131,7 @@ msgstr "Connected. Currently streaming."
 msgid "タイマー開始。"
 msgstr "Timer started."
 
-#: manager.py:146 manager.py:298 manager.py:500
+#: manager.py:146 manager.py:298 manager.py:501
 #, python-format
 msgid "残り時間：%s"
 msgstr "remaining time: %s"
@@ -169,12 +181,12 @@ msgstr "currently streaming"
 msgid "オフライン"
 msgstr "offline"
 
-#: manager.py:297 manager.py:499
+#: manager.py:297 manager.py:500
 #, python-format
 msgid "経過時間：%s"
 msgstr "elapsed time: %s"
 
-#: manager.py:300 manager.py:513
+#: manager.py:300 manager.py:514
 msgid "残り時間：無制限"
 msgstr "remaining time: unlimited"
 
@@ -273,87 +285,87 @@ msgstr "%s minutes remaining."
 msgid "残り%(minutes)s分%(seconds)s秒です。"
 msgstr "%(minutes)s minutes and %(seconds)s seconds remaining."
 
-#: manager.py:506
+#: manager.py:507
 #, python-format
 msgid "残り%(hour)d時間%(minute)d分%(second)d秒"
 msgstr "%(hour)d hours %(minute)d minutes and %(second)d seconds remaining"
 
-#: manager.py:508
+#: manager.py:509
 #, python-format
 msgid "残り%(minute)d分%(second)d秒"
 msgstr "%(minute)d minutes and %(second)d seconds remaining"
 
-#: manager.py:510
+#: manager.py:511
 #, python-format
 msgid "残り%(second)d秒"
 msgstr "%(second)d seconds remaining"
 
-#: manager.py:517
+#: manager.py:518
 #, python-format
 msgid "%sさんが入力中"
 msgstr "%s is typing"
 
-#: manager.py:533
+#: manager.py:534
 msgid "ライブ終了。"
 msgstr "Live ended."
 
-#: manager.py:544
+#: manager.py:545
 msgid "ライブ開始。"
 msgstr "Live started."
 
-#: manager.py:555
+#: manager.py:556
 msgid "テロップ削除"
 msgstr "Subtitle was removed."
 
-#: manager.py:557
+#: manager.py:558
 msgid "テロップ変更。"
 msgstr "Subtitle changed."
 
-#: manager.py:566
+#: manager.py:567
 #, python-format
 msgid "カテゴリ変更：%s"
 msgstr "Category changed: %s"
 
-#: manager.py:575
+#: manager.py:576
 msgid "次のライブが開始されました。"
 msgstr "New live started."
 
-#: manager.py:605
+#: manager.py:606
 msgid "コイン消費"
 msgstr "Coin used"
 
-#: manager.py:610
+#: manager.py:611
 #, python-format
 msgid "完走に必要なコイン%d枚が集まりました。"
 msgstr "Got enough %d coins to complete the live."
 
-#: manager.py:612
+#: manager.py:613
 #, python-format
 msgid "コインが%d枚集まりました。"
 msgstr "You got %d coins."
 
-#: manager.py:624
+#: manager.py:625
 msgid "再生URLを取得できません。"
 msgstr "Faild to get playback URL."
 
-#: manager.py:628
+#: manager.py:629
 msgid "再生に失敗しました。"
 msgstr "Failed to start playback."
 
-#: manager.py:631 views\indicatorSoundSettings.py:17
+#: manager.py:632 views\indicatorSoundSettings.py:17
 msgid "再生"
 msgstr "play"
 
-#: manager.py:644
+#: manager.py:645
 msgid "停止"
 msgstr "stop"
 
-#: manager.py:653 manager.py:657
+#: manager.py:654 manager.py:658
 #, python-format
 msgid "音量%d"
 msgstr "volume %d"
 
-#: manager.py:772
+#: manager.py:773
 msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
@@ -361,59 +373,63 @@ msgstr ""
 "Access token is invalid. Add your account again from Account Manager in the "
 "settings menu."
 
-#: manager.py:774
+#: manager.py:775
 msgid ""
 "APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"
 msgstr ""
 "The API has reached its maximum number of runs. Please try again after a "
 "while."
 
-#: manager.py:776
+#: manager.py:777
 msgid ""
 "ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してくださ"
 "い。"
 msgstr ""
 "TwitCasting API returned a 500 error. Wait a while and try to connect again."
 
-#: manager.py:778 twitcasting\accountManager.py:62
+#: manager.py:779 twitcasting\accountManager.py:62
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 "Currently you cannot use TCV. Please contact the developer for further "
 "assistance."
 
-#: manager.py:793
+#: manager.py:794
 #, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
 msgstr ""
 "An error has occured during the communication between TwitCasting. Details: "
 "%s"
 
-#: manager.py:839
+#: manager.py:823 manager.py:847 manager.py:850
+msgid "不明なユーザ"
+msgstr "Unknown User"
+
+#: manager.py:842
 #, python-format
 msgid "%sをもらいました。"
 msgstr "You got %s."
 
-#: manager.py:841
+#: manager.py:844
 #, python-format
 msgid "%(name)sを%(count)i個もらいました。"
 msgstr "You got %(count)i %(name)s."
 
-#: manager.py:849
+#: manager.py:854
 #, python-format
 msgid "%(user)sさんから%(item)sをもらいました。"
 msgstr "You got %(item)s from %(user)s."
 
-#: manager.py:851
+#: manager.py:856
 #, python-format
 msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
 msgstr "You got %(count)i %(item)s from %(user)s."
 
-#: manager.py:854
+#: manager.py:859
 #, python-format
 msgid "%(user)sさんなどから%(item)sをもらいました。"
 msgstr "You got %(item)s from %(user)s and others."
 
-#: manager.py:856
+#: manager.py:861
 #, python-format
 msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
 msgstr "You got %(count)i %(item)s from %(user)s and others."
@@ -658,7 +674,7 @@ msgstr ""
 msgid "通信エラー"
 msgstr "Connection Error"
 
-#: twitcasting\accountManager.py:54 views\settings.py:151
+#: twitcasting\accountManager.py:54 views\settings.py:153
 msgid "ネットワーク"
 msgstr "network"
 
@@ -717,11 +733,7 @@ msgstr "Canceled."
 msgid "不明"
 msgstr "unknown"
 
-#: twitcasting\connection.py:111
-msgid "不明なユーザー"
-msgstr "Unknown User"
-
-#: twitcasting\connection.py:165
+#: twitcasting\connection.py:157
 msgid "カテゴリなし"
 msgstr "no category"
 
@@ -844,7 +856,7 @@ msgstr "waiting for browser..."
 #: views\changeSpeechOutput.py:44 views\commentListConfiguration.py:60
 #: views\connect.py:35 views\KeyValueSettingDialogBase.py:84
 #: views\KeyValueSettingDialogBase.py:275 views\mkDialog.py:30
-#: views\settings.py:160 views\updateDialog.py:45
+#: views\settings.py:162 views\updateDialog.py:45
 msgid "キャンセル"
 msgstr "cancel"
 
@@ -1174,7 +1186,7 @@ msgstr "File path"
 msgid "参照"
 msgstr "browse"
 
-#: views\indicatorSoundSettings.py:109 views\settings.py:303
+#: views\indicatorSoundSettings.py:109 views\settings.py:307
 msgid "効果音ファイルを選択"
 msgstr "select a sound file"
 
@@ -1342,7 +1354,7 @@ msgstr "&Help"
 msgid "グローバルホットキーの設定"
 msgstr "Global Hot Keys Settings"
 
-#: views\main.py:306 views\main.py:315 views\main.py:621 views\postItem.py:54
+#: views\main.py:306 views\main.py:315 views\main.py:621 views\postItem.py:55
 #: views\viewFavorites.py:46 views\viewFavorites.py:54 views\viewHistory.py:44
 msgid "確認"
 msgstr "confirmation"
@@ -1431,7 +1443,7 @@ msgid ""
 "ん。"
 msgstr "Account %s does not have enough point."
 
-#: views\postItem.py:54
+#: views\postItem.py:55
 #, python-format
 msgid ""
 "24時間以内に%dポイント使用しようとしています。100ポイント以上使用した場合で"
@@ -1532,181 +1544,185 @@ msgstr "&Timer type"
 msgid "ポイント管理機能を使用する(&P)"
 msgstr "Use &Point management functions"
 
-#: views\settings.py:86
+#: views\settings.py:87
 msgid "起動/接続"
 msgstr "startup/connection"
 
-#: views\settings.py:87
+#: views\settings.py:88
 msgid "起動時に接続ダイアログを開く(&L)"
 msgstr "Open connection dialog when &Launched"
 
-#: views\settings.py:89
+#: views\settings.py:90
 msgid "接続ダイアログの表示項目(&O)"
 msgstr "Items displayed in the c&onnect dialog"
 
-#: views\settings.py:90
+#: views\settings.py:91
 msgid "接続時に読み込むコメント数(&C)"
 msgstr ""
 "number of &Comments\n"
 "which will be loaded initially"
 
-#: views\settings.py:91
+#: views\settings.py:92
 msgid "接続履歴の保持件数(&H)"
 msgstr "max count of connection &History"
 
-#: views\settings.py:92
+#: views\settings.py:93
 msgid "規定の接続先ユーザー名/URL(&U)"
 msgstr "default &User / URL to connect on startup"
 
-#: views\settings.py:93
+#: views\settings.py:94
 msgid "接続時にブラウザでライブを開く(&O)"
 msgstr "automatically &Open the live in browser when connected"
 
-#: views\settings.py:97
+#: views\settings.py:98
 msgid "表示/言語"
 msgstr "Display/Language"
 
-#: views\settings.py:98
+#: views\settings.py:99
 msgid "言語(&L)"
 msgstr "&Language"
 
-#: views\settings.py:99
+#: views\settings.py:100
 msgid "画面表示モード(&D)"
 msgstr "&Display mode"
 
-#: views\settings.py:100
+#: views\settings.py:101
 msgid "テキストの折り返し(&W)"
 msgstr "Text &Wrap "
 
-#: views\settings.py:101
+#: views\settings.py:102
 msgid "タイトルバー(&B)"
 msgstr "Title &Bar"
 
-#: views\settings.py:104
+#: views\settings.py:105
 msgid "読み上げ-1"
 msgstr "reading-1"
 
-#: views\settings.py:105
+#: views\settings.py:106
 msgid "出力先(&O)"
 msgstr "&Output"
 
-#: views\settings.py:106
+#: views\settings.py:107
 msgid "受信したコメントを読み上げる(&C)"
 msgstr "read received &Comments"
 
-#: views\settings.py:107
+#: views\settings.py:108
 msgid "コメント受信時の読み上げ内容"
 msgstr "string for reading comments"
 
-#: views\settings.py:109
+#: views\settings.py:110
 msgid "コメントの読み上げスキップ"
 msgstr "comment reading skip"
 
-#: views\settings.py:111
+#: views\settings.py:112
 msgid "自分が投稿したコメントを読み上げる"
 msgstr "read my comment"
 
-#: views\settings.py:113
+#: views\settings.py:114
 msgid "自分のライブ"
 msgstr "your live"
 
-#: views\settings.py:114
+#: views\settings.py:115
 msgid "自分以外のライブ"
 msgstr "someone else's live"
 
-#: views\settings.py:118
+#: views\settings.py:119
 msgid "読み上げ-2"
 msgstr "reading-2"
 
-#: views\settings.py:119
+#: views\settings.py:120
 msgid "閲覧者数が増加したら読み上げる(&I)"
 msgstr "read viewers count when &Increased"
 
-#: views\settings.py:120
+#: views\settings.py:121
 msgid "閲覧者数が増加した際の読み上げ"
 msgstr "reading string when viewers are increased"
 
-#: views\settings.py:121
+#: views\settings.py:122
 msgid "閲覧者数が減少したら読み上げる(&D)"
 msgstr "read viewers count when &Decreased"
 
-#: views\settings.py:122
+#: views\settings.py:123
 msgid "閲覧者数が減少した際の読み上げ"
 msgstr "reading string when viewers are decreased"
 
-#: views\settings.py:123
+#: views\settings.py:124
 msgid "入力中のユーザーを読み上げる(&T)"
 msgstr "read &Typing user if exists"
 
-#: views\settings.py:124
+#: views\settings.py:125
 msgid "受信したアイテムを読み上げる(&E)"
 msgstr "read received it&ems"
 
-#: views\settings.py:125
+#: views\settings.py:126
 msgid "アイテム投稿者の読み方"
 msgstr "read the user who sent an item"
 
-#: views\settings.py:128
+#: views\settings.py:127
+msgid "残り時間を読み上げる(&R)"
+msgstr "read &remaining time"
+
+#: views\settings.py:130
 msgid "ライブ再生"
 msgstr "live playback"
 
-#: views\settings.py:129
+#: views\settings.py:131
 msgid "自動的に再生を開始する(&A)"
 msgstr "&Automatically start playback"
 
-#: views\settings.py:130
+#: views\settings.py:132
 msgid "規定の音量(&V)"
 msgstr "Default &Volume"
 
-#: views\settings.py:131
+#: views\settings.py:133
 msgid "ライブ再生の遅延時間(&D)"
 msgstr "&Delay time for live playback"
 
-#: views\settings.py:134
+#: views\settings.py:136
 msgid "効果音"
 msgstr "indicator sound"
 
-#: views\settings.py:136
+#: views\settings.py:138
 msgid "効果音の出力先をライブ音声の出力先と同期(&S)"
 msgstr "&Sync indicator sound output device with live playback output device"
 
-#: views\settings.py:138
+#: views\settings.py:140
 msgid "効果音の音量(&V)"
 msgstr "indicator sound &Volume"
 
-#: views\settings.py:140
+#: views\settings.py:142
 msgid "読み上げを省略したコメントも通知音を再生する(&C)"
 msgstr "play &Comment received sound for reading skipped comment"
 
-#: views\settings.py:145
+#: views\settings.py:147
 msgid "URL設定"
 msgstr "URL settings"
 
-#: views\settings.py:146
+#: views\settings.py:148
 msgid "プロトコル名を削除(&P)"
 msgstr "delete &Protocol name"
 
-#: views\settings.py:147
+#: views\settings.py:149
 msgid "ドメインのみ(&D)"
 msgstr "only &Domain"
 
-#: views\settings.py:148
+#: views\settings.py:150
 msgid "URLを次の文字列に置き換える(&R)"
 msgstr "&Replace URLs to the following string"
 
-#: views\settings.py:152
+#: views\settings.py:154
 msgid "起動時に更新を確認(&U)"
 msgstr "Automatically Check for &Updates on startup"
 
-#: views\settings.py:153
+#: views\settings.py:155
 msgid "プロキシサーバーの情報を手動で設定する(&M)"
 msgstr "&Manually configure proxy information"
 
-#: views\settings.py:154
+#: views\settings.py:156
 msgid "サーバーURL"
 msgstr "server URL"
 
-#: views\settings.py:155
+#: views\settings.py:157
 msgid "ポート番号"
 msgstr "port number"
 
