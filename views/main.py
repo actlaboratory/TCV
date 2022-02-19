@@ -16,6 +16,7 @@ import ConfigManager
 import keymap
 import hotkeyHandler
 from views import globalKeyConfig
+import update
 
 import constants
 import errorCodes
@@ -425,7 +426,7 @@ class Events(BaseEvents):
 			self.help()
 		#更新を確認
 		elif selected==menuItemsStore.getRef("CHECK4UPDATE"):
-			globalVars.update.update(False)
+			update.checkUpdate()
 		#コメントリストのコンテキストメニューを開く
 		elif selected==menuItemsStore.getRef("POPUP_OPEN_COMMENT"):
 				return self.commentContextMenu()
