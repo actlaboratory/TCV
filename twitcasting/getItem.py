@@ -34,17 +34,22 @@ def getItem(screenId):
 	itemCount = []
 	itemId = []
 	result = []
-	for i in req["items"]:
-		itemName.append(i["name"])
-		itemCount.append(i["count"])
-		itemId.append(i["item_id"])
-	itemName.append("MP")
-	itemCount.append(req["status"]["mp"])
-	itemId.append("MP")
-	for name, count, id in zip(itemName, itemCount, itemId):
-		if count > 0 or name == "MP":
-			result.append({"name": name, "count": count, "id": id, "user": getItemPostedUser(screenId, id)})
-	return result
+	try:
+		for i in req["items"]:
+			itemName.append(i["name"])
+			itemCount.append(i["count"])
+			itemId.append(i["item_id"])
+		itemName.append("MP")
+		itemCount.append(req["status"]["mp"])
+		itemId.append("MP")
+		for name, count, id in zip(itemName, itemCount, itemId):
+			if count > 0 or name == "MP":
+				result.append({"name": name, "count": count, "id": id, "user": getItemPostedUser(screenId, id)})
+		return result
+	except Exception as e:
+		log.error(traceback.format_exc())
+		return []
+
 
 def getItemPostedUser(screenId, itemId):
 	if itemId == "MP":
