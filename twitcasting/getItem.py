@@ -11,7 +11,15 @@ from logging import getLogger
 import traceback
 import sys
 
-log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.getItem"))
+log = getLogger("%s.%s" % (constants.LOG_PREFIX, "twitcasting.getItem"))
+
+
+ITEM_BAKU = {
+	"coin": {
+		"coin_baku5": 5,
+	},
+}
+
 
 def getItem(screenId):
 	log.debug("Getting items...")
@@ -86,12 +94,18 @@ def getItemPostedUser(screenId, itemId):
 			log.error("Failed to get item Id on getItemPostedUser.")
 			log.error(traceback.format_exc())
 			continue
+		try:
+			user = i.find("a", {"class": "tw-user-name-icon"})["data-user-id"]
+		except Exception as e:
+			log.error("Failed to get user Id on getItemPostedUser.")
+			log.error(traceback.format_exc())
+			continue
 		if item == itemId:
-			try:
-				user = i.find("a", {"class": "tw-user-name-icon"})["data-user-id"]
-				result.append(user)
-			except Exception as e:
-				log.error("Failed to get user Id on getItemPostedUser.")
-				log.error(traceback.format_exc())
-				continue
+			result.append(user)
+		# コイン爆対応
+		if itemId in ITEM_BAKU:
+			for j in ITEM_BAKU[itemId]:
+				if j == item:
+					log.debug(j)
+					result += [user] * ITEM_BAKU[itemId][j]
 	return result
