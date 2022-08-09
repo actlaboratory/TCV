@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # manager
 
+import json
 import threading
 import time
 import twitcasting.connection
@@ -22,6 +23,8 @@ from copy import deepcopy
 import os
 import traceback
 from logging import getLogger
+import requests
+import websocket
 
 evtComment = 0
 evtLiveInfo = 1
@@ -171,6 +174,8 @@ class manager:
 			self.openLiveWindow()
 		self.connection.start()
 		self.items = []
+		self.itemWatcher = ItemWatcher(self.connection.movieId)
+		self.itemWatcher.start()
 
 	def disconnect(self):
 		self.connection.running = False
@@ -866,3 +871,41 @@ class ItemOperation(threading.Thread):
 		while self.running:
 			time.sleep(5)
 			self.checkItem()
+
+class ItemWatcher(threading.Thread):
+	def __init__(self, movieId):
+		super().__init__(daemon=True)
+		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
+		self.movieId = movieId
+
+	def getWebsocketUrl(self):
+		url = "https://twitcasting.tv/eventpubsuburl.php"
+		data = {
+			"movie_id": self.movieId,
+			"__n": int(time.time() * 1000),
+		}
+		self.log.debug("connecting to: %s, data: %s" % (url, data))
+		r = requests.post(url, data)
+		self.log.debug("status: %s" % r.status_code)
+		response = r.json()
+		return response["url"]
+
+	def run(self):
+		url = self.getWebsocketUrl()
+		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
+		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
+		# self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
+		self.socket.run_forever(ping_interval=3)
+
+	def onMessage(self, ws, text):
+		data = json.loads(text)
+		print(data)
+
+	def onError(self, ws, error):
+		self.log.error("".join(traceback.TracebackException.from_exception(error).format()))
+
+	def onOpen(self, ws):
+		self.log.debug("wss opened")
+
+	def onClose(self, ws, code, msg):
+		self.log.debug("wss closed. code:%s, msg:%s" % (code, msg))
