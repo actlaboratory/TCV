@@ -170,8 +170,6 @@ class manager:
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
 			self.openLiveWindow()
 		self.connection.start()
-		self.itemOperation = ItemOperation(self)
-		self.itemOperation.start()
 		self.items = []
 
 	def disconnect(self):
