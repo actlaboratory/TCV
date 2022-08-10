@@ -575,6 +575,9 @@ class manager:
 	def checkMovieId(self):
 		self.newMovieId = self.connection.movieId
 		if self.newMovieId != self.oldMovieId:
+			self.itemWatcher.exit()
+			self.itemWatcher = ItemWatcher(self, self.newMovieId)
+			self.itemWatcher.start()
 			if self.connection.isLive == True:
 				globalVars.app.say(_("次のライブが開始されました。"))
 				self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
@@ -945,9 +948,9 @@ class ItemWatcher(threading.Thread):
 					globalVars.app.say(_("%(name)sを%(count)i個もらいました。") % {"name": name, "count": count})
 			else:
 				if readItemPostedUser == 1:
-					user = data["sender"]["screenName"]
+					user = data[0]["sender"]["screenName"]
 				elif readItemPostedUser == 2:
-					user = data["sender"]["name"]
+					user = data[0]["sender"]["name"]
 				if multiUser == False:
 					if count == 1:
 						globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") % {"user": user, "item": name})
@@ -958,3 +961,8 @@ class ItemWatcher(threading.Thread):
 						globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": user, "item": name})
 					else:
 						globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
+
+	def exit(self):
+		self.log.debug("exitting...")
+		if hasattr(self, "socket"):
+			self.socket.close()
