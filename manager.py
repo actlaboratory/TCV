@@ -174,7 +174,7 @@ class manager:
 			self.openLiveWindow()
 		self.connection.start()
 		self.items = []
-		self.itemWatcher = ItemWatcher(self.connection.movieId)
+		self.itemWatcher = ItemWatcher(self, self.connection.movieId)
 		self.itemWatcher.start()
 
 	def disconnect(self):
@@ -873,9 +873,10 @@ class ItemOperation(threading.Thread):
 			self.checkItem()
 
 class ItemWatcher(threading.Thread):
-	def __init__(self, movieId):
+	def __init__(self, manager, movieId):
 		super().__init__(daemon=True)
 		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
+		self.manager = manager
 		self.movieId = movieId
 
 	def getWebsocketUrl(self):
@@ -888,18 +889,35 @@ class ItemWatcher(threading.Thread):
 		r = requests.post(url, data)
 		self.log.debug("status: %s" % r.status_code)
 		response = r.json()
-		return response["url"]
+		ret =  response["url"]
+		ret = ret + "&gift=1"
+		return ret
 
 	def run(self):
 		url = self.getWebsocketUrl()
+		self.log.debug("Websocket URL: %s" % url)
 		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
 		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
 		# self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
 		self.socket.run_forever(ping_interval=3)
 
 	def onMessage(self, ws, text):
-		data = json.loads(text)
-		print(data)
+		try:
+			data = json.loads(text)
+			items = {}
+			for i in data:
+				if i["type"] != "gift":
+					continue
+				self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
+				itemName = i["item"]["name"]
+				lst = items.get(itemName, [])
+				lst.append(i)
+				items[itemName] = lst
+			if items:
+				self.processItems(items)
+		except Exception as e:
+			self.log.error("Failed to get item info")
+			self.log.error(traceback.format_exc())
 
 	def onError(self, ws, error):
 		self.log.error("".join(traceback.TracebackException.from_exception(error).format()))
@@ -909,3 +927,34 @@ class ItemWatcher(threading.Thread):
 
 	def onClose(self, ws, code, msg):
 		self.log.debug("wss closed. code:%s, msg:%s" % (code, msg))
+
+	def processItems(self, items):
+		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True):
+			self.manager.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
+		if not globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True):
+			return
+		readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
+		for name, data in items.items():
+			users = [i["sender"]["id"] for i in data]
+			multiUser = len(set(users)) > 1
+			count = len(data)
+			if readItemPostedUser == 0:
+				if count == 1:
+					globalVars.app.say(_("%sをもらいました。") % name)
+				else:
+					globalVars.app.say(_("%(name)sを%(count)i個もらいました。") % {"name": name, "count": count})
+			else:
+				if readItemPostedUser == 1:
+					user = data["sender"]["screenName"]
+				elif readItemPostedUser == 2:
+					user = data["sender"]["name"]
+				if multiUser == False:
+					if count == 1:
+						globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") % {"user": user, "item": name})
+					else:
+						globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
+				else:
+					if count == 1:
+						globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": user, "item": name})
+					else:
+						globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
