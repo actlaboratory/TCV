@@ -174,12 +174,14 @@ class manager:
 			self.openLiveWindow()
 		self.connection.start()
 		self.items = []
-		self.itemWatcher = ItemWatcher(self, self.connection.movieId)
-		self.itemWatcher.start()
+		if self.connection.movieId:
+			self.itemWatcher = ItemWatcher(self, self.connection.movieId)
+			self.itemWatcher.start()
 
 	def disconnect(self):
 		self.connection.running = False
-		self.itemOperation.running = False
+		if hasattr(self, "itemWatcher"):
+			self.itemWatcher.exit()
 		if self.livePlayer != None:
 			self.stop()
 			self.livePlayer.exit()
