@@ -891,15 +891,24 @@ class ItemWatcher(threading.Thread):
 			"__n": int(time.time() * 1000),
 		}
 		self.log.debug("connecting to: %s, data: %s" % (url, data))
-		r = requests.post(url, data)
-		self.log.debug("status: %s" % r.status_code)
-		response = r.json()
-		ret =  response["url"]
-		ret = ret + "&gift=1"
-		return ret
+		try:
+			r = requests.post(url, data)
+			self.log.debug("status: %s" % r.status_code)
+			if r.status_code != 200:
+				return ""
+			response = r.json()
+			ret =  response["url"]
+			ret = ret + "&gift=1"
+			return ret
+		except Exception as e:
+			self.log.error(traceback.format_exc())
+			return ""
 
 	def run(self):
 		url = self.getWebsocketUrl()
+		if not url:
+			self.log.error("Failed to get websocket URL")
+			return
 		self.log.debug("Websocket URL: %s" % url)
 		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
 		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
