@@ -112,3 +112,28 @@ class Main(AppBase.MainBase):
 		#戻り値は無視される
 		return 0
 
+	def getProxyInfo(self):
+		"""プロキシサーバーの情報を取得
+
+		:return: (URL, port)のタプル
+		:rtype: tuple
+		"""
+		data = os.environ.get("HTTP_PROXY")
+		self.log.debug("Retrieving proxy information from environment variable...")
+		if data == None:
+			self.log.info("Proxy information could not be found.")
+			return (None, None)
+		self.log.debug("configured data: %s" %data)
+		separator = data.rfind(":")
+		if separator == -1:
+			self.log.info("Validation Error.")
+			return (None, None)
+		url = data[:separator]
+		port = data[separator + 1:]
+		try:
+			port = int(port)
+		except ValueError:
+			self.log.info("Validation Error.")
+			return (None, None)
+		self.log.info("Proxy URL: %s, Port: %s." %(url, port))
+		return (url, port)

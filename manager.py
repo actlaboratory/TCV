@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # manager
 
+import json
 import threading
 import time
 import twitcasting.connection
@@ -22,6 +23,8 @@ from copy import deepcopy
 import os
 import traceback
 from logging import getLogger
+import requests
+import websocket
 
 evtComment = 0
 evtLiveInfo = 1
@@ -170,13 +173,15 @@ class manager:
 		if globalVars.app.config.getboolean("general", "openlivewindow", False) == True:
 			self.openLiveWindow()
 		self.connection.start()
-		self.itemOperation = ItemOperation(self)
-		self.itemOperation.start()
 		self.items = []
+		if self.connection.movieId:
+			self.itemWatcher = ItemWatcher(self, self.connection.movieId)
+			self.itemWatcher.start()
 
 	def disconnect(self):
 		self.connection.running = False
-		self.itemOperation.running = False
+		if hasattr(self, "itemWatcher"):
+			self.itemWatcher.exit()
 		if self.livePlayer != None:
 			self.stop()
 			self.livePlayer.exit()
@@ -572,6 +577,9 @@ class manager:
 	def checkMovieId(self):
 		self.newMovieId = self.connection.movieId
 		if self.newMovieId != self.oldMovieId:
+			self.itemWatcher.exit()
+			self.itemWatcher = ItemWatcher(self, self.newMovieId)
+			self.itemWatcher.start()
 			if self.connection.isLive == True:
 				globalVars.app.say(_("次のライブが開始されました。"))
 				self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
@@ -797,74 +805,103 @@ class manager:
 	def canExit(self):
 		return block == 0
 
-class ItemOperation(threading.Thread):
-	def __init__(self, manager):
+class ItemWatcher(threading.Thread):
+	def __init__(self, manager, movieId):
 		super().__init__(daemon=True)
+		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
 		self.manager = manager
-		self.running = False
+		self.movieId = movieId
 
-	def checkItem(self):
-		self.manager.newItem = self.manager.connection.item
-		receivedItem = []
-		for new in self.manager.newItem:
-			if new["id"] not in [i["id"] for i in self.manager.oldItem]:
-				receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"], "user": new["user"]})
-			for old in self.manager.oldItem:
-				if new["id"] == old["id"] and new["count"] > old["count"]:
-					receivedItem.append({"id": new["id"], "name": new["name"], "count": new["count"] - old["count"], "user": new["user"]})
-		for i in receivedItem:
-			if i["name"] == "MP":
-				continue
-			id = i["id"]
-			name = i["name"]
-			count = i["count"]
-			users = i["user"][:count]
-			for i in range(len(users), count):
-				users.append(_("不明なユーザ"))
-			items = []
-			for i in range(count):
-				items.append({
-					"user": users[i],
-					"item": name,
-				})
-			self.manager.items = items + self.manager.items
-			readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
-			multiUser = False
-			if len(users) > 1:
-				for k in range(1, len(users) - 1):
-					if users[0] != users[k]:
-						multiUser = True
-						break
-			readReceivedItems = globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True)
-			if readReceivedItems == True:
-				if readItemPostedUser == 0:
-					if count == 1:
-						globalVars.app.say(_("%sをもらいました。") %name)
-					else:
-						globalVars.app.say(_("%(name)sを%(count)i個もらいました。") %{"name": name, "count": count})
-				else:
-					if readItemPostedUser == 1:
-						if users[0] != _("不明なユーザ"):
-							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["screen_id"]
-					elif readItemPostedUser == 2:
-						if users[0] != _("不明なユーザ"):
-							users[0] = twitcasting.twitcasting.GetUserInfo(users[0])["user"]["name"]
-					if multiUser == False:
-						if count == 1:
-							globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") %{"user": users[0], "item": name})
-						else:
-							globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-					else:
-						if count == 1:
-							globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": users[0], "item": name})
-						else:
-							globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") %{"user": users[0], "item": name, "count": count})
-		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True) == True and len(receivedItem) != 0:
-			self.manager.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
-		self.manager.oldItem = self.manager.newItem
+	def getWebsocketUrl(self):
+		url = "https://twitcasting.tv/eventpubsuburl.php"
+		data = {
+			"movie_id": self.movieId,
+			"__n": int(time.time() * 1000),
+		}
+		self.log.debug("connecting to: %s, data: %s" % (url, data))
+		try:
+			r = requests.post(url, data)
+			self.log.debug("status: %s" % r.status_code)
+			if r.status_code != 200:
+				return ""
+			response = r.json()
+			ret =  response["url"]
+			ret = ret + "&gift=1"
+			return ret
+		except Exception as e:
+			self.log.error(traceback.format_exc())
+			return ""
 
 	def run(self):
-		self.running = True
-		while self.running:
-			time.sleep(5)
-			self.checkItem()
+		url = self.getWebsocketUrl()
+		if not url:
+			self.log.error("Failed to get websocket URL")
+			return
+		self.log.debug("Websocket URL: %s" % url)
+		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
+		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
+		# self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
+		self.socket.run_forever(ping_interval=3)
+
+	def onMessage(self, ws, text):
+		try:
+			data = json.loads(text)
+			items = {}
+			for i in data:
+				if i["type"] != "gift":
+					continue
+				self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
+				itemName = i["item"]["name"]
+				lst = items.get(itemName, [])
+				lst.append(i)
+				items[itemName] = lst
+			if items:
+				self.processItems(items)
+		except Exception as e:
+			self.log.error("Failed to get item info")
+			self.log.error(traceback.format_exc())
+
+	def onError(self, ws, error):
+		self.log.error("".join(traceback.TracebackException.from_exception(error).format()))
+
+	def onOpen(self, ws):
+		self.log.debug("wss opened")
+
+	def onClose(self, ws, code, msg):
+		self.log.debug("wss closed. code:%s, msg:%s" % (code, msg))
+
+	def processItems(self, items):
+		if globalVars.app.config.getboolean("fx", "playItemReceivedSound", True):
+			self.manager.playFx(globalVars.app.config["fx"]["itemReceivedSound"])
+		if not globalVars.app.config.getboolean("autoReadingOptions", "readReceivedItems", True):
+			return
+		readItemPostedUser = globalVars.app.config.getint("autoReadingOptions", "readItemPostedUser", 0)
+		for name, data in items.items():
+			users = [i["sender"]["id"] for i in data]
+			multiUser = len(set(users)) > 1
+			count = len(data)
+			if readItemPostedUser == 0:
+				if count == 1:
+					globalVars.app.say(_("%sをもらいました。") % name)
+				else:
+					globalVars.app.say(_("%(name)sを%(count)i個もらいました。") % {"name": name, "count": count})
+			else:
+				if readItemPostedUser == 1:
+					user = data[0]["sender"]["screenName"]
+				elif readItemPostedUser == 2:
+					user = data[0]["sender"]["name"]
+				if multiUser == False:
+					if count == 1:
+						globalVars.app.say(_("%(user)sさんから%(item)sをもらいました。") % {"user": user, "item": name})
+					else:
+						globalVars.app.say(_("%(user)sさんから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
+				else:
+					if count == 1:
+						globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") %{"user": user, "item": name})
+					else:
+						globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
+
+	def exit(self):
+		self.log.debug("exitting...")
+		if hasattr(self, "socket"):
+			self.socket.close()
