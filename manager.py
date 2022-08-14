@@ -844,6 +844,11 @@ class ItemWatcher(threading.Thread):
 		self.log.debug("Websocket URL: %s" % url)
 		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
 		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
+		self.log.debug("proxyUrl: %s" % proxyUrl)
+		if proxyUrl.startswith("http://"):
+			proxyUrl = proxyUrl.replace("http://", "")
+			self.log.debug("removed 'http://'")
+		self.log.debug("proxyUrl: %s" % proxyUrl)
 		self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
 
 	def onMessage(self, ws, text):
