@@ -22,7 +22,7 @@ import sys
 from copy import deepcopy
 import os
 import traceback
-from logging import getLogger
+import logging
 import requests
 import websocket
 
@@ -59,7 +59,7 @@ def mainViewAccess(func):
 
 class manager:
 	def __init__(self, MainView):
-		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "manager"))
+		self.log = logging.getLogger("%s.%s" %(constants.LOG_PREFIX, "manager"))
 		self.MainView = MainView
 		self.evtHandler = wx.EvtHandler()
 		self.evtHandler.Bind(wx.EVT_TIMER, self.timer)
@@ -808,7 +808,11 @@ class manager:
 class ItemWatcher(threading.Thread):
 	def __init__(self, manager, movieId):
 		super().__init__(daemon=True)
-		self.log = getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
+		self.log = logging.getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
+		websocket.enableTrace(True)
+		logger = logging.getLogger("websocket")
+		logger.setLevel(logging.DEBUG)
+		logger.addHandler(globalVars.app.hLogHandler)
 		self.manager = manager
 		self.movieId = movieId
 
@@ -840,8 +844,7 @@ class ItemWatcher(threading.Thread):
 		self.log.debug("Websocket URL: %s" % url)
 		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
 		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
-		# self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
-		self.socket.run_forever(ping_interval=3)
+		self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
 
 	def onMessage(self, ws, text):
 		try:
