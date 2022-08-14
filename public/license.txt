@@ -15,6 +15,8 @@ Copyright (c)2019-2021 Kazto Kitabatake,ACT laboratory All rights reserved.
 	pyperclip	(https://pypi.org/project/pyperclip/)
 	pybass　(https://pypi.org/project/pybass/)
 		Copyright(c) Maxim Kolosov 2009-2013 pyirrlicht@gmail.com
+	websocket-client
+		Copyright 2018 Hiroki Ohtani.
 
 ・MITライセンスに基づく以下のライブラリ
 	pytags　(https://pypi.org/project/pytags/)
