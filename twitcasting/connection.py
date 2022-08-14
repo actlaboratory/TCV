@@ -69,7 +69,10 @@ class connection(threading.Thread):
 		if self.hasMovieId == False:
 			return
 		ret = []
-		result = GetComments(self.movieId, slice_id=self.lastCommentId)
+		if hasattr(self, "lastCommentId"):
+			result = GetComments(self.movieId, slice_id=self.lastCommentId)
+		else:
+			result = GetComments(self.movieId)
 		try:
 			result = result["comments"]
 		except KeyError:
