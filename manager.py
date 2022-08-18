@@ -845,7 +845,7 @@ class ItemWatcher(threading.Thread):
 		self.socket = websocket.WebSocketApp(url, on_message=self.onMessage, on_error=self.onError, on_open=self.onOpen, on_close=self.onClose)
 		proxyUrl, proxyPort = globalVars.app.getProxyInfo()
 		self.log.debug("proxyUrl: %s" % proxyUrl)
-		if proxyUrl.startswith("http://"):
+		if proxyUrl and proxyUrl.startswith("http://"):
 			proxyUrl = proxyUrl.replace("http://", "")
 			self.log.debug("removed 'http://'")
 		self.log.debug("proxyUrl: %s" % proxyUrl)
