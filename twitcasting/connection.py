@@ -146,11 +146,13 @@ class connection(threading.Thread):
 			self.viewers = 0
 			self.subtitle = None
 			self.createDummyMovieInfo(userInfo)
-		self.item = getItem(self.userId)
-		self.coins = 0
-		for i in self.item:
-			if i["name"] == "コンティニューコイン":
-				self.coins = i["count"]
+		item = getItem(self.userId)
+		if item is not None:
+			self.item = item
+			self.coins = 0
+			for i in self.item:
+				if i["name"] == "コンティニューコイン":
+					self.coins = i["count"]
 		if mode == 1:
 			self.getComment()
 			self.getTypingUser()

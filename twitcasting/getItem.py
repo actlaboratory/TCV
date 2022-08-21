@@ -38,6 +38,9 @@ def getItem(screenId):
 			traceback.print_exc()
 		return []
 	log.debug("response: %s" % req)
+	if "error" in req:
+		log.error("Failed to get item. %s" % req)
+		return None
 	itemName = []
 	itemCount = []
 	itemId = []
