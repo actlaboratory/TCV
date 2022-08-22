@@ -815,6 +815,7 @@ class ItemWatcher(threading.Thread):
 		logger.addHandler(globalVars.app.hLogHandler)
 		self.manager = manager
 		self.movieId = movieId
+		self.shouldExit = False
 
 	def getWebsocketUrl(self):
 		url = "https://twitcasting.tv/eventpubsuburl.php"
@@ -849,7 +850,9 @@ class ItemWatcher(threading.Thread):
 			proxyUrl = proxyUrl.replace("http://", "")
 			self.log.debug("removed 'http://'")
 		self.log.debug("proxyUrl: %s" % proxyUrl)
-		self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
+		while not self.shouldExit:
+			self.socket.run_forever(http_proxy_host=proxyUrl, http_proxy_port=proxyPort, proxy_type="http", ping_interval=3)
+			time.sleep(3)
 
 	def onMessage(self, ws, text):
 		try:
@@ -911,5 +914,6 @@ class ItemWatcher(threading.Thread):
 
 	def exit(self):
 		self.log.debug("exitting...")
+		self.shouldExit = True
 		if hasattr(self, "socket"):
 			self.socket.close()
