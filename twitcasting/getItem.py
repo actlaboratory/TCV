@@ -36,7 +36,7 @@ def getItem(screenId):
 			import winsound
 			winsound.Beep(1000, 1000)
 			traceback.print_exc()
-		return []
+		return None
 	log.debug("response: %s" % req)
 	if "error" in req:
 		log.error("Failed to get item. %s" % req)
@@ -59,7 +59,7 @@ def getItem(screenId):
 		return result
 	except Exception as e:
 		log.error(traceback.format_exc())
-		return []
+		return None
 
 
 def getItemPostedUser(screenId, itemId):
