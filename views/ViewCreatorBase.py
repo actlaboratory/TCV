@@ -18,6 +18,7 @@ from views.viewObjectBase import checkBoxBase
 from views.viewObjectBase import radioBoxBase
 from views.viewObjectBase import radioButtonBase
 from views.viewObjectBase import listBoxBase
+from views.viewObjectBase import treeCtrlBase
 from views.viewObjectBase import normalListCtrlBase
 from views.viewObjectBase import virtualListCtrlBase
 from views.viewObjectBase import notebookBase
@@ -57,6 +58,7 @@ class ViewCreatorBase():
 			"radioBox": radioBoxBase.radioBox,
 			"radioButton": radioButtonBase.radioButton,
 			"listBox": listBoxBase.listBox,
+			"treeCtrl": treeCtrlBase.treeCtrl,
 			"listCtrl": normalListCtrlBase.listCtrl,
 			"virtualListCtrl": virtualListCtrlBase.virtualListCtrl,
 			"notebook": notebookBase.notebook,
@@ -232,7 +234,7 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hCombo,hStaticText
 
-	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
+	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL|wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hCombo=self.winObject["comboBox"](parent,wx.ID_ANY,value=defaultValue,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1), enableTabFocus=enableTabFocus)
@@ -247,7 +249,7 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hCombo,hStaticText
 
-	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=0, proportion=0,margin=5, enableTabFocus=True):
+	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5, enableTabFocus=True):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.getParentOrientation())
@@ -281,7 +283,7 @@ class ViewCreatorBase():
 			raise ValueError("ViewCreatorはCheckboxの作成に際し正しくない型の値を受け取りました。")
 
 	# 3stateチェックボックス
-	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=0, proportion=0,margin=0, enableTabFocus=True):
+	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=0, enableTabFocus=True):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.getParentOrientation())
@@ -325,7 +327,7 @@ class ViewCreatorBase():
 		else:
 			raise ValueError("ViewCreatorはCheckboxの作成に際し正しくない型の値を受け取りました。")
 
-	def radiobox(self,text, items, event=None, dimension=0, orient=wx.VERTICAL, style=0, x=-1, sizerFlag=0, proportion=0,margin=5, enableTabFocus=True):
+	def radiobox(self,text, items, event=None, dimension=0, orient=wx.VERTICAL, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL|wx.ALL, proportion=0,margin=5, enableTabFocus=True):
 		if orient==wx.VERTICAL:
 			style=wx.RA_SPECIFY_COLS | style
 		else:
@@ -345,7 +347,7 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hRadioBox
 
-	def radio(self,text,event=None,state=False,style=0, x=-1, sizerFlag=0, proportion=0,margin=5, enableTabFocus=True):
+	def radio(self,text,event=None,state=False,style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5, enableTabFocus=True):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.getParentOrientation())
@@ -397,7 +399,17 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hListBox,hStaticText
 
-	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
+	def treeCtrl(self,text, event=None, style=wx.TR_FULL_ROW_HIGHLIGHT|wx.TR_NO_BUTTONS, size=(200,200), sizerFlag=wx.ALL, proportion=0, margin=5, textLayout=wx.DEFAULT, enableTabFocus=True):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
+
+		hTreeCtrl=self.winObject["treeCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size, enableTabFocus=enableTabFocus)
+		hTreeCtrl.Bind(wx.EVT_TREE_SEL_CHANGED,event)
+		self._setFace(hTreeCtrl)
+		Add(sizer,hTreeCtrl,proportion,sizerFlag,margin)
+		self.AddSpace()
+		return hTreeCtrl,hStaticText
+
+	def listCtrl(self,text, event=None, style=wx.LC_SINGLE_SEL|wx.LC_REPORT, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hListCtrl=self.winObject["listCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size, enableTabFocus=enableTabFocus)
@@ -412,7 +424,7 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
-	def virtualListCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
+	def virtualListCtrl(self,text, event=None, style=wx.LC_SINGLE_SEL|wx.LC_REPORT, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hListCtrl=self.winObject["virtualListCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size, enableTabFocus=enableTabFocus)
@@ -432,7 +444,7 @@ class ViewCreatorBase():
 		self.sizer.Layout()
 		return htab
 
-	def inputbox(self,text, event=None, defaultValue="", style=wx.BORDER_RAISED, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
+	def inputbox(self,text, event=None, defaultValue="", style=wx.BORDER_RAISED, x=-1, sizerFlag=wx.ALL|wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		if self.mode&MODE_WRAPPING==MODE_NOWRAP:
 			style|=wx.TE_DONTWRAP
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
@@ -447,7 +459,7 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hTextCtrl,hStaticText
 
-	def gauge(self,text,max=0,defaultValue=0,style=wx.GA_HORIZONTAL | wx.GA_SMOOTH | wx.BORDER_RAISED,x=-1,sizerFlag=wx.ALL,proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def gauge(self,text,max=0,defaultValue=0,style=wx.GA_HORIZONTAL | wx.GA_SMOOTH | wx.BORDER_RAISED,x=-1,sizerFlag=wx.ALL|wx.ALIGN_CENTER_VERTICAL,proportion=0,margin=5,textLayout=wx.DEFAULT):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hGauge=self.winObject["gauge"](parent, wx.ID_ANY, size=(x,-1), style=style,name=text,)

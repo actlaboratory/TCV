@@ -69,7 +69,10 @@ class connection(threading.Thread):
 		if self.hasMovieId == False:
 			return
 		ret = []
-		result = GetComments(self.movieId, slice_id=self.lastCommentId)
+		if hasattr(self, "lastCommentId"):
+			result = GetComments(self.movieId, slice_id=self.lastCommentId)
+		else:
+			result = GetComments(self.movieId)
 		try:
 			result = result["comments"]
 		except KeyError:
@@ -143,11 +146,17 @@ class connection(threading.Thread):
 			self.viewers = 0
 			self.subtitle = None
 			self.createDummyMovieInfo(userInfo)
-		self.item = getItem(self.userId)
-		self.coins = 0
-		for i in self.item:
-			if i["name"] == "コンティニューコイン":
-				self.coins = i["count"]
+		item = getItem(self.userId)
+		if type(item) == list:
+			self.item = item
+			self.coins = 0
+			for i in self.item:
+				if i["name"] == "コンティニューコイン":
+					self.coins = i["count"]
+		else:
+			if not hasattr(self, "item"):
+				self.item = []
+				self.coins = 0
 		if mode == 1:
 			self.getComment()
 			self.getTypingUser()

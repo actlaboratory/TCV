@@ -7,6 +7,7 @@ import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
 import webbrowser
+import datetime
 
 class Dialog(BaseDialog):
 	def __init__(self, comment):
@@ -27,6 +28,8 @@ class Dialog(BaseDialog):
 		body.Bind(wx.EVT_TEXT_ENTER,self.processEnter)
 
 		grid=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),views.ViewCreator.FlexGridSizer,20,2)
+		dtstr = datetime.datetime.fromtimestamp(self.comment["created"]).strftime("%Y/%m/%d %H:%M:%S")
+		dt, dummy = grid.inputbox(_("投稿日時"), None, dtstr, wx.TE_READONLY, 300)
 		name,dummy = grid.inputbox(_("名前"), None, self.comment["from_user"]["name"], wx.TE_READONLY, 300)
 		userName,dummy = grid.inputbox(_("ユーザ名"), None, self.comment["from_user"]["screen_id"], wx.TE_READONLY, 300)
 		level,dummy = grid.inputbox(_("レベル"), None, str(self.comment["from_user"]["level"]), wx.TE_READONLY, 300)

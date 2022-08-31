@@ -11,9 +11,18 @@ from logging import getLogger
 import traceback
 import sys
 
-log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.getItem"))
+log = getLogger("%s.%s" % (constants.LOG_PREFIX, "twitcasting.getItem"))
+
+
+ITEM_BAKU = {
+	"coin": {
+		"coin_baku5": 5,
+	},
+}
+
 
 def getItem(screenId):
+	log.debug("Getting items...")
 	if globalVars.app.config["general"]["language"] == "ja-JP":
 		lang = "ja"
 	else:
@@ -27,22 +36,31 @@ def getItem(screenId):
 			import winsound
 			winsound.Beep(1000, 1000)
 			traceback.print_exc()
-		return []
+		return None
+	log.debug("response: %s" % req)
+	if "error" in req:
+		log.error("Failed to get item. %s" % req)
+		return None
 	itemName = []
 	itemCount = []
 	itemId = []
 	result = []
-	for i in req["items"]:
-		itemName.append(i["name"])
-		itemCount.append(i["count"])
-		itemId.append(i["item_id"])
-	itemName.append("MP")
-	itemCount.append(req["status"]["mp"])
-	itemId.append("MP")
-	for name, count, id in zip(itemName, itemCount, itemId):
-		if count > 0 or name == "MP":
-			result.append({"name": name, "count": count, "id": id, "user": getItemPostedUser(screenId, id)})
-	return result
+	try:
+		for i in req["items"]:
+			itemName.append(i["name"])
+			itemCount.append(i["count"])
+			itemId.append(i["item_id"])
+		itemName.append("MP")
+		itemCount.append(req["status"]["mp"])
+		itemId.append("MP")
+		for name, count, id in zip(itemName, itemCount, itemId):
+			if count > 0 or name == "MP":
+				result.append({"name": name, "count": count, "id": id, "user": getItemPostedUser(screenId, id)})
+		return result
+	except Exception as e:
+		log.error(traceback.format_exc())
+		return None
+
 
 def getItemPostedUser(screenId, itemId):
 	if itemId == "MP":
@@ -79,12 +97,18 @@ def getItemPostedUser(screenId, itemId):
 			log.error("Failed to get item Id on getItemPostedUser.")
 			log.error(traceback.format_exc())
 			continue
+		try:
+			user = i.find("a", {"class": "tw-user-name-icon"})["data-user-id"]
+		except Exception as e:
+			log.error("Failed to get user Id on getItemPostedUser.")
+			log.error(traceback.format_exc())
+			continue
 		if item == itemId:
-			try:
-				user = i.find("a", {"class": "tw-user-name-icon"})["data-user-id"]
-				result.append(user)
-			except Exception as e:
-				log.error("Failed to get user Id on getItemPostedUser.")
-				log.error(traceback.format_exc())
-				continue
+			result.append(user)
+		# コイン爆対応
+		if itemId in ITEM_BAKU:
+			for j in ITEM_BAKU[itemId]:
+				if j == item:
+					log.debug(j)
+					result += [user] * ITEM_BAKU[itemId][j]
 	return result

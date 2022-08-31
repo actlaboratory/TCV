@@ -72,6 +72,9 @@ def GetCategories(lang):
 # エラー対策関係
 def checkData(response):
 	if not re.match("^application/json", response.headers["content-type"]):
+		from logging import getLogger
+		from constants import LOG_PREFIX
+		getLogger("%s.%s" % (LOG_PREFIX, "twitcasting")).error("Received data is invalid: %s" % response.text)
 		raise DataIsNotJsonException
 
 class DataIsNotJsonException(Exception): pass
