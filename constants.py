@@ -7,10 +7,10 @@ import wx
 #アプリケーション基本情報
 APP_NAME="TCV"
 APP_FULL_NAME = "TwitCasting Viewer"
-APP_VERSION="3.2.1"
+APP_VERSION="3.2.2"
 APP_LAST_RELEASE_DATE = "2021-07-24"
 APP_ICON = None
-APP_COPYRIGHT_YEAR="2019-2021"
+APP_COPYRIGHT_YEAR="2019-2022"
 APP_LICENSE="GNU General Public License2.0 or later"
 APP_DEVELOPERS="Kazto Kitabatake, ACT Laboratory"
 APP_DEVELOPERS_URL="https://actlab.org/"
