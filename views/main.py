@@ -36,6 +36,7 @@ import views.viewComment
 import views.viewBroadcaster
 import views.viewHistory
 import views.viewFavorites
+import views.viewPopular
 import views.accountManager
 import views.changeDevice
 import views.settings
@@ -174,6 +175,7 @@ class Menu(BaseMenu):
 			"CONNECT",
 			"VIEW_HISTORY",
 			"VIEW_FAVORITES",
+			"VIEW_POPULAR",
 			"DISCONNECT",
 			"EXIT"
 		])
@@ -281,6 +283,9 @@ class Events(BaseEvents):
 		#お気に入り
 		elif selected==menuItemsStore.getRef("VIEW_FAVORITES"):
 			self.viewFavorites()
+		#おすすめライブ
+		elif selected==menuItemsStore.getRef("VIEW_POPULAR"):
+			self.viewPopular()
 		#コメントのコピー
 		elif selected == menuItemsStore.getRef("COPY_COMMENT"):
 			globalVars.app.Manager.copyComment()
@@ -507,6 +512,26 @@ class Events(BaseEvents):
 			self.parent.createStartScreen()
 			return
 		globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
+		return
+
+	def viewPopular(self, event=None):
+		if globalVars.app.accountManager.hasDefaultAccount() == False:
+			if len(globalVars.app.accountManager.tokens) == 0:
+				simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			else:
+				simpleDialog.errorDialog(_("通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのアカウントマネージャから通信用アカウントの設定を行ってください。"))
+			self.parent.createStartScreen()
+			return
+		self.parent.Clear()
+		viewPopularDialog = views.viewPopular.Dialog()
+		if not viewPopularDialog.Initialize():
+			self.parent.createStartScreen()
+			return
+		ret = viewPopularDialog.Show()
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
+		globalVars.app.Manager.connect(viewPopularDialog.GetValue())
 		return
 
 	def accountManager(self, event=None):

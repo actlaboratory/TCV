@@ -8,6 +8,7 @@ defaultKeymap["MAINVIEW"]={
 	"CONNECT":"CTRL+N",
 	"VIEW_HISTORY": "CTRL+H",
 	"VIEW_FAVORITES": "CTRL+I",
+	"VIEW_POPULAR": "",
 	"DISCONNECT":"CTRL+W/CTRL+F4",
 	"EXIT": "",
 	"PLAY": "F1",

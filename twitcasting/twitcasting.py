@@ -69,6 +69,13 @@ def GetCategories(lang):
 	dict = result.json()
 	return dict
 
+# Search
+def searchLiveMovies(type, context="", limit=10, lang="ja"):
+	result = requests.get(baseURL + "/search/lives?limit=" + str(limit) + "&type=" + type + "&context=" + context + "&lang=" + lang, headers=makeHeader())
+	checkData(result)
+	dict = result.json()
+	return dict
+
 # エラー対策関係
 def checkData(response):
 	if not re.match("^application/json", response.headers["content-type"]):
