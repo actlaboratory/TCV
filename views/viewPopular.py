@@ -4,7 +4,6 @@
 import wx
 import globalVars
 import views.ViewCreator
-from logging import getLogger
 from views.baseDialog import *
 import simpleDialog
 
@@ -23,12 +22,12 @@ class Dialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL|wx.EXPAND,margin=20)
-		self.hListCtrl, dummy = self.creator.virtualListCtrl(_("おすすめライブ"), proportion=1)
+		self.hListCtrl, dummy = self.creator.virtualListCtrl(_("おすすめライブ"), size=(600,300), sizerFlag=wx.EXPAND, proportion=1)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED, self.onItemFocused)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onItemActivated)
-		self.hListCtrl.AppendColumn(_("タイトル"))
-		self.hListCtrl.AppendColumn(_("名前"))
-		self.hListCtrl.AppendColumn(_("ユーザ名"))
+		self.hListCtrl.AppendColumn(_("タイトル"), width=200)
+		self.hListCtrl.AppendColumn(_("名前"), width=200)
+		self.hListCtrl.AppendColumn(_("ユーザ名"), width=200)
 
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("接続"),None)
