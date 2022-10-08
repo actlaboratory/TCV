@@ -818,10 +818,7 @@ class ItemWatcher(threading.Thread):
 	def __init__(self, manager, movieId):
 		super().__init__(daemon=True)
 		self.log = logging.getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
-		websocket.enableTrace(True)
-		logger = logging.getLogger("websocket")
-		logger.setLevel(logging.DEBUG)
-		logger.addHandler(globalVars.app.hLogHandler)
+		websocket.enableTrace(True, globalVars.app.hLogHandler)
 		self.manager = manager
 		self.movieId = movieId
 		self.shouldExit = False
