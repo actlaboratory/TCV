@@ -194,6 +194,13 @@ class manager:
 		self.changeMenuState(False)
 		self.connection.connected = False
 
+	def getPopular(self):
+		self.log.debug("getting popular live movies...")
+		ret = twitcasting.twitcasting.searchLiveMovies("recommend", limit=100)
+		if "error" in ret:
+			self.log.error(ret)
+		return ret
+
 	@mainViewAccess
 	def getNewComments(self):
 		limit = len(self.connection.comments) - self.MainView.commentList.GetItemCount()
@@ -700,6 +707,7 @@ class manager:
 				"CONNECT": True,
 				"VIEW_HISTORY": True,
 				"VIEW_FAVORITES": True,
+				"VIEW_POPULAR": True,
 				"DISCONNECT": False,
 				"PLAY": False,
 				"STOP": False,
@@ -723,6 +731,7 @@ class manager:
 				"CONNECT": False,
 				"VIEW_HISTORY": False,
 				"VIEW_FAVORITES": False,
+				"VIEW_POPULAR": False,
 				"DISCONNECT": True,
 				"PLAY": True,
 				"REPLY2BROADCASTER": True,
@@ -809,10 +818,7 @@ class ItemWatcher(threading.Thread):
 	def __init__(self, manager, movieId):
 		super().__init__(daemon=True)
 		self.log = logging.getLogger("%s.%s" %(constants.LOG_PREFIX, "itemWatcher"))
-		websocket.enableTrace(True)
-		logger = logging.getLogger("websocket")
-		logger.setLevel(logging.DEBUG)
-		logger.addHandler(globalVars.app.hLogHandler)
+		websocket.enableTrace(True, globalVars.app.hLogHandler)
 		self.manager = manager
 		self.movieId = movieId
 		self.shouldExit = False

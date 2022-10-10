@@ -36,6 +36,7 @@ import views.viewComment
 import views.viewBroadcaster
 import views.viewHistory
 import views.viewFavorites
+import views.viewPopular
 import views.accountManager
 import views.changeDevice
 import views.settings
@@ -76,9 +77,10 @@ class MainView(BaseView):
 		self.titleText.SetFont(font)
 
 		#メニューボタン
-		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.connectButton = self.creator.button(_("接続"), self.events.connect, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewHistoryButton = self.creator.button(_("接続履歴を開く"), self.events.viewHistory, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く"), self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewPopularButton = self.creator.button(_("おすすめライブを開く"), self.events.viewPopular, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.helpButton = self.creator.button(_("ヘルプを表示"), self.events.help, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
@@ -174,6 +176,7 @@ class Menu(BaseMenu):
 			"CONNECT",
 			"VIEW_HISTORY",
 			"VIEW_FAVORITES",
+			"VIEW_POPULAR",
 			"DISCONNECT",
 			"EXIT"
 		])
@@ -281,6 +284,9 @@ class Events(BaseEvents):
 		#お気に入り
 		elif selected==menuItemsStore.getRef("VIEW_FAVORITES"):
 			self.viewFavorites()
+		#おすすめライブ
+		elif selected==menuItemsStore.getRef("VIEW_POPULAR"):
+			self.viewPopular()
 		#コメントのコピー
 		elif selected == menuItemsStore.getRef("COPY_COMMENT"):
 			globalVars.app.Manager.copyComment()
@@ -507,6 +513,26 @@ class Events(BaseEvents):
 			self.parent.createStartScreen()
 			return
 		globalVars.app.Manager.connect(globalVars.app.Manager.favorites[viewFavoritesDialog.GetValue()])
+		return
+
+	def viewPopular(self, event=None):
+		if globalVars.app.accountManager.hasDefaultAccount() == False:
+			if len(globalVars.app.accountManager.tokens) == 0:
+				simpleDialog.errorDialog(_("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
+			else:
+				simpleDialog.errorDialog(_("通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのアカウントマネージャから通信用アカウントの設定を行ってください。"))
+			self.parent.createStartScreen()
+			return
+		self.parent.Clear()
+		viewPopularDialog = views.viewPopular.Dialog()
+		if not viewPopularDialog.Initialize():
+			self.parent.createStartScreen()
+			return
+		ret = viewPopularDialog.Show()
+		if ret==wx.ID_CANCEL:
+			self.parent.createStartScreen()
+			return
+		globalVars.app.Manager.connect(viewPopularDialog.GetValue())
 		return
 
 	def accountManager(self, event=None):

@@ -11,6 +11,7 @@ import globalVars
 import update
 import threading
 import constants
+import soundPlayer
 
 def _import():
 	global main, manager, twitcasting
@@ -78,6 +79,8 @@ class Main(AppBase.MainBase):
 			self.proxyEnviron.set_environ(self.config["proxy"]["server"], self.config.getint("proxy", "port", 8080, 0, 65535))
 		else:
 			self.proxyEnviron.set_environ()
+		if "http_proxy" in os.environ:
+			soundPlayer.player.setProxy(os.environ["http_proxy"])
 
 	def installThreadExcepthook(self):
 		_init = threading.Thread.__init__
