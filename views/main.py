@@ -77,9 +77,9 @@ class MainView(BaseView):
 		self.titleText.SetFont(font)
 
 		#メニューボタン
-		self.connectButton = self.creator.button(_("接続") + "(Ctrl+N)", self.events.connect, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.viewHistoryButton = self.creator.button(_("接続履歴を開く") + "(Ctrl+H)", self.events.viewHistory, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
-		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く") + "(Ctrl+I)", self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.connectButton = self.creator.button(_("接続"), self.events.connect, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewHistoryButton = self.creator.button(_("接続履歴を開く"), self.events.viewHistory, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
+		self.viewFavoritesButton = self.creator.button(_("お気に入り一覧を開く"), self.events.viewFavorites, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.viewPopularButton = self.creator.button(_("おすすめライブを開く"), self.events.viewPopular, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.settingsButton = self.creator.button(_("設定"), self.events.settings, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
 		self.accountManagerButton = self.creator.button(_("アカウントマネージャを開く"), self.events.accountManager, size=(540,-1), sizerFlag=wx.ALIGN_CENTER | wx.ALL)
