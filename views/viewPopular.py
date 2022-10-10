@@ -22,7 +22,7 @@ class Dialog(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL|wx.EXPAND,margin=20)
-		self.hListCtrl, dummy = self.creator.virtualListCtrl(_("おすすめライブ"), size=(600,300), sizerFlag=wx.EXPAND, proportion=1)
+		self.hListCtrl, dummy = self.creator.virtualListCtrl(_("おすすめライブ"), size=(630,300), sizerFlag=wx.EXPAND, proportion=1)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED, self.onItemFocused)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onItemActivated)
 		self.hListCtrl.AppendColumn(_("タイトル"), width=200)
