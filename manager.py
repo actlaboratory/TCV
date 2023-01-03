@@ -417,13 +417,29 @@ class manager:
 			self.elapsedTime = 0
 			self.remainingTime = 0
 			return
-		tmp = 1800 - (self.elapsedTime % 1800)
-		if timerType == 0:
-			totalTime = self.elapsedTime + tmp
-		else:
-			totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
-		if totalTime > 14400:
-			totalTime = 14400
+		if self.connection.is_corporate_broadcasting:	# コーポレート
+			totalTime = 60*60*24						# 24時間固定
+		elif self.connection.is_vtuber:					# vtuber
+			totalTime = 60*60*4							# 4時間固定
+		elif self.connection.is_games:					# ゲーム配信
+			tmp = 1800 - (self.elapsedTime % 1800)
+			if timerType == 0:
+				totalTime = self.elapsedTime + tmp
+			else:
+				if self.elapsedTime >= 60*60*4:
+					totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+				else:
+					totalTime = 60*60*4 + (int(self.connection.coins / 5) * 1800)
+				if totalTime > 60*60*8:					# 上限8時間
+					totalTime = 60*60*8
+		else:											# 通常配信
+			tmp = 1800 - (self.elapsedTime % 1800)
+			if timerType == 0:
+				totalTime = self.elapsedTime + tmp
+			else:
+				totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+				if totalTime > 14400:					# 4時間上限
+					totalTime = 14400
 		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
 		if timerType == 2:
@@ -748,9 +764,20 @@ class manager:
 		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
 
 	def hasEnoughCoins(self, count):
-		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
-		current = current * 5
-		return current + count >= 35
+		if self.connection.is_vtuber or self.connection.is_corporate_broadcasting:
+			return False				# コイン利用不可
+
+		if self.connection.is_games:
+			if self.elapsedTime >= 60*60*4:
+				current = (self.elapsedTime - 60*60*4 + (1800 - (self.elapsedTime % 1800))) // 1800
+			else:
+				current = 0
+			current = current * 5		# 使用済みコイン枚数
+			return current + count >= 40
+		else:
+			current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
+			current = current * 5		# 使用済みコイン枚数
+			return current + count >= 35
 
 	def refreshReplaceSettings(self):
 		if hasattr(self, "connection") == False or hasattr(self.MainView, "commentList") == False or self.MainView.commentList == None:

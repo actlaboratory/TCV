@@ -4,6 +4,7 @@
 from pprint import pformat
 from twitcasting.twitcasting import *
 from twitcasting.getItem import *
+from twitcasting.getMovieType import *
 from twitcasting.getTypingUser import *
 import views.main
 import datetime
@@ -19,6 +20,14 @@ class connection(threading.Thread):
 		self.comments = []
 		self.errorFlag = 0
 		self.typingUser = ""
+		self.is_games = False
+		self.is_vtuber = False
+		self.is_corporate_broadcasting = False
+		if self.movieId:
+			data = getMovieType(self.movieId)
+			self.is_games = data["is_games"]
+			self.is_vtuber = data["is_vtuber"]
+			self.is_corporate_broadcasting = data["is_corporate_broadcasting"]
 
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
@@ -180,7 +189,7 @@ class connection(threading.Thread):
 				if subCategory["id"] == id:
 					return subCategory["name"]
 
-	def  createDummyMovieInfo(self, userInfo):
+	def createDummyMovieInfo(self, userInfo):
 		self.movieInfo = {}
 		self.movieInfo["movie"] = {
 			"id": "",
