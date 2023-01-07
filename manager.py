@@ -124,6 +124,7 @@ class manager:
 			simpleDialog.errorDialog(_("履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.HISTORY_FILE_NAME))
 			traceback.print_exc()
 			self.log.warning("Failed to write history data. detail:" + traceback.format_exc())
+		self.connection.updateMovieType()
 		try:
 			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 		except:
