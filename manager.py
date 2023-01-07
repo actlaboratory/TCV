@@ -609,6 +609,7 @@ class manager:
 				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 					self.stop()
 					self.play()
+			self.connection.updateMovieType()
 		self.oldMovieId = self.newMovieId
 
 	def checkViewers(self):

@@ -23,11 +23,6 @@ class connection(threading.Thread):
 		self.is_games = False
 		self.is_vtuber = False
 		self.is_corporate_broadcasting = False
-		if self.movieId:
-			data = getMovieType(self.movieId)
-			self.is_games = data["is_games"]
-			self.is_vtuber = data["is_vtuber"]
-			self.is_corporate_broadcasting = data["is_corporate_broadcasting"]
 
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
@@ -169,6 +164,12 @@ class connection(threading.Thread):
 		if mode == 1:
 			self.getComment()
 			self.getTypingUser()
+
+	def updateMovieType(self):
+		data = getMovieType(self.movieId)
+		self.is_games = data["is_games"]
+		self.is_vtuber = data["is_vtuber"]
+		self.is_corporate_broadcasting = data["is_corporate_broadcasting"]
 
 	def getCategoryName(self, id):
 		if id == None:
