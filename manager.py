@@ -631,6 +631,8 @@ class manager:
 		self.oldViewers = self.newViewers
 
 	def checkCoins(self):
+		if not self.isCoinSupportedLive():
+			return
 		self.newCoins = self.connection.coins
 		if self.newCoins != self.oldCoins:
 			if self.newCoins < self.oldCoins:
@@ -763,8 +765,11 @@ class manager:
 	def openLiveWindow(self):
 		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
 
+	def isCoinSupportedLive(self):
+		return not (self.connection.is_vtuber or self.connection.is_corporate_broadcasting)
+
 	def hasEnoughCoins(self, count):
-		if self.connection.is_vtuber or self.connection.is_corporate_broadcasting:
+		if not self.isCoinSupportedLive():
 			return False				# コイン利用不可
 
 		if self.connection.is_games:
