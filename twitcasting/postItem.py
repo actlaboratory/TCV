@@ -186,7 +186,9 @@ class PostItem:
 		for i in range(count):
 			if self._postItem(account, item):
 				counter += 1
-		if counter == 0:
+			else:
+				break
+		if counter != count:
 			simpleDialog.errorDialog(_("アイテムの投下に失敗しました。"))
 			return
 		simpleDialog.dialog(_("完了"), _("%(name)sを%(count)d個投下しました。") % {"name": item.name, "count": counter})
