@@ -124,6 +124,7 @@ class manager:
 			simpleDialog.errorDialog(_("履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.HISTORY_FILE_NAME))
 			traceback.print_exc()
 			self.log.warning("Failed to write history data. detail:" + traceback.format_exc())
+		self.connection.updateMovieType()
 		try:
 			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 		except:
@@ -417,13 +418,29 @@ class manager:
 			self.elapsedTime = 0
 			self.remainingTime = 0
 			return
-		tmp = 1800 - (self.elapsedTime % 1800)
-		if timerType == 0:
-			totalTime = self.elapsedTime + tmp
-		else:
-			totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
-		if totalTime > 14400:
-			totalTime = 14400
+		if self.connection.is_corporate_broadcasting:	# コーポレート
+			totalTime = 60*60*24						# 24時間固定
+		elif self.connection.is_vtuber:					# vtuber
+			totalTime = 60*60*4							# 4時間固定
+		elif self.connection.is_games:					# ゲーム配信
+			tmp = 1800 - (self.elapsedTime % 1800)
+			if timerType == 0:
+				totalTime = self.elapsedTime + tmp
+			else:
+				if self.elapsedTime >= 60*60*4:
+					totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+				else:
+					totalTime = 60*60*4 + (int(self.connection.coins / 5) * 1800)
+				if totalTime > 60*60*8:					# 上限8時間
+					totalTime = 60*60*8
+		else:											# 通常配信
+			tmp = 1800 - (self.elapsedTime % 1800)
+			if timerType == 0:
+				totalTime = self.elapsedTime + tmp
+			else:
+				totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+				if totalTime > 14400:					# 4時間上限
+					totalTime = 14400
 		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
 		if timerType == 2:
@@ -593,6 +610,7 @@ class manager:
 				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 					self.stop()
 					self.play()
+			self.connection.updateMovieType()
 		self.oldMovieId = self.newMovieId
 
 	def checkViewers(self):
@@ -615,6 +633,8 @@ class manager:
 		self.oldViewers = self.newViewers
 
 	def checkCoins(self):
+		if not self.isCoinSupportedLive():
+			return
 		self.newCoins = self.connection.coins
 		if self.newCoins != self.oldCoins:
 			if self.newCoins < self.oldCoins:
@@ -747,10 +767,24 @@ class manager:
 	def openLiveWindow(self):
 		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
 
+	def isCoinSupportedLive(self):
+		return not (self.connection.is_vtuber or self.connection.is_corporate_broadcasting)
+
 	def hasEnoughCoins(self, count):
-		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
-		current = current * 5
-		return current + count >= 35
+		if not self.isCoinSupportedLive():
+			return False				# コイン利用不可
+
+		if self.connection.is_games:
+			if self.elapsedTime >= 60*60*4:
+				current = (self.elapsedTime - 60*60*4 + (1800 - (self.elapsedTime % 1800))) // 1800
+			else:
+				current = 0
+			current = current * 5		# 使用済みコイン枚数
+			return current + count >= 40
+		else:
+			current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
+			current = current * 5		# 使用済みコイン枚数
+			return current + count >= 35
 
 	def refreshReplaceSettings(self):
 		if hasattr(self, "connection") == False or hasattr(self.MainView, "commentList") == False or self.MainView.commentList == None:
