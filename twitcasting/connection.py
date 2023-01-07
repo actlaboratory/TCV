@@ -166,6 +166,8 @@ class connection(threading.Thread):
 			self.getTypingUser()
 
 	def updateMovieType(self):
+		if self.movieId is None:
+			return
 		data = getMovieType(self.movieId)
 		self.is_games = data["is_games"]
 		self.is_vtuber = data["is_vtuber"]
