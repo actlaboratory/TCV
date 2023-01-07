@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# タイピングメッセージの取得
+# ライブ種別の取得
+#Copyright (C) 2023 yamahubuki <itiro.ishino@gmail.com>
 
 import requests
 import datetime
@@ -8,7 +9,7 @@ from logging import getLogger
 import traceback
 import sys
 
-log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.getFrontendApiToken"))
+log = getLogger("%s.%s" %(constants.LOG_PREFIX, "twitcasting.getMovieType"))
 
 def getMovieType(movie_id):
 	result = {}
