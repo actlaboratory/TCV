@@ -150,6 +150,7 @@ class manager:
 				globalVars.app.say(_("接続。法人向けプログラムで配信中。"))
 			else:
 				globalVars.app.say(_("接続。現在配信中。"))
+			self.elapsedTime += int(time.time() - self.connection.movieInfo["duration_updated_at"])
 			self.resetTimer()
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
