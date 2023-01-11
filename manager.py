@@ -142,7 +142,15 @@ class manager:
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
 		if self.connection.isLive == True:
-			globalVars.app.say(_("接続。現在配信中。"))
+			if self.connection.is_games:
+				globalVars.app.say(_("接続。ゲームズ配信中。"))
+			elif self.connection.is_vtuber:
+				globalVars.app.say(_("接続。VTuber配信中。"))
+			elif self.connection.is_corporate_broadcasting:
+				globalVars.app.say(_("接続。法人向けプログラムで配信中。"))
+			else:
+				globalVars.app.say(_("接続。現在配信中。"))
+			self.elapsedTime += int(time.time() - self.connection.movieInfo["duration_updated_at"])
 			self.resetTimer()
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
@@ -303,7 +311,14 @@ class manager:
 			self.connection.movieInfo["broadcaster"]["screen_id"]
 		]
 		if self.connection.movieInfo["movie"]["is_live"] == True:
-			result.insert(0, _("現在配信中"))
+			if self.connection.is_games:
+				result.insert(0, _("ゲームズ配信中"))
+			elif self.connection.is_vtuber:
+				result.insert(0, _("VTuber配信中"))
+			elif self.connection.is_corporate_broadcasting:
+				result.insert(0, _("法人向け配信中"))
+			else:
+				result.insert(0, _("配信中"))
 		else:
 			result.insert(0, _("オフライン"))
 		try:
@@ -443,11 +458,18 @@ class manager:
 					totalTime = 14400
 		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
-		if timerType == 2:
-			if self.remainingTime > 1800 and int(self.remainingTime % 1800) == 180:
+
+		if self.connection.is_games and self.elapsedTime <= 60*60*3.5:
+			# 4H無料なので3.5Hまでは読上げ不要
+			return
+		if (self.connection.is_vtuber or self.connection.is_corporate_broadcasting) and self.remainingTime >= 1800:
+			# コインや延長という概念がない枠は残り30分以上の場合読み上げ不要
+			return
+		if timerType == 2 and self.remainingTime >= 1800:
+			# vtuberの3.5H以降と通常配信で、残り30分以上ある＝延長可能な場合のみここにくる
+			if int(self.remainingTime % 1800) == 180:
 				self.sayRemainingTime()
-				if self.remainingTime >= 1800:
-					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
+				globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
 			return
 		announceTime = [900, 600, 300, 180, 60, 30, 10]
 		for i in announceTime:
@@ -456,7 +478,7 @@ class manager:
 				if self.remainingTime >= 1800 and timerType != 0:
 					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
 		if self.remainingTime > 0 and self.remainingTime % 1800 == 0:
-			globalVars.app.say(_("30分が経過しました。"))
+			globalVars.app.say(_("次の枠に切り替わります。"))
 
 	def clearHistory(self):
 		self.history.clear()
@@ -604,13 +626,20 @@ class manager:
 			self.itemWatcher.exit()
 			self.itemWatcher = ItemWatcher(self, self.newMovieId)
 			self.itemWatcher.start()
+			self.connection.updateMovieType()
 			if self.connection.isLive == True:
-				globalVars.app.say(_("次のライブが開始されました。"))
+				if self.connection.is_games:
+					globalVars.app.say(_("次のゲームズ配信が開始されました。"))
+				elif self.connection.is_vtuber:
+					globalVars.app.say(_("次のVTuber配信が開始されました。"))
+				elif self.connection.is_corporate_broadcasting:
+					globalVars.app.say(_("次の法人向けプログラム配信が開始されました。"))
+				else:
+					globalVars.app.say(_("次のライブが開始されました。"))
 				self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 					self.stop()
 					self.play()
-			self.connection.updateMovieType()
 		self.oldMovieId = self.newMovieId
 
 	def checkViewers(self):

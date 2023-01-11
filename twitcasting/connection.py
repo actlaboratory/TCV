@@ -134,6 +134,7 @@ class connection(threading.Thread):
 			self.isLive = False
 		if self.hasMovieId == True:
 			self.movieInfo = GetMovieInfo(self.movieId)
+			self.movieInfo["duration_updated_at"] = time.time()
 			if "error" in self.movieInfo:
 				if self.movieInfo["error"]["code"] == 404:
 					self.hasMovieId = False
@@ -204,6 +205,7 @@ class connection(threading.Thread):
 			"is_collabo": False,
 			"comment_count": 0,
 			"duration": 0,
+			"duration_updated_at": 0,
 			"max_view_count": 0,
 			"current_view_count": 0,
 			"total_view_count": 0,
