@@ -314,7 +314,7 @@ class manager:
 			if self.connection.is_games:
 				result.insert(0, _("ゲームズ配信中"))
 			elif self.connection.is_vtuber:
-				result.insert(0, _("VTuber現在配信中"))
+				result.insert(0, _("VTuber配信中"))
 			elif self.connection.is_corporate_broadcasting:
 				result.insert(0, _("法人向け配信中"))
 			else:
