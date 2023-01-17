@@ -158,11 +158,11 @@ class manager:
 				globalVars.app.say(_("残り時間：%s") %self.formatTime(self.remainingTime).strftime("%H:%M:%S"))
 			except:
 				globalVars.app.say(_("配信時間が４時間を超えているため、タイマーを使用できません。"))
+			if self.hasEnoughCoins(self.connection.coins) == True:
+				globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		else:
 			self.resetTimer()
 			globalVars.app.say(_("接続。現在オフライン。"))
-		if self.hasEnoughCoins(self.connection.coins) == True:
-			globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		self.oldCoins = self.connection.coins
 		self.oldCategory = self.connection.categoryName
 		self.oldViewers = self.connection.viewers
