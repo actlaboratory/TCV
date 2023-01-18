@@ -79,7 +79,7 @@ def getMovieType(movie_id):
 		return result
 
 def getFrontendApiToken(session, movie_id):
-	log.debug("getting frontend api token")
+	log.debug("getting frontend api token with movie_id=" + str(movie_id))
 	try:
 		ret = requests.post(
 				"https://twitcasting.tv/happytoken.php?__n=" + str(int(datetime.datetime.now().timestamp()*1000)),
@@ -87,6 +87,9 @@ def getFrontendApiToken(session, movie_id):
 				data = {"movie_id":movie_id},
 				timeout = 5
 			)
+		if ret.status_code != 200:
+			log.error("received error response. status_code=" + str(ret.status_code))
+			return
 	except:
 		log.error("Connection failed.")
 		log.error(traceback.format_exc())
@@ -96,6 +99,7 @@ def getFrontendApiToken(session, movie_id):
 			traceback.print_exc()
 		return
 	try:
+		log.debug("response:" + ret.text)
 		return ret.json()["token"]
 	except:
 		log.error("Failed. data: %s" % ret.text)
