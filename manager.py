@@ -688,7 +688,7 @@ class manager:
 			if not globalVars.app.advancedAccountManager.login(account):
 				return "\r\n".join(ret)
 			if not globalVars.app.advancedAccountManager.isActive(account):
-				if globalVars.app.advancedAccountManager.relogin(account):
+				if not globalVars.app.advancedAccountManager.relogin(account):
 					return "\r\n".join(ret)
 			session = globalVars.app.advancedAccountManager.getSession(account)
 			cookies = session.cookies
