@@ -69,6 +69,7 @@ class DefaultSettings:
 			"defaultVolume": 100,
 			"audioDelay": 10,
 			"device": "",
+			"login": False,
 		}
 		config["fx"] = {
 			"playCommentReceivedSound": True,

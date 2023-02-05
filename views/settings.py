@@ -131,6 +131,7 @@ class settingsDialog(BaseDialog):
 		self.autoplay = creator.checkbox(_("自動的に再生を開始する(&A)"))
 		self.defaultvolume, static = creator.slider(_("規定の音量(&V)"), 0, 100)
 		self.audiodelay, static = creator.spinCtrl(_("ライブ再生の遅延時間(&D)"), 1, 30)
+		self.login = creator.checkbox(_("ログインした状態で再生(&L)"))
 
 		# FX
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,views.ViewCreator.GridBagSizer,space=0,label=_("効果音"),style=wx.LEFT|wx.RIGHT|wx.TOP|wx.EXPAND,margin=20)
@@ -201,6 +202,7 @@ class settingsDialog(BaseDialog):
 		self.autoplay.SetValue(globalVars.app.config.getboolean("livePlay", "autoplay"))
 		self.defaultvolume.SetValue(globalVars.app.config.getint("livePlay", "defaultvolume"))
 		self.audiodelay.SetValue(globalVars.app.config["livePlay"]["audiodelay"])
+		self.login.SetValue(globalVars.app.config.getboolean("livePlay", "login"))
 
 		# fx
 		self.fxvolume.SetValue(globalVars.app.config.getint("fx", "fxvolume"))
@@ -268,6 +270,7 @@ class settingsDialog(BaseDialog):
 		globalVars.app.config["livePlay"]["autoplay"] = self.autoplay.GetValue()
 		globalVars.app.config["livePlay"]["defaultvolume"] = self.defaultvolume.GetValue()
 		globalVars.app.config["livePlay"]["audiodelay"] = self.audiodelay.GetValue()
+		globalVars.app.config["livePlay"]["login"] = self.login.GetValue()
 
 		# fx
 		globalVars.app.config["fx"]["fxvolume"] = self.fxvolume.GetValue()

@@ -678,6 +678,23 @@ class manager:
 
 		self.oldCoins = self.newCoins
 
+	def getStreamingUrl(self):
+		ret = [self.connection.movieInfo["movie"]["hls_url"]]
+		if globalVars.app.config.getboolean("livePlay", "login", False):
+			accounts = list(globalVars.app.config["advanced_ids"].keys())
+			if len(accounts) == 0:
+				return "\r\n".join(ret)
+			account = globalVars.app.advancedAccountManager.getDefaultAccount()
+			if not globalVars.app.advancedAccountManager.login(account):
+				return "\r\n".join(ret)
+			if not globalVars.app.advancedAccountManager.isActive(account):
+				if globalVars.app.advancedAccountManager.relogin(account):
+					return "\r\n".join(ret)
+			session = globalVars.app.advancedAccountManager.getSession(account)
+			cookies = session.cookies
+			ret.append("Cookie: tc_id=%s;tc_ss=%s" % (cookies["tc_id"], cookies["tc_ss"]))
+		return "\r\n".join(ret)
+
 	def play(self):
 		if self.livePlayer == None:
 			self.livePlayer = soundPlayer.player.player()
@@ -688,7 +705,9 @@ class manager:
 			if self.connection.movieInfo["movie"]["hls_url"] == None:
 				simpleDialog.errorDialog(_("再生URLを取得できません。"))
 				return
-			setSource = self.livePlayer.setSource(self.connection.movieInfo["movie"]["hls_url"])
+			source = self.getStreamingUrl()
+			self.log.debug("streaming URL: %s" % source)
+			setSource = self.livePlayer.setSource(source)
 			if setSource == False:
 				simpleDialog.errorDialog(_("再生に失敗しました。"))
 				return

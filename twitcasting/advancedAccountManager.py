@@ -103,3 +103,10 @@ class AdvancedAccountManager:
 
 	def getSession(self, account):
 		return self.sessions[account]
+
+	def isActive(self, account):
+		session = self.sessions[account]
+		user = self.getUserId(account)
+		url = "https://twitcasting.tv/%s/account" % user
+		response = session.get(url)
+		return response.url == url
