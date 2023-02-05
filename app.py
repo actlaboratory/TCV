@@ -18,7 +18,7 @@ def _import():
 	from views import main
 	import manager
 	import twitcasting.accountManager
-	import twitcasting.postItem
+	import twitcasting.advancedAccountManager
 
 class Main(AppBase.MainBase):
 	def __init__(self):
@@ -55,7 +55,7 @@ class Main(AppBase.MainBase):
 		self.accountManager = twitcasting.accountManager.AccountManager()
 		self.hasAccountIssue = False
 		self.Manager = manager.manager(self.hMainView)
-		self.postItem = twitcasting.postItem.PostItem()
+		self.advancedAccountManager = twitcasting.advancedAccountManager.AdvancedAccountManager()
 		if len(self.accountManager.tokens) == 0:
 			simpleDialog.dialog(_("アカウント登録"), _("アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウントマネージャからアカウントの登録を行ってください。"))
 			self.hasAccountIssue = True

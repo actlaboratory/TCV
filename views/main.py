@@ -50,6 +50,8 @@ import webbrowser
 import constants
 import time
 
+import twitcasting.postItem
+
 class MainView(BaseView):
 	def __init__(self):
 		super().__init__("mainView")
@@ -337,18 +339,19 @@ class Events(BaseEvents):
 			if len(accounts) == 0:
 				simpleDialog.errorDialog(_("この機能を使用する前に、設定メニューの拡張機能用アカウントの設定から、使用するアカウントを登録してください。"))
 				return
-			if not globalVars.app.postItem.login(globalVars.app.postItem.getDefaultAccount()):
+			if not globalVars.app.advancedAccountManager.login(globalVars.app.advancedAccountManager.getDefaultAccount()):
 				return
-			items = globalVars.app.postItem.getItemList()
+			postItem = twitcasting.postItem.PostItem()
+			items = postItem.getItemList()
 			if len(items) == 0:
-				if len(accounts) == 1 and globalVars.app.postItem.getUserId(globalVars.app.postItem.getDefaultAccount()) == globalVars.app.Manager.connection.userId:
+				if len(accounts) == 1 and globalVars.app.advancedAccountManager.getUserId(globalVars.app.advancedAccountManager.getDefaultAccount()) == globalVars.app.Manager.connection.userId:
 					simpleDialog.errorDialog(_("自分のライブにアイテムを投下することはできません。"))
 					return
 				for i in range(1, len(accounts)):
-					globalVars.app.postItem.setDefaultAccountIndex(i)
-					if not globalVars.app.postItem.login(globalVars.app.postItem.getDefaultAccount()):
+					globalVars.app.advancedAccountManager.setDefaultAccountIndex(i)
+					if not globalVars.app.advancedAccountManager.login(globalVars.app.advancedAccountManager.getDefaultAccount()):
 						return
-					items = globalVars.app.postItem.getItemList()
+					items = postItem.getItemList()
 					if len(items) > 0:
 						d = views.postItem.Dialog(accounts, items)
 						d.Initialize()
@@ -356,7 +359,7 @@ class Events(BaseEvents):
 						return
 				simpleDialog.errorDialog(_("アイテム情報の取得に失敗しました。"))
 				return
-			d = views.postItem.Dialog(accounts, items)
+			d = views.postItem.Dialog(accounts, items, postItem)
 			d.Initialize()
 			d.Show() 
 		#設定
@@ -551,7 +554,7 @@ class Events(BaseEvents):
 		for k,v in ids.items():
 			globalVars.app.config["advanced_ids"][k] = v
 			globalVars.app.config["advanced_passwords"][k] = pws[k]
-		globalVars.app.postItem.deleteSessions()
+		globalVars.app.advancedAccountManager.deleteSessions()
 
 	def settings(self, event=None):
 		settings = views.settings.settingsDialog()
