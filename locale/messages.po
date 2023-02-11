@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 12:13+0900\n"
+"POT-Creation-Date: 2023-02-11 14:52+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -731,7 +731,11 @@ msgid "設定されたユーザ名またはパスワードが不正です。設�
 msgstr ""
 
 #: twitcasting\advancedAccountManager.py:35
-msgid "Twitterユーザ名またはパスワードが不正です。設定を確認してください。"
+msgid ""
+"Twitterユーザ名またはパスワードが不正です。設定を確認してください。バージョン"
+"3.3.0までのTCVでログインできており、その後パスワードとユーザー名を変更してい"
+"ない場合には、ツイキャスのページでログインパスワードが設定されていることを確"
+"認してください。"
 msgstr ""
 
 #: twitcasting\advancedAccountManager.py:36

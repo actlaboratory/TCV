@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TCV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 12:13+0900\n"
-"PO-Revision-Date: 2023-02-10 15:55+0900\n"
+"POT-Creation-Date: 2023-02-11 14:52+0900\n"
+"PO-Revision-Date: 2023-02-11 14:53+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -779,8 +779,16 @@ msgid "設定されたユーザ名またはパスワードが不正です。設�
 msgstr "Configured ID or password is wrong."
 
 #: twitcasting\advancedAccountManager.py:35
-msgid "Twitterユーザ名またはパスワードが不正です。設定を確認してください。"
-msgstr "Twitter user name or password is wrong."
+msgid ""
+"Twitterユーザ名またはパスワードが不正です。設定を確認してください。バージョン"
+"3.3.0までのTCVでログインできており、その後パスワードとユーザー名を変更してい"
+"ない場合には、ツイキャスのページでログインパスワードが設定されていることを確"
+"認してください。"
+msgstr ""
+"Your Twitter username or password is invalid. Check your settings. If you "
+"have logged in with TCV up to version 3.3.0 and have not changed your "
+"password and username since then, make sure that you have set a login "
+"password on the TwitCasting page."
 
 #: twitcasting\advancedAccountManager.py:36
 msgid ""
@@ -1917,6 +1925,9 @@ msgstr "title"
 #, python-format
 msgid "おすすめライブの取得に失敗しました。詳細:%s"
 msgstr "Failed to get popular live movies. Details: %s"
+
+#~ msgid "Twitterユーザ名またはパスワードが不正です。設定を確認してください。"
+#~ msgstr "Twitter user name or password is wrong."
 
 #~ msgid "30分が経過しました。"
 #~ msgstr "30 minutes have elapsed."
