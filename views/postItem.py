@@ -10,10 +10,11 @@ from views.baseDialog import *
 import simpleDialog
 
 class Dialog(BaseDialog):
-	def __init__(self, accounts, items):
+	def __init__(self, accounts, items, postItem):
 		super().__init__("postItemDialog")
 		self.accounts = accounts
 		self.items = items
+		self.postItem = postItem
 
 	def Initialize(self):
 		self.log.debug("created")
@@ -34,11 +35,11 @@ class Dialog(BaseDialog):
 
 	def post(self, event):
 		account = self.account.GetValue()
-		item = globalVars.app.postItem.getItem(self.item.GetValue())
-		if not globalVars.app.postItem.login(account):
+		item = self.postItem.getItem(self.item.GetValue())
+		if not globalVars.app.advancedAccountManager.login(account):
 			return
 		point = self.count.GetValue() * item.point
-		if point > globalVars.app.postItem.getPoint(account):
+		if point > self.postItem.getPoint(account):
 			simpleDialog.errorDialog(_("アカウント「%s」の所有ポイント数が不足しているため、アイテムを投下できません。") % account)
 			return
 		if globalVars.app.config.getboolean("general", "checkPoint", True):
@@ -58,7 +59,7 @@ class Dialog(BaseDialog):
 			if now - last > 86400:
 				globalVars.app.config["item_posted_time"][key] = int(now)
 			globalVars.app.config["item_point"][key] = newPoint
-		globalVars.app.postItem.postItem(account, item, self.count.GetValue())
+		self.postItem.postItem(account, item, self.count.GetValue())
 		self.account.SetFocus()
 
 	def itemSelected(self, event):

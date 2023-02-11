@@ -4,6 +4,7 @@
 from pprint import pformat
 from twitcasting.twitcasting import *
 from twitcasting.getItem import *
+from twitcasting.getMovieType import *
 from twitcasting.getTypingUser import *
 import views.main
 import datetime
@@ -19,6 +20,9 @@ class connection(threading.Thread):
 		self.comments = []
 		self.errorFlag = 0
 		self.typingUser = ""
+		self.is_games = False
+		self.is_vtuber = False
+		self.is_corporate_broadcasting = False
 
 	def getInitialComment(self, number):
 		if self.hasMovieId == False:
@@ -130,6 +134,7 @@ class connection(threading.Thread):
 			self.isLive = False
 		if self.hasMovieId == True:
 			self.movieInfo = GetMovieInfo(self.movieId)
+			self.movieInfo["duration_updated_at"] = time.time()
 			if "error" in self.movieInfo:
 				if self.movieInfo["error"]["code"] == 404:
 					self.hasMovieId = False
@@ -161,6 +166,14 @@ class connection(threading.Thread):
 			self.getComment()
 			self.getTypingUser()
 
+	def updateMovieType(self):
+		if self.movieId is None:
+			return
+		data = getMovieType(self.movieId)
+		self.is_games = data["is_games"]
+		self.is_vtuber = data["is_vtuber"]
+		self.is_corporate_broadcasting = data["is_corporate_broadcasting"]
+
 	def getCategoryName(self, id):
 		if id == None:
 			return _("カテゴリなし")
@@ -180,7 +193,7 @@ class connection(threading.Thread):
 				if subCategory["id"] == id:
 					return subCategory["name"]
 
-	def  createDummyMovieInfo(self, userInfo):
+	def createDummyMovieInfo(self, userInfo):
 		self.movieInfo = {}
 		self.movieInfo["movie"] = {
 			"id": "",
@@ -192,6 +205,7 @@ class connection(threading.Thread):
 			"is_collabo": False,
 			"comment_count": 0,
 			"duration": 0,
+			"duration_updated_at": 0,
 			"max_view_count": 0,
 			"current_view_count": 0,
 			"total_view_count": 0,

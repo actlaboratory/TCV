@@ -124,6 +124,7 @@ class manager:
 			simpleDialog.errorDialog(_("履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを確認してください。") + "\n" + os.path.abspath(constants.HISTORY_FILE_NAME))
 			traceback.print_exc()
 			self.log.warning("Failed to write history data. detail:" + traceback.format_exc())
+		self.connection.updateMovieType()
 		try:
 			self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 		except:
@@ -141,7 +142,15 @@ class manager:
 		self.liveInfoTimer.Start(liveInfoTimerInterval)
 		self.createLiveInfoList(first)
 		if self.connection.isLive == True:
-			globalVars.app.say(_("接続。現在配信中。"))
+			if self.connection.is_games:
+				globalVars.app.say(_("接続。ゲームズ配信中。"))
+			elif self.connection.is_vtuber:
+				globalVars.app.say(_("接続。VTuber配信中。"))
+			elif self.connection.is_corporate_broadcasting:
+				globalVars.app.say(_("接続。法人向けプログラムで配信中。"))
+			else:
+				globalVars.app.say(_("接続。現在配信中。"))
+			self.elapsedTime += int(time.time() - self.connection.movieInfo["duration_updated_at"])
 			self.resetTimer()
 			self.countDownTimer.Start(countDownTimerInterval)
 			globalVars.app.say(_("タイマー開始。"))
@@ -149,11 +158,11 @@ class manager:
 				globalVars.app.say(_("残り時間：%s") %self.formatTime(self.remainingTime).strftime("%H:%M:%S"))
 			except:
 				globalVars.app.say(_("配信時間が４時間を超えているため、タイマーを使用できません。"))
+			if self.hasEnoughCoins(self.connection.coins) == True:
+				globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		else:
 			self.resetTimer()
 			globalVars.app.say(_("接続。現在オフライン。"))
-		if self.hasEnoughCoins(self.connection.coins) == True:
-			globalVars.app.say(_("完走に必用なコインが集まっています。"))
 		self.oldCoins = self.connection.coins
 		self.oldCategory = self.connection.categoryName
 		self.oldViewers = self.connection.viewers
@@ -302,7 +311,14 @@ class manager:
 			self.connection.movieInfo["broadcaster"]["screen_id"]
 		]
 		if self.connection.movieInfo["movie"]["is_live"] == True:
-			result.insert(0, _("現在配信中"))
+			if self.connection.is_games:
+				result.insert(0, _("ゲームズ配信中"))
+			elif self.connection.is_vtuber:
+				result.insert(0, _("VTuber配信中"))
+			elif self.connection.is_corporate_broadcasting:
+				result.insert(0, _("法人向け配信中"))
+			else:
+				result.insert(0, _("配信中"))
 		else:
 			result.insert(0, _("オフライン"))
 		try:
@@ -417,20 +433,43 @@ class manager:
 			self.elapsedTime = 0
 			self.remainingTime = 0
 			return
-		tmp = 1800 - (self.elapsedTime % 1800)
-		if timerType == 0:
-			totalTime = self.elapsedTime + tmp
-		else:
-			totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
-		if totalTime > 14400:
-			totalTime = 14400
+		if self.connection.is_corporate_broadcasting:	# コーポレート
+			totalTime = 60*60*24						# 24時間固定
+		elif self.connection.is_vtuber:					# vtuber
+			totalTime = 60*60*4							# 4時間固定
+		elif self.connection.is_games:					# ゲーム配信
+			tmp = 1800 - (self.elapsedTime % 1800)
+			if timerType == 0:
+				totalTime = self.elapsedTime + tmp
+			else:
+				if self.elapsedTime >= 60*60*4:
+					totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+				else:
+					totalTime = 60*60*4 + (int(self.connection.coins / 5) * 1800)
+				if totalTime > 60*60*8:					# 上限8時間
+					totalTime = 60*60*8
+		else:											# 通常配信
+			tmp = 1800 - (self.elapsedTime % 1800)
+			if timerType == 0:
+				totalTime = self.elapsedTime + tmp
+			else:
+				totalTime = self.elapsedTime + tmp + (int(self.connection.coins / 5) * 1800)
+				if totalTime > 14400:					# 4時間上限
+					totalTime = 14400
 		self.elapsedTime = self.elapsedTime + 1
 		self.remainingTime = totalTime - self.elapsedTime
-		if timerType == 2:
-			if self.remainingTime > 1800 and int(self.remainingTime % 1800) == 180:
+
+		if self.connection.is_games and self.elapsedTime <= 60*60*3.5:
+			# 4H無料なので3.5Hまでは読上げ不要
+			return
+		if (self.connection.is_vtuber or self.connection.is_corporate_broadcasting) and self.remainingTime >= 1800:
+			# コインや延長という概念がない枠は残り30分以上の場合読み上げ不要
+			return
+		if timerType == 2 and self.remainingTime >= 1800:
+			# vtuberの3.5H以降と通常配信で、残り30分以上ある＝延長可能な場合のみここにくる
+			if int(self.remainingTime % 1800) == 180:
 				self.sayRemainingTime()
-				if self.remainingTime >= 1800:
-					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
+				globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
 			return
 		announceTime = [900, 600, 300, 180, 60, 30, 10]
 		for i in announceTime:
@@ -439,7 +478,7 @@ class manager:
 				if self.remainingTime >= 1800 and timerType != 0:
 					globalVars.app.say(_("コインが%d枚あるので延長可能です。") %(self.connection.coins))
 		if self.remainingTime > 0 and self.remainingTime % 1800 == 0:
-			globalVars.app.say(_("30分が経過しました。"))
+			globalVars.app.say(_("次の枠に切り替わります。"))
 
 	def clearHistory(self):
 		self.history.clear()
@@ -587,8 +626,16 @@ class manager:
 			self.itemWatcher.exit()
 			self.itemWatcher = ItemWatcher(self, self.newMovieId)
 			self.itemWatcher.start()
+			self.connection.updateMovieType()
 			if self.connection.isLive == True:
-				globalVars.app.say(_("次のライブが開始されました。"))
+				if self.connection.is_games:
+					globalVars.app.say(_("次のゲームズ配信が開始されました。"))
+				elif self.connection.is_vtuber:
+					globalVars.app.say(_("次のVTuber配信が開始されました。"))
+				elif self.connection.is_corporate_broadcasting:
+					globalVars.app.say(_("次の法人向けプログラム配信が開始されました。"))
+				else:
+					globalVars.app.say(_("次のライブが開始されました。"))
 				self.elapsedTime = self.connection.movieInfo["movie"]["duration"]
 				if self.livePlayer != None and self.livePlayer.getStatus() == PLAYER_STATUS_PLAYING:
 					self.stop()
@@ -615,6 +662,8 @@ class manager:
 		self.oldViewers = self.newViewers
 
 	def checkCoins(self):
+		if not self.isCoinSupportedLive():
+			return
 		self.newCoins = self.connection.coins
 		if self.newCoins != self.oldCoins:
 			if self.newCoins < self.oldCoins:
@@ -629,6 +678,23 @@ class manager:
 
 		self.oldCoins = self.newCoins
 
+	def getStreamingUrl(self):
+		ret = [self.connection.movieInfo["movie"]["hls_url"]]
+		if globalVars.app.config.getboolean("livePlay", "login", False):
+			accounts = list(globalVars.app.config["advanced_ids"].keys())
+			if len(accounts) == 0:
+				return "\r\n".join(ret)
+			account = globalVars.app.advancedAccountManager.getDefaultAccount()
+			if not globalVars.app.advancedAccountManager.login(account):
+				return "\r\n".join(ret)
+			if not globalVars.app.advancedAccountManager.isActive(account):
+				if not globalVars.app.advancedAccountManager.relogin(account):
+					return "\r\n".join(ret)
+			session = globalVars.app.advancedAccountManager.getSession(account)
+			cookies = session.cookies
+			ret.append("Cookie: tc_id=%s;tc_ss=%s" % (cookies["tc_id"], cookies["tc_ss"]))
+		return "\r\n".join(ret)
+
 	def play(self):
 		if self.livePlayer == None:
 			self.livePlayer = soundPlayer.player.player()
@@ -639,7 +705,9 @@ class manager:
 			if self.connection.movieInfo["movie"]["hls_url"] == None:
 				simpleDialog.errorDialog(_("再生URLを取得できません。"))
 				return
-			setSource = self.livePlayer.setSource(self.connection.movieInfo["movie"]["hls_url"])
+			source = self.getStreamingUrl()
+			self.log.debug("streaming URL: %s" % source)
+			setSource = self.livePlayer.setSource(source)
 			if setSource == False:
 				simpleDialog.errorDialog(_("再生に失敗しました。"))
 				return
@@ -747,10 +815,24 @@ class manager:
 	def openLiveWindow(self):
 		webbrowser.open("https://twitcasting.tv/%s" %(self.connection.movieInfo["broadcaster"]["screen_id"]))
 
+	def isCoinSupportedLive(self):
+		return not (self.connection.is_vtuber or self.connection.is_corporate_broadcasting)
+
 	def hasEnoughCoins(self, count):
-		current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
-		current = current * 5
-		return current + count >= 35
+		if not self.isCoinSupportedLive():
+			return False				# コイン利用不可
+
+		if self.connection.is_games:
+			if self.elapsedTime >= 60*60*4:
+				current = (self.elapsedTime - 60*60*4 + (1800 - (self.elapsedTime % 1800))) // 1800
+			else:
+				current = 0
+			current = current * 5		# 使用済みコイン枚数
+			return current + count >= 40
+		else:
+			current = (self.elapsedTime + (1800 - (self.elapsedTime % 1800))) // 1800 - 1
+			current = current * 5		# 使用済みコイン枚数
+			return current + count >= 35
 
 	def refreshReplaceSettings(self):
 		if hasattr(self, "connection") == False or hasattr(self.MainView, "commentList") == False or self.MainView.commentList == None:
