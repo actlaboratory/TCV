@@ -92,9 +92,13 @@ class AdvancedAccountManager:
 			self.log.error("Session data save error:" + str(e))
 
 	def deleteSessions(self):
+		target = []
 		for i in self.sessions:
 			if i not in globalVars.app.config["advanced_ids"].keys():
-				del self.sessions[i]
+				target.append(i)
+		target.reverse()
+		for i in target:
+			del self.sessions[i]
 		self.saveSessionData()
 
 	def relogin(self, account):
