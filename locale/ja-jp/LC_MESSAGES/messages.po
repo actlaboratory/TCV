@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-11 14:52+0900\n"
+"POT-Creation-Date: 2023-02-11 15:36+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -732,10 +732,10 @@ msgstr ""
 
 #: twitcasting\advancedAccountManager.py:35
 msgid ""
-"Twitterユーザ名またはパスワードが不正です。設定を確認してください。バージョン"
-"3.3.0までのTCVでログインできており、その後パスワードとユーザー名を変更してい"
-"ない場合には、ツイキャスのページでログインパスワードが設定されていることを確"
-"認してください。"
+"Twitterユーザ名またはパスワードが不正です。設定を確認してください。なお、TCV "
+"Version 3.4.0の更新に伴い、ツイキャスの「ログインパスワード」を使用してログイ"
+"ンするようになりました。ツイキャスのサイトでログインパスワードを設定し、その"
+"パスワードをTCVに設定する必要があります。"
 msgstr ""
 
 #: twitcasting\advancedAccountManager.py:36

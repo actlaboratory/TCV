@@ -32,7 +32,7 @@ class AdvancedAccountManager:
 			messages = {
 				errorCodes.LOGIN_TWITCASTING_ERROR: _("ログイン中にエラーが発生しました。"),
 				errorCodes.LOGIN_TWITCASTING_WRONG_ACCOUNT: _("設定されたユーザ名またはパスワードが不正です。設定を確認してください。"),
-				errorCodes.LOGIN_TWITTER_WRONG_ACCOUNT: _("Twitterユーザ名またはパスワードが不正です。設定を確認してください。バージョン3.3.0までのTCVでログインできており、その後パスワードとユーザー名を変更していない場合には、ツイキャスのページでログインパスワードが設定されていることを確認してください。"),
+				errorCodes.LOGIN_TWITTER_WRONG_ACCOUNT: _("Twitterユーザ名またはパスワードが不正です。設定を確認してください。なお、TCV Version 3.4.0の更新に伴い、ツイキャスの「ログインパスワード」を使用してログインするようになりました。ツイキャスのサイトでログインパスワードを設定し、そのパスワードをTCVに設定する必要があります。"),
 				errorCodes.LOGIN_RECAPTCHA_NEEDED: _("reCAPTCHAによる認証が必要です。ブラウザからTwitterにログインし、認証を行ってください。"),
 				errorCodes.LOGIN_TWITTER_ERROR: _("ログイン中にエラーが発生しました。"),
 				errorCodes.LOGIN_CONFIRM_NEEDED: _("認証が必要です。ブラウザで操作を完了してください。"),
