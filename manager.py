@@ -947,7 +947,9 @@ class ItemWatcher(threading.Thread):
 			data = json.loads(text)
 			items = {}
 			for i in data:
+				self.log.debug(json.dumps(i, ensure_ascii=False))
 				if i["type"] != "gift":
+					self.log.debug("skipped: %s" % i["type"])
 					continue
 				self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
 				itemName = i["item"]["name"]
