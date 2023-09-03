@@ -6,9 +6,11 @@ import traceback
 
 import requests
 import websocket
+import wx
 
 import constants
 import globalVars
+from views import poll
 
 
 class EventPubsub(threading.Thread):
@@ -63,18 +65,38 @@ class EventPubsub(threading.Thread):
 			items = {}
 			for i in data:
 				self.log.debug(json.dumps(i, ensure_ascii=False))
-				if i["type"] != "gift":
-					self.log.debug("skipped: %s" % i["type"])
+				type_ = i.get("type", "")
+				if type_ == "gift":
+					self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
+					itemName = i["item"]["name"]
+					lst = items.get(itemName, [])
+					lst.append(i)
+					items[itemName] = lst
+				elif type_ == "poll_status_update":
+					obj = i["poll"]
+					if obj["status"] == "closed":
+						self.log.debug("poll %s was closed" % obj["title"])
+						continue
+					accounts = list(globalVars.app.config["advanced_ids"].keys())
+					if len(accounts) == 0:
+						self.log.info("advanced accounts are not registered")
+						self.log.info("skip poll %s" % obj["title"])
+						continue
+					question = obj["title"]
+					answers = []
+					options = obj["options"]
+					assert [option["id"] for option in options] == list(range(len(options)))
+					for option in obj["options"]:
+						answers.append(option["text"])
+					sec = obj["expire_after"]
+					wx.CallAfter(self.showPollDialog, accounts, question, answers, sec)
+				else:
+					self.log.debug("skipped: %s" % type_)
 					continue
-				self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
-				itemName = i["item"]["name"]
-				lst = items.get(itemName, [])
-				lst.append(i)
-				items[itemName] = lst
 			if items:
 				self.processItems(items)
 		except Exception as e:
-			self.log.error("Failed to get item info")
+			self.log.error("Failed to get information")
 			self.log.error(traceback.format_exc())
 
 	def onError(self, ws, error):
@@ -116,6 +138,11 @@ class EventPubsub(threading.Thread):
 						globalVars.app.say(_("%(user)sさんなどから%(item)sをもらいました。") % {"user": user, "item": name})
 					else:
 						globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
+
+	def showPollDialog(self, accounts, question, answers, sec):
+		d = poll.Dialog(accounts, question, answers, sec)
+		d.Initialize()
+		d.Show()
 
 	def exit(self):
 		self.log.debug("exitting...")
