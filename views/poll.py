@@ -40,8 +40,10 @@ class Dialog(BaseDialog):
 
 	def onOkButton(self, event):
 		self.timer.Stop()
-		simpleDialog.dialog("answer", str(self.comboBox.GetSelection()))
 		event.Skip()
 
 	def onTimerEvent(self, event):
 		self.wnd.EndModal(wx.ID_CANCEL)
+
+	def GetValue(self):
+		return self.comboBox.GetSelection()

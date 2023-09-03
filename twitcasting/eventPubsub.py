@@ -4,12 +4,14 @@ import threading
 import time
 import traceback
 
+import bs4
 import requests
 import websocket
 import wx
 
 import constants
 import globalVars
+import simpleDialog
 from views import poll
 
 
@@ -142,7 +144,55 @@ class EventPubsub(threading.Thread):
 	def showPollDialog(self, accounts, question, answers, sec):
 		d = poll.Dialog(accounts, question, answers, sec)
 		d.Initialize()
-		d.Show()
+		if d.Show() == wx.ID_CANCEL:
+			return
+		self.answerPoll(d.GetValue())
+
+	def answerPoll(self, option):
+		account = globalVars.app.advancedAccountManager.getDefaultAccount()
+		if globalVars.app.advancedAccountManager.getUserId(account) == self.manager.connection.userId:
+			# 自分のライブ
+			existFlag = False
+			for i in list(globalVars.app.config["advanced_ids"].keys()):
+				if i == account:
+					continue
+				account = globalVars.app.config["advanced_ids"][i]
+				existFlag = True
+				break
+			if not existFlag:
+				simpleDialog.errorDialog(_("自分のライブで行われているアンケートに答えることはできません。"))
+				return
+		if not globalVars.app.advancedAccountManager.login(account):
+			return
+		if not globalVars.app.advancedAccountManager.isActive(account):
+			if not globalVars.app.advancedAccountManager.relogin(account):
+				return
+		session = globalVars.app.advancedAccountManager.getSession(account)
+		try:
+			# get csrf token
+			self.log.debug("getting csrf token...")
+			r = session.get("https://twitcasting.tv/%s" % (self.manager.connection.userId))
+			self.log.debug("status: %s" % r.status_code)
+			if r.status_code != 200:
+				simpleDialog.errorDialog(_("アンケートへの回答に失敗しました。"))
+				return
+			soup = bs4.BeautifulSoup(r.text, "lxml")
+			elem = soup.find(attrs={"data-csrf-token": True})
+			if elem is None:
+				simpleDialog.errorDialog(_("アンケートへの回答に失敗しました。"))
+				return
+			token = elem["data-csrf-token"]
+			# 回答送信
+			self.log.debug("posting data...")
+			r = session.post("https://frontendapi.twitcasting.tv/users/%s/polls/current/options/%d?action=vote" % (self.manager.connection.userId, option), json={"cs_session_id": token})
+			self.log.debug("status: %s" % r.status_code)
+			if r.status_code != 200:
+				simpleDialog.errorDialog(_("アンケートへの回答に失敗しました。"))
+				return
+		except Exception as e:
+			self.log.error(traceback.format_exc())
+			simpleDialog.errorDialog(_("アンケートへの回答に失敗しました。"))
+			return
 
 	def exit(self):
 		self.log.debug("exitting...")
