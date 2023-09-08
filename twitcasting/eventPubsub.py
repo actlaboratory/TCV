@@ -162,6 +162,8 @@ class EventPubsub(threading.Thread):
 			if not existFlag:
 				simpleDialog.errorDialog(_("自分のライブで行われているアンケートに答えることはできません。"))
 				return
+		if not globalVars.app.advancedAccountManager.login(account):
+			return
 		if not globalVars.app.advancedAccountManager.isActive(account):
 			if not globalVars.app.advancedAccountManager.relogin(account):
 				return
