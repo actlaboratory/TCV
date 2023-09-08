@@ -1,7 +1,7 @@
 		TwitCasting Viewer -TCV-
 
-	バージョン:　　ver.3.4.0
-	リリース:　　　2023-02-11
+	バージョン:　　ver.3.5.0
+	リリース:　　　2023-09-18
 	開発・配布元:　ACT Laboratory　(https://actlab.org/)
 	主要開発者:　　北畠一翔
 　　ソフト種別:　　オープンソースソフトウェア　(GitHubリポジトリ:https://github.com/actlaboratory/TCV/)
