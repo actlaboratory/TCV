@@ -90,7 +90,7 @@ class settingsDialog(BaseDialog):
 		self.displayonconnectdialog, static = creator.combobox(_("接続ダイアログの表示項目(&O)"), list(self.displayonconnectdialogSelection.values()))
 		self.initialcommentcount, static = creator.spinCtrl(_("接続時に読み込むコメント数(&C)"), 1, 250)
 		self.historymax, static = creator.spinCtrl(_("接続履歴の保持件数(&H)"), -1, 50)
-		self.defaultconnectaccount, static = creator.inputbox(_("規定の接続先ユーザー名/URL(&U)"),sizerFlag=wx.EXPAND)
+		self.defaultconnectaccount, static = creator.inputbox(_("既定の接続先ユーザー名/URL(&U)"),sizerFlag=wx.EXPAND)
 		self.openlivewindow = creator.checkbox(_("接続時にブラウザでライブを開く(&O)"))
 		creator.GetSizer().SetItemSpan(self.openlivewindow.GetParent(),2)
 
@@ -129,7 +129,7 @@ class settingsDialog(BaseDialog):
 		# live play
 		creator=views.ViewCreator.ViewCreator(self.viewMode,self.tab,None,wx.VERTICAL,space=20,label=_("ライブ再生"),style=wx.ALL,margin=20)
 		self.autoplay = creator.checkbox(_("自動的に再生を開始する(&A)"))
-		self.defaultvolume, static = creator.slider(_("規定の音量(&V)"), 0, 100)
+		self.defaultvolume, static = creator.slider(_("既定の音量(&V)"), 0, 100)
 		self.audiodelay, static = creator.spinCtrl(_("ライブ再生の遅延時間(&D)"), 1, 30)
 		self.login = creator.checkbox(_("ログインした状態で再生(&L)"))
 
