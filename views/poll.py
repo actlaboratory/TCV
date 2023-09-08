@@ -30,7 +30,7 @@ class Dialog(BaseDialog):
 		self.comboBox, self.comboBoxLabel = self.creator.combobox(_("回答"), self.answers, state=0)
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton("OK", self.onOkButton)
-		self.bCancel=self.creator.cancelbutton(_("閉じる"))
+		self.bCancel=self.creator.cancelbutton(_("閉じる"), self.onCancelButton)
 		# timer
 		self.timer = wx.Timer(self.wnd)
 		self.wnd.Bind(wx.EVT_TIMER, self.onTimerEvent)
@@ -39,6 +39,10 @@ class Dialog(BaseDialog):
 		self.timer.Start(timerInterval, True)
 
 	def onOkButton(self, event):
+		self.timer.Stop()
+		event.Skip()
+
+	def onCancelButton(self, event):
 		self.timer.Stop()
 		event.Skip()
 
