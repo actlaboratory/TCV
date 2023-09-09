@@ -156,7 +156,7 @@ class EventPubsub(threading.Thread):
 			for i in list(globalVars.app.config["advanced_ids"].keys()):
 				if i == account:
 					continue
-				account = globalVars.app.config["advanced_ids"][i]
+				account = i
 				existFlag = True
 				break
 			if not existFlag:
