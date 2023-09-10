@@ -13,6 +13,7 @@ import constants
 import globalVars
 import simpleDialog
 from views import poll
+from views import pollResult
 
 
 class EventPubsub(threading.Thread):
@@ -23,6 +24,7 @@ class EventPubsub(threading.Thread):
 		self.manager = manager
 		self.movieId = movieId
 		self.shouldExit = False
+		self.pollResultDialog: pollResult.Dialog = None
 
 	def getWebsocketUrl(self):
 		url = "https://twitcasting.tv/eventpubsuburl.php"
@@ -90,6 +92,7 @@ class EventPubsub(threading.Thread):
 					obj = i["poll"]
 					if obj["status"] == "closed":
 						self.log.debug("poll %s was closed" % obj["title"])
+						wx.CallAfter(self.showPollResultDialog, obj)
 						continue
 					question = obj["title"]
 					answers = []
@@ -149,6 +152,10 @@ class EventPubsub(threading.Thread):
 						globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
 
 	def showPollDialog(self, question, answers, sec):
+		# 結果がすでに表示されていれば、最初にそれを閉じる
+		if self.pollResultDialog:
+			self.pollResultDialog.wnd.EndModal(wx.ID_CANCEL)
+			self.pollResultDialog = None
 		d = poll.Dialog(question, answers, sec)
 		d.Initialize()
 		if d.Show() == wx.ID_CANCEL:
@@ -183,6 +190,12 @@ class EventPubsub(threading.Thread):
 			self.log.error(traceback.format_exc())
 			simpleDialog.errorDialog(_("アンケートへの回答に失敗しました。"))
 			return
+
+	def showPollResultDialog(self, poll):
+		self.pollResultDialog = pollResult.Dialog(poll)
+		self.pollResultDialog.Initialize()
+		self.pollResultDialog.Show()
+		self.pollResultDialog = None
 
 	def exit(self):
 		self.log.debug("exitting...")
