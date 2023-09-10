@@ -69,6 +69,18 @@ class EventPubsub(threading.Thread):
 				self.log.debug(json.dumps(i, ensure_ascii=False))
 				type_ = i.get("type", "")
 				if type_ == "gift":
+					# アイテム名が空の場合、「不明なアイテム」に置換する
+					if i["item"]["name"] == "":
+						self.log.debug("unknown item")
+						i["item"]["name"] = _("不明なアイテム")
+						self.log.debug(json.dumps(i, ensure_ascii=False))
+						# 「コインの種」対応
+						if i["item"]["image"].endswith("icon_incentive_coin.png"):
+							self.log.debug("incentive_coin")
+							globalVars.app.say(_("コインの種を使いました。"))
+							# 続きの処理は不要
+							self.log.debug("skipped remaining process")
+							continue
 					self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
 					itemName = i["item"]["name"]
 					lst = items.get(itemName, [])
