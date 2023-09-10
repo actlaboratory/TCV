@@ -10,9 +10,8 @@ from views.baseDialog import *
 import simpleDialog
 
 class Dialog(BaseDialog):
-	def __init__(self, accounts, question, answers, sec):
+	def __init__(self, question, answers, sec):
 		super().__init__("pollDialog")
-		self.accounts = accounts
 		self.question = question
 		self.answers = answers
 		self.sec = sec

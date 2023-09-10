@@ -91,11 +91,6 @@ class EventPubsub(threading.Thread):
 					if obj["status"] == "closed":
 						self.log.debug("poll %s was closed" % obj["title"])
 						continue
-					accounts = list(globalVars.app.config["advanced_ids"].keys())
-					if len(accounts) == 0:
-						self.log.info("advanced accounts are not registered")
-						self.log.info("skip poll %s" % obj["title"])
-						continue
 					question = obj["title"]
 					answers = []
 					options = obj["options"]
@@ -103,7 +98,7 @@ class EventPubsub(threading.Thread):
 					for option in obj["options"]:
 						answers.append(option["text"])
 					sec = obj["expire_after"]
-					wx.CallAfter(self.showPollDialog, accounts, question, answers, sec)
+					wx.CallAfter(self.showPollDialog, question, answers, sec)
 				else:
 					self.log.debug("skipped: %s" % type_)
 					continue
@@ -153,33 +148,16 @@ class EventPubsub(threading.Thread):
 					else:
 						globalVars.app.say(_("%(user)sさんなどから%(item)sを%(count)i個もらいました。") % {"user": user, "item": name, "count": count})
 
-	def showPollDialog(self, accounts, question, answers, sec):
-		d = poll.Dialog(accounts, question, answers, sec)
+	def showPollDialog(self, question, answers, sec):
+		d = poll.Dialog(question, answers, sec)
 		d.Initialize()
 		if d.Show() == wx.ID_CANCEL:
 			return
 		self.answerPoll(d.GetValue())
 
 	def answerPoll(self, option):
-		account = globalVars.app.advancedAccountManager.getDefaultAccount()
-		if globalVars.app.advancedAccountManager.getUserId(account) == self.manager.connection.userId:
-			# 自分のライブ
-			existFlag = False
-			for i in list(globalVars.app.config["advanced_ids"].keys()):
-				if i == account:
-					continue
-				account = i
-				existFlag = True
-				break
-			if not existFlag:
-				simpleDialog.errorDialog(_("自分のライブで行われているアンケートに答えることはできません。"))
-				return
-		if not globalVars.app.advancedAccountManager.login(account):
-			return
-		if not globalVars.app.advancedAccountManager.isActive(account):
-			if not globalVars.app.advancedAccountManager.relogin(account):
-				return
-		session = globalVars.app.advancedAccountManager.getSession(account)
+		session = requests.Session()
+		session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"})
 		try:
 			# get csrf token
 			self.log.debug("getting csrf token...")
