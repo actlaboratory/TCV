@@ -36,7 +36,7 @@ class Dialog(BaseDialog):
 		self.wnd.Bind(wx.EVT_TIMER, self.onTimerEvent)
 		# 秒→ミリ秒変換、回答送信時の遅延を考慮して3秒前にはダイアログを閉じる
 		timerInterval = (self.sec - 3) * 1000
-		self.timer.Start(timerInterval, True)
+		self.timer.StartOnce(timerInterval)
 
 	def onOkButton(self, event):
 		self.timer.Stop()
