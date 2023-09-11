@@ -192,6 +192,12 @@ class EventPubsub(threading.Thread):
 			return
 
 	def showPollResultDialog(self, poll):
+		# 結果がすでに表示されていれば、最初にそれを閉じる
+		# 次のアンケートが始まった時点で結果のダイアログは閉じられるため、本来このコードは要らないはず
+		if self.pollResultDialog:
+			self.log.warn("Poll result dialog does not closed as expected")
+			self.pollResultDialog.wnd.EndModal(wx.ID_CANCEL)
+			self.pollResultDialog = None
 		self.pollResultDialog = pollResult.Dialog(poll)
 		self.pollResultDialog.Initialize()
 		self.pollResultDialog.Show()
