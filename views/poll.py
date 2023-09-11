@@ -1,13 +1,10 @@
 ﻿# -*- coding: utf-8 -*-
 # poll dialog
 
-import time
 import wx
 import globalVars
 import views.ViewCreator
-from logging import getLogger
 from views.baseDialog import *
-import simpleDialog
 
 class Dialog(BaseDialog):
 	def __init__(self, question, answers, sec):
