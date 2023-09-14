@@ -24,10 +24,11 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL|wx.EXPAND,margin=20)
 		self.question = self.creator.staticText(self.poll["title"])
-		self.answers, self.answersLabel = self.creator.listCtrl(_("回答"), style=wx.LC_REPORT)
-		self.answers.AppendColumn(_("内容"))
-		self.answers.AppendColumn(_("回答数"))
+		self.creator.AddSpace()
+		self.answers, self.answersLabel = self.creator.listCtrl(_("回答"), size=(500,300), style=wx.LC_REPORT, sizerFlag=wx.EXPAND)
+		self.answers.AppendColumn(_("内容"), width=300)
+		self.answers.AppendColumn(_("回答数"), wx.LIST_FORMAT_RIGHT, width=150)
 		for option in self.poll["options"]:
 			self.answers.Append((option["text"], str(option["vote_count"])))
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.ALL,margin=20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.BOTTOM, margin=20)
 		self.bClose=self.creator.cancelbutton(_("閉じる"))
