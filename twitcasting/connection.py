@@ -138,6 +138,7 @@ class connection(threading.Thread):
 			if "error" in self.movieInfo:
 				if self.movieInfo["error"]["code"] == 404:
 					self.hasMovieId = False
+					self.isLive = False
 				else:
 					self.errorFlag = self.movieInfo["error"]["code"]
 			if self.hasMovieId == True:
@@ -169,7 +170,7 @@ class connection(threading.Thread):
 	def updateMovieType(self):
 		if self.movieId is None:
 			return
-		data = getMovieType(self.movieId)
+		data = getMovieType(self.userId)
 		self.is_games = data["is_games"]
 		self.is_vtuber = data["is_vtuber"]
 		self.is_corporate_broadcasting = data["is_corporate_broadcasting"]
@@ -205,13 +206,13 @@ class connection(threading.Thread):
 			"is_collabo": False,
 			"comment_count": 0,
 			"duration": 0,
-			"duration_updated_at": 0,
 			"max_view_count": 0,
 			"current_view_count": 0,
 			"total_view_count": 0,
 			"hls_url": None,
 			"user_id": self.userId,
 		}
+		self.movieInfo["duration_updated_at"] = time.time()
 		self.movieInfo["broadcaster"] = userInfo["user"]
 
 	def run(self):
