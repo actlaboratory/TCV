@@ -1,13 +1,11 @@
 ﻿# -*- coding: utf-8 -*-
 # poll result dialog
 
-import time
 import wx
 import globalVars
 import views.ViewCreator
-from logging import getLogger
 from views.baseDialog import *
-import simpleDialog
+
 
 class Dialog(BaseDialog):
 	def __init__(self, poll: dict):
@@ -31,4 +29,4 @@ class Dialog(BaseDialog):
 		for option in self.poll["options"]:
 			self.answers.Append((option["text"], str(option["vote_count"])))
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.BOTTOM, margin=20)
-		self.bClose=self.creator.cancelbutton(_("閉じる"))
+		self.bClose=self.creator.closebutton(_("閉じる"))

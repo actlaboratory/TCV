@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # manager
 
-import json
-import threading
 import time
 import twitcasting.connection
 import datetime
@@ -24,7 +22,6 @@ import os
 import traceback
 import logging
 import requests
-import websocket
 from twitcasting.eventPubsub import EventPubsub
 
 evtComment = 0
