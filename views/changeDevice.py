@@ -24,7 +24,7 @@ class Dialog(BaseDialog):
 		self.deviceList, self.static = self.creator.listCtrl(_("再生デバイス"), None, wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.BORDER_RAISED,sizerFlag=wx.EXPAND)
 		self.deviceList.AppendColumn(_("再生デバイス"),width=450)
 		self.deviceList.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.closeDialog)
-		self.deviceList.InsertItem(0, _("規定のデバイス"))
+		self.deviceList.InsertItem(0, _("既定のデバイス"))
 		deviceList = list(getDeviceList())
 		del deviceList[deviceList.index("No sound")]
 		for i in deviceList:

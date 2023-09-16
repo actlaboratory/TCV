@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SOC\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-11 15:36+0900\n"
+"POT-Creation-Date: 2023-09-11 11:29+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "アカウント登録"
 msgstr ""
 
-#: app.py:60 manager.py:97 views\main.py:524
+#: app.py:60 manager.py:95 views\main.py:524
 msgid ""
 "アカウントが登録されていません。ライブに接続する前に、設定メニューのアカウン"
 "トマネージャからアカウントの登録を行ってください。"
@@ -95,122 +95,122 @@ msgstr ""
 msgid "この組み合わせは別の用途で予約されているため、利用できません。"
 msgstr ""
 
-#: manager.py:99 views\main.py:526
+#: manager.py:97 views\main.py:526
 msgid ""
 "通信用アカウントが設定されていません。ライブに接続する前に、設定メニューのア"
 "カウントマネージャから通信用アカウントの設定を行ってください。"
 msgstr ""
 
-#: manager.py:107
+#: manager.py:105
 msgid "接続に失敗しました。"
 msgstr ""
 
-#: manager.py:124 manager.py:488
+#: manager.py:122 manager.py:486
 msgid ""
 "履歴データの保存に失敗しました。以下のファイルへのアクセスが可能であることを"
 "確認してください。"
 msgstr ""
 
-#: manager.py:146
+#: manager.py:144
 msgid "接続。ゲームズ配信中。"
 msgstr ""
 
-#: manager.py:148
+#: manager.py:146
 msgid "接続。VTuber配信中。"
 msgstr ""
 
-#: manager.py:150
+#: manager.py:148
 msgid "接続。法人向けプログラムで配信中。"
 msgstr ""
 
-#: manager.py:152
+#: manager.py:150
 msgid "接続。現在配信中。"
 msgstr ""
 
-#: manager.py:156
+#: manager.py:154
 msgid "タイマー開始。"
 msgstr ""
 
-#: manager.py:158 manager.py:326 manager.py:552
+#: manager.py:156 manager.py:324 manager.py:550
 #, python-format
 msgid "残り時間：%s"
 msgstr ""
 
-#: manager.py:160
+#: manager.py:158
 msgid "配信時間が４時間を超えているため、タイマーを使用できません。"
 msgstr ""
 
-#: manager.py:162
+#: manager.py:160
 msgid "完走に必用なコインが集まっています。"
 msgstr ""
 
-#: manager.py:165
+#: manager.py:163
 msgid "接続。現在オフライン。"
 msgstr ""
 
-#: manager.py:306
+#: manager.py:304
 #, python-format
 msgid "タイトル：%s"
 msgstr ""
 
-#: manager.py:307
+#: manager.py:305
 #, python-format
 msgid "テロップ：%s"
 msgstr ""
 
-#: manager.py:308
+#: manager.py:306
 #, python-format
 msgid "閲覧者数：現在%(current)d人、合計%(total)d人"
 msgstr ""
 
-#: manager.py:309
+#: manager.py:307
 #, python-format
 msgid "カテゴリ：%s"
 msgstr ""
 
-#: manager.py:310
+#: manager.py:308
 #, python-format
 msgid "コメント：%d件"
 msgstr ""
 
-#: manager.py:315
+#: manager.py:313
 msgid "ゲームズ配信中"
 msgstr ""
 
-#: manager.py:317
+#: manager.py:315
 msgid "VTuber配信中"
 msgstr ""
 
-#: manager.py:319
+#: manager.py:317
 msgid "法人向け配信中"
 msgstr ""
 
-#: manager.py:321
+#: manager.py:319
 msgid "配信中"
 msgstr ""
 
-#: manager.py:323
+#: manager.py:321
 msgid "オフライン"
 msgstr ""
 
-#: manager.py:325 manager.py:551
+#: manager.py:323 manager.py:549
 #, python-format
 msgid "経過時間：%s"
 msgstr ""
 
-#: manager.py:328 manager.py:565
+#: manager.py:326 manager.py:563
 msgid "残り時間：無制限"
 msgstr ""
 
-#: manager.py:330
+#: manager.py:328
 msgid "コラボ可能"
 msgstr ""
 
-#: manager.py:332
+#: manager.py:330
 msgid "コラボ不可"
 msgstr ""
 
-#: manager.py:334 views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
+#: manager.py:332 views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\globalKeyConfig.py:138 views\globalKeyConfig.py:143
@@ -220,224 +220,194 @@ msgstr ""
 msgid "なし"
 msgstr ""
 
-#: manager.py:367 manager.py:382
+#: manager.py:365 manager.py:380
 msgid ""
 "コメント投稿に失敗しました。次にこのユーザがライブを行うまで、コメントを投稿"
 "できません。"
 msgstr ""
 
-#: manager.py:371
+#: manager.py:369
 msgid "コメントが入力されていません。"
 msgstr ""
 
-#: manager.py:374
+#: manager.py:372
 #, python-format
 msgid ""
 "１４０字を超えるコメントは投稿できません。現在%s文字のコメントが入力されてい"
 "ます。"
 msgstr ""
 
-#: manager.py:379
+#: manager.py:377
 msgid "コメント文字数が１４０字を超えているため、コメントを投稿できません。"
 msgstr ""
 
-#: manager.py:385
+#: manager.py:383
 #, python-format
 msgid "エラーが発生しました。詳細：%s"
 msgstr ""
 
-#: manager.py:415
+#: manager.py:413
 msgid ""
 "コメントの削除に失敗しました。これらのコメントを削除する権限がありません。"
 msgstr ""
 
-#: manager.py:417
+#: manager.py:415
 #, python-format
 msgid ""
 "%d個のコメントを削除できませんでした。これらのコメントを削除する権限がありま"
 "せん。"
 msgstr ""
 
-#: manager.py:430
+#: manager.py:428
 msgid "タイマーリセット。"
 msgstr ""
 
-#: manager.py:472 manager.py:479
+#: manager.py:470 manager.py:477
 #, python-format
 msgid "コインが%d枚あるので延長可能です。"
 msgstr ""
 
-#: manager.py:481
+#: manager.py:479
 msgid "次の枠に切り替わります。"
 msgstr ""
 
-#: manager.py:498 manager.py:508 manager.py:517
+#: manager.py:496 manager.py:506 manager.py:515
 msgid ""
 "お気に入りデータの保存に失敗しました。以下のファイルへのアクセスが可能である"
 "ことを確認してください。"
 msgstr ""
 
-#: manager.py:526
+#: manager.py:524
 #, python-format
 msgid "残り%s秒です。"
 msgstr ""
 
-#: manager.py:528
+#: manager.py:526
 #, python-format
 msgid "残り%s分です。"
 msgstr ""
 
-#: manager.py:530
+#: manager.py:528
 #, python-format
 msgid "残り%(minutes)s分%(seconds)s秒です。"
 msgstr ""
 
-#: manager.py:558
+#: manager.py:556
 #, python-format
 msgid "残り%(hour)d時間%(minute)d分%(second)d秒"
 msgstr ""
 
-#: manager.py:560
+#: manager.py:558
 #, python-format
 msgid "残り%(minute)d分%(second)d秒"
 msgstr ""
 
-#: manager.py:562
+#: manager.py:560
 #, python-format
 msgid "残り%(second)d秒"
 msgstr ""
 
-#: manager.py:569
+#: manager.py:567
 #, python-format
 msgid "%sさんが入力中"
 msgstr ""
 
-#: manager.py:585
+#: manager.py:583
 msgid "ライブ終了。"
 msgstr ""
 
-#: manager.py:596
+#: manager.py:594
 msgid "ライブ開始。"
 msgstr ""
 
-#: manager.py:607
+#: manager.py:605
 msgid "テロップ削除"
 msgstr ""
 
-#: manager.py:609
+#: manager.py:607
 msgid "テロップ変更。"
 msgstr ""
 
-#: manager.py:618
+#: manager.py:616
 #, python-format
 msgid "カテゴリ変更：%s"
 msgstr ""
 
-#: manager.py:632
+#: manager.py:630
 msgid "次のゲームズ配信が開始されました。"
 msgstr ""
 
-#: manager.py:634
+#: manager.py:632
 msgid "次のVTuber配信が開始されました。"
 msgstr ""
 
-#: manager.py:636
+#: manager.py:634
 msgid "次の法人向けプログラム配信が開始されました。"
 msgstr ""
 
-#: manager.py:638
+#: manager.py:636
 msgid "次のライブが開始されました。"
 msgstr ""
 
-#: manager.py:670
+#: manager.py:668
 msgid "コイン消費"
 msgstr ""
 
-#: manager.py:675
+#: manager.py:673
 #, python-format
 msgid "完走に必要なコイン%d枚が集まりました。"
 msgstr ""
 
-#: manager.py:677
+#: manager.py:675
 #, python-format
 msgid "コインが%d枚集まりました。"
 msgstr ""
 
-#: manager.py:706
+#: manager.py:704
 msgid "再生URLを取得できません。"
 msgstr ""
 
-#: manager.py:712
+#: manager.py:710
 msgid "再生に失敗しました。"
 msgstr ""
 
-#: manager.py:715 views\indicatorSoundSettings.py:17
+#: manager.py:713 views\indicatorSoundSettings.py:17
 msgid "再生"
 msgstr ""
 
-#: manager.py:728
+#: manager.py:726
 msgid "停止"
 msgstr ""
 
-#: manager.py:737 manager.py:741
+#: manager.py:735 manager.py:739
 #, python-format
 msgid "音量%d"
 msgstr ""
 
-#: manager.py:872
+#: manager.py:870
 msgid ""
 "アクセストークンが不正です。設定メニューのアカウントマネージャから、再度アカ"
 "ウントの追加を行ってください。"
 msgstr ""
 
-#: manager.py:874
+#: manager.py:872
 msgid ""
 "APIの実行回数が上限に達しました。しばらくたってから、再度実行してください。"
 msgstr ""
 
-#: manager.py:876
+#: manager.py:874
 msgid ""
 "ツイキャスAPIが500エラーを返しました。しばらく待ってから、再度接続してくださ"
 "い。"
 msgstr ""
 
-#: manager.py:878 twitcasting\accountManager.py:62
+#: manager.py:876 twitcasting\accountManager.py:62
 msgid "現在TCVは使用できません。開発者に連絡してください。"
 msgstr ""
 
-#: manager.py:893
+#: manager.py:891
 #, python-format
 msgid "ツイキャスAPIとの通信中にエラーが発生しました。詳細：%s"
-msgstr ""
-
-#: manager.py:984
-#, python-format
-msgid "%sをもらいました。"
-msgstr ""
-
-#: manager.py:986
-#, python-format
-msgid "%(name)sを%(count)i個もらいました。"
-msgstr ""
-
-#: manager.py:994
-#, python-format
-msgid "%(user)sさんから%(item)sをもらいました。"
-msgstr ""
-
-#: manager.py:996
-#, python-format
-msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
-msgstr ""
-
-#: manager.py:999
-#, python-format
-msgid "%(user)sさんなどから%(item)sをもらいました。"
-msgstr ""
-
-#: manager.py:1001
-#, python-format
-msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
 msgstr ""
 
 #: menuItemsDic.py:14
@@ -752,6 +722,49 @@ msgstr ""
 msgid "カテゴリなし"
 msgstr ""
 
+#: twitcasting\eventPubsub.py:77
+msgid "不明なアイテム"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:82
+msgid "コインの種を使いました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:135
+#, python-format
+msgid "%sをもらいました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:137
+#, python-format
+msgid "%(name)sを%(count)i個もらいました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:145
+#, python-format
+msgid "%(user)sさんから%(item)sをもらいました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:147
+#, python-format
+msgid "%(user)sさんから%(item)sを%(count)i個もらいました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:150
+#, python-format
+msgid "%(user)sさんなどから%(item)sをもらいました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:152
+#, python-format
+msgid "%(user)sさんなどから%(item)sを%(count)i個もらいました。"
+msgstr ""
+
+#: twitcasting\eventPubsub.py:174 twitcasting\eventPubsub.py:179
+#: twitcasting\eventPubsub.py:187 twitcasting\eventPubsub.py:191
+msgid "アンケートへの回答に失敗しました。"
+msgstr ""
+
 #: twitcasting\postItem.py:136
 msgid "アイテムの投下に失敗しました。"
 msgstr ""
@@ -814,10 +827,10 @@ msgstr ""
 msgid "下へ(&D)"
 msgstr ""
 
-#: views\accountManager.py:54 views\itemHistory.py:35 views\postItem.py:34
-#: views\versionDialog.py:49 views\viewBroadcaster.py:37
-#: views\viewComment.py:42 views\viewFavorites.py:36 views\viewHistory.py:32
-#: views\viewPopular.py:35
+#: views\accountManager.py:54 views\itemHistory.py:35 views\poll.py:29
+#: views\pollResult.py:31 views\postItem.py:34 views\versionDialog.py:49
+#: views\viewBroadcaster.py:37 views\viewComment.py:42
+#: views\viewFavorites.py:36 views\viewHistory.py:32 views\viewPopular.py:35
 msgid "閉じる"
 msgstr ""
 
@@ -914,7 +927,7 @@ msgid "再生デバイス"
 msgstr ""
 
 #: views\changeDevice.py:27
-msgid "規定のデバイス"
+msgid "既定のデバイス"
 msgstr ""
 
 #: views\changeDevice.py:44 views\changeSpeechOutput.py:43
@@ -1398,6 +1411,26 @@ msgstr ""
 msgid "readme.txtが見つかりません。"
 msgstr ""
 
+#: views\poll.py:18
+msgid "アンケート"
+msgstr ""
+
+#: views\poll.py:26 views\pollResult.py:25
+msgid "回答"
+msgstr ""
+
+#: views\pollResult.py:17
+msgid "アンケート結果"
+msgstr ""
+
+#: views\pollResult.py:26
+msgid "内容"
+msgstr ""
+
+#: views\pollResult.py:27
+msgid "回答数"
+msgstr ""
+
 #: views\postItem.py:21 views\postItem.py:32
 msgid "アイテム投下"
 msgstr ""
@@ -1541,7 +1574,7 @@ msgid "接続履歴の保持件数(&H)"
 msgstr ""
 
 #: views\settings.py:93
-msgid "規定の接続先ユーザー名/URL(&U)"
+msgid "既定の接続先ユーザー名/URL(&U)"
 msgstr ""
 
 #: views\settings.py:94
@@ -1645,7 +1678,7 @@ msgid "自動的に再生を開始する(&A)"
 msgstr ""
 
 #: views\settings.py:132
-msgid "規定の音量(&V)"
+msgid "既定の音量(&V)"
 msgstr ""
 
 #: views\settings.py:133
