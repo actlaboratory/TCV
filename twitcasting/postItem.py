@@ -68,7 +68,7 @@ class PostItem:
 		if not req:
 			return 0
 		soup = bs4.BeautifulSoup(req.text, "lxml")
-		tmp = soup.find("span", class_="tw-point-bar-amount")
+		tmp = soup.find("span", class_="tw-point-bar-point")
 		if tmp == None:
 			self.log.error("Get MP failed.")
 			return 0
