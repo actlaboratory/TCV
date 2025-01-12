@@ -155,6 +155,7 @@ class MaiｎBase(wx.App):
 		"""スクリーンリーダーでしゃべらせる。"""
 		self.speech.speak(s, interrupt=interrupt)
 		self.speech.braille(s)
+		self.log.debug("speech: " + s + ", interrupt=" + str(interrupt))
 
 	def SetTimeZone(self):
 		bias=win32api.GetTimeZoneInformation(True)[1][0]*-1
