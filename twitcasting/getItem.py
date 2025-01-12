@@ -70,7 +70,7 @@ def getItemPostedUser(screenId, itemId):
 	else:
 		lang = "en"
 	try:
-		req = requests.get("http://twitcasting.tv/%s/gifts" % (screenId)).text
+		req = requests.get("https://twitcasting.tv/%s/gifts" % (screenId)).text
 	except:
 		log.error("Connection failed(getItemPostedUser).")
 		log.error(traceback.format_exc)
