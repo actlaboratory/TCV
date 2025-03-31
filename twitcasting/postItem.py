@@ -87,14 +87,16 @@ class PostItem:
 
 	def _postItem(self, account, item):
 		session = globalVars.app.advancedAccountManager.getSession(account)
-		req = session.get("https://twitcasting.tv/gearajax.php", params={"c": "sendgift", "tuser": globalVars.app.Manager.connection.userId, "itemid": item.id})
+		req = session.get("https://twitcasting.tv/"+globalVars.app.Manager.connection.userId)
 		if req.status_code != 200:
+			self.log.error("live top request error. status=%d text=%s" % (req.status_code,req.text))
 			return False
 		soup = bs4.BeautifulSoup(req.text, "lxml")
-		tmp = soup.find("input", {"name": "cs_session_id"})
+		tmp = soup.select("[data-csrf-token]")
 		if tmp == None:
+			self.log.error("session id entity not found.")
 			return False
-		csSessionId = tmp["value"]
+		csSessionId = tmp[0]["data-csrf-token"]
 		data = {
 			"cs_session_id": csSessionId,
 			"c": "sendgift",
@@ -122,10 +124,12 @@ class PostItem:
 		}
 		req = session.post("https://twitcasting.tv/gearajax.php", data)
 		if req.status_code != 200:
+			self.log.error("post request error. status_code=%d text=%s" % (req.status_code,req.text))
 			return False
 		return True
 
 	def postItem(self, account, item, count):
+		self.log.info("post %s x %d from %s. use %d point." % (item.id,count,account,item.point))
 		counter = 0
 		for i in range(count):
 			if self._postItem(account, item):
@@ -134,7 +138,9 @@ class PostItem:
 				break
 		if counter != count:
 			simpleDialog.errorDialog(_("アイテムの投下に失敗しました。"))
+			self.log.error("post failed. counter = " + str(counter))
 			return
+		self.log.info("post success")
 		simpleDialog.dialog(_("完了"), _("%(name)sを%(count)d個投下しました。") % {"name": item.name, "count": counter})
 
 class Item:
