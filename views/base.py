@@ -37,6 +37,7 @@ class BaseView(object):
 		_winxptheme.SetWindowTheme(self.hFrame.GetHandle(),"","")
 		self.hFrame.Bind(wx.EVT_MOVE_END,self.events.WindowMove)
 		self.hFrame.Bind(wx.EVT_SIZE,self.events.WindowResize)
+		self.hFrame.Bind(wx.EVT_MAXIMIZE,self.events.WindowResize)
 		self.hFrame.Bind(wx.EVT_CLOSE,self.events.OnExit)
 		self.MakePanel(space)
 
@@ -45,9 +46,9 @@ class BaseView(object):
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,None, wx.VERTICAL,style=wx.ALL,space=space)
 		self.hFrame.Layout()
 
-	def Clear(self):
+	def Clear(self, space=0):
 		self.hFrame.DestroyChildren()
-		self.MakePanel()
+		self.MakePanel(space)
 
 	def Show(self):
 		self.creator.GetPanel().Layout()
@@ -118,14 +119,14 @@ class BaseMenu(object):
 				tmp+=v+"\n"
 			dialog(_("エラー"),tmp)
 
-	def ApplyShortcut(self,window=None):
+	def ApplyShortcut(self, window=None, event=None):
 		"""
 			キーマップ上のショートカットキーの更新を反映する
 			windowが指定されていれば、そのウィンドウに更新されたショートカットキーを割り当てる
 		"""
 		self.acceleratorTable=self.keymap.GetTable(self.keymap_identifier)
 		if window:
-			self.keymap.Set(self.keymap_identifier,window)
+			self.keymap.Set(self.keymap_identifier, window, event)
 
 	def Block(self,ref):
 		"""
@@ -285,6 +286,11 @@ class BaseMenu(object):
 		for menu,id in self.hMenuBar.GetMenus():
 			self._addMenuItemList(menu,ret)
 		return ret
+
+	def setCallbacks(self, items):
+		"""メニューバーなしのショートカットをまとめてコールバック登録する"""
+		for k,v in items.items():
+			self.callbacks[menuItemsStore.getRef(k)] = v
 
 	def getCallback(self,ref_id):
 		if ref_id in self.callbacks:
