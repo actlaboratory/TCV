@@ -20,7 +20,7 @@ class listBox(controlBase.controlBase, wx.ListBox):
 			if self.IsSelected(self.GetTopItem()+i):
 				c=i
 		if c!=-1:
-			return wx.Point(x/2,h*c-h//2)
+			return wx.Point(int(x/2),h*c-h//2)
 		else:
 			return super().getPopupMenuPosition()
 

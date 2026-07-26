@@ -64,7 +64,7 @@ class connection(threading.Thread):
 					break
 		for i in result:
 			i["movieId"] = self.movieId
-			i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
+			i["urls"] = list(re.finditer(r"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
 		self.comments = result + self.comments
 		result.reverse()
 		return result
@@ -89,7 +89,7 @@ class connection(threading.Thread):
 		ret = result
 		for i in ret:
 			i["movieId"] = self.movieId
-			i["urls"] = list(re.finditer("https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
+			i["urls"] = list(re.finditer(r"https?://[\w/:%#\$&\?\(\)~\.=\+\-]+", i["message"]))
 		self.comments = ret + self.comments
 
 	def postComment(self, body, idx):

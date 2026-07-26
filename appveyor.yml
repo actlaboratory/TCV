@@ -18,7 +18,7 @@ environment:
     # The list here is complete (excluding Python 2.6, which
     # isn't covered by this document) at the time of writing.
 
-    - PYTHON: "C:\\Python37"
+    - PYTHON: "C:\\Python311"
 
 install:
   # We need wheel installed to build wheels
@@ -69,4 +69,4 @@ deploy:
       branch: master                 # release from master branch only
 
 after_deploy:
-  - cmd: echo import constants;print("https://actlab.org/api/addAlphaVersion?repo_name=%APPVEYOR_REPO_NAME%&commit_hash=%APPVEYOR_REPO_COMMIT%&version="+constants.APP_VERSION+"&password=%SCRIPT_PASSWORD%",end="") | C:\\Python37\python.exe | xargs -n1 curl
+  - cmd: echo import constants;print("https://actlab.org/api/addAlphaVersion?repo_name=%APPVEYOR_REPO_NAME%&commit_hash=%APPVEYOR_REPO_COMMIT%&version="+constants.APP_VERSION+"&password=%SCRIPT_PASSWORD%",end="") | C:\\Python311\python.exe | xargs -n1 curl

@@ -132,7 +132,8 @@ class MaiｎBase(wx.App):
 
 	def InitTranslation(self):
 		"""翻訳を初期化する。"""
-		loc = locale.getdefaultlocale()[0].replace("_", "-")
+		#locale.getdefaultlocale()はPython3.15で削除予定のため、ユーザ既定のロケールを直接取得する
+		loc = locale.windows_locale.get(win32api.GetUserDefaultLCID(), "en_US").replace("_", "-")
 		lang=self.config.getstring("general","language","",constants.SUPPORTING_LANGUAGE.keys())
 		if lang == "":
 			if loc in list(constants.SUPPORTING_LANGUAGE.keys()):
