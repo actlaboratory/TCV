@@ -6,8 +6,8 @@ import re
 def getValueString(ref_id):
 	""" ナビキーとダイアログ文字列を消去した文字列を取り出し """
 	dicVal = dic[ref_id]
-	s = re.sub("\.\.\.$", "", dicVal)
-	s = re.sub("\(&.\)$", "", s)
+	s = re.sub(r"\.\.\.$", "", dicVal)
+	s = re.sub(r"\(&.\)$", "", s)
 	return re.sub("&", "", s)
 
 dic={

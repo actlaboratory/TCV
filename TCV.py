@@ -51,12 +51,11 @@ else: os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 import win32timezone#ダミー
 
-#dllを相対パスで指定した時のため、カレントディレクトリを変更
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
 #Python3.8対応
 #dllやモジュールをカレントディレクトリから読み込むように設定
-if sys.version_info.major>=3 and sys.version_info.minor>=8:
+#凍結時、__file__はPyInstaller 6以降では_internalの中を指すため、
+#カレントディレクトリの変更には使わないこと(exeと同階層のlocaleやdataが見えなくなる)
+if sys.version_info >= (3, 8):
 	os.add_dll_directory(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
