@@ -167,7 +167,6 @@ class manager:
 		self.oldIsLive = self.connection.isLive
 		self.oldMovieId = self.connection.movieId
 		self.oldSubtitle = self.connection.subtitle
-		self.oldItem = self.connection.item
 		self.createItemList(first)
 		self.typingTimer = wx.Timer(self.evtHandler, evtTyping)
 		self.timers.append(self.typingTimer)
