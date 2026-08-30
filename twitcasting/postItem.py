@@ -28,7 +28,7 @@ class PostItem:
 		itemNames = []
 		itemPoints = []
 		for i in itemList.find_all("a"):
-			match = re.match(r"javascript:giftItem\('.+?', '(.+?)', .+?\);", i["href"])
+			match = re.match(r"javascript:giftItem\([^,]+,\s*[\"']([^\"']+)[\"']", i.get("href", ""))
 			if match:
 				itemIds.append(match.group(1))
 		for i in itemList.find_all("span", class_="tw-item-list-item-name"):
@@ -36,7 +36,7 @@ class PostItem:
 		for i in itemList.find_all("span", class_="tw-item-list-item-amount"):
 			itemPoints.append(int(i.get_text()))
 		if not len(itemIds) == len(itemNames) == len(itemPoints):
-			self.log.error("GetItemList failed.\nids=%s\nnames=%s\npoints=%s" % (",".join(itemIds), ",".join(itemNames), ",".join(itemPoints)))
+			self.log.error("GetItemList failed.\nids=%s\nnames=%s\npoints=%s" % (",".join(itemIds), ",".join(itemNames), ",".join(map(str, itemPoints))))
 			return []
 		for i in range(len(itemIds)):
 			self.items.append(Item(itemIds[i], itemNames[i], itemPoints[i]))

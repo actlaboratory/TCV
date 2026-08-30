@@ -157,7 +157,7 @@ class connection(threading.Thread):
 			self.item = item
 			self.coins = 0
 			for i in self.item:
-				if i["name"] == "コンティニューコイン":
+				if i["id"] == "coin":
 					self.coins = i["count"]
 		else:
 			if not hasattr(self, "item"):
