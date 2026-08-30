@@ -28,7 +28,7 @@ class PostItem:
 		itemNames = []
 		itemPoints = []
 		for i in itemList.find_all("a"):
-			match = re.match(r"javascript:giftItem\('.+?', '(.+?)', .+?\);", i["href"])
+			match = re.match(r"javascript:giftItem\([^,]+,\s*[\"']([^\"']+)[\"']", i.get("href", ""))
 			if match:
 				itemIds.append(match.group(1))
 		for i in itemList.find_all("span", class_="tw-item-list-item-name"):
