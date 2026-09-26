@@ -71,11 +71,8 @@ class EventPubsub(threading.Thread):
 				self.log.debug(json.dumps(i, ensure_ascii=False))
 				type_ = i.get("type", "")
 				if type_ == "gift":
-					# アイテム名が空の場合、「不明なアイテム」に置換する
+					# アイテム名が空の場合の処理
 					if i["item"]["name"] == "":
-						self.log.debug("unknown item")
-						i["item"]["name"] = _("不明なアイテム")
-						self.log.debug(json.dumps(i, ensure_ascii=False))
 						# 「コインの種」対応
 						if i["item"]["image"].endswith("icon_incentive_coin.png"):
 							self.log.debug("incentive_coin")
@@ -83,6 +80,14 @@ class EventPubsub(threading.Thread):
 							# 続きの処理は不要
 							self.log.debug("skipped remaining process")
 							continue
+						# キャンペーン等の埋め込み演出通知（実際のアイテム受信ではない）は無視する
+						if i["item"].get("effectCommand", "").startswith("embeddeditem("):
+							self.log.debug("embedded effect notification, not an item: %s" % i["item"]["effectCommand"])
+							continue
+						# それ以外はアイテム名不明として「不明なアイテム」に置換する
+						self.log.debug("unknown item")
+						i["item"]["name"] = _("不明なアイテム")
+						self.log.debug(json.dumps(i, ensure_ascii=False))
 					self.manager.items.insert(0, {"item": i["item"]["name"], "user": i["sender"]["screenName"]})
 					itemName = i["item"]["name"]
 					lst = items.get(itemName, [])
