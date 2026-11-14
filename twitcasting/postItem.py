@@ -44,12 +44,31 @@ class PostItem:
 
 	def getItemListPage(self, account):
 		result = self._getItemListPage(account)
-		if type(result) == requests.models.Response and result.text.replace("\n", "") in ("User does not exists.", "指定されたユーザーは存在しません。"):
+		if type(result) == requests.models.Response and self._isSessionError(result):
 			self.log.error("Session error.")
 			if not globalVars.app.advancedAccountManager.relogin(account):
 				return
 			result = self._getItemListPage(account)
+			if type(result) == requests.models.Response and self._isSessionError(result):
+				self.log.error("Session error remains after relogin.")
 		return result
+
+	def _isSessionError(self, response):
+		# 先方の仕様変更で一部の判定が効かなくなっても検出できるよう、複数の条件のいずれかに該当すればセッションエラーとみなす
+		# エラーメッセージのみが返される
+		if response.text.replace("\n", "") in ("User does not exists.", "指定されたユーザーは存在しません。"):
+			self.log.debug("session error: error message returned")
+			return True
+		# 未ログイン用のページ(各アイテムがログイン画面へのリンク)が返される
+		if "indexloginwindow.php" in response.text:
+			self.log.debug("session error: login link found")
+			return True
+		# ログイン時にのみ表示される所持ポイントがない
+		soup = bs4.BeautifulSoup(response.text, "lxml")
+		if soup.find("span", class_="tw-point-bar-point") == None:
+			self.log.debug("session error: point not found")
+			return True
+		return False
 
 	def _getItemListPage(self, account):
 		session = globalVars.app.advancedAccountManager.getSession(account)
